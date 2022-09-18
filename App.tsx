@@ -1,103 +1,82 @@
 import React from "react";
+import { Main, Onboarding, Register } from "./screens";
+import { View, Platform, Button } from "react-native";
+import { Buffer } from "buffer";
+import * as SplashScreen from 'expo-splash-screen';
+import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from "@react-navigation/native";
+import * as Linking from 'expo-linking';
+import * as Global from "./Global";
+import * as URL from "./URL";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Home, Matches, Messages, Profile } from "./screens";
-import { PRIMARY_COLOR, DARK_GRAY, BLACK, WHITE } from "./assets/styles";
-import TabBarIcon from "./components/TabBarIcon";
+import * as I18N from "./i18n/i18n";
+
+const i18n = I18N.getI18n()
+const TWO_WEEKS_MS = 1209600000;
+const APP_URL = Linking.createURL("");
+
+SplashScreen.preventAutoHideAsync();
+setTimeout(SplashScreen.hideAsync, 1000);
+WebBrowser.maybeCompleteAuthSession();
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
 
-const App = () => (
-  <NavigationContainer>
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Tab"
-        options={{ headerShown: false, animationEnabled: false }}
-      >
-        {() => (
-          <Tab.Navigator
-            tabBarOptions={{
-              showLabel: false,
-              activeTintColor: PRIMARY_COLOR,
-              inactiveTintColor: DARK_GRAY,
-              labelStyle: {
-                fontSize: 14,
-                textTransform: "uppercase",
-                paddingTop: 10,
-              },
-              style: {
-                backgroundColor: WHITE,
-                borderTopWidth: 0,
-                marginBottom: 0,
-                shadowOpacity: 0.05,
-                shadowRadius: 10,
-                shadowColor: BLACK,
-                shadowOffset: { height: 0, width: 0 },
-              },
-            }}
-          >
-            <Tab.Screen
-              name="Explore"
-              component={Home}
-              options={{
-                tabBarIcon: ({ focused }) => (
-                  <TabBarIcon
-                    focused={focused}
-                    iconName="search"
-                    text="Explore"
-                  />
-                ),
-              }}
-            />
+//TODO remove auth cookie just before it expires
 
-            <Tab.Screen
-              name="Matches"
-              component={Matches}
-              options={{
-                tabBarIcon: ({ focused }) => (
-                  <TabBarIcon
-                    focused={focused}
-                    iconName="heart"
-                    text="Matches"
-                  />
-                ),
-              }}
-            />
 
-            <Tab.Screen
-              name="Chat"
-              component={Messages}
-              options={{
-                tabBarIcon: ({ focused }) => (
-                  <TabBarIcon
-                    focused={focused}
-                    iconName="chatbubble"
-                    text="Chat"
-                  />
-                ),
-              }}
-            />
+export default function App() {
 
-            <Tab.Screen
-              name="Profile"
-              component={Profile}
-              options={{
-                tabBarIcon: ({ focused }) => (
-                  <TabBarIcon
-                    focused={focused}
-                    iconName="person"
-                    text="Profile"
-                  />
-                ),
-              }}
-            />
-          </Tab.Navigator>
-        )}
-      </Stack.Screen>
-    </Stack.Navigator>
-  </NavigationContainer>
-);
+  const _handleRedirect = async (event: { url: string; }) => {
 
-export default App;
+    if (Platform.OS === 'ios') {
+      WebBrowser.dismissBrowser();
+    }
+
+    let data = Linking.parse(event.url);
+    if (data.queryParams != null) {
+      //let firstName: string = String(data.queryParams["firstName"]);
+      let page = Number(data.queryParams["page"]);
+      let rememberMe = String(data.queryParams["remember-me"]);
+      let rememberMeExpire: Number = Number(data.queryParams["remember-me-expire"]);
+      let expireDate = Number(rememberMeExpire);
+      let expireDateIso = new Date(expireDate).toISOString();
+      await Global.SetStorage("remember-me", rememberMe);
+      await Global.SetStorage("remember-me-expire", expireDateIso);
+      await Global.SetStorage("page", String(page));
+
+      //TODO move to next screen
+
+    }
+  };
+
+  const loginGoogle = async () => {
+    let e = Linking.addEventListener('url', _handleRedirect);
+    await WebBrowser.openAuthSessionAsync(URL.AUTH_GOOGLE + "/" + Buffer.from(APP_URL).toString('base64'), '');
+    e.remove();
+  };
+
+  const loginFacebook = async () => {
+    let e = Linking.addEventListener('url', _handleRedirect);
+    await WebBrowser.openAuthSessionAsync(URL.AUTH_FACEBOOK + "/" + Buffer.from(APP_URL).toString('base64'), '');
+    e.remove();
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Button
+          title={i18n.t('auth.google')}
+          onPress={() => {
+            loginGoogle();
+          }}
+        />
+        <Button
+          title={i18n.t('auth.facebook')}
+          onPress={() => {
+            loginGoogle();
+          }}
+        />
+      </NavigationContainer>
+    </View>
+  );
+}

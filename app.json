@@ -1,14 +1,16 @@
 {
   "expo": {
-    "name": "tinder-expo",
-    "slug": "tinder-expo",
+    "name": "alovoa-expo",
+    "slug": "alovoa-expo",
     "version": "1.0.0",
+    "scheme": "alovoa",
     "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ec407a"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,13 +19,30 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "usesAppleSignIn": true,
+      "bundleIdentifier": "com.alovoa.expo"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#ec407a"
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "alovoa"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
+      "package": "com.alovoa.expo"
     },
     "web": {
       "favicon": "./assets/favicon.png"
