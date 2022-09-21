@@ -23,8 +23,14 @@ const Stack = createStackNavigator();
 
 //TODO remove auth cookie just before it expires
 
+//TEST
+const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking'); 
+RCTNetworking.clearCookies(() => {});
+
 
 export default function App() {
+
+  //Global.Fetch(URL.USER_STATUS_ALERT);
 
   const _handleRedirect = async (event: { url: string; }) => {
 
@@ -37,15 +43,25 @@ export default function App() {
       //let firstName: string = String(data.queryParams["firstName"]);
       let page = Number(data.queryParams["page"]);
       let rememberMe = String(data.queryParams["remember-me"]);
-      let rememberMeExpire: Number = Number(data.queryParams["remember-me-expire"]);
-      let expireDate = Number(rememberMeExpire);
-      let expireDateIso = new Date(expireDate).toISOString();
-      await Global.SetStorage("remember-me", rememberMe);
-      await Global.SetStorage("remember-me-expire", expireDateIso);
-      await Global.SetStorage("page", String(page));
+      //await Global.SetStorage("remember-me", rememberMe);
+      //await Global.SetStorage("page", String(page));
 
       //TODO move to next screen
 
+      console.log("test")
+      //let res = await Global.Fetch(URL.USER_STATUS_ALERT);
+      
+      
+      await Global.Fetch(URL.API_RESOURCE_DONATE);
+
+      await Global.Fetch( URL.format(URL.AUTH_COOKIE, rememberMe));
+
+      await Global.Fetch(URL.USER_STATUS_ALERT);
+      
+
+      await Global.Fetch(URL.API_RESOURCE_DONATE);
+
+      
     }
   };
 
@@ -73,10 +89,11 @@ export default function App() {
         <Button
           title={i18n.t('auth.facebook')}
           onPress={() => {
-            loginGoogle();
+            loginFacebook();
           }}
         />
       </NavigationContainer>
     </View>
   );
+  
 }
