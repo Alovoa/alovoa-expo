@@ -4,6 +4,10 @@ import * as Global from "./Global";
 //const DOMAIN : string = "https://beta.alovoa.com"
 const DOMAIN : string = "https://alovoa.com"
 
+export const IMPRINT = DOMAIN + "/imprint"
+export const PRIVACY = DOMAIN + "/privacy"
+export const TOS = DOMAIN + "/tos"
+
 export const AUTH_LOGIN = DOMAIN + "/login"
 export const AUTH_GOOGLE = DOMAIN + "/oauth2/authorization/google"
 export const AUTH_FACEBOOK = DOMAIN + "/oauth2/authorization/facebook"

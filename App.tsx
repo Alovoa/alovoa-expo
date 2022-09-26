@@ -1,6 +1,6 @@
 import React from "react";
-import { Main, Onboarding, Register } from "./screens";
-import { View, Platform, Button } from "react-native";
+import { Onboarding, Register, Search, Likes, Messages, Profile, Donate } from "./screens";
+import { View, Platform, Pressable, ScrollView, Text, StyleSheet } from "react-native";
 import { Buffer } from "buffer";
 import * as SplashScreen from 'expo-splash-screen';
 import * as WebBrowser from 'expo-web-browser';
@@ -9,10 +9,13 @@ import * as Linking from 'expo-linking';
 import * as Global from "./Global";
 import * as URL from "./URL";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as I18N from "./i18n/i18n";
+import { FontAwesome } from '@expo/vector-icons';
+import TabBarIcon from "./components/TabBarIcon";
+import { PRIMARY_COLOR, DARK_GRAY, BLACK, WHITE } from "./assets/styles";
 
 const i18n = I18N.getI18n()
-const TWO_WEEKS_MS = 1209600000;
 const APP_URL = Linking.createURL("");
 
 SplashScreen.preventAutoHideAsync();
@@ -20,13 +23,11 @@ setTimeout(SplashScreen.hideAsync, 1000);
 WebBrowser.maybeCompleteAuthSession();
 
 const Stack = createStackNavigator();
-
-//TODO remove auth cookie just before it expires
+const Tab = createBottomTabNavigator();
 
 //TEST
-const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking'); 
-RCTNetworking.clearCookies(() => {});
-
+//const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking'); 
+//RCTNetworking.clearCookies(() => {});
 
 export default function App() {
 
@@ -40,28 +41,12 @@ export default function App() {
 
     let data = Linking.parse(event.url);
     if (data.queryParams != null) {
-      //let firstName: string = String(data.queryParams["firstName"]);
+      let firstName: string = String(data.queryParams["firstName"]);
       let page = Number(data.queryParams["page"]);
       let rememberMe = String(data.queryParams["remember-me"]);
-      //await Global.SetStorage("remember-me", rememberMe);
-      //await Global.SetStorage("page", String(page));
+      await Global.Fetch(URL.format(URL.AUTH_COOKIE, rememberMe));
 
-      //TODO move to next screen
-
-      console.log("test")
-      //let res = await Global.Fetch(URL.USER_STATUS_ALERT);
-      
-      
-      await Global.Fetch(URL.API_RESOURCE_DONATE);
-
-      await Global.Fetch( URL.format(URL.AUTH_COOKIE, rememberMe));
-
-      await Global.Fetch(URL.USER_STATUS_ALERT);
-      
-
-      await Global.Fetch(URL.API_RESOURCE_DONATE);
-
-      
+      //TODO next page
     }
   };
 
@@ -78,22 +63,165 @@ export default function App() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <NavigationContainer>
-        <Button
-          title={i18n.t('auth.google')}
-          onPress={() => {
-            loginGoogle();
-          }}
-        />
-        <Button
-          title={i18n.t('auth.facebook')}
-          onPress={() => {
-            loginFacebook();
-          }}
-        />
-      </NavigationContainer>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          options={{ headerShown: false, animationEnabled: false }}
+        >{() => (
+          <View style={{ flex: 1 }}>
+            <ScrollView>
+              <Pressable style={[styles.button, styles.buttonGoogle]}
+                onPress={() => {
+                  loginGoogle();
+                }}
+              ><FontAwesome name="google" size={24} color="white" /><Text style={styles.buttonText}>{i18n.t('auth.google')}</Text></Pressable>
+              <Pressable style={[styles.button, styles.buttonFacebook]}
+                onPress={() => {
+                  loginFacebook();
+                }}
+              ><FontAwesome name="facebook-official" size={24} color="white" /><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Pressable>
+            </ScrollView>
+            <View>
+              <Text style={styles.link} onPress={() => {
+                WebBrowser.openBrowserAsync(URL.PRIVACY);
+              }}>{i18n.t('privacy-policy')}</Text>
+              <Text style={styles.link} onPress={() => {
+                WebBrowser.openBrowserAsync(URL.TOS);
+              }}>{i18n.t('tos')}</Text>
+              <Text style={styles.link} onPress={() => {
+                WebBrowser.openBrowserAsync(URL.IMPRINT);
+              }}>{i18n.t('imprint')}</Text>
+            </View>
+          </View>
+        )}</Stack.Screen>
+        <Stack.Screen
+          name="Tab"
+          options={{ headerShown: false, animationEnabled: false }}
+        >
+          {() => (
+            <Tab.Navigator
+              tabBarOptions={{
+                showLabel: false,
+                activeTintColor: PRIMARY_COLOR,
+                inactiveTintColor: DARK_GRAY,
+                labelStyle: {
+                  fontSize: 14,
+                  textTransform: "uppercase",
+                  paddingTop: 10,
+                },
+                style: {
+                  backgroundColor: WHITE,
+                  borderTopWidth: 0,
+                  marginBottom: 0,
+                  shadowOpacity: 0.05,
+                  shadowRadius: 10,
+                  shadowColor: BLACK,
+                  shadowOffset: { height: 0, width: 0 },
+                },
+              }}
+            >
+              <Tab.Screen
+                name="Search"
+                component={Search}
+                options={{
+                  tabBarIcon: ({ focused }) => (
+                    <TabBarIcon
+                      focused={focused}
+                      iconName="search"
+                      text="Search"
+                    />
+                  ),
+                }}
+              />
+
+              <Tab.Screen
+                name="Likes"
+                component={Likes}
+                options={{
+                  tabBarIcon: ({ focused }) => (
+                    <TabBarIcon
+                      focused={focused}
+                      iconName="heart"
+                      text="Likes"
+                    />
+                  ),
+                }}
+              />
+
+              <Tab.Screen
+                name="Chat"
+                component={Messages}
+                options={{
+                  tabBarIcon: ({ focused }) => (
+                    <TabBarIcon
+                      focused={focused}
+                      iconName="chatbubble"
+                      text="Chat"
+                    />
+                  ),
+                }}
+              />
+
+              <Tab.Screen
+                name="Profile"
+                component={Profile}
+                options={{
+                  tabBarIcon: ({ focused }) => (
+                    <TabBarIcon
+                      focused={focused}
+                      iconName="person"
+                      text="Profile"
+                    />
+                  ),
+                }}
+              />
+
+              <Tab.Screen
+                name="Donate"
+                component={Donate}
+                options={{
+                  tabBarIcon: ({ focused }) => (
+                    <TabBarIcon
+                      focused={focused}
+                      iconName="cash-outline"
+                      text="Donate"
+                    />
+                  ),
+                }}
+              />
+
+            </Tab.Navigator>
+          )}
+        </Stack.Screen>
+      </Stack.Navigator>
+
+
+    </NavigationContainer>
   );
-  
+
 }
+
+const styles = StyleSheet.create({
+  link: {
+    color: "#ec407a"
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'blue',
+  },
+  buttonGoogle: {
+    backgroundColor: '#4285f4',
+  },
+  buttonFacebook: {
+    backgroundColor: '#4267b2',
+  },
+  buttonText: {
+    color: 'white'
+  }
+});
