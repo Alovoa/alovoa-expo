@@ -1,6 +1,6 @@
 import React from "react";
 import { Onboarding, Register, Search, Likes, Messages, Profile, Donate } from "./screens";
-import { View, Platform, Pressable, ScrollView, Text, StyleSheet } from "react-native";
+import { View, Platform, Pressable, ScrollView, Text, StyleSheet, Image } from "react-native";
 import { Buffer } from "buffer";
 import * as SplashScreen from 'expo-splash-screen';
 import * as WebBrowser from 'expo-web-browser';
@@ -69,30 +69,32 @@ export default function App() {
           name="Login"
           options={{ headerShown: false, animationEnabled: false }}
         >{() => (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, padding: 12 }}>
             <ScrollView>
+              <Image resizeMode='contain' style={{resizeMode: "contain", height: 400, width: '100%'}} source={require('./assets/splash.png')} />
               <Pressable style={[styles.button, styles.buttonGoogle]}
                 onPress={() => {
                   loginGoogle();
                 }}
-              ><FontAwesome name="google" size={24} color="white" /><Text style={styles.buttonText}>{i18n.t('auth.google')}</Text></Pressable>
+              ><FontAwesome name="google" size={24} color="white" style={styles.icon} /><Text style={styles.buttonText}>{i18n.t('auth.google')}</Text></Pressable>
               <Pressable style={[styles.button, styles.buttonFacebook]}
                 onPress={() => {
                   loginFacebook();
                 }}
-              ><FontAwesome name="facebook-official" size={24} color="white" /><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Pressable>
+              ><FontAwesome name="facebook-official" size={24} color="white" style={styles.icon} /><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Pressable>
+              <View style={{ marginTop: 24 }}>
+                <Text style={styles.link} onPress={() => {
+                  WebBrowser.openBrowserAsync(URL.PRIVACY);
+                }}>{i18n.t('privacy-policy')}</Text>
+                <Text style={styles.link} onPress={() => {
+                  WebBrowser.openBrowserAsync(URL.TOS);
+                }}>{i18n.t('tos')}</Text>
+                <Text style={styles.link} onPress={() => {
+                  WebBrowser.openBrowserAsync(URL.IMPRINT);
+                }}>{i18n.t('imprint')}</Text>
+              </View>
             </ScrollView>
-            <View>
-              <Text style={styles.link} onPress={() => {
-                WebBrowser.openBrowserAsync(URL.PRIVACY);
-              }}>{i18n.t('privacy-policy')}</Text>
-              <Text style={styles.link} onPress={() => {
-                WebBrowser.openBrowserAsync(URL.TOS);
-              }}>{i18n.t('tos')}</Text>
-              <Text style={styles.link} onPress={() => {
-                WebBrowser.openBrowserAsync(URL.IMPRINT);
-              }}>{i18n.t('imprint')}</Text>
-            </View>
+
           </View>
         )}</Stack.Screen>
         <Stack.Screen
@@ -204,7 +206,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
   link: {
-    color: "#ec407a"
+    color: "#ec407a",
+    flex: 1,
   },
   button: {
     alignItems: 'center',
@@ -214,6 +217,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: 'blue',
+    margin: 4,
+    flexDirection: 'row'
   },
   buttonGoogle: {
     backgroundColor: '#4285f4',
@@ -223,5 +228,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white'
+  },
+  icon: {
+    marginRight: 8
   }
 });
