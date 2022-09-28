@@ -1,4 +1,4 @@
-export var de : any = {
+{
     "imprint": "Impressum",
     "tos": "Nutzungsbedingungen",
     "privacy-policy": "Datenschutzerklärung",
@@ -23,5 +23,21 @@ export var de : any = {
         "male": "Mann",
         "female": "Frau",
         "other": "Divers"
+    },
+    "profile": {
+        "onboarding": {
+            "profile-picture": "So sehe ich aus",
+            "description": "Etwas über mich",
+            "description-placeholder": "Ich liebe Eiscreme!",
+            "interests": "Ich mag diese Dinge wirklich gerne...",
+            "intention-warning": "Kann erst nach 24 Stunden wieder geändert werden",
+            "match": {
+                "title": "Jetzt Likes erhalten!",
+                "subtitle": "Nachrichten können nur nach einem Match gesendet werden",
+            },
+            "submit": "Los geht's!"
+        },
+        "intention": "I möchte...",
+        "gender": "Ich suche nach..."
     }
 }

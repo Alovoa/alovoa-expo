@@ -5,7 +5,7 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import * as I18N from "../i18n/i18n";
+import * as I18N from "../i18n";
 import TabBarIcon from "../components/TabBarIcon";
 import { PRIMARY_COLOR, DARK_GRAY, BLACK, WHITE } from "../assets/styles";
 

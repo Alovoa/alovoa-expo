@@ -1,4 +1,4 @@
-export var en : any = {
+{
     "imprint": "Imprint",
     "tos": "Terms of Service",
     "privacy-policy": "Privacy Policy",
@@ -23,5 +23,21 @@ export var en : any = {
         "male": "Male",
         "female": "Female",
         "other": "Other"
+    },
+    "profile": {
+        "onboarding": {
+            "profile-picture": "I look like this",
+            "description": "Something about myself",
+            "description-placeholder": "I really love ice cream!",
+            "interests": "I really like these things...",
+            "intention-warning": "Can only be changed again after 24 hours",
+            "match": {
+                "title": "Start getting likes!",
+                "subtitle": "Messages can only be sent after a match",
+            },
+            "submit": "Let's go!"
+        },
+        "intention": "I want...",
+        "gender": "Looking for..."
     }
 }
