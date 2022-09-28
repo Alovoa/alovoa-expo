@@ -53,3 +53,15 @@ export type DataT = {
   info4?: string;
   location?: string;
 };
+
+
+export type RegisterBody = {
+  email?: string
+  password?: string
+  firstName: string;
+  dateOfBirth: Date;
+  referrerCode?: string
+  gender: number
+  termsConditions: boolean
+  privacy: boolean;
+}

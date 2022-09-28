@@ -6,3 +6,5 @@ export { default as Donate } from "./Donate";
 export { default as Register } from "./Register";
 export { default as Onboarding } from "./Onboarding";
 export { default as YourProfile } from "./YourProfile";
+export { default as Login } from "./Login";
+export { default as Main } from "./Main";
