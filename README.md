@@ -29,7 +29,3 @@ When installation is complete, run it :
 ```
 yarn start
 ```
-
-## Contribute
-
-As one of the goals of this project is to make Alovoa available to the Apple App Store and its ToS is not compatible with GPL, pull requests will not be accepted. If you have a problem with this, please contact Apple and tell them about this issue :)
