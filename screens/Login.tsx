@@ -31,6 +31,7 @@ const _handleRedirect = async (event: { url: string; }) => {
     await Global.Fetch(URL.format(URL.AUTH_COOKIE, rememberMe, sessionId));
     await Global.SetStorage("firstName", firstName);
     await Global.SetStorage("page", page);
+    console.log("page " + page);
 
     Global.loadPage(page);
   }

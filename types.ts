@@ -65,3 +65,17 @@ export type RegisterBody = {
   termsConditions: boolean
   privacy: boolean;
 }
+
+export type UserInterestAutocomplete = {
+  count: number
+  countString: string
+  name: string
+}
+
+export type UserOnboarding = {
+	intention: number
+	preferredGenders: Array<number>
+	profilePicture: string
+  description: string
+	interests: Array<string>	
+}

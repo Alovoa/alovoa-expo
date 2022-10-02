@@ -61,18 +61,20 @@ const Register = () => {
   const togglePrivacySwitch = () => setIsPrivacyEnabled(previousState => !previousState);
 
   async function submit() {
-    let data = {} as RegisterBody;
-    data.dateOfBirth = dob;
-    data.firstName = firstName;
-    data.gender = gender;
-    data.privacy = isPrivacyEnabled;
-    data.termsConditions = isTosEnabled;
+    if (isPrivacyEnabled && isTosEnabled && firstName) {
+      let data = {} as RegisterBody;
+      data.dateOfBirth = dob;
+      data.firstName = firstName;
+      data.gender = gender;
+      data.privacy = isPrivacyEnabled;
+      data.termsConditions = isTosEnabled;
 
-    try {
-      await Global.Fetch(URL.REGISTER_OAUTH, 'post', data);
-      await Global.SetStorage("page", Global.INDEX_ONBOARDING);
-      Global.loadPage(Global.INDEX_ONBOARDING);
-    } catch(e) {}
+      try {
+        await Global.Fetch(URL.REGISTER_OAUTH, 'post', data);
+        await Global.SetStorage("page", Global.INDEX_ONBOARDING);
+        Global.loadPage(Global.INDEX_ONBOARDING);
+      } catch (e) { }
+    }
   }
 
   return (
@@ -140,7 +142,6 @@ const Register = () => {
           <Switch onValueChange={toggleTosSwitch}
             trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
             thumbColor={isTosEnabled ? '#EC407A' : '#eeeeee'}
-            ios_backgroundColor="#3e3e3e"
             value={isTosEnabled} />
           <Text style={{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }}>{i18n.t('register.tos-agree')}</Text><Text style={styles.link} onPress={() => {
             WebBrowser.openBrowserAsync(URL.TOS);

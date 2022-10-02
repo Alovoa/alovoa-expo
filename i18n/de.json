@@ -33,11 +33,17 @@
             "intention-warning": "Kann erst nach 24 Stunden wieder geändert werden",
             "match": {
                 "title": "Jetzt Likes erhalten!",
-                "subtitle": "Nachrichten können nur nach einem Match gesendet werden",
+                "subtitle": "Nachrichten können nur nach einem Match gesendet werden"
             },
             "submit": "Los geht's!"
         },
-        "intention": "I möchte...",
+        "intention": {
+            "title": "I möchte...",
+            "meet": "to meet new people",
+            "date": "a relationship",
+            "sex": "sexual intimacy",
+            "warning": "Kann erst nach 24 Stunden wieder geändert werden"
+        },
         "gender": "Ich suche nach..."
     }
 }

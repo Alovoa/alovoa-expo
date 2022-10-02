@@ -5,7 +5,6 @@ import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from "@react-navigation/native";
 import * as Linking from 'expo-linking';
 import * as Global from "./Global";
-import * as URL from "./URL";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as I18N from "./i18n";

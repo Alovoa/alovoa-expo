@@ -30,14 +30,19 @@
             "description": "Something about myself",
             "description-placeholder": "I really love ice cream!",
             "interests": "I really like these things...",
-            "intention-warning": "Can only be changed again after 24 hours",
             "match": {
                 "title": "Start getting likes!",
-                "subtitle": "Messages can only be sent after a match",
+                "subtitle": "Messages can only be sent after a match"
             },
             "submit": "Let's go!"
         },
-        "intention": "I want...",
+        "intention": {
+            "title": "I want...",
+            "meet": "to meet new people",
+            "date": "a relationship",
+            "sex": "sexual intimacy",
+            "warning": "Can only be changed again after 24 hours"
+        },
         "gender": "Looking for..."
     }
 }

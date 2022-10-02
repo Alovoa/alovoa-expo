@@ -13,7 +13,6 @@ export const INDEX_MAIN = "3"
 
 export async function Fetch(url: string = "", method: string = "get", data: any = {}): Promise<any> {
   console.log(url)
-  
   try {
     let res = await axios({
       withCredentials: true,
@@ -21,7 +20,6 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
       url: url,
       data: data
     })
-    console.log(res)
     if (res.request.responseURL == URL.AUTH_LOGIN) {
       navigate("Login")
       throw new Error("Not authenticated")
@@ -45,7 +43,6 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
 
 export function navigate(name: string, params?: any) {
   if (navigationRef.isReady()) {
-    console.log("navigate")
     navigationRef.navigate(name, params);
   }
 }
@@ -67,7 +64,7 @@ export async function SetStorage(key: string, value: string) {
 }
 
 export function loadPage(page : string = INDEX_REGISTER) {
-  console.log("loadpage")
+  console.log("loadpage: " + page)
   if(INDEX_ONBOARDING == page) {
       navigate("Onboarding");
   } else if (INDEX_MAIN == page) {

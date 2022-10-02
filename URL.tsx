@@ -20,4 +20,9 @@ export const API_RESOURCE_DONATE = DOMAIN + "/api/v1/resource/donate"
 
 export const REGISTER_OAUTH = DOMAIN + "/register-oauth";
 
+export const USER_INTEREST_AUTOCOMPLETE = DOMAIN + "/user/interest/autocomplete/%s";
+
+export const USER_ONBOARDING = DOMAIN + "/user/onboarding";
+
+
 export const format = (str : string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);
