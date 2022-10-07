@@ -12,7 +12,7 @@ export const INDEX_ONBOARDING = "2"
 export const INDEX_MAIN = "3"
 
 export async function Fetch(url: string = "", method: string = "get", data: any = {}): Promise<any> {
-  console.log(url)
+  //console.log(url)
   try {
     let res = await axios({
       withCredentials: true,
@@ -29,16 +29,6 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
     console.log(e);
     throw e;
   }
-  
-
-  /*
-  let res = await fetch(url, {
-    method: method,
-    credentials: "same-origin"
-  });
-  console.log(JSON.stringify(res))
-  return res;
-  */
 }
 
 export function navigate(name: string, params?: any) {
@@ -73,3 +63,5 @@ export function loadPage(page : string = INDEX_REGISTER) {
     navigate("Register");
   }
 }
+
+export const format = (str : string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);

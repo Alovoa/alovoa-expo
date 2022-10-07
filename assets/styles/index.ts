@@ -1,7 +1,9 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-export const PRIMARY_COLOR = "#7444C0";
-export const SECONDARY_COLOR = "#5636B8";
+export const PRIMARY_COLOR = "#EC407A";
+export const PRIMARY_COLOR_LIGHT = "#F2D3DD";
+export const SECONDARY_COLOR = "#28C4ED";
+export const SECONDARY_COLOR_LIGHT = "#71D7F0";
 export const WHITE = "#FFFFFF";
 export const GRAY = "#757E90";
 export const DARK_GRAY = "#363636";
@@ -19,6 +21,31 @@ export const DIMENSION_WIDTH = Dimensions.get("window").width;
 export const DIMENSION_HEIGHT = Dimensions.get("window").height;
 
 export default StyleSheet.create({
+  link: {
+    color: "#ec407a",
+    flex: 1,
+  },
+  center: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  profileButton: {
+    backgroundColor: PRIMARY_COLOR,
+    padding: 12,
+    borderRadius: 8
+  },
+  profileButtonLight: {
+    backgroundColor: PRIMARY_COLOR_LIGHT,
+    padding: 12
+  },
+  radioButton: {
+    marginBottom: 12,
+    marginTop: 12,
+  },
+  switchText: {
+    marginBottom: 12,
+    marginTop: 12,
+  },
   // COMPONENT - CARD ITEM
   containerCardItem: {
     backgroundColor: WHITE,
@@ -77,7 +104,7 @@ export default StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: WHITE,
+    backgroundColor: "#EC407A",
     marginHorizontal: 7,
     alignItems: "center",
     justifyContent: "center",
@@ -191,7 +218,7 @@ export default StyleSheet.create({
     paddingTop: 25,
     paddingBottom: 5,
     color: DARK_GRAY,
-    fontSize: 15,
+    fontSize: 24,
     textAlign: "center",
   },
   descriptionProfileItem: {
@@ -254,7 +281,7 @@ export default StyleSheet.create({
   containerProfile: { marginHorizontal: 0 },
   photo: {
     width: DIMENSION_WIDTH,
-    height: 450,
+    height: DIMENSION_WIDTH,
   },
   topIconLeft: {
     paddingLeft: 20,

@@ -1,5 +1,5 @@
 import React from "react";
-import { Onboarding, Register, Main} from "../screens";
+import { Onboarding, Register, Main } from "../screens";
 import { View, Platform, Pressable, ScrollView, Text, StyleSheet, Image } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
@@ -16,7 +16,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 const _handleRedirect = async (event: { url: string; }) => {
 
-  
+
 
   if (Platform.OS === 'ios') {
     WebBrowser.dismissBrowser();
@@ -25,10 +25,10 @@ const _handleRedirect = async (event: { url: string; }) => {
   let data = Linking.parse(event.url);
   if (data.queryParams != null) {
     let firstName: string = String(data.queryParams["firstName"]);
-    let page : string = String(data.queryParams["page"]);
-    let sessionId : string = String(data.queryParams["jsessionid"]);
+    let page: string = String(data.queryParams["page"]);
+    let sessionId: string = String(data.queryParams["jsessionid"]);
     let rememberMe = String(data.queryParams["remember-me"]);
-    await Global.Fetch(URL.format(URL.AUTH_COOKIE, rememberMe, sessionId));
+    await Global.Fetch(Global.format(URL.AUTH_COOKIE, rememberMe, sessionId));
     await Global.SetStorage("firstName", firstName);
     await Global.SetStorage("page", page);
     console.log("page " + page);

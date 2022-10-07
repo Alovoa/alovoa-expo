@@ -73,9 +73,192 @@ export type UserInterestAutocomplete = {
 }
 
 export type UserOnboarding = {
-	intention: number
-	preferredGenders: Array<number>
-	profilePicture: string
+  intention: number
+  preferredGenders: Array<number>
+  profilePicture: string
   description: string
-	interests: Array<string>	
+  interests: Array<string>
+}
+
+export type Gender = {
+  text: string
+}
+
+export type UserMiscInfo = {
+  value: number;
+}
+
+export type UserIntention = {
+  text: string
+}
+
+export type UserInterest = {
+  text: string
+}
+
+export type UserImage = {
+  content: string
+}
+
+export type UserDto = {
+  idEncoded: string
+  email?: string //is null when not current user
+  firstName: string
+  age: number
+  donationAmount: number
+  gender: Gender;
+  hasAudio: boolean;
+  audio: string;
+  accentColor: string;
+  uiDesign: string;
+  zodiac: string;
+  showZodiac: boolean;
+  units: number;
+  preferedMinAge: number;
+  preferedMaxAge: number;
+  miscInfos: Array<UserMiscInfo>
+  preferedGenders: Array<Gender>;
+  intention: UserIntention;
+  interests: Array<UserInterest>
+  profilePicture: string;
+  images: Array<UserImage>;
+  description: string;
+  country: string;
+  distanceToUser: number;
+  sameInterests: number;
+  totalDonations: number;
+  activeDate: Date;
+  numBlockedByUsers: number;
+  numReports: number;
+  blockedByCurrentUser: boolean
+  reportedByCurrentUser: boolean
+  likedByCurrentUser: boolean
+  hiddenByCurrentUser: boolean
+  numberReferred: number;
+  numberProfileViews: number;
+  numberSearches: number;
+  compatible: boolean
+  hasLocation: boolean;
+  locationLatitude: number;
+  locationLongitude: number;
+  lastActiveState: number;
+}
+
+export type DonationDto = {
+  id: number;
+  date: Date;
+  user: UserDto;
+  amount: number;
+}
+
+export type MessageDto = {
+  id: number;
+  content: string;
+  date: Date;
+  from: boolean;
+  allowedFormatting: boolean;
+}
+
+export type ConversationDto = {
+  lastUpdated: Date;
+  userName: string;
+  userProfilePicture: string;
+  lastMessage: MessageDto;
+  userIdEncoded: string;
+  read: boolean;
+}
+
+export type NotificationDto = {
+  id: number;
+  date: Date;
+  userFromDto: UserDto;
+}
+
+export enum SearchStageEnum {
+  NORMAL,
+  INCREASED_RADIUS_1,
+  INCREASED_RADIUS_2,
+  WORLD,
+  IGNORE_1,
+  IGNORE_2,
+  IGNORE_ALL
+}
+
+export enum UserMiscInfoEnum {
+  DRUGS_TOBACCO = 1,
+  DRUGS_ALCOHOL = 2,
+  DRUGS_CANNABIS = 3,
+  DRUGS_OTHER = 4,
+  RELATIONSHIP_SINGLE = 11,
+  RELATIONSHIP_TAKEN = 12,
+  RELATIONSHIP_OPEN = 13,
+  RELATIONSHIP_OTHER = 14,
+  KIDS_NO = 21,
+  KIDS_YES = 22
+}
+
+export type SearchDto = {
+  users: Array<UserDto>;
+  message: string;
+  stage: SearchStageEnum;
+  global: boolean;
+  incompatible: boolean;
+}
+
+export type YourProfileResource = {
+  user: UserDto;
+  genders: Array<Gender>;
+  intentions: Array<UserIntention>;
+  imageMax: number,
+  isLegal: boolean,
+  mediaMaxSize: number,
+  interestMaxSize: number,
+  referralsLeft: number;
+  showIntention: boolean
+}
+
+export type DonateResource = {
+  user: UserDto;
+}
+
+export type DonateSearchFilterResource = {
+  currUser: UserDto;
+  donations: Array<DonationDto>;
+  filter: number;
+}
+
+export type ChatsResource = {
+  conversations: UserDto;
+  user: UserDto;
+}
+
+export type ChatDetailResource = {
+  messages: Array<MessageDto>;
+  user: UserDto;
+  convoId: number;
+  partner: UserDto;
+}
+
+export type ChatMessageUpdateResource = {
+  messages: Array<MessageDto>;
+}
+
+export type AlertsResource = {
+  notifications: Array<NotificationDto>;
+  user: UserDto;
+}
+
+export type ProfileResource = {
+  compatible: boolean;
+  user: UserDto;
+  currUserDto: UserDto;
+}
+
+export type SearchResource = {
+  user: UserDto;
+}
+
+export type SearchUsersResource = {
+  dto: SearchDto;
+  currUser: UserDto;
 }

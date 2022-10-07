@@ -26,6 +26,9 @@ import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import * as URL from "../URL";
 import * as Global from "../Global";
 import { UserInterestAutocomplete, UserOnboarding } from "../types";
+import * as ImageManipulator from 'expo-image-manipulator';
+
+const IMAGE_HEADER = "data:image/png;base64,";
 
 const i18n = I18N.getI18n()
 
@@ -63,8 +66,9 @@ const Onboarding = () => {
   const scrollRef = React.useRef(null);
   const svgHeight = 150;
   const svgWidth = 200;
+  const IMG_SIZE_MAX = 600;
 
-  const pickImage = async () => {
+  async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -73,8 +77,14 @@ const Onboarding = () => {
       base64: true,
     });
     if (!result.cancelled) {
-      setImage(result.uri);
-      setImageB64(result.base64);
+      const resizedImageData = await ImageManipulator.manipulateAsync(
+        result.uri,
+        [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
+        { compress: 0.8, format: ImageManipulator.SaveFormat.WEBP, base64: true, }
+      );
+
+      setImage(resizedImageData.uri);
+      setImageB64(IMAGE_HEADER + resizedImageData.base64);
     }
   };
 
@@ -129,7 +139,7 @@ const Onboarding = () => {
         setLoading3(true)
         break;
     }
-    const response = await Global.Fetch(URL.format(URL.USER_INTEREST_AUTOCOMPLETE, encodeURI(filterToken)));
+    const response = await Global.Fetch(Global.format(URL.USER_INTEREST_AUTOCOMPLETE, encodeURI(filterToken)));
     const items: Array<UserInterestAutocomplete> = response.data
     const suggestions = items
       .map((item: any) => ({
@@ -234,6 +244,7 @@ const Onboarding = () => {
             maxLength={200}
             value={description}
             style={{ width: 200, height: 100 }}
+            autoCorrect={false}
           />
         </KeyboardAvoidingView>
         <View style={[styles.view]}>
@@ -482,7 +493,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   radioButton: {
-
     marginBottom: 12,
     marginTop: 12,
   },

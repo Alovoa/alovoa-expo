@@ -44,6 +44,42 @@
             "sex": "sexual intimacy",
             "warning": "Kann erst nach 24 Stunden wieder geändert werden"
         },
-        "gender": "Ich suche nach..."
-    }
+        "gender": "Ich suche nach...",
+        "interest-alert": {
+            "title": "Interesse entfernen?",
+            "subtitle": "Interesse '%s' entfernen?"
+        },
+        "units": {
+            "title": "Einheiten",
+            "si": "SI",
+            "imperial": "Imperial"
+        },
+        "age": {
+            "min": "Min. Alter",
+            "max": "Max. Alter"
+        },
+        "misc-info": {
+            "drugs": {
+                "title": "Drogen",
+                "alcohol": "Alkohol",
+                "tobacco": "Tabak",
+                "cannabis": "Cannabis",
+                "other": "Andere Drogen"
+            },
+            "kids": {
+                "title": "Kinder",
+                "no": "Keine Kinder",
+                "yes": "Hat Kinder"
+            },
+            "relationship": {
+                "title": "Beziehungsstatus",
+                "single": "Single",
+                "taken": "In einer Beziehung",
+                "open" : "Offene Beziehung",
+                "other": "Es ist kompliziert"
+            }
+        }
+    },
+    "cancel": "Abbrechen",
+    "ok": "OK"
 }

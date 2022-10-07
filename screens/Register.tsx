@@ -13,10 +13,9 @@ import { Picker } from '@react-native-picker/picker';
 import { RegisterBody } from "../types";
 
 const i18n = I18N.getI18n()
-const APP_URL = Linking.createURL("");
 
 const MIN_AGE = 16
-const MAX_AGE = 99
+const MAX_AGE = 100
 const DEFAULT_AGE = 18
 
 function subtractYears(years: number): Date {
@@ -74,6 +73,8 @@ const Register = () => {
         await Global.SetStorage("page", Global.INDEX_ONBOARDING);
         Global.loadPage(Global.INDEX_ONBOARDING);
       } catch (e) { }
+    } else {
+      console.log("register error")
     }
   }
 
