@@ -89,6 +89,7 @@ export type UserMiscInfo = {
 }
 
 export type UserIntention = {
+  id: number;
   text: string
 }
 

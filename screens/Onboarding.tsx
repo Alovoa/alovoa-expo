@@ -105,12 +105,15 @@ const Onboarding = () => {
     switch (i) {
       case Intention.One:
         dropdownController.current.setInputText(filterToken);
+        setInterest1(filterToken);
         break;
       case Intention.Two:
         dropdownController2.current.setInputText(filterToken);
+        setInterest2(filterToken);
         break;
       case Intention.Three:
         dropdownController3.current.setInputText(filterToken);
+        setInterest3(filterToken);
         break;
     }
 

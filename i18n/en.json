@@ -77,7 +77,8 @@
                 "open" : "Open relationship",
                 "other": "It's complicated"
             }
-        }
+        },
+        "intention-toast": "Intention changed. You cannot change it for another 24 hours."
     },
     "cancel": "Cancel",
     "ok": "OK"

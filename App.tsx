@@ -9,6 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as I18N from "./i18n";
 import { LogBox } from 'react-native';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 
 LogBox.ignoreAllLogs();
@@ -23,39 +24,41 @@ WebBrowser.maybeCompleteAuthSession();
 const Stack = createStackNavigator();
 
 //TEST
-const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking'); 
-RCTNetworking.clearCookies(() => {});
+const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking');
+RCTNetworking.clearCookies(() => { });
 
 export default function App() {
   return (
-    <NavigationContainer ref={Global.navigationRef}>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          options={{ headerShown: false, animationEnabled: false }}
-          component={Login}
-        ></Stack.Screen>
-        <Stack.Screen
-          name="Register"
-          options={{ headerShown: false, animationEnabled: false }}
-          component={Register}
-        ></Stack.Screen>
-        <Stack.Screen
-          name="Onboarding"
-          options={{ headerShown: false, animationEnabled: false }}
-          component={Onboarding}
-        ></Stack.Screen>
-        <Stack.Screen
-          name="Main"
-          options={{ headerShown: false, animationEnabled: false }}
-          component={Main}
-        ></Stack.Screen>
-        <Stack.Screen
-          name="Profile"
-          options={{ headerShown: false, animationEnabled: false }}
-          component={Profile}
-        ></Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <RootSiblingParent>
+      <NavigationContainer ref={Global.navigationRef}>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            options={{ headerShown: false, animationEnabled: false }}
+            component={Login}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Register"
+            options={{ headerShown: false, animationEnabled: false }}
+            component={Register}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Onboarding"
+            options={{ headerShown: false, animationEnabled: false }}
+            component={Onboarding}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Main"
+            options={{ headerShown: false, animationEnabled: false }}
+            component={Main}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Profile"
+            options={{ headerShown: false, animationEnabled: false }}
+            component={Profile}
+          ></Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </RootSiblingParent>
   );
 }

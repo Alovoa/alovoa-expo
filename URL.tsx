@@ -21,10 +21,20 @@ export const API_RESOURCE_CHATS = DOMAIN + "/api/v1/resource/chats"
 export const API_RESOURCE_CHAT_DETAIL = DOMAIN + "/api/v1/resource/chats/%s"
 export const API_RESOURCE_DONATE = DOMAIN + "/api/v1/resource/donate"
 
-
 export const REGISTER_OAUTH = DOMAIN + "/register-oauth";
 
 export const USER_INTEREST_AUTOCOMPLETE = DOMAIN + "/user/interest/autocomplete/%s";
 export const USER_ONBOARDING = DOMAIN + "/user/onboarding";
 export const USER_STATUS_ALERT = DOMAIN + "/user/status/new-alert"
 export const USER_STATUS_MESSAGE = DOMAIN + "/user/status/new-message"
+
+export const USER_UPDATE_PROFILE_PICTURE = DOMAIN + "/user/update/profile-picture"
+export const USER_UPDATE_DESCRIPTION = DOMAIN + "/user/update/description"
+export const USER_UPDATE_INTENTION = DOMAIN + "/user/update/intention/%s"
+export const USER_UPDATE_MIN_AGE = DOMAIN + "/user/update/min-age/%s"
+export const USER_UPDATE_MAX_AGE = DOMAIN + "/user/update/max-age/%s"
+export const USER_UPDATE_PREFERED_GENDER = DOMAIN + "/user/update/preferedGender/%s/%s"
+export const USER_UPDATE_MISC_INFO = DOMAIN + "/user/update/misc-info/%s/%s"
+export const USER_ADD_INTEREST = DOMAIN + "/user/interest/add/%s"
+export const USER_REMOVE_INTEREST = DOMAIN + "/user/interest/delete/%s"
+export const USER_UPDATE_UNITS = DOMAIN + "/user/units/update/%s"
