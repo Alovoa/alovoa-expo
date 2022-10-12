@@ -1,8 +1,8 @@
 import * as Global from "./Global";
 
-export const DOMAIN : string = "http://localhost:8080"
+//export const DOMAIN : string = "http://localhost:8080"
 //const DOMAIN : string = "https://beta.alovoa.com"
-//const DOMAIN : string = "https://alovoa.com"
+const DOMAIN : string = "https://alovoa.com"
 
 export const IMPRINT = DOMAIN + "/imprint"
 export const PRIVACY = DOMAIN + "/privacy"

@@ -39,7 +39,6 @@ const Search = () => {
   React.useEffect(() => {
     setStackKey(new Date().getTime());
     for (let i = 0; i < results.length; i++) {
-      console.log(results[i].idEncoded);
       swiper?.goBackFromTop();
     }
   }, [results]);
@@ -99,7 +98,6 @@ const Search = () => {
   }
 
   async function hideUser(index: number, swipe?: boolean) {
-    console.log("index: ", index)
     if (index < results.length) {
       let id = results[index].idEncoded;
       await Global.Fetch(Global.format(URL.USER_HIDE, id), 'post');
@@ -112,19 +110,7 @@ const Search = () => {
       load();
     }
   }
-
-  let cards = () => {
-    return results.map((card, index) => (
-      <Card key={card.idEncoded}
-        style={{ flex: 1 }}>
-        <CardItem
-          user={card}
-          hasActions={true}
-          swiper={swiper}
-        />
-      </Card>
-    ))
-  }
+  
   return (
     <ScrollView style={{ height: HEIGHT }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>

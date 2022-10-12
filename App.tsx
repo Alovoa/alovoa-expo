@@ -28,7 +28,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
-  Global.GetStorage("page").then((value) => {
+  Global.GetStorage(Global.STORAGE_PAGE).then((value) => {
     if(value) {
       Global.loadPage(value);
     }

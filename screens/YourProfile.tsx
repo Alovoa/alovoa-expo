@@ -292,7 +292,7 @@ const YourProfile = () => {
   }
 
   async function logout() {
-    Global.SetStorage("page", "1");
+    Global.SetStorage(Global.STORAGE_PAGE, "1");
     Global.navigate("Login");
   }
 

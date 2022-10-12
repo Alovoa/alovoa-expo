@@ -211,7 +211,7 @@ const Onboarding = () => {
 
     try {
       await Global.Fetch(URL.USER_ONBOARDING, 'post', dto);
-      await Global.SetStorage("page", Global.INDEX_MAIN);
+      await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_MAIN);
       Global.loadPage(Global.INDEX_MAIN);
       
     } catch (e) {}

@@ -12,8 +12,10 @@ export const INDEX_REGISTER = "1"
 export const INDEX_ONBOARDING = "2"
 export const INDEX_MAIN = "3"
 
+export const STORAGE_PAGE = "page";
+export const STORAGE_YOUR_PROFILE = "your-profile"
+
 export async function Fetch(url: string = "", method: string = "get", data: any = {}, contentType: string = "application/json"): Promise<any> {
-  console.log(url)
   try {
     let res = await axios({
       withCredentials: true,
@@ -31,7 +33,6 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
     }
     return res;
   } catch (e) {
-    console.log(e);
     throw e;
   }
 }
@@ -59,7 +60,6 @@ export async function SetStorage(key: string, value: string) {
 }
 
 export function loadPage(page: string = INDEX_REGISTER) {
-  console.log("loadpage: " + page)
   if (INDEX_ONBOARDING == page) {
     navigate("Onboarding");
   } else if (INDEX_MAIN == page) {

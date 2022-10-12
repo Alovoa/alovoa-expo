@@ -43,7 +43,6 @@ const Register = () => {
   }, [firstName]);
 
   const showDatePicker = () => {
-    console.log("showDatePicker")
     setDatePickerVisibility(true);
   };
 
@@ -70,11 +69,10 @@ const Register = () => {
 
       try {
         await Global.Fetch(URL.REGISTER_OAUTH, 'post', data);
-        await Global.SetStorage("page", Global.INDEX_ONBOARDING);
+        await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_ONBOARDING);
         Global.loadPage(Global.INDEX_ONBOARDING);
       } catch (e) { }
     } else {
-      console.log("register error")
     }
   }
 

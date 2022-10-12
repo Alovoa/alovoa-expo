@@ -28,9 +28,8 @@ const _handleRedirect = async (event: { url: string; }) => {
     let rememberMe = String(data.queryParams["remember-me"]);
     await Global.Fetch(Global.format(URL.AUTH_COOKIE, rememberMe, sessionId));
     await Global.SetStorage("firstName", firstName);
-    await Global.SetStorage("page", page);
+    await Global.SetStorage(Global.STORAGE_PAGE, page);
     await Global.SetStorage("loginDate", new Date().toISOString());
-    console.log("page " + page);
 
     Global.loadPage(page);
   }
