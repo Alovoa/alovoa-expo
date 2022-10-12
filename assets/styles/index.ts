@@ -13,8 +13,8 @@ export const ONLINE_STATUS = "#46A575";
 export const OFFLINE_STATUS = "#D04949";
 
 export const STAR_ACTIONS = "#FFA200";
-export const LIKE_ACTIONS = "#B644B2";
-export const DISLIKE_ACTIONS = "#363636";
+export const LIKE_ACTIONS = WHITE;
+export const DISLIKE_ACTIONS = WHITE;
 export const FLASH_ACTIONS = "#5028D7";
 
 export const DIMENSION_WIDTH = Dimensions.get("window").width;
@@ -57,6 +57,8 @@ export default StyleSheet.create({
     shadowRadius: 10,
     shadowColor: BLACK,
     shadowOffset: { height: 0, width: 0 },
+    flexGrow: 1,
+    width: DIMENSION_WIDTH - 22
   },
   matchesCardItem: {
     marginTop: -35,
@@ -71,6 +73,9 @@ export default StyleSheet.create({
   descriptionCardItem: {
     color: GRAY,
     textAlign: "center",
+    paddingLeft: 12,
+    paddingRight: 12,
+    flexShrink: 1,
   },
   status: {
     paddingBottom: 10,
@@ -98,7 +103,7 @@ export default StyleSheet.create({
   actionsCardItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 30,
+    paddingVertical: 12,
   },
   button: {
     width: 60,
@@ -150,14 +155,15 @@ export default StyleSheet.create({
   // COMPONENT - FILTERS
   filters: {
     backgroundColor: WHITE,
-    padding: 10,
+    padding: 4,
     borderRadius: 20,
     width: 90,
     elevation: 1,
     shadowOpacity: 0.05,
     shadowRadius: 10,
     shadowColor: BLACK,
-    shadowOffset: { height: 0, width: 0 },
+    shadowOffset: { height: 0, width: 0 }
+
   },
   filtersText: {
     color: DARK_GRAY,
@@ -250,7 +256,7 @@ export default StyleSheet.create({
     height: DIMENSION_HEIGHT,
   },
   top: {
-    paddingTop: 50,
+    paddingTop: 12,
     marginHorizontal: 10,
     flexDirection: "row",
     justifyContent: "space-between",

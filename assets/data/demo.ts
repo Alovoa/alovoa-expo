@@ -13,11 +13,11 @@ import IMAGE_10 from "../images/10.jpg";
 const data: DataT[] = [
   {
     id: 1,
-    name: "Leanne Graham",
+    name: "Leanneana",
     isOnline: true,
     match: "78",
     description:
-      "Full-time Traveller. Globe Trotter. Occasional Photographer. Part time Singer/Dancer.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut a.",
     message:
       "I will go back to Gotham and I will fight men Iike this but I will not become an executioner.",
     image: IMAGE_01,

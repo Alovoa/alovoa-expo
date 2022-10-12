@@ -6,7 +6,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import * as Linking from 'expo-linking';
 import * as Global from "./Global";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as I18N from "./i18n";
 import { LogBox } from 'react-native';
 import { RootSiblingParent } from 'react-native-root-siblings';
@@ -24,10 +23,17 @@ WebBrowser.maybeCompleteAuthSession();
 const Stack = createStackNavigator();
 
 //TEST
-const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking');
-RCTNetworking.clearCookies(() => { });
+//const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking');
+//RCTNetworking.clearCookies(() => { });
 
 export default function App() {
+
+  Global.GetStorage("page").then((value) => {
+    if(value) {
+      Global.loadPage(value);
+    }
+  });
+
   return (
     <RootSiblingParent>
       <NavigationContainer ref={Global.navigationRef}>

@@ -1,11 +1,11 @@
+import CardStack from "react-native-card-stack-swiper";
+
 export type CardItemT = {
-  description?: string;
+  user: UserDto;
   hasActions?: boolean;
   hasVariant?: boolean;
-  image: any;
-  isOnline?: boolean;
-  matches?: string;
-  name: string;
+  unitsImperial?: boolean;
+  swiper?: CardStack
 };
 
 export type IconT = {

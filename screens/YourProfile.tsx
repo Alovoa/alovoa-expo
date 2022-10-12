@@ -83,7 +83,7 @@ const YourProfile = () => {
   const [maxAge, setMaxAge] = React.useState(MAX_AGE)
   const [minAgeText, setMinAgeText] = React.useState(MIN_AGE)
   const [maxAgeText, setMaxAgeText] = React.useState(MAX_AGE)
-  const dropdownController = React.useRef({})
+  const dropdownController = React.useRef()
   const [units, setUnits] = React.useState(Unit.SI)
 
   const [miscInfoDrugsTobacco, setMiscInfoDrugsTobacco] = React.useState(false)
@@ -172,57 +172,50 @@ const YourProfile = () => {
   }, []);
 
   async function load() {
-    await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE).then(
-      (response) => {
-        let data: YourProfileResource = response.data;
-        setProfilePic(data.user.profilePicture);
-        setName(data.user.firstName);
-        setAge(data.user.age);
-        setDescription(data.user.description);
-        setShowIntention(data.showIntention);
+    let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
+    let data: YourProfileResource = response.data;
+    setProfilePic(data.user.profilePicture);
+    setName(data.user.firstName);
+    setAge(data.user.age);
+    setDescription(data.user.description);
+    setShowIntention(data.showIntention);
 
-        setInterests(data.user.interests);
-        setMinAge(data.user.preferedMinAge);
-        setMaxAge(data.user.preferedMaxAge);
-        setUnits(data.user.units);
+    setInterests(data.user.interests);
+    setMinAge(data.user.preferedMinAge);
+    setMaxAge(data.user.preferedMaxAge);
+    setUnits(data.user.units);
 
-        let intentionText = data.user.intention.text;
-        switch (intentionText) {
-          case IntentionText.MEET:
-            setIntention(Intention.MEET);
-            break;
-          case IntentionText.DATE:
-            setIntention(Intention.DATE);
-            break;
-          case IntentionText.SEX:
-            setIntention(Intention.SEX);
-            break;
-        }
+    let intentionText = data.user.intention.text;
+    switch (intentionText) {
+      case IntentionText.MEET:
+        setIntention(Intention.MEET);
+        break;
+      case IntentionText.DATE:
+        setIntention(Intention.DATE);
+        break;
+      case IntentionText.SEX:
+        setIntention(Intention.SEX);
+        break;
+    }
 
-        let gendersData = data.user.preferedGenders.map(item => item.text);
-        setIsGenderMaleEnabled(gendersData.includes(GenderText.MALE));
-        setIsGenderFemaleEnabled(gendersData.includes(GenderText.FEMALE));
-        setIsGenderOtherEnabled(gendersData.includes(GenderText.OTHER));
+    let gendersData = data.user.preferedGenders.map(item => item.text);
+    setIsGenderMaleEnabled(gendersData.includes(GenderText.MALE));
+    setIsGenderFemaleEnabled(gendersData.includes(GenderText.FEMALE));
+    setIsGenderOtherEnabled(gendersData.includes(GenderText.OTHER));
 
-        //const [isGenderMaleEnabled, setIsGenderMaleEnabled] = React.useState(false);
-        //const [isGenderFemaleEnabled, setIsGenderFemaleEnabled] = React.useState(false);
-        //const [isGenderOtherEnabled, setIsGenderOtherEnabled] = React.useState(false);
+    let miscInfoData = data.user.miscInfos.map(item => item.value);
+    setMiscInfoDrugsTobacco(miscInfoData.includes(UserMiscInfoEnum.DRUGS_TOBACCO));
+    setMiscInfoDrugsAlcohol(miscInfoData.includes(UserMiscInfoEnum.DRUGS_ALCOHOL));
+    setMiscInfoDrugsCannabis(miscInfoData.includes(UserMiscInfoEnum.DRUGS_CANNABIS));
+    setMiscInfoDrugsOther(miscInfoData.includes(UserMiscInfoEnum.DRUGS_OTHER));
+    setMiscInfoKidsNo(miscInfoData.includes(UserMiscInfoEnum.KIDS_NO));
+    setMiscInfoKidsYes(miscInfoData.includes(UserMiscInfoEnum.KIDS_YES));
+    setMiscInfoRelationShipSingle(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_SINGLE));
+    setMiscInfoRelationShipTaken(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_TAKEN));
+    setMiscInfoRelationShipOpen(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OPEN));
+    setMiscInfoRelationShipOther(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OTHER));
 
-        let miscInfoData = data.user.miscInfos.map(item => item.value);
-        setMiscInfoDrugsTobacco(miscInfoData.includes(UserMiscInfoEnum.DRUGS_TOBACCO));
-        setMiscInfoDrugsAlcohol(miscInfoData.includes(UserMiscInfoEnum.DRUGS_ALCOHOL));
-        setMiscInfoDrugsCannabis(miscInfoData.includes(UserMiscInfoEnum.DRUGS_CANNABIS));
-        setMiscInfoDrugsOther(miscInfoData.includes(UserMiscInfoEnum.DRUGS_OTHER));
-        setMiscInfoKidsNo(miscInfoData.includes(UserMiscInfoEnum.KIDS_NO));
-        setMiscInfoKidsYes(miscInfoData.includes(UserMiscInfoEnum.KIDS_YES));
-        setMiscInfoRelationShipSingle(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_SINGLE));
-        setMiscInfoRelationShipTaken(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_TAKEN));
-        setMiscInfoRelationShipOpen(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OPEN));
-        setMiscInfoRelationShipOther(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OTHER));
-
-        setUnits(data.user.units);
-      }
-    );
+    setUnits(data.user.units);
   }
   React.useEffect(() => {
     load();
@@ -346,7 +339,7 @@ const YourProfile = () => {
   }
 
   async function updateDescription(text: string) {
-    if(text) {
+    if (text) {
       Global.Fetch(URL.USER_UPDATE_DESCRIPTION, 'post', text, 'text/plain');
     }
   }
@@ -400,7 +393,7 @@ const YourProfile = () => {
           <TextInput
             multiline={true}
             numberOfLines={4}
-            onChangeText={ 
+            onChangeText={
               (text: string) => {
                 setDescription(text);
                 debounceDescriptionHandler(text);

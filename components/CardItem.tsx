@@ -1,23 +1,23 @@
 import React from "react";
 import { Text, View, Image, Dimensions, TouchableOpacity } from "react-native";
 import Icon from "./Icon";
-import { CardItemT } from "../types";
+import { CardItemT, UserDto } from "../types";
 import styles, {
   DISLIKE_ACTIONS,
   FLASH_ACTIONS,
   LIKE_ACTIONS,
   STAR_ACTIONS,
   WHITE,
+  GRAY
 } from "../assets/styles";
+import { FontAwesome } from '@expo/vector-icons';
 
 const CardItem = ({
-  description,
+  user,
   hasActions,
   hasVariant,
-  image,
-  isOnline,
-  matches,
-  name,
+  unitsImperial,
+  swiper
 }: CardItemT) => {
   // Custom styling
   const fullWidth = Dimensions.get("window").width;
@@ -26,69 +26,60 @@ const CardItem = ({
     {
       borderRadius: 8,
       width: hasVariant ? fullWidth / 2 - 30 : fullWidth - 80,
-      height: hasVariant ? 170 : 350,
+      height: hasVariant ? fullWidth / 2 - 30 : fullWidth - 80,
       margin: hasVariant ? 0 : 20,
     },
   ];
 
   const nameStyle = [
     {
-      paddingTop: hasVariant ? 10 : 15,
+      //paddingTop: hasVariant ? 10 : 15,
       paddingBottom: hasVariant ? 5 : 7,
       color: "#363636",
-      fontSize: hasVariant ? 15 : 30,
+      fontSize: hasVariant ? 15 : 20,
     },
   ];
+
+  function onLikeUser() {
+    if(swiper) {
+      swiper.swipeRight();
+    }
+  }
+
+  function onhideUser() {
+    if(swiper) {
+      swiper.swipeLeft();
+    }
+  }
 
   return (
     <View style={styles.containerCardItem}>
       {/* IMAGE */}
-      <Image source={image} style={imageStyle} />
-
-      {/* MATCHES */}
-      {matches && (
-        <View style={styles.matchesCardItem}>
-          <Text style={styles.matchesTextCardItem}>
-            <Icon name="heart" color={WHITE} size={13} /> {matches}% Match!
-          </Text>
-        </View>
-      )}
+      <Image source={{ uri: user.profilePicture }} style={imageStyle} />
 
       {/* NAME */}
-      <Text style={nameStyle}>{name}</Text>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingLeft: 24, paddingRight: 24}}>
+        <Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
+        <View style={{flexDirection: 'row'}}>
+          <FontAwesome name="map-marker" size={18} style={{paddingRight: 4}}/>
+          <Text>{user.distanceToUser}</Text>
+          <Text>{unitsImperial ? ' mi' : ' km'}</Text>
+          </View>
+      </View>
 
       {/* DESCRIPTION */}
-      {description && (
-        <Text style={styles.descriptionCardItem}>{description}</Text>
-      )}
-
-      {/* STATUS */}
-      {!description && (
-        <View style={styles.status}>
-          <View style={isOnline ? styles.online : styles.offline} />
-          <Text style={styles.statusText}>
-            {isOnline ? "Online" : "Offline"}
-          </Text>
-        </View>
+      {user.description && (
+        <Text style={styles.descriptionCardItem}>{user.description}</Text>
       )}
 
       {/* ACTIONS */}
       {hasActions && (
         <View style={styles.actionsCardItem}>
-          <TouchableOpacity style={styles.miniButton}>
-            <Icon name="star" color={STAR_ACTIONS} size={14} />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button}>
-            <Icon name="heart" color={LIKE_ACTIONS} size={25} />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY }]} onPress={() => onhideUser()}>
             <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.miniButton}>
-            <Icon name="flash" color={FLASH_ACTIONS} size={14} />
+          <TouchableOpacity style={styles.button} onPress={() => onLikeUser()}>
+            <Icon name="heart" color={LIKE_ACTIONS} size={25} />
           </TouchableOpacity>
         </View>
       )}

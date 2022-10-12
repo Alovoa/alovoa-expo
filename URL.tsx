@@ -18,7 +18,6 @@ export const API_RESOURCE_PROFILE = DOMAIN + "/api/v1/resource/profile/view/%s"
 export const API_RESOURCE_SEARCH = DOMAIN + "/api/v1/resource/search"
 export const API_RESOURCE_ALERTS = DOMAIN + "/api/v1/resource/alerts"
 export const API_RESOURCE_CHATS = DOMAIN + "/api/v1/resource/chats"
-export const API_RESOURCE_CHAT_DETAIL = DOMAIN + "/api/v1/resource/chats/%s"
 export const API_RESOURCE_DONATE = DOMAIN + "/api/v1/resource/donate"
 
 export const REGISTER_OAUTH = DOMAIN + "/register-oauth";
@@ -38,3 +37,13 @@ export const USER_UPDATE_MISC_INFO = DOMAIN + "/user/update/misc-info/%s/%s"
 export const USER_ADD_INTEREST = DOMAIN + "/user/interest/add/%s"
 export const USER_REMOVE_INTEREST = DOMAIN + "/user/interest/delete/%s"
 export const USER_UPDATE_UNITS = DOMAIN + "/user/units/update/%s"
+
+export const USER_LIKE = DOMAIN + "/user/like/%s"
+export const USER_HIDE = DOMAIN + "/user/hide/%s"
+export const USER_BLOCK = DOMAIN + "/user/block/%s"
+export const USER_UNBLOCK = DOMAIN + "/user/unblock/%s"
+
+//lat: number, lon: number, distance: number, sort: number
+export const API_SEARCH_USERS = DOMAIN + "/api/v1/search/users/%s/%s/%s/%s"
+export const API_SEARCH_USERS_DEFAULT = DOMAIN + "/api/v1/search/users/default"
+export const API_CHAT_DETAIL = DOMAIN + "/api/v1/chats/%s"

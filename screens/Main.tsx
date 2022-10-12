@@ -15,15 +15,16 @@ const Tab = createBottomTabNavigator();
 const Main = () => {
   return (
     <Tab.Navigator initialRouteName="Search"
-    screenOptions={{
-      headerShown: false,
-      tabBarShowLabel: false
-    }}
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false
+      }}
     >
       <Tab.Screen
         name="YourProfile"
         component={YourProfile}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               focused={focused}
@@ -37,6 +38,7 @@ const Main = () => {
         name="Chat"
         component={Messages}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               focused={focused}
@@ -50,6 +52,7 @@ const Main = () => {
         name="Search"
         component={Search}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               focused={focused}
@@ -63,6 +66,7 @@ const Main = () => {
         name="Likes"
         component={Likes}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               focused={focused}
@@ -76,6 +80,7 @@ const Main = () => {
         name="Donate"
         component={Donate}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               focused={focused}

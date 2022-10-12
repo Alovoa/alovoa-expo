@@ -16,8 +16,6 @@ WebBrowser.maybeCompleteAuthSession();
 
 const _handleRedirect = async (event: { url: string; }) => {
 
-
-
   if (Platform.OS === 'ios') {
     WebBrowser.dismissBrowser();
   }
@@ -52,8 +50,9 @@ const loginFacebook = async () => {
 
 
 const Login = () => (
-  <View style={{ flex: 1, padding: 12 }}>
-    <ScrollView>
+  <View style={{ flex: 1, padding: 12, 
+  justifyContent: "center", }}>
+    <View>
       <Image resizeMode='contain' style={{ resizeMode: "contain", height: 200, width: '100%' }} source={require('../assets/splash.png')} />
 
       <Text style={{ textAlign: 'center', marginBottom: 48, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
@@ -79,7 +78,7 @@ const Login = () => (
           WebBrowser.openBrowserAsync(URL.IMPRINT);
         }}>{i18n.t('imprint')}</Text>
       </View>
-    </ScrollView>
+    </View>
   </View>
 );
 
@@ -87,8 +86,7 @@ export default Login;
 
 const styles = StyleSheet.create({
   link: {
-    color: "#ec407a",
-    flex: 1,
+    color: "#ec407a"
   },
   button: {
     alignItems: 'center',
