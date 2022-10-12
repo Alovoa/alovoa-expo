@@ -175,6 +175,12 @@ export type NotificationDto = {
   userFromDto: UserDto;
 }
 
+export enum UnitsEnum {
+  SI = 0,
+  IMPERIAL = 1
+}
+
+
 export enum SearchStageEnum {
   NORMAL,
   INCREASED_RADIUS_1,

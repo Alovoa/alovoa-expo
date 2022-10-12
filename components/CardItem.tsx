@@ -33,42 +33,53 @@ const CardItem = ({
 
   const nameStyle = [
     {
-      //paddingTop: hasVariant ? 10 : 15,
+      paddingTop: hasVariant ? 10 : 0,
       paddingBottom: hasVariant ? 5 : 7,
       color: "#363636",
       fontSize: hasVariant ? 15 : 20,
+      textAlign: 'center',
+      textAlignVertical: 'center',
+      flex: 1
+
     },
   ];
 
+  const cardVariant = hasVariant ? {
+    width: 150, paddingVertical: 6
+  } : {}
+
+
   function onLikeUser() {
-    if(swiper) {
+    if (swiper) {
       swiper.swipeRight();
     }
   }
 
   function onhideUser() {
-    if(swiper) {
+    if (swiper) {
       swiper.swipeLeft();
     }
   }
 
   return (
-    <View style={styles.containerCardItem}>
+    <View style={[styles.containerCardItem, cardVariant]}>
       {/* IMAGE */}
       <Image source={{ uri: user.profilePicture }} style={imageStyle} />
 
       {/* NAME */}
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingLeft: 24, paddingRight: 24}}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: 24}}>
         <Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
-        <View style={{flexDirection: 'row'}}>
-          <FontAwesome name="map-marker" size={18} style={{paddingRight: 4}}/>
-          <Text>{user.distanceToUser}</Text>
-          <Text>{unitsImperial ? ' mi' : ' km'}</Text>
+        {!hasVariant &&
+          <View style={{ flexDirection: 'row' }}>
+            <FontAwesome name="map-marker" size={18} style={{ paddingRight: 4 }} />
+            <Text>{user.distanceToUser}</Text>
+            <Text>{unitsImperial ? ' mi' : ' km'}</Text>
           </View>
+        }
       </View>
 
       {/* DESCRIPTION */}
-      {user.description && (
+      {!hasVariant && user.description && (
         <Text style={styles.descriptionCardItem}>{user.description}</Text>
       )}
 

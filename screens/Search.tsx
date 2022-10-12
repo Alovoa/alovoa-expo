@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { View, ImageBackground, FlatList, Dimensions, RefreshControl } from "react-native";
+import { View, Dimensions, RefreshControl } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import { Filters, CardItem } from "../components";
 import styles from "../assets/styles";
-import { UserDto, SearchResource, SearchDto } from "../types";
+import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -30,6 +30,7 @@ const Search = () => {
 
   
   const [refreshing, setRefreshing] = React.useState(false);
+  const [user, setUser] = React.useState<UserDto>();
   const [swiper, setSwiper] = useState<CardStack | null>();
   const [results, setResults] = useState(Array<UserDto>);
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
@@ -47,6 +48,7 @@ const Search = () => {
     await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE).then(
       (response) => {
         let data: SearchResource = response.data;
+        setUser(data.user);
         if (!data.user.locationLatitude) {
           loadResults();
         } else {
@@ -110,7 +112,7 @@ const Search = () => {
       load();
     }
   }
-  
+
   return (
     <ScrollView style={{ height: HEIGHT }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
@@ -137,6 +139,7 @@ const Search = () => {
                   <CardItem
                     user={card}
                     hasActions={true}
+                    unitsImperial={user?.units == UnitsEnum.IMPERIAL}
                     swiper={swiper}
                   />
                 </Card>
