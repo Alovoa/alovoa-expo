@@ -60,7 +60,7 @@ export default function App() {
           ></Stack.Screen>
           <Stack.Screen
             name="Profile"
-            options={{ headerShown: false, animationEnabled: false }}
+            options={{ headerShown: true, animationEnabled: false }}
             component={Profile}
           ></Stack.Screen>
         </Stack.Navigator>

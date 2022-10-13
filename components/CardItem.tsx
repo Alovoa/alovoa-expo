@@ -2,6 +2,7 @@ import React from "react";
 import { Text, View, Image, Dimensions, TouchableOpacity } from "react-native";
 import Icon from "./Icon";
 import { CardItemT, UserDto } from "../types";
+import * as Global from "../Global";
 import styles, {
   DISLIKE_ACTIONS,
   FLASH_ACTIONS,
@@ -64,7 +65,9 @@ const CardItem = ({
   return (
     <View style={[styles.containerCardItem, cardVariant]}>
       {/* IMAGE */}
-      <Image source={{ uri: user.profilePicture }} style={imageStyle} />
+      <TouchableOpacity onPress={Global.nagivateProfile(user.idEncoded)}>
+        <Image source={{ uri: user.profilePicture }} style={imageStyle} />
+      </TouchableOpacity>
 
       {/* NAME */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: 24}}>

@@ -14,6 +14,10 @@ export const INDEX_MAIN = "3"
 
 export const STORAGE_PAGE = "page";
 export const STORAGE_YOUR_PROFILE = "your-profile"
+export const STORAGE_YOUR_CHAT = "chat"
+export const STORAGE_YOUR_CHAT_DETAIL = "chat/%s"
+export const STORAGE_LIKES = "likes"
+export const STORAGE_DONATE = "donate"
 
 export async function Fetch(url: string = "", method: string = "get", data: any = {}, contentType: string = "application/json"): Promise<any> {
   try {
@@ -35,6 +39,12 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
   } catch (e) {
     throw e;
   }
+}
+
+export function nagivateProfile(idEnc: string) {
+  navigate("Profile", {
+    idEnc: idEnc
+  });
 }
 
 export function navigate(name: string, params?: any) {
