@@ -1,5 +1,6 @@
 import React from "react";
-import { Text, View, Image, Dimensions, TouchableOpacity } from "react-native";
+import { View, Image, Dimensions, TouchableOpacity } from "react-native";
+import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT, UserDto } from "../types";
 import * as Global from "../Global";
@@ -20,6 +21,9 @@ const CardItem = ({
   unitsImperial,
   swiper
 }: CardItemT) => {
+
+  const { colors } = useTheme();
+
   // Custom styling
   const fullWidth = Dimensions.get("window").width;
 
@@ -36,12 +40,10 @@ const CardItem = ({
     {
       paddingTop: hasVariant ? 10 : 0,
       paddingBottom: hasVariant ? 5 : 7,
-      color: "#363636",
       fontSize: hasVariant ? 15 : 20,
-      textAlign: 'center',
+      textAlign: hasVariant ? 'center' : 'auto',
       textAlignVertical: 'center',
       flex: 1
-
     },
   ];
 
@@ -63,7 +65,7 @@ const CardItem = ({
   }
 
   return (
-    <View style={[styles.containerCardItem, cardVariant]}>
+    <View style={[styles.containerCardItem, cardVariant, {backgroundColor: colors.backgroundColor}]}>
       {/* IMAGE */}
       <TouchableOpacity onPress={Global.nagivateProfile(user.idEncoded)}>
         <Image source={{ uri: user.profilePicture }} style={imageStyle} />

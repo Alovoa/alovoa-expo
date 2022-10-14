@@ -5,7 +5,7 @@ import styles, { DARK_GRAY, PRIMARY_COLOR } from "../assets/styles";
 import { TabBarIconT } from "../types";
 
 const TabBarIcon = ({ focused, iconName, text }: TabBarIconT) => {
-  const iconFocused = focused ? PRIMARY_COLOR : DARK_GRAY;
+  const iconFocused = focused ? PRIMARY_COLOR : '#9e9e9e';
 
   return (
     <View style={styles.iconMenu}>

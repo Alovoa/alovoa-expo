@@ -1,16 +1,13 @@
 import React from "react";
 import {
   View,
-  Text,
   Dimensions,
   StyleSheet,
   Image,
-  Pressable,
-  TextInput,
   Platform,
   KeyboardAvoidingView,
-  Switch,
 } from "react-native";
+import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as ImagePicker from 'expo-image-picker';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
@@ -21,12 +18,12 @@ import SvgInterests from "../assets/onboarding/interests.svg";
 import SvgMatch from "../assets/onboarding/match.svg";
 import { FontAwesome } from '@expo/vector-icons';
 import * as I18N from "../i18n";
-import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import * as URL from "../URL";
 import * as Global from "../Global";
 import { UserInterestAutocomplete, UserOnboarding } from "../types";
 import * as ImageManipulator from 'expo-image-manipulator';
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const IMAGE_HEADER = "data:image/png;base64,";
 
@@ -43,6 +40,8 @@ const GENDER_FEMALE = 2
 const GENDER_OTHER = 3
 
 const Onboarding = () => {
+
+  const { colors } = useTheme();
 
   const [image, setImage] = React.useState("");
   const [imageB64, setImageB64] = React.useState("");
@@ -170,10 +169,10 @@ const Onboarding = () => {
   const onClearPress3 = React.useCallback(() => { setSuggestionsList3([]) }, [])
 
   async function submit() {
-    if(!imageB64) {
+    if (!imageB64) {
       scrollRef.current.scrollToIndex({ index: 0 });
       return;
-    } else if(!description) {
+    } else if (!description) {
       scrollRef.current.scrollToIndex({ index: 1 });
       return;
     } else if (!isGenderMaleEnabled && !isGenderFemaleEnabled && !isGenderOtherEnabled) {
@@ -186,7 +185,7 @@ const Onboarding = () => {
     let genders = []
     if (isGenderMaleEnabled) {
       genders.push(GENDER_MALE)
-    } 
+    }
     if (isGenderFemaleEnabled) {
       genders.push(GENDER_FEMALE)
     }
@@ -199,7 +198,7 @@ const Onboarding = () => {
     let interests = []
     if (interest1) {
       interests.push(interest1)
-    } 
+    }
     if (interest2) {
       interests.push(interest2)
     }
@@ -213,12 +212,12 @@ const Onboarding = () => {
       await Global.Fetch(URL.USER_ONBOARDING, 'post', dto);
       await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_MAIN);
       Global.loadPage(Global.INDEX_MAIN);
-      
-    } catch (e) {}
+
+    } catch (e) { }
   }
 
   return (
-    <View>
+    <View style={{ backgroundColor: colors.backgroundColor }}>
       <SwiperFlatList
         ref={scrollRef}
         showPagination={true}
@@ -229,26 +228,27 @@ const Onboarding = () => {
         <View style={[styles.view]}>
           <SvgProfilePic style={styles.svg} height={svgHeight} width={svgWidth} />
           <Text style={styles.title}>{i18n.t('profile.onboarding.profile-picture')}</Text>
-          <Pressable onPress={pickImage} style={[styles.profilePicButton]}>
-            {!image && <FontAwesome name="plus" size={48} color="white" />}
-            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-          </Pressable>
+          
+          {!image && <IconButton icon="plus" mode="contained-tonal" size={60} onPress={pickImage} style={[styles.profilePicButton]} />}
+          {image && <TouchableOpacity onPress={pickImage} ><Image source={{ uri: image }} style={{ width: 200, height: 200 }} /></TouchableOpacity>}
+          
         </View>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
           style={[styles.view]}>
           <SvgDescription style={styles.svg} height={svgHeight} width={svgWidth} />
           <Text style={styles.title}>{i18n.t('profile.onboarding.description')}</Text>
+          <View style={{height: 120, width: 300}}>
           <TextInput
-            multiline={true}
-            numberOfLines={4}
+            multiline
+            mode="outlined"
             onChangeText={(text) => setDescription(text)}
             placeholder={i18n.t('profile.onboarding.description-placeholder')}
             maxLength={200}
             value={description}
-            style={{ width: 200, height: 100 }}
             autoCorrect={false}
           />
+          </View>
         </KeyboardAvoidingView>
         <View style={[styles.view]}>
           <SvgGenders style={styles.svg} height={svgHeight} width={svgWidth} />
@@ -256,22 +256,16 @@ const Onboarding = () => {
           <View>
             <View style={{ flexDirection: "row" }}>
               <Switch onValueChange={toggleGenderMaleSwitch}
-                trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                thumbColor={isGenderMaleEnabled ? '#EC407A' : '#eeeeee'}
                 value={isGenderMaleEnabled} />
               <Text style={styles.switchText}>{i18n.t('gender.male')}</Text>
             </View>
             <View style={{ flexDirection: "row" }}>
               <Switch onValueChange={toggleGenderFemaleSwitch}
-                trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                thumbColor={isGenderFemaleEnabled ? '#EC407A' : '#eeeeee'}
                 value={isGenderFemaleEnabled} />
               <Text style={styles.switchText}>{i18n.t('gender.female')}</Text>
             </View>
             <View style={{ flexDirection: "row" }}>
               <Switch onValueChange={toggleGenderOtherSwitch}
-                trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                thumbColor={isGenderOtherEnabled ? '#EC407A' : '#eeeeee'}
                 value={isGenderOtherEnabled} />
               <Text style={styles.switchText}>{i18n.t('gender.other')}</Text>
             </View>
@@ -280,15 +274,13 @@ const Onboarding = () => {
         <View style={[styles.view]}>
           <SvgIntention style={styles.svg} height={svgHeight} width={svgWidth} />
           <Text style={styles.title}>{i18n.t('profile.intention.title')}</Text>
-          <RadioButtonGroup
-            containerStyle={{ marginBottom: 10 }}
-            selected={intention}
-            onSelected={(value: string) => setIntention(value)}
-            radioBackground="#ec407a">
-            <RadioButtonItem label={i18n.t('profile.intention.meet')} value="1" style={styles.radioButton} />
-            <RadioButtonItem label={i18n.t('profile.intention.date')} value="2" style={styles.radioButton} />
-            <RadioButtonItem label={i18n.t('profile.intention.sex')} value="3" style={styles.radioButton} />
-          </RadioButtonGroup>
+          <RadioButton.Group
+            value={intention}
+            onValueChange={(value: string) => setIntention(value)}>
+            <RadioButton.Item label={i18n.t('profile.intention.meet')} value="1" style={{ flexDirection: 'row-reverse'}} />
+            <RadioButton.Item label={i18n.t('profile.intention.date')} value="2" style={{ flexDirection: 'row-reverse'}} />
+            <RadioButton.Item label={i18n.t('profile.intention.sex')} value="3" style={{ flexDirection: 'row-reverse'}} />
+          </RadioButton.Group>
 
           <Text style={styles.warning}>{i18n.t('profile.intention.warning')}</Text>
         </View>
@@ -338,7 +330,7 @@ const Onboarding = () => {
               suggestionsListContainerStyle={{
               }}
               containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-              renderItem={(item, text) => <Text style={{ padding: 15 }}>{item.title}</Text>}
+              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.backgroundColor }}>{item.title}</Text>}
               ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
               ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
               inputHeight={50}
@@ -384,7 +376,7 @@ const Onboarding = () => {
               suggestionsListContainerStyle={{
               }}
               containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-              renderItem={(item, text) => <Text style={{ padding: 15 }}>{item.title}</Text>}
+              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.backgroundColor }}>{item.title}</Text>}
               ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
               ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
               inputHeight={50}
@@ -431,7 +423,7 @@ const Onboarding = () => {
               suggestionsListContainerStyle={{
               }}
               containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-              renderItem={(item, text) => <Text style={{ padding: 15 }}>{item.title}</Text>}
+              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.backgroundColor }}>{item.title}</Text>}
               ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
               ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
               inputHeight={50}
@@ -444,12 +436,11 @@ const Onboarding = () => {
         <View style={[styles.view]}>
           <SvgMatch style={styles.svg} height={svgHeight} width={svgWidth} />
           <Text style={styles.title}>{i18n.t('profile.onboarding.match.title')}</Text>
-          <Pressable style={[styles.button, { marginTop: 48 }]} onPress={submit}>
+          <Button mode="contained" icon="heart" style={[{ marginTop: 48 }]} onPress={submit}>
             <Text style={{ color: "white" }}>{i18n.t('profile.onboarding.submit')}</Text>
-          </Pressable>
+          </Button>
           <Text style={styles.warning}>{i18n.t('profile.onboarding.match.subtitle')}</Text>
         </View>
-
       </SwiperFlatList>
     </View>
   )
@@ -484,10 +475,7 @@ const styles = StyleSheet.create({
   },
   profilePicButton: {
     width: 200,
-    height: 200,
-    backgroundColor: "#ec407a",
-    justifyContent: 'center',
-    alignItems: 'center'
+    height: 200
   },
   title: {
     textAlign: 'center',

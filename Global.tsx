@@ -12,6 +12,7 @@ export const INDEX_REGISTER = "1"
 export const INDEX_ONBOARDING = "2"
 export const INDEX_MAIN = "3"
 
+export const STORAGE_FIRSTNAME = "firstName";
 export const STORAGE_PAGE = "page";
 export const STORAGE_YOUR_PROFILE = "your-profile"
 export const STORAGE_YOUR_CHAT = "chat"
@@ -42,9 +43,11 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
 }
 
 export function nagivateProfile(idEnc: string) {
+  /*
   navigate("Profile", {
     idEnc: idEnc
   });
+  */ //TODO
 }
 
 export function navigate(name: string, params?: any) {

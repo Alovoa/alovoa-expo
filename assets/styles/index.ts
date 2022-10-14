@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, useColorScheme } from "react-native";
 
 export const PRIMARY_COLOR = "#EC407A";
 export const PRIMARY_COLOR_LIGHT = "#F2D3DD";
@@ -48,14 +48,13 @@ export default StyleSheet.create({
   },
   // COMPONENT - CARD ITEM
   containerCardItem: {
-    backgroundColor: WHITE,
     borderRadius: 8,
     alignItems: "center",
     margin: 10,
     elevation: 1,
     shadowOpacity: 0.05,
     shadowRadius: 10,
-    shadowColor: BLACK,
+    shadowColor: GRAY,
     shadowOffset: { height: 0, width: 0 },
     flexGrow: 1,
     width: DIMENSION_WIDTH - 22
@@ -103,7 +102,8 @@ export default StyleSheet.create({
   actionsCardItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 12,
+    paddingBottom: 12,
+    paddingTop: 24
   },
   button: {
     width: 60,
@@ -195,7 +195,6 @@ export default StyleSheet.create({
 
   // COMPONENT - PROFILE ITEM
   containerProfileItem: {
-    backgroundColor: WHITE,
     paddingHorizontal: 10,
     paddingBottom: 25,
     margin: 20,
@@ -223,7 +222,6 @@ export default StyleSheet.create({
   name: {
     paddingTop: 25,
     paddingBottom: 5,
-    color: DARK_GRAY,
     fontSize: 24,
     textAlign: "center",
   },

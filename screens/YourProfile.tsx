@@ -2,11 +2,8 @@ import React from "react";
 import {
   ScrollView,
   View,
-  Text,
   ImageBackground,
   TouchableOpacity,
-  TextInput,
-  Switch,
   Platform,
   Pressable,
   FlatList,
@@ -14,6 +11,7 @@ import {
   RefreshControl,
   Keyboard
 } from "react-native";
+import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
 import styles, { WHITE, PRIMARY_COLOR, PRIMARY_COLOR_LIGHT, GRAY } from "../assets/styles";
 import { UserInterestAutocomplete, YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum } from "../types";
 import * as I18N from "../i18n";
@@ -62,6 +60,7 @@ enum IntentionText {
 
 const YourProfile = () => {
 
+  const { colors } = useTheme();
   const [refreshing, setRefreshing] = React.useState(false);
   const [profilePic, setProfilePic] = React.useState("");
   const [name, setName] = React.useState("");
@@ -95,7 +94,17 @@ const YourProfile = () => {
   const [isGenderFemaleEnabled, setIsGenderFemaleEnabled] = React.useState(false);
   const [isGenderOtherEnabled, setIsGenderOtherEnabled] = React.useState(false);
 
+  const descriptionRef = React.useRef(description);
+
   const debounceDescriptionHandler = React.useCallback(debounce(updateDescription, 1500), []);
+  React.useEffect(() => {
+    descriptionRef.current = description;
+    debounceDescriptionHandler();
+  }, [description]);
+
+  React.useEffect(() => {
+    addInterest();
+  }, [interest]);
 
   const IMG_SIZE_MAX = 600;
 
@@ -145,7 +154,6 @@ const YourProfile = () => {
 
   const getSuggestions = React.useCallback(async (q: string) => {
     const filterToken = cleanInterest(q);
-    setInterest(filterToken);
     dropdownController.current.setInputText(filterToken);
     if (typeof q !== 'string' || q.length < 2) {
       setSuggestionsList([])
@@ -332,9 +340,9 @@ const YourProfile = () => {
     }
   }
 
-  async function updateDescription(text: string) {
-    if (text) {
-      Global.Fetch(URL.USER_UPDATE_DESCRIPTION, 'post', text, 'text/plain');
+  async function updateDescription() {
+    if (descriptionRef.current) {
+      Global.Fetch(URL.USER_UPDATE_DESCRIPTION, 'post', descriptionRef.current, 'text/plain');
     }
   }
 
@@ -369,7 +377,7 @@ const YourProfile = () => {
   }
 
   return (
-    <ScrollView style={styles.containerProfile} keyboardShouldPersistTaps='handled'
+    <ScrollView style={[styles.containerProfile, { backgroundColor: colors.backgroundColor }]} keyboardShouldPersistTaps='handled'
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
       <TouchableOpacity
         onPress={updateProfilePicture}
@@ -378,33 +386,30 @@ const YourProfile = () => {
         </ImageBackground>
       </TouchableOpacity>
 
-      <View style={[styles.containerProfileItem, { marginTop: 24 }]}>
-        <Text style={styles.name}>{name + ", " + age}</Text>
-        <TextInput
-          multiline={true}
-          numberOfLines={4}
-          onChangeText={
-            (text: string) => {
-              setDescription(text);
-              debounceDescriptionHandler(text);
-            }
-          }
-          placeholder={i18n.t('profile.onboarding.description-placeholder')}
-          maxLength={200}
-          value={description}
-          style={{ height: 160, padding: 8 }}
-          autoCorrect={false}
-        />
-        <View><Text>{i18n.t('profile.intention.title')}</Text>
-          <RadioButtonGroup
-            containerStyle={{ marginBottom: 10 }}
-            selected={intention}
-            onSelected={(value: number) => updateIntention(value)}
-            radioBackground="#ec407a">
-            <RadioButtonItem label={i18n.t('profile.intention.meet')} value={Intention.MEET} style={{ marginTop: 4, marginBottom: 4 }} />
-            <RadioButtonItem label={i18n.t('profile.intention.date')} value={Intention.DATE} style={{ marginTop: 4, marginBottom: 4 }} />
-            <RadioButtonItem label={i18n.t('profile.intention.sex')} value={Intention.SEX} style={{ marginTop: 4, marginBottom: 4 }} />
-          </RadioButtonGroup>
+      <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
+        <Text style={[styles.name, {}]}>{name + ", " + age}</Text>
+        <View style={{ height: 80, width: 300, marginTop: 24 }}>
+          <TextInput
+            multiline
+            mode="outlined"
+            onChangeText={(text) => {
+              setDescription(text)
+            }}
+            placeholder={i18n.t('profile.onboarding.description-placeholder')}
+            maxLength={200}
+            value={description}
+            autoCorrect={false}
+          />
+        </View>
+        <View style={{ marginTop: 12 }}>
+          <Text>{i18n.t('profile.intention.title')}</Text>
+          <RadioButton.Group
+            value={intention.toString()}
+            onValueChange={(value: string) => updateIntention(Number(value))}>
+            <RadioButton.Item label={i18n.t('profile.intention.meet')} value={String(Intention.MEET)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.MEET} />
+            <RadioButton.Item label={i18n.t('profile.intention.date')} value={String(Intention.DATE)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.DATE} />
+            <RadioButton.Item label={i18n.t('profile.intention.sex')} value={String(Intention.SEX)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.SEX} />
+          </RadioButton.Group>
         </View>
 
         <View style={{ marginTop: 12 }}>
@@ -440,9 +445,10 @@ const YourProfile = () => {
             value={minAge}
             minimumValue={MIN_AGE}
             maximumValue={maxAge}
-            minimumTrackTintColor={PRIMARY_COLOR_LIGHT}
+            minimumTrackTintColor={colors.tertiary}
             maximumTrackTintColor={GRAY}
-            thumbTintColor={PRIMARY_COLOR}
+            thumbTintColor={colors.primary}
+            step={1}
             onValueChange={value => {
               setMinAgeText(value);
             }}
@@ -456,9 +462,9 @@ const YourProfile = () => {
             value={maxAge}
             minimumValue={minAge}
             maximumValue={MAX_AGE}
-            minimumTrackTintColor={PRIMARY_COLOR_LIGHT}
+            minimumTrackTintColor={colors.tertiary}
             maximumTrackTintColor={GRAY}
-            thumbTintColor={PRIMARY_COLOR}
+            thumbTintColor={colors.primary}
             step={1}
             onValueChange={value => {
               setMaxAgeText(value);
@@ -512,35 +518,22 @@ const YourProfile = () => {
                 suggestionsListContainerStyle={{
                 }}
                 containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-                renderItem={(item, text) => <Text style={{ padding: 15 }}>{item.title}</Text>}
+                renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.backgroundColor }}>{item.title}</Text>}
                 ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
                 ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
                 inputHeight={50}
                 showChevron={false}
                 closeOnBlur={false}
               />
-              <Pressable style={[styles.profileButton, styles.center, { marginLeft: 8, width: 52 }]} onPress={() => addInterest()}>
-                <View style={styles.center}>
-                  <FontAwesome name="plus" color={WHITE} size={18} />
-                </View>
-              </Pressable>
+              <IconButton icon='plus' mode='contained' style={{ width: 38, height: 38 }} size={20} onPress={() => addInterest()} />
             </View>}
-          <FlatList
-            numColumns={2}
-            data={interests}
-            extraData={interests}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <Pressable onPress={() => {
-                removeInterest(item);
-              }} style={[{ marginRight: 8, marginBottom: 8 }, styles.profileButtonLight]}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ textAlign: 'center', marginRight: 4 }}>{item.text}</Text>
-                  <FontAwesome name="times-circle" size={18} />
-                </View>
-              </Pressable>
-            )}
-          />
+          {
+            interests.map((item, index) => (
+              <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+                <Text>{item.text}</Text>
+              </Button>
+            ))
+          }
         </View>
 
 
@@ -630,20 +623,18 @@ const YourProfile = () => {
 
         <View style={{ marginTop: 24 }}>
           <Text>{i18n.t('profile.units.title')}</Text>
-          <RadioButtonGroup
-            containerStyle={{ marginBottom: 10 }}
-            selected={units}
-            onSelected={(value: number) => updateUnits(value)}
-            radioBackground="#ec407a">
-            <RadioButtonItem label={i18n.t('profile.units.si')} value={UnitsEnum.SI} style={{ marginTop: 4, marginBottom: 4 }} />
-            <RadioButtonItem label={i18n.t('profile.units.imperial')} value={UnitsEnum.IMPERIAL} style={{ marginTop: 4, marginBottom: 4 }} />
-          </RadioButtonGroup>
+          <RadioButton.Group
+            value={units.toString()}
+            onValueChange={(value: string) => updateUnits(Number(value))}>
+            <RadioButton.Item label={i18n.t('profile.units.si')} value={String(UnitsEnum.SI)} style={{ flexDirection: 'row-reverse' }} />
+            <RadioButton.Item label={i18n.t('profile.units.imperial')} value={String(UnitsEnum.IMPERIAL)} style={{ flexDirection: 'row-reverse' }} />
+          </RadioButton.Group>
         </View>
 
         <View style={{ marginTop: 128 }}>
-          <Pressable style={[styles.profileButton, styles.center]} onPress={() => logout()}>
-            <Text style={{ color: WHITE }}>Logout</Text>
-          </Pressable>
+          <Button mode='contained' onPress={() => logout()}>
+            <Text>Logout</Text>
+          </Button>
           <View style={{ marginTop: 24 }}>
             <Text style={styles.link} onPress={() => {
               WebBrowser.openBrowserAsync(URL.PRIVACY);

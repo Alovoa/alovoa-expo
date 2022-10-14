@@ -1,9 +1,7 @@
 import React from "react";
-import { Onboarding, Main } from "../screens";
-import { View, Platform, Pressable, ScrollView, Text, StyleSheet, Switch, Image, TextInput } from "react-native";
-import { Buffer } from "buffer";
+import { useTheme, Text, Button, TextInput, Switch, RadioButton } from "react-native-paper";
+import { View, ScrollView, StyleSheet, Image } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
@@ -26,21 +24,26 @@ function subtractYears(years: number): Date {
 
 const Register = () => {
 
+  const { colors } = useTheme();
+
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [dob, setDob] = React.useState(subtractYears(DEFAULT_AGE));
-  const [gender, setGender] = React.useState(1);
+  const [gender, setGender] = React.useState("1");
   const [isTosEnabled, setIsTosEnabled] = React.useState(false);
   const [isPrivacyEnabled, setIsPrivacyEnabled] = React.useState(false);
 
   const minDate = subtractYears(MAX_AGE);
   const maxDate = subtractYears(MIN_AGE);
 
+  async function load() {
+    let name = await Global.GetStorage(Global.STORAGE_FIRSTNAME);
+    setFirstName(name ? String(name) : "");
+  }
+
   React.useEffect(() => {
-    Global.GetStorage("firstName").then((firstNameStorage) => {
-      setFirstName(firstNameStorage ? String(firstNameStorage) : "");
-    });
-  }, [firstName]);
+    load();
+  }, []);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -63,7 +66,7 @@ const Register = () => {
       let data = {} as RegisterBody;
       data.dateOfBirth = dob;
       data.firstName = firstName;
-      data.gender = gender;
+      data.gender = Number(gender);
       data.privacy = isPrivacyEnabled;
       data.termsConditions = isTosEnabled;
 
@@ -78,7 +81,7 @@ const Register = () => {
 
   return (
 
-    <View style={{ flex: 1, padding: 12 }}>
+    <View style={{ flex: 1, padding: 12, backgroundColor: colors.backgroundColor }}>
       <ScrollView>
 
         <Text style={{ textAlign: 'center', marginBottom: 4, fontSize: 32, fontWeight: '500' }}>{i18n.t('register.title')}</Text>
@@ -90,11 +93,12 @@ const Register = () => {
             <Text style={{ color: "red" }}>{" *"}</Text>
           </View>
           <TextInput
-            defaultValue={firstName}
+            mode="outlined"
+            value={firstName}
             autoCapitalize={"none"}
+            onChangeText={text => setFirstName(text)}
             maxLength={10}
             autoCorrect={false}
-            style={{ fontSize: 18 }}
           />
         </View>
 
@@ -103,12 +107,11 @@ const Register = () => {
             <Text>{i18n.t('dob')}</Text>
             <Text style={{ color: "red" }}>{" *"}</Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Pressable onPress={showDatePicker} style={[styles.button]}>
-              <FontAwesome name="calendar" size={18} color="white" style={styles.icon} />
+          <View style={{ paddingTop: 6 }}>
+            <Button onPress={showDatePicker} icon="calendar" mode="elevated">
               <Text
                 style={{ fontSize: 18, color: "white" }}>{dob.toISOString().split('T')[0]}</Text>
-            </Pressable>
+            </Button>
           </View>
         </View>
 
@@ -117,30 +120,37 @@ const Register = () => {
             <Text>{i18n.t('gender.title')}</Text>
             <Text style={{ color: "red" }}>{" *"}</Text>
           </View>
-          <Picker
-            style={{ fontSize: 18 }}
-            selectedValue={gender}
-            onValueChange={(itemValue, itemIndex) => setGender(itemValue)}>
-            <Picker.Item label={i18n.t('gender.male')} value="1" style={{ fontSize: 18 }} />
-            <Picker.Item label={i18n.t('gender.female')} value="2" style={{ fontSize: 18 }} />
-            <Picker.Item label={i18n.t('gender.other')} value="3" style={{ fontSize: 18 }} />
-          </Picker>
+          <RadioButton.Group onValueChange={(itemValue) => { setGender(itemValue) }} value={gender}>
+          <RadioButton.Item
+              label={i18n.t('gender.male')}
+              value="1"
+              style={{ flexDirection: 'row-reverse'}}
+            />
+            <RadioButton.Item
+              label={i18n.t('gender.female')}
+              value="2"
+              style={{ flexDirection: 'row-reverse'}}
+            />
+            <RadioButton.Item
+              label={i18n.t('gender.other')}
+              value="3"
+              style={{ flexDirection: 'row-reverse'}}
+            />
+          </RadioButton.Group>
         </View>
 
         <View style={[styles.container]}>
           <Text>{i18n.t('register.referral-code') + " (" + i18n.t('optional') + ")"}</Text>
           <TextInput
+            mode="outlined"
             autoCapitalize={"none"}
             autoCorrect={false}
             placeholder={"c2f2-29be-4933-b9b9-3efa"}
-            style={{ fontSize: 18 }}
           />
         </View>
 
         <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
           <Switch onValueChange={toggleTosSwitch}
-            trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-            thumbColor={isTosEnabled ? '#EC407A' : '#eeeeee'}
             value={isTosEnabled} />
           <Text style={{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }}>{i18n.t('register.tos-agree')}</Text><Text style={styles.link} onPress={() => {
             WebBrowser.openBrowserAsync(URL.TOS);
@@ -149,8 +159,6 @@ const Register = () => {
 
         <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }]}>
           <Switch onValueChange={togglePrivacySwitch}
-            trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-            thumbColor={isPrivacyEnabled ? '#EC407A' : '#eeeeee'}
             value={isPrivacyEnabled} />
           <Text style={{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }}>{i18n.t('register.privacy-agree')}</Text>
           <Text style={styles.link} onPress={() => {
@@ -160,9 +168,9 @@ const Register = () => {
 
         <Text style={{ color: "red", marginBottom: 24 }}>{i18n.t('register.asterisk-warning')}</Text>
 
-        <Pressable style={[styles.button]} onPress={submit}><FontAwesome name="check" color="white" style={styles.icon} />
+        <Button mode="contained" onPress={submit}>
           <Text style={{ color: "white" }}>{i18n.t('register.title')}</Text>
-        </Pressable>
+        </Button>
 
         <Text style={styles.link} onPress={() => {
           WebBrowser.openBrowserAsync(URL.IMPRINT);

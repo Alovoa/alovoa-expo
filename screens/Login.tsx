@@ -1,13 +1,12 @@
 import React from "react";
-import { Onboarding, Register, Main } from "../screens";
-import { View, Platform, Pressable, ScrollView, Text, StyleSheet, Image } from "react-native";
+import { useTheme, Text, Button } from "react-native-paper";
+import { View, Platform, StyleSheet, Image } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
-import { FontAwesome } from '@expo/vector-icons';
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
@@ -27,11 +26,12 @@ const _handleRedirect = async (event: { url: string; }) => {
     let sessionId: string = String(data.queryParams["jsessionid"]);
     let rememberMe = String(data.queryParams["remember-me"]);
     await Global.Fetch(Global.format(URL.AUTH_COOKIE, rememberMe, sessionId));
-    await Global.SetStorage("firstName", firstName);
+    await Global.SetStorage(Global.STORAGE_FIRSTNAME, firstName);
     await Global.SetStorage(Global.STORAGE_PAGE, page);
     await Global.SetStorage("loginDate", new Date().toISOString());
 
     Global.loadPage(page);
+    
   }
 };
 
@@ -48,24 +48,30 @@ const loginFacebook = async () => {
 };
 
 
-const Login = () => (
-  <View style={{ flex: 1, padding: 12, 
-  justifyContent: "center", }}>
+
+
+
+const Login = () => { 
+  
+  const { colors } = useTheme();
+  
+  return (
+  <View style={[{ flex: 1, padding: 12, justifyContent: "center", backgroundColor: colors.backgroundColor}]}>
     <View>
       <Image resizeMode='contain' style={{ resizeMode: "contain", height: 200, width: '100%' }} source={require('../assets/splash.png')} />
 
       <Text style={{ textAlign: 'center', marginBottom: 48, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
 
-      <Pressable style={[styles.button, styles.buttonGoogle]}
+      <Button icon="google" mode="contained" style={[styles.buttonGoogle]}
         onPress={() => {
           loginGoogle();
         }}
-      ><FontAwesome name="google" size={24} color="white" style={styles.icon} /><Text style={styles.buttonText}>{i18n.t('auth.google')}</Text></Pressable>
-      <Pressable style={[styles.button, styles.buttonFacebook]}
+      ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+      <Button icon="facebook" mode="contained" style={[styles.buttonFacebook, {marginTop: 8}]}
         onPress={() => {
           loginFacebook();
         }}
-      ><FontAwesome name="facebook-official" size={24} color="white" style={styles.icon} /><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Pressable>
+      ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
       <View style={{ marginTop: 24 }}>
         <Text style={styles.link} onPress={() => {
           WebBrowser.openBrowserAsync(URL.PRIVACY);
@@ -79,7 +85,7 @@ const Login = () => (
       </View>
     </View>
   </View>
-);
+)};
 
 export default Login;
 
