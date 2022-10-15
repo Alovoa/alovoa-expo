@@ -7,6 +7,8 @@ import * as URL from "./URL";
 import { createNavigationContainerRef } from '@react-navigation/native';
 import Toast from 'react-native-root-toast';
 
+export const FLAG_ENABLE_DONATION = true;
+
 export const navigationRef = createNavigationContainerRef()
 export const INDEX_REGISTER = "1"
 export const INDEX_ONBOARDING = "2"
@@ -20,7 +22,8 @@ export const STORAGE_YOUR_CHAT_DETAIL = "chat/%s"
 export const STORAGE_LIKES = "likes"
 export const STORAGE_DONATE = "donate"
 
-export async function Fetch(url: string = "", method: string = "get", data: any = {}, contentType: string = "application/json"): Promise<any> {
+export async function Fetch(url: string = "", method: string = "get", data: any = {},
+  contentType: string = "application/json"): Promise<any> {
   try {
     let res = await axios({
       withCredentials: true,
@@ -30,7 +33,7 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
         'Content-Type': contentType
       },
       data: data,
-      
+
     })
     if (res.request.responseURL == URL.AUTH_LOGIN) {
       navigate("Login")
@@ -43,6 +46,7 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
 }
 
 export function nagivateProfile(idEnc: string) {
+  console.log("test")
   /*
   navigate("Profile", {
     idEnc: idEnc
@@ -91,7 +95,7 @@ export function ShowToast(text: string) {
       backgroundColor: "#424242"
     });
   }
-  
+
 }
 
 export const format = (str: string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);

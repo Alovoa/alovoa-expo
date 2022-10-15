@@ -4,8 +4,10 @@ export type CardItemT = {
   user: UserDto;
   hasActions?: boolean;
   hasVariant?: boolean;
+  hasDonation?: boolean;
   unitsImperial?: boolean;
-  swiper?: CardStack
+  swiper?: CardStack;
+  donation?: number;
 };
 
 export type IconT = {
@@ -53,6 +55,10 @@ export type DataT = {
   info4?: string;
   location?: string;
 };
+
+export type DonationDtoListModel = {
+  list: Array<DonationDto>;
+}
 
 
 export type RegisterBody = {

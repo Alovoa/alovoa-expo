@@ -82,5 +82,18 @@
         "intention-toast": "Intention geändert. Du kannst dies in 24h wieder ändern."
     },
     "cancel": "Abbrechen",
-    "ok": "OK"
+    "ok": "OK",
+    "navigation": {
+        "profile": "Profil",
+        "chat": "Chat",
+        "search": "Suchen",
+        "likes": "Likes",
+        "donate": "Spenden"
+    },
+    "donate": {
+        "filter": {
+            "recent": "Neueste",
+            "amount": "Höhe"
+        }
+    }
 }

@@ -17,7 +17,6 @@ import { UserInterestAutocomplete, YourProfileResource, UserMiscInfoEnum, UserIn
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import { FontAwesome } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
@@ -406,9 +405,9 @@ const YourProfile = () => {
           <RadioButton.Group
             value={intention.toString()}
             onValueChange={(value: string) => updateIntention(Number(value))}>
-            <RadioButton.Item label={i18n.t('profile.intention.meet')} value={String(Intention.MEET)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.MEET} />
-            <RadioButton.Item label={i18n.t('profile.intention.date')} value={String(Intention.DATE)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.DATE} />
-            <RadioButton.Item label={i18n.t('profile.intention.sex')} value={String(Intention.SEX)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.SEX} />
+            <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.meet')} value={String(Intention.MEET)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.MEET} />
+            <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.date')} value={String(Intention.DATE)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.DATE} />
+            <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.sex')} value={String(Intention.SEX)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.SEX} />
           </RadioButton.Group>
         </View>
 
@@ -445,7 +444,7 @@ const YourProfile = () => {
             value={minAge}
             minimumValue={MIN_AGE}
             maximumValue={maxAge}
-            minimumTrackTintColor={colors.tertiary}
+            minimumTrackTintColor={colors.secondary}
             maximumTrackTintColor={GRAY}
             thumbTintColor={colors.primary}
             step={1}
@@ -462,7 +461,7 @@ const YourProfile = () => {
             value={maxAge}
             minimumValue={minAge}
             maximumValue={MAX_AGE}
-            minimumTrackTintColor={colors.tertiary}
+            minimumTrackTintColor={colors.secondary}
             maximumTrackTintColor={GRAY}
             thumbTintColor={colors.primary}
             step={1}
@@ -626,8 +625,8 @@ const YourProfile = () => {
           <RadioButton.Group
             value={units.toString()}
             onValueChange={(value: string) => updateUnits(Number(value))}>
-            <RadioButton.Item label={i18n.t('profile.units.si')} value={String(UnitsEnum.SI)} style={{ flexDirection: 'row-reverse' }} />
-            <RadioButton.Item label={i18n.t('profile.units.imperial')} value={String(UnitsEnum.IMPERIAL)} style={{ flexDirection: 'row-reverse' }} />
+            <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.units.si')} value={String(UnitsEnum.SI)} style={{ flexDirection: 'row-reverse' }} />
+            <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.units.imperial')} value={String(UnitsEnum.IMPERIAL)} style={{ flexDirection: 'row-reverse' }} />
           </RadioButton.Group>
         </View>
 

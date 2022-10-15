@@ -7,6 +7,7 @@ const DOMAIN : string = "https://alovoa.com"
 export const IMPRINT = DOMAIN + "/imprint"
 export const PRIVACY = DOMAIN + "/privacy"
 export const TOS = DOMAIN + "/tos"
+export const DONATE_LIST = DOMAIN + "/donate-list"
 
 export const AUTH_LOGIN = DOMAIN + "/login"
 export const AUTH_GOOGLE = DOMAIN + "/oauth2/authorization/google"
@@ -47,3 +48,4 @@ export const USER_UNBLOCK = DOMAIN + "/user/unblock/%s"
 export const API_SEARCH_USERS = DOMAIN + "/api/v1/search/users/%s/%s/%s/%s"
 export const API_SEARCH_USERS_DEFAULT = DOMAIN + "/api/v1/search/users/default"
 export const API_CHAT_DETAIL = DOMAIN + "/api/v1/chats/%s"
+export const API_DONATE_RECENT = DOMAIN + "/api/v1/donate/recent/%s";

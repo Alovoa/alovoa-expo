@@ -1,46 +1,102 @@
 import React from "react";
 import {
-  ScrollView,
   View,
-  Text,
   TouchableOpacity,
-  ImageBackground,
   FlatList,
+  RefreshControl
 } from "react-native";
-import { CardItem, Icon } from "../components";
-import DEMO from "../assets/data/demo";
-import styles, { DARK_GRAY } from "../assets/styles";
 
-const Donate = () => (
-  <ImageBackground
-    source={require("../assets/images/bg.png")}
-    style={styles.bg}
-  >
-    <View style={styles.containerMatches}>
+import { useTheme, Text, Button, IconButton, Portal, Menu, RadioButton } from "react-native-paper";
+import { CardItem, Icon } from "../components";
+import styles from "../assets/styles";
+import * as I18N from "../i18n";
+import * as Global from "../Global";
+import * as URL from "../URL";
+import { DonationDtoListModel, DonationDto, UnitsEnum } from "../types";
+import * as Linking from 'expo-linking';
+
+const Donate = () => {
+
+  const FILTER_RECENT = 1;
+  const FILTER_AMOUNT = 2;
+
+  const i18n = I18N.getI18n()
+  const { colors } = useTheme();
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [results, setResults] = React.useState(Array<DonationDto>);
+  const [filter, setFilter] = React.useState(FILTER_RECENT);
+
+  const [menuSortVisible, setMenuSortVisible] = React.useState(false);
+
+  const showMenuSort = () => setMenuSortVisible(true);
+  const hideMenuSort = () => setMenuSortVisible(false);
+
+  async function load() {
+    let response = await Global.Fetch(Global.format(URL.API_DONATE_RECENT, filter));
+    let data: DonationDtoListModel = response.data;
+    setResults(data.list);
+  }
+
+  function updateFilter(num: number) {
+    if (num != filter) {
+      setFilter(num);
+    }
+    hideMenuSort();
+  }
+
+  React.useEffect(() => {
+    load();
+  }, [filter]);
+
+  React.useEffect(() => {
+    load();
+  }, []);
+
+  return (
+    <View style={styles.containerMatches} >
       <View style={styles.top}>
-        <Text style={styles.title}>Matches</Text>
-        <TouchableOpacity>
-          <Icon name="ellipsis-vertical" color={DARK_GRAY} size={20} />
-        </TouchableOpacity>
+        <Text style={styles.title}>{i18n.t('navigation.donate')}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {Global.FLAG_ENABLE_DONATION &&
+            <Button icon="cash-multiple" mode="outlined" onPress={() => Linking.openURL(URL.DONATE_LIST)}>
+              <Text>{i18n.t('navigation.donate')}</Text>
+            </Button>}
+          <View>
+            <Menu
+              visible={menuSortVisible}
+              onDismiss={hideMenuSort}
+              anchor={<IconButton iconColor={colors.secondary} onPress={() => showMenuSort()} icon="sort" mode="outlined"></IconButton>}>
+              <Menu.Item leadingIcon="sort-clock-ascending-outline" onPress={() => { updateFilter(1) }} title={i18n.t('donate.filter.recent')} />
+              <Menu.Item leadingIcon="sort-numeric-descending-variant" onPress={() => { updateFilter(2) }} title={i18n.t('donate.filter.amount')} />
+            </Menu>
+          </View>
+        </View>
       </View>
 
+
       <FlatList
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
+        columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
         numColumns={2}
-        data={DEMO}
+        data={results}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity>
             <CardItem
-              image={item.image}
-              name={item.name}
-              isOnline={item.isOnline}
+              user={item.user}
+              hasActions={false}
               hasVariant
+              hasDonation
+              donation={item.amount}
             />
           </TouchableOpacity>
         )}
       />
+
+
     </View>
-  </ImageBackground>
-);
+  )
+};
 
 export default Donate;

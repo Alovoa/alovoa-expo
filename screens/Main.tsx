@@ -29,7 +29,7 @@ const Main = () => {
             <TabBarIcon
               focused={focused}
               iconName="person"
-              text="Profile"
+              text={i18n.t('navigation.profile')}
             />
           ),
         }}
@@ -43,7 +43,7 @@ const Main = () => {
             <TabBarIcon
               focused={focused}
               iconName="chatbubble"
-              text="Chat"
+              text={i18n.t('navigation.chat')}
             />
           ),
         }}
@@ -57,7 +57,7 @@ const Main = () => {
             <TabBarIcon
               focused={focused}
               iconName="search"
-              text="Search"
+              text={i18n.t('navigation.search')}
             />
           ),
         }}
@@ -71,7 +71,7 @@ const Main = () => {
             <TabBarIcon
               focused={focused}
               iconName="heart"
-              text="Likes"
+              text={i18n.t('navigation.likes')}
             />
           ),
         }}
@@ -85,7 +85,7 @@ const Main = () => {
             <TabBarIcon
               focused={focused}
               iconName="cash-outline"
-              text="Donate"
+              text={i18n.t('navigation.donate')}
             />
           ),
         }}
