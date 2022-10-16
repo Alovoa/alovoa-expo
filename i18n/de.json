@@ -95,5 +95,9 @@
             "recent": "Neueste",
             "amount": "Höhe"
         }
-    }
+    },
+    "chat": {
+        "default": "Ein Match! Jemand mag dich zurück! Tippe hier, um eine Nachricht zu senden :)"
+    },
+    "you": "Du"
 }

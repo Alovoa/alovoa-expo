@@ -18,8 +18,8 @@ export type IconT = {
 };
 
 export type MessageT = {
-  image: any;
-  lastMessage: string;
+  image: string;
+  lastMessage: MessageDto;
   name: string;
 };
 
@@ -40,26 +40,9 @@ export type TabBarIconT = {
   text: string;
 };
 
-export type DataT = {
-  id: number;
-  name: string;
-  isOnline: boolean;
-  match: string;
-  description: string;
-  message: string;
-  image: any;
-  age?: string;
-  info1?: string;
-  info2?: string;
-  info3?: string;
-  info4?: string;
-  location?: string;
-};
-
 export type DonationDtoListModel = {
   list: Array<DonationDto>;
 }
-
 
 export type RegisterBody = {
   email?: string
@@ -167,6 +150,7 @@ export type MessageDto = {
 }
 
 export type ConversationDto = {
+  id: number;
   lastUpdated: Date;
   userName: string;
   userProfilePicture: string;
@@ -240,13 +224,7 @@ export type DonateSearchFilterResource = {
   filter: number;
 }
 
-export type ChatsResource = {
-  conversations: UserDto;
-  user: UserDto;
-}
-
 export type ChatDetailResource = {
-  messages: Array<MessageDto>;
   user: UserDto;
   convoId: number;
   partner: UserDto;
@@ -274,4 +252,9 @@ export type SearchResource = {
 export type SearchUsersResource = {
   dto: SearchDto;
   currUser: UserDto;
+}
+
+export type ChatsResource = {
+  user: UserDto;
+  conversations: Array<ConversationDto>;
 }

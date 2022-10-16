@@ -46,7 +46,16 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
 }
 
 export function nagivateProfile(idEnc: string) {
-  console.log("test")
+  console.log("nagivateProfile")
+  /*
+  navigate("Profile", {
+    idEnc: idEnc
+  });
+  */ //TODO
+}
+
+export function nagivateChatDetails(convoId: number) {
+  console.log("nagivateChatDetails")
   /*
   navigate("Profile", {
     idEnc: idEnc
