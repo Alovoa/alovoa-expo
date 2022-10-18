@@ -51,3 +51,4 @@ export const API_SEARCH_USERS_DEFAULT = DOMAIN + "/api/v1/search/users/default"
 export const API_DONATE_RECENT = DOMAIN + "/api/v1/donate/recent/%s";
 
 export const API_MESSAGE_UPDATE = DOMAIN + "/api/v1/message/update/%s/%s";
+export const MESSAGE_SEND = DOMAIN + "/message/send/%s";

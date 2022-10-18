@@ -97,7 +97,8 @@
         }
     },
     "chat": {
-        "default": "Ein Match! Jemand mag dich zurück! Tippe hier, um eine Nachricht zu senden :)"
+        "default": "Ein Match! Jemand mag dich zurück! Tippe hier, um eine Nachricht zu senden :)",
+        "placeholder": "Schreib eine Nachricht..."
     },
     "you": "Du"
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Login, Register, Onboarding, Main, Profile } from "./screens";
+import { Login, Register, Onboarding, Main, Profile, MessageDetail } from "./screens";
 import * as SplashScreen from 'expo-splash-screen';
 import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from "@react-navigation/native";
@@ -92,6 +92,11 @@ export default function App() {
               name="Profile"
               options={{ headerShown: true, animationEnabled: false }}
               component={Profile}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="MessageDetail"
+              options={{ headerShown: true, animationEnabled: false }}
+              component={MessageDetail}
             ></Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>

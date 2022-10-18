@@ -258,3 +258,7 @@ export type ChatsResource = {
   user: UserDto;
   conversations: Array<ConversationDto>;
 }
+
+export type MessageDtoListModel = {
+  list: Array<MessageDto> ;
+}

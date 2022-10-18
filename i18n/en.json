@@ -96,7 +96,8 @@
         }
     },
     "chat": {
-        "default": "You got a match! Tap here to send a message :)"
+        "default": "You got a match! Tap here to send a message :)",
+        "placeholder": "Write a message..."
     },
     "you": "You"
 }
