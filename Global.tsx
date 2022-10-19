@@ -47,14 +47,12 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
 }
 
 export function nagivateProfile(idEnc: string) {
-  console.log("nagivateProfile")
   navigate("Profile", {
     idEnc: idEnc
   });
 }
 
 export function nagivateChatDetails(conversation: ConversationDto) {
-  console.log("")
   navigate("MessageDetail", {
     conversation: conversation
   });

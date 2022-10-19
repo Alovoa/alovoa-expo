@@ -103,7 +103,6 @@ const Profile = ({ route, navigation }) => {
     navigation.setOptions({ title: "" });
     let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, idEnc));
     let data: ProfileResource = response.data;
-    console.log(data.user.likedByCurrentUser)
     setLiked(data.user.likedByCurrentUser);
     setHidden(data.user.hiddenByCurrentUser);
     setYou(data.currUserDto);
