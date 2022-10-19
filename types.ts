@@ -18,9 +18,7 @@ export type IconT = {
 };
 
 export type MessageT = {
-  image: string;
-  lastMessage: MessageDto;
-  name: string;
+  conversation: ConversationDto;
 };
 
 export type ProfileItemT = {

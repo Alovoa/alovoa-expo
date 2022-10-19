@@ -70,11 +70,11 @@ export default StyleSheet.create({
     color: WHITE,
   },
   descriptionCardItem: {
-    color: GRAY,
     textAlign: "center",
     paddingLeft: 12,
     paddingRight: 12,
     flexShrink: 1,
+    opacity: 0.8
   },
   status: {
     paddingBottom: 10,

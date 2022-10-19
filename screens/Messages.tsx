@@ -46,13 +46,9 @@ const Messages = () => {
         data={results}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => Global.nagivateChatDetails(item)}>
-            <Message
-              image={item.userProfilePicture}
-              name={item.userName}
-              lastMessage={item.lastMessage}
-            />
-          </TouchableOpacity>
+          <Message
+            conversation={item}
+          />
         )}
       />
     </View>

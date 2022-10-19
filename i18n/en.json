@@ -78,7 +78,12 @@
                 "other": "It's complicated"
             }
         },
-        "intention-toast": "Intention changed. You cannot change it for another 24 hours."
+        "intention-toast": "Intention changed. You cannot change it for another 24 hours.",
+        "preferred-age-range": "Preferred age range",
+        "donated": "Donated",
+        "num-blocks": "# Blocks by users",
+        "block": "Nutzer blocken",
+        "unblock": "Nutzer entblocken"
     },
     "cancel": "Cancel",
     "ok": "OK",
