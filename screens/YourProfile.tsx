@@ -24,14 +24,16 @@ import * as WebBrowser from 'expo-web-browser';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { debounce } from "lodash";
+import { StorageAccessFramework } from 'expo-file-system';
 
-
-const IMAGE_HEADER = "data:image/png;base64,";
+const userdataFileName = "userdata-alovoa.json"
+const IMAGE_HEADER = "data:image/webp;base64,";
+const MIME_JSON = "application/json";
 
 const i18n = I18N.getI18n()
 const MAX_INTERESTS = 5;
-const MIN_AGE = 16
-const MAX_AGE = 100
+const MIN_AGE = 16;
+const MAX_AGE = 100;
 
 enum Gender {
   MALE = 1,
@@ -64,6 +66,7 @@ const YourProfile = () => {
   const [profilePic, setProfilePic] = React.useState("");
   const [name, setName] = React.useState("");
   const [age, setAge] = React.useState(0);
+  const [idEnc, setIdEnc] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [intention, setIntention] = React.useState(Intention.MEET);
   const [showIntention, setShowIntention] = React.useState(false);
@@ -175,6 +178,7 @@ const YourProfile = () => {
   async function load() {
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
+    setIdEnc(data.user.idEncoded);
     setProfilePic(data.user.profilePicture);
     setName(data.user.firstName);
     setAge(data.user.age);
@@ -375,8 +379,31 @@ const YourProfile = () => {
     await Global.Fetch(Global.format(URL.USER_UPDATE_MISC_INFO, String(num), activated ? "1" : "0"), 'post');
   }
 
+  async function downloadUserData() {
+
+    const response = await Global.Fetch(Global.format(URL.USER_USERDATA, idEnc));
+    const userData = JSON.stringify(response.data);
+
+    if (Platform.OS == 'android') {
+      const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+      if (permissions.granted) {
+        const uri = permissions.directoryUri;
+        let newFile = await StorageAccessFramework.createFileAsync(uri, userdataFileName, MIME_JSON);
+        await StorageAccessFramework.writeAsStringAsync(newFile, userData);
+        Global.ShowToast(i18n.t('profile.download-userdata-success'));
+      }
+    }
+
+    //TODO iOS
+  }
+
+  async function deleteAccount() {
+    await Global.Fetch(URL.USER_DELETE_ACCOUNT, 'post');
+    Global.ShowToast(i18n.t('profile.delete-account-success'));
+  }
+
   return (
-    <ScrollView style={[styles.containerProfile, { backgroundColor: colors.backgroundColor }]} keyboardShouldPersistTaps='handled'
+    <ScrollView style={[styles.containerProfile, { backgroundColor: colors.background }]} keyboardShouldPersistTaps='handled'
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
       <TouchableOpacity
         onPress={updateProfilePicture}
@@ -387,7 +414,7 @@ const YourProfile = () => {
 
       <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
         <Text style={[styles.name, {}]}>{name + ", " + age}</Text>
-        <View style={{ height: 80, width: 300, marginTop: 24 }}>
+        <View style={{ height: 140, width: 300, marginTop: 24 }}>
           <TextInput
             multiline
             mode="outlined"
@@ -517,7 +544,7 @@ const YourProfile = () => {
                 suggestionsListContainerStyle={{
                 }}
                 containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-                renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.backgroundColor }}>{item.title}</Text>}
+                renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
                 ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
                 ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
                 inputHeight={50}
@@ -635,15 +662,21 @@ const YourProfile = () => {
             <Text>Logout</Text>
           </Button>
           <View style={{ marginTop: 24 }}>
-            <Text style={styles.link} onPress={() => {
+            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
               WebBrowser.openBrowserAsync(URL.PRIVACY);
             }}>{i18n.t('privacy-policy')}</Text>
-            <Text style={styles.link} onPress={() => {
+            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
               WebBrowser.openBrowserAsync(URL.TOS);
             }}>{i18n.t('tos')}</Text>
-            <Text style={styles.link} onPress={() => {
+            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
               WebBrowser.openBrowserAsync(URL.IMPRINT);
             }}>{i18n.t('imprint')}</Text>
+            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+              downloadUserData();
+            }}>{i18n.t('profile.download-userdata')}</Text>
+            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+              deleteAccount();
+            }}>{i18n.t('profile.delete-account')}</Text>
           </View>
 
         </View>

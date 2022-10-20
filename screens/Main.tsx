@@ -3,34 +3,83 @@ import { Search, Likes, Messages, YourProfile, Donate } from "../screens";
 import * as Linking from 'expo-linking';
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import * as I18N from "../i18n";
 import TabBarIcon from "../components/TabBarIcon";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
-const Main = () => {
+const SECOND_MS = 1000;
+const POLL_ALERT = 5 * SECOND_MS;
+const POLL_MESSAGE = 5 * SECOND_MS;
+
+const Main = ({ route, navigation }) => {
+
+  let messageUpdateInterval: NodeJS.Timeout | undefined;
+  let alertUpdateInterval: NodeJS.Timeout | undefined;
+  let langIso: string | undefined;
+
+  const [newAlert, setNewAlert] = React.useState(false);
+  const [newMessage, setHasNewMessage] = React.useState(false);
+
+  async function updateNewAlert() {
+    let url;
+    if (!langIso) {
+      langIso = i18n.locale.slice(0, 2);
+      url = Global.format(URL.USER_STATUS_ALERT_LANG, langIso);
+    } else {
+      url = URL.USER_STATUS_ALERT;
+    }
+    let response = await Global.Fetch(url);
+    let data: boolean = response.data;
+    setNewAlert(data);
+  }
+
+  async function updateNewMessage() {
+    let response = await Global.Fetch(URL.USER_STATUS_MESSAGE);
+    let data: boolean = response.data;
+    setHasNewMessage(data);
+  }
+
+  React.useEffect(() => {
+    messageUpdateInterval = setInterval(async () => {
+      updateNewAlert();
+    }, POLL_MESSAGE);
+
+    alertUpdateInterval = setInterval(async () => {
+      updateNewMessage();
+    }, POLL_ALERT);
+
+    updateNewAlert();
+    updateNewMessage();
+  }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      if (messageUpdateInterval) {
+        clearInterval(messageUpdateInterval);
+      }
+      if (alertUpdateInterval) {
+        clearInterval(alertUpdateInterval);
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+
   return (
-    <Tab.Navigator initialRouteName="Search"
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false
-      }}
-    >
+    <Tab.Navigator initialRouteName="Search">
       <Tab.Screen
         name="YourProfile"
         component={YourProfile}
         options={{
-          unmountOnBlur: true,
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon
-              focused={focused}
-              iconName="person"
-              text={i18n.t('navigation.profile')}
-            />
+          tabBarLabel: i18n.t('navigation.profile'),
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account" color={color} size={26} />
           ),
         }}
       />
@@ -38,13 +87,10 @@ const Main = () => {
         name="Chat"
         component={Messages}
         options={{
-          unmountOnBlur: true,
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon
-              focused={focused}
-              iconName="chatbubble"
-              text={i18n.t('navigation.chat')}
-            />
+          tabBarBadge: newMessage,
+          tabBarLabel: i18n.t('navigation.chat'),
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="chat" color={color} size={26} />
           ),
         }}
       />
@@ -52,13 +98,9 @@ const Main = () => {
         name="Search"
         component={Search}
         options={{
-          unmountOnBlur: true,
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon
-              focused={focused}
-              iconName="search"
-              text={i18n.t('navigation.search')}
-            />
+          tabBarLabel: i18n.t('navigation.search'),
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="magnify" color={color} size={26} />
           ),
         }}
       />
@@ -66,13 +108,10 @@ const Main = () => {
         name="Likes"
         component={Likes}
         options={{
-          unmountOnBlur: true,
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon
-              focused={focused}
-              iconName="heart"
-              text={i18n.t('navigation.likes')}
-            />
+          tabBarBadge: newAlert,
+          tabBarLabel: i18n.t('navigation.likes'),
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="heart" color={color} size={26} />
           ),
         }}
       />
@@ -80,13 +119,9 @@ const Main = () => {
         name="Donate"
         component={Donate}
         options={{
-          unmountOnBlur: true,
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon
-              focused={focused}
-              iconName="cash-outline"
-              text={i18n.t('navigation.donate')}
-            />
+          tabBarLabel: i18n.t('navigation.donate'),
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="cash-multiple" color={color} size={26} />
           ),
         }}
       />

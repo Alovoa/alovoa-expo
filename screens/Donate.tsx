@@ -55,18 +55,20 @@ const Donate = () => {
 
   return (
     <View style={styles.containerMatches} >
-      <View style={styles.top}>
+      <View style={[styles.top, {paddingBottom: 4}]}>
         <Text style={styles.title}>{i18n.t('navigation.donate')}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {Global.FLAG_ENABLE_DONATION &&
-            <Button icon="cash-multiple" mode="outlined" onPress={() => Linking.openURL(URL.DONATE_LIST)}>
+            <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{marginRight: 4}}>
               <Text>{i18n.t('navigation.donate')}</Text>
             </Button>}
           <View>
             <Menu
               visible={menuSortVisible}
               onDismiss={hideMenuSort}
-              anchor={<IconButton iconColor={colors.secondary} onPress={() => showMenuSort()} icon="sort" mode="outlined"></IconButton>}>
+              anchor={<Button icon="sort" mode="contained-tonal" onPress={() => showMenuSort()}>
+                <Text>{i18n.t('sort')}</Text>
+              </Button>}>
               <Menu.Item leadingIcon="sort-clock-ascending-outline" onPress={() => { updateFilter(1) }} title={i18n.t('donate.filter.recent')} />
               <Menu.Item leadingIcon="sort-numeric-descending-variant" onPress={() => { updateFilter(2) }} title={i18n.t('donate.filter.amount')} />
             </Menu>

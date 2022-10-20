@@ -198,13 +198,6 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 25,
     margin: 20,
-    borderRadius: 8,
-    marginTop: -65,
-    elevation: 1,
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    shadowColor: BLACK,
-    shadowOffset: { height: 0, width: 0 },
   },
   matchesProfileItem: {
     width: 135,

@@ -82,8 +82,12 @@
         "preferred-age-range": "Preferred age range",
         "donated": "Donated",
         "num-blocks": "# Blocks by users",
-        "block": "Nutzer blocken",
-        "unblock": "Nutzer entblocken"
+        "block": "Block user",
+        "unblock": "Unlock user",
+        "delete-account": "Delete account",
+        "delete-account-success": "Success! Please follow the instructions in the email we sent you.",
+        "download-userdata": "Download user data",
+        "download-userdata-success": "User data downloaded!"
     },
     "cancel": "Cancel",
     "ok": "OK",
@@ -104,5 +108,6 @@
         "default": "You got a match! Tap here to send a message :)",
         "placeholder": "Write a message..."
     },
-    "you": "You"
+    "you": "You",
+    "sort": "Sort"
 }

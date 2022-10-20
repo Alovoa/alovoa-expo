@@ -81,7 +81,7 @@ const Register = () => {
 
   return (
 
-    <View style={{ flex: 1, padding: 12, backgroundColor: colors.backgroundColor }}>
+    <View style={{ flex: 1, padding: 12, backgroundColor: colors.background }}>
       <ScrollView>
 
         <Text style={{ textAlign: 'center', marginBottom: 4, fontSize: 32, fontWeight: '500' }}>{i18n.t('register.title')}</Text>

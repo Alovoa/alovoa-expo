@@ -56,7 +56,7 @@ const Login = () => {
   const { colors } = useTheme();
   
   return (
-  <View style={[{ flex: 1, padding: 12, justifyContent: "center", backgroundColor: colors.backgroundColor}]}>
+  <View style={[{ flex: 1, padding: 12, justifyContent: "center", backgroundColor: colors.background}]}>
     <View>
       <Image resizeMode='contain' style={{ resizeMode: "contain", height: 200, width: '100%' }} source={require('../assets/splash.png')} />
 

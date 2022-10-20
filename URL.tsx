@@ -1,8 +1,8 @@
 import * as Global from "./Global";
 
-//export const DOMAIN : string = "http://localhost:8080"
+export const DOMAIN : string = "http://localhost:8080"
 //const DOMAIN : string = "https://beta.alovoa.com"
-const DOMAIN : string = "https://alovoa.com"
+//const DOMAIN : string = "https://alovoa.com"
 
 export const IMPRINT = DOMAIN + "/imprint"
 export const PRIVACY = DOMAIN + "/privacy"
@@ -21,12 +21,18 @@ export const API_RESOURCE_ALERTS = DOMAIN + "/api/v1/resource/alerts"
 export const API_RESOURCE_CHATS = DOMAIN + "/api/v1/resource/chats"
 export const API_RESOURCE_CHATS_DETAIL = DOMAIN + "/api/v1/resource/chats/%s"
 export const API_RESOURCE_DONATE = DOMAIN + "/api/v1/resource/donate"
+//lat: number, lon: number, distance: number, sort: number
+export const API_SEARCH_USERS = DOMAIN + "/api/v1/search/users/%s/%s/%s/%s"
+export const API_SEARCH_USERS_DEFAULT = DOMAIN + "/api/v1/search/users/default"
+export const API_DONATE_RECENT = DOMAIN + "/api/v1/donate/recent/%s";
+export const API_MESSAGE_UPDATE = DOMAIN + "/api/v1/message/update/%s/%s";
 
 export const REGISTER_OAUTH = DOMAIN + "/register-oauth";
 
 export const USER_INTEREST_AUTOCOMPLETE = DOMAIN + "/user/interest/autocomplete/%s";
 export const USER_ONBOARDING = DOMAIN + "/user/onboarding";
 export const USER_STATUS_ALERT = DOMAIN + "/user/status/new-alert"
+export const USER_STATUS_ALERT_LANG = DOMAIN + "/user/status/new-alert/%s"
 export const USER_STATUS_MESSAGE = DOMAIN + "/user/status/new-message"
 
 export const USER_UPDATE_PROFILE_PICTURE = DOMAIN + "/user/update/profile-picture"
@@ -39,16 +45,12 @@ export const USER_UPDATE_MISC_INFO = DOMAIN + "/user/update/misc-info/%s/%s"
 export const USER_ADD_INTEREST = DOMAIN + "/user/interest/add/%s"
 export const USER_REMOVE_INTEREST = DOMAIN + "/user/interest/delete/%s"
 export const USER_UPDATE_UNITS = DOMAIN + "/user/units/update/%s"
+export const USER_USERDATA = DOMAIN + "/user/userdata/%s";
+export const USER_DELETE_ACCOUNT = DOMAIN + "/user/delete-account";
 
 export const USER_LIKE = DOMAIN + "/user/like/%s"
 export const USER_HIDE = DOMAIN + "/user/hide/%s"
 export const USER_BLOCK = DOMAIN + "/user/block/%s"
 export const USER_UNBLOCK = DOMAIN + "/user/unblock/%s"
 
-//lat: number, lon: number, distance: number, sort: number
-export const API_SEARCH_USERS = DOMAIN + "/api/v1/search/users/%s/%s/%s/%s"
-export const API_SEARCH_USERS_DEFAULT = DOMAIN + "/api/v1/search/users/default"
-export const API_DONATE_RECENT = DOMAIN + "/api/v1/donate/recent/%s";
-
-export const API_MESSAGE_UPDATE = DOMAIN + "/api/v1/message/update/%s/%s";
 export const MESSAGE_SEND = DOMAIN + "/message/send/%s";

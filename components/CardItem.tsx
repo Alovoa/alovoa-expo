@@ -67,7 +67,7 @@ const CardItem = ({
   }
 
   return (
-    <View style={[styles.containerCardItem, cardVariant, { backgroundColor: colors.backgroundColor }]}>
+    <View style={[styles.containerCardItem, cardVariant, { backgroundColor: colors.background }]}>
       {/* IMAGE */}
       <TouchableOpacity onPress={() => Global.nagivateProfile(user.idEncoded)}>
         <Image source={{ uri: user.profilePicture }} style={imageStyle} />

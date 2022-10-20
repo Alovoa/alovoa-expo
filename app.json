@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "alovoa-expo",
+    "name": "Alovoa",
     "slug": "alovoa-expo",
     "version": "1.0.0",
     "scheme": "alovoa",
@@ -18,7 +18,11 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ec407a"
+      "backgroundColor": "#ec407a",
+      "dark": {
+        "image": "./assets/splash.png",
+        "backgroundColor": "#121212"
+      }
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -36,21 +40,21 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ec407a"
       },
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "data": [
-            {
-              "scheme": "alovoa"
-            }
-          ],
-          "category": [
-            "BROWSABLE",
-            "DEFAULT"
-          ]
-        }
-      ],
-      "package": "com.alovoa.expo"
+      "intentFilters": [{
+        "action": "VIEW",
+        "data": [{
+          "scheme": "alovoa"
+        }],
+        "category": [
+          "BROWSABLE",
+          "DEFAULT"
+        ]
+      }],
+      "package": "com.alovoa.expo",
+      "permissions": ["android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

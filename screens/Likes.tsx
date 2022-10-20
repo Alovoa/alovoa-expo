@@ -14,7 +14,7 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import { AlertsResource, NotificationDto, UserDto, UnitsEnum } from "../types";
 
-const Likes = () => {
+const Likes = ({navigation}) => {
 
   const i18n = I18N.getI18n()
 
@@ -36,8 +36,11 @@ const Likes = () => {
   }
 
   React.useEffect(() => {
-    load();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      load();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={styles.containerMatches} >

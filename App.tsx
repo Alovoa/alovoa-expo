@@ -7,7 +7,7 @@ import * as Linking from 'expo-linking';
 import * as Global from "./Global";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as I18N from "./i18n";
-import { LogBox, useColorScheme } from 'react-native';
+import { Dimensions, LogBox, useColorScheme } from 'react-native';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider } from 'react-native-paper';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
@@ -25,11 +25,13 @@ WebBrowser.maybeCompleteAuthSession();
 
 const Stack = createStackNavigator();
 
+const DIMENSION_WIDTH = Dimensions.get("window").width;
+const DIMENSION_HEIGHT = Dimensions.get("window").height;
+const showHeader = DIMENSION_WIDTH/DIMENSION_HEIGHT > 16/9;
+
 //TEST
 //const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking');
 //RCTNetworking.clearCookies(() => { });
-
-
 
 export default function App() {
 
@@ -64,7 +66,7 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-       <StatusBar style= {isDarkTheme ? "light" : "dark"} />
+       <StatusBar style= {isDarkTheme ? "light" : "dark"} hidden={showHeader}/>
       <RootSiblingParent>
         <NavigationContainer theme={themeNavigation} ref={Global.navigationRef}>
           <Stack.Navigator>

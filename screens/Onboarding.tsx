@@ -217,7 +217,7 @@ const Onboarding = () => {
   }
 
   return (
-    <View style={{ backgroundColor: colors.backgroundColor }}>
+    <View style={{ backgroundColor: colors.background }}>
       <SwiperFlatList
         ref={scrollRef}
         showPagination={true}
@@ -330,7 +330,7 @@ const Onboarding = () => {
               suggestionsListContainerStyle={{
               }}
               containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.backgroundColor }}>{item.title}</Text>}
+              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
               ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
               ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
               inputHeight={50}
@@ -376,7 +376,7 @@ const Onboarding = () => {
               suggestionsListContainerStyle={{
               }}
               containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.backgroundColor }}>{item.title}</Text>}
+              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
               ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
               ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
               inputHeight={50}
@@ -423,7 +423,7 @@ const Onboarding = () => {
               suggestionsListContainerStyle={{
               }}
               containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.backgroundColor }}>{item.title}</Text>}
+              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
               ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
               ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
               inputHeight={50}

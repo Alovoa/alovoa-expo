@@ -22,6 +22,8 @@ export const STORAGE_YOUR_CHAT = "chat"
 export const STORAGE_YOUR_CHAT_DETAIL = "chat/%s"
 export const STORAGE_LIKES = "likes"
 export const STORAGE_DONATE = "donate"
+export const STORAGE_LATITUDE = "latitude"
+export const STORAGE_LONGITUDE = "longitude"
 
 export async function Fetch(url: string = "", method: string = "get", data: any = {},
   contentType: string = "application/json"): Promise<any> {

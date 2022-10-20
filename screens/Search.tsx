@@ -9,7 +9,6 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
 import { ScrollView } from "react-native-gesture-handler";
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 
 const i18n = I18N.getI18n()
@@ -24,18 +23,21 @@ enum SORT {
 }
 
 const Search = () => {
-  const TAB_BAR_HEIGHT = useBottomTabBarHeight();
+  const TAB_BAR_HEIGHT = 0;
   const WINDOW_HEIGHT = Dimensions.get('window').height;
   const HEIGHT = WINDOW_HEIGHT - TAB_BAR_HEIGHT;
 
-  
+
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState<UserDto>();
   const [swiper, setSwiper] = useState<CardStack | null>();
   const [results, setResults] = useState(Array<UserDto>);
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
   const [distance, setDistance] = useState(50);
-  const [stackKey, setStackKey] = React.useState(0); 
+  const [stackKey, setStackKey] = React.useState(0);
+
+  let latitude: number | undefined;
+  let longitude: number | undefined;
 
   React.useEffect(() => {
     setStackKey(new Date().getTime());
@@ -45,39 +47,47 @@ const Search = () => {
   }, [results]);
 
   async function load() {
+    let l1 = await Global.GetStorage(Global.STORAGE_LATITUDE);
+    latitude = l1 ? Number(l1) : undefined;
+    let l2 = await Global.GetStorage(Global.STORAGE_LONGITUDE);
+    longitude = l2 ? Number(l2) : undefined;
     await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE).then(
-      (response) => {
+      async (response) => {
         let data: SearchResource = response.data;
         setUser(data.user);
-        if (!data.user.locationLatitude) {
-          loadResults();
-        } else {
-          loadResultsDefault();
-        }
+        updateLocationLocal(data.user.locationLatitude, data.user.locationLongitude);
+        loadResults();
       }
     );
+  }
+
+  async function updateLocationLocal(lat: number, lon: number) {
+    await Global.SetStorage(Global.STORAGE_LATITUDE, String(lat));
+    await Global.SetStorage(Global.STORAGE_LONGITUDE, String(lon));
+    latitude = lat;
+    longitude = lon;
   }
 
   async function loadResultsDefault() {
     let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS_DEFAULT));
     let result: SearchDto = response.data;
-    let incompatible : boolean = result.incompatible;
+    let incompatible: boolean = result.incompatible;
     if (result.users && !incompatible) {
       setResults(result.users);
     }
   }
 
   async function loadResults() {
-
+    let lat = latitude;
+    let lon = longitude;
     let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      //TODO
-      return;
+    if (status == 'granted') {
+      try {
+        let location = await Location.getCurrentPositionAsync({});
+        lat = location.coords.latitude;
+        lon = location.coords.longitude;
+      } catch { }
     }
-
-    let location = await Location.getCurrentPositionAsync({});
-    let lat = location.coords.latitude;
-    let lon = location.coords.longitude;
 
     let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
     let result: SearchDto = response.data;
@@ -114,16 +124,12 @@ const Search = () => {
   }
 
   return (
-    <ScrollView style={{ height: HEIGHT }}
+    <ScrollView contentContainerStyle={{ flex: 1 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
-      <View style={{ flex: 1, height: HEIGHT }}>
-        <View style={[styles.top, { justifyContent: 'flex-end' }]}>
-          {/*<Filters />*/}
-        </View>
+      <View style={{ flex: 1 }}>
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
           <CardStack
             style={{
-              flex: 1,
               justifyContent: 'flex-end'
             }}
             verticalSwipe={false}
@@ -134,8 +140,7 @@ const Search = () => {
             onSwipedRight={(index: number) => { likeUser(index) }}>
             {
               results.map((card, index) => (
-                <Card key={card.idEncoded}
-                  style={{ flex: 1 }}>
+                <Card key={card.idEncoded}>
                   <CardItem
                     user={card}
                     hasActions={true}

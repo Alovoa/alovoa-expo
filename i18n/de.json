@@ -83,8 +83,12 @@
         "preferred-age-range": "Bevorzugte Altersspanne",
         "donated": "Gespendet",
         "num-blocks": "# Blocken durch Nutzer",
-        "block": "Block user",
-        "unblock": "Unlock user"
+        "block": "Nutzer blocken",
+        "unblock": "Nutzer entblocken",
+        "delete-account": "Account löschen",
+        "delete-account-success": "Erfolg! Bitte folge den Anweisungen in der E-Mail die wir Dir geschickt haben.",
+        "download-userdata": "Nutzerdaten herunterladen",
+        "download-userdata-success": "Nutzerdaten erfolgreich herunterladen"
     },
     "cancel": "Abbrechen",
     "ok": "OK",
@@ -105,5 +109,6 @@
         "default": "Ein Match! Jemand mag dich zurück! Tippe hier, um eine Nachricht zu senden :)",
         "placeholder": "Schreib eine Nachricht..."
     },
-    "you": "Du"
+    "you": "Du",
+    "sort": "Sort."
 }

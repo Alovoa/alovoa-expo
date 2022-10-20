@@ -24,7 +24,7 @@ import * as I18N from "../i18n";
 const i18n = I18N.getI18n()
 
 const SECOND_MS = 1000;
-const POLL_MESSAGE = 10 * SECOND_MS;
+const POLL_MESSAGE = 5 * SECOND_MS;
 const DIMENSION_WIDTH = Dimensions.get("window").width;
 
 const MessageDetail = ({ route, navigation }) => {

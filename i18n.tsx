@@ -8,7 +8,7 @@ export const translations = {
     de: de,
 };
 
-export function getI18n() : any {
+export function getI18n() : I18n {
     const i18n = new I18n(translations);
     i18n.locale = Localization.locale;
     i18n.enableFallback = true;

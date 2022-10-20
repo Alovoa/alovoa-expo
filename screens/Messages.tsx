@@ -14,7 +14,7 @@ import styles, { DARK_GRAY } from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
 
-const Messages = () => {
+const Messages = ({navigation}) => {
 
   const { colors } = useTheme();
   const [refreshing, setRefreshing] = React.useState(false);
@@ -27,8 +27,11 @@ const Messages = () => {
   }
 
   React.useEffect(() => {
-    load();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      load();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={styles.containerMessages}>
