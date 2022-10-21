@@ -39,9 +39,9 @@
         },
         "intention": {
             "title": "I möchte...",
-            "meet": "to meet new people",
-            "date": "a relationship",
-            "sex": "sexual intimacy",
+            "meet": "neue Leute kennenlernen",
+            "date": "eine romantische Beziehung",
+            "sex": "sexuelle Intimität",
             "warning": "Kann erst nach 24 Stunden wieder geändert werden"
         },
         "gender": "Ich suche nach...",
