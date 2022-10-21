@@ -81,6 +81,7 @@ const YourProfile = () => {
   const dropdownController = React.useRef()
   const [units, setUnits] = React.useState(UnitsEnum.SI)
 
+  const [isLegal, setIsLegal] = React.useState(false);
   const [miscInfoDrugsTobacco, setMiscInfoDrugsTobacco] = React.useState(false)
   const [miscInfoDrugsAlcohol, setMiscInfoDrugsAlcohol] = React.useState(false)
   const [miscInfoDrugsCannabis, setMiscInfoDrugsCannabis] = React.useState(false)
@@ -184,7 +185,7 @@ const YourProfile = () => {
     setAge(data.user.age);
     setDescription(data.user.description);
     setShowIntention(data.showIntention);
-
+    setIsLegal(data.isLegal);
     setInterests(data.user.interests);
     setMinAge(data.user.preferedMinAge);
     setMaxAge(data.user.preferedMaxAge);
@@ -434,7 +435,7 @@ const YourProfile = () => {
             onValueChange={(value: string) => updateIntention(Number(value))}>
             <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.meet')} value={String(Intention.MEET)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.MEET} />
             <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.date')} value={String(Intention.DATE)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.DATE} />
-            <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.sex')} value={String(Intention.SEX)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.SEX} />
+            <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.sex')} value={String(Intention.SEX)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.SEX || !isLegal} />
           </RadioButton.Group>
         </View>
 

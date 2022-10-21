@@ -258,5 +258,13 @@ export type ChatsResource = {
 }
 
 export type MessageDtoListModel = {
-  list: Array<MessageDto> ;
+  list: Array<MessageDto>;
+}
+
+export type UserOnboardingResource = {
+  genders: Array<Gender>;
+  intentions: Array<UserIntention>;
+  isLegal: boolean;
+  mediaMaxSize: number
+  interestMaxSize: number;
 }

@@ -21,7 +21,7 @@ import * as I18N from "../i18n";
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import * as URL from "../URL";
 import * as Global from "../Global";
-import { UserInterestAutocomplete, UserOnboarding } from "../types";
+import { UserInterestAutocomplete, UserOnboarding, UserOnboardingResource } from "../types";
 import * as ImageManipulator from 'expo-image-manipulator';
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -46,6 +46,7 @@ const Onboarding = () => {
   const [image, setImage] = React.useState("");
   const [imageB64, setImageB64] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [isLegal, setIsLegal] = React.useState(false);
   const [isGenderMaleEnabled, setIsGenderMaleEnabled] = React.useState(false);
   const [isGenderFemaleEnabled, setIsGenderFemaleEnabled] = React.useState(false);
   const [isGenderOtherEnabled, setIsGenderOtherEnabled] = React.useState(false);
@@ -66,6 +67,15 @@ const Onboarding = () => {
   const svgHeight = 150;
   const svgWidth = 200;
   const IMG_SIZE_MAX = 600;
+
+  async function load() {
+    let response = await Global.Fetch(URL.API_RESOURCE_USER_ONBOARDING);
+    let data: UserOnboardingResource = response.data;
+    setIsLegal(data.isLegal);
+  }
+  React.useEffect(() => {
+    load();
+  }, []);
 
   async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -279,7 +289,7 @@ const Onboarding = () => {
             onValueChange={(value: string) => setIntention(value)}>
             <RadioButton.Item label={i18n.t('profile.intention.meet')} value="1" style={{ flexDirection: 'row-reverse'}} />
             <RadioButton.Item label={i18n.t('profile.intention.date')} value="2" style={{ flexDirection: 'row-reverse'}} />
-            <RadioButton.Item label={i18n.t('profile.intention.sex')} value="3" style={{ flexDirection: 'row-reverse'}} />
+            <RadioButton.Item label={i18n.t('profile.intention.sex')} value="3" disabled={!isLegal} style={{ flexDirection: 'row-reverse'}} />
           </RadioButton.Group>
 
           <Text style={styles.warning}>{i18n.t('profile.intention.warning')}</Text>

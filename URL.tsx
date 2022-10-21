@@ -1,8 +1,8 @@
 import * as Global from "./Global";
 
-export const DOMAIN : string = "http://localhost:8080"
+//export const DOMAIN : string = "http://localhost:8080"
 //const DOMAIN : string = "https://beta.alovoa.com"
-//const DOMAIN : string = "https://alovoa.com"
+const DOMAIN : string = "https://alovoa.com"
 
 export const IMPRINT = DOMAIN + "/imprint"
 export const PRIVACY = DOMAIN + "/privacy"
@@ -21,6 +21,8 @@ export const API_RESOURCE_ALERTS = DOMAIN + "/api/v1/resource/alerts"
 export const API_RESOURCE_CHATS = DOMAIN + "/api/v1/resource/chats"
 export const API_RESOURCE_CHATS_DETAIL = DOMAIN + "/api/v1/resource/chats/%s"
 export const API_RESOURCE_DONATE = DOMAIN + "/api/v1/resource/donate"
+export const API_RESOURCE_USER_ONBOARDING = DOMAIN + "/api/v1/resource/user/onboarding"
+
 //lat: number, lon: number, distance: number, sort: number
 export const API_SEARCH_USERS = DOMAIN + "/api/v1/search/users/%s/%s/%s/%s"
 export const API_SEARCH_USERS_DEFAULT = DOMAIN + "/api/v1/search/users/default"
