@@ -15,14 +15,18 @@ const Message = ({ conversation }: MessageT) => {
   text += conversation.lastMessage ? conversation.lastMessage.content : i18n.t('chat.default');
 
   return (
-    <View style={styles.containerMessage}>
-      <TouchableOpacity onPress={() => Global.nagivateProfile(conversation.userIdEncoded)}>
-        <Image source={{ uri: conversation.userProfilePicture }} style={styles.avatar} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => Global.nagivateChatDetails(conversation)}>
+    <View style={[styles.containerMessage]}>
+      <View>
+        <TouchableOpacity onPress={() => Global.nagivateProfile(conversation.userIdEncoded)} >
+          <Image source={{ uri: conversation.userProfilePicture }} style={styles.avatar} />
+        </TouchableOpacity>
+      </View>
+      <View style={{flexGrow: 1}}>
+      <TouchableOpacity onPress={() => Global.nagivateChatDetails(conversation)} >
         <Text>{conversation.userName}</Text>
         <Text numberOfLines={2} style={styles.message}>{text}</Text>
       </TouchableOpacity>
+      </View>
     </View>
   )
 };

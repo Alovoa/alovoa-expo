@@ -93,7 +93,9 @@ const MessageDetail = ({ route, navigation }) => {
   }
 
   const styleChat = {
-    marginTop: 6,
+    marginLeft: 4,
+    marginRight: 4,
+    marginBottom: 6,
     padding: 10,
     borderRadius: 10,
     width: DIMENSION_WIDTH * 0.85
@@ -109,8 +111,8 @@ const MessageDetail = ({ route, navigation }) => {
           results.map((item, index) => (
             <View key={index} style={[{ flex: 1 }, item.from ? {} : { alignItems: 'flex-end' }]}>
               <Card style={[styleChat, item.from ? {} : styleYourChat]} >
-                {!item.allowedFormatting && <Text>{item.content}</Text>}
-                {item.allowedFormatting && <Text style={{textDecorationLine: 'underline'}} onPress={() => {
+                {!item.allowedFormatting && <Text style={[item.from ? {} : styleYourChat]}>{item.content}</Text>}
+                {item.allowedFormatting && <Text style={[{textDecorationLine: 'underline'}, item.from ? {} : styleYourChat]} onPress={() => {
                   WebBrowser.openBrowserAsync(item.content);
                 }}>{item.content}</Text>}
               </Card>

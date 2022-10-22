@@ -404,7 +404,7 @@ const YourProfile = () => {
   }
 
   return (
-    <ScrollView style={[styles.containerProfile, { backgroundColor: colors.background }]} keyboardShouldPersistTaps='handled'
+    <ScrollView style={[styles.containerProfile]} keyboardShouldPersistTaps='handled'
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
       <TouchableOpacity
         onPress={updateProfilePicture}

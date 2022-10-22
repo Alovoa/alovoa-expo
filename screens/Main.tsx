@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
+const ICON_SIZE = 26;
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -79,7 +80,7 @@ const Main = ({ route, navigation }) => {
         options={{
           tabBarLabel: i18n.t('navigation.profile'),
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="account" color={color} size={26} />
+            <MaterialCommunityIcons name="account" color={color} size={ICON_SIZE} />
           ),
         }}
       />
@@ -90,7 +91,7 @@ const Main = ({ route, navigation }) => {
           tabBarBadge: newMessage,
           tabBarLabel: i18n.t('navigation.chat'),
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="chat" color={color} size={26} />
+            <MaterialCommunityIcons name="chat" color={color} size={ICON_SIZE} />
           ),
         }}
       />
@@ -100,7 +101,7 @@ const Main = ({ route, navigation }) => {
         options={{
           tabBarLabel: i18n.t('navigation.search'),
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="magnify" color={color} size={26} />
+            <MaterialCommunityIcons name="magnify" color={color} size={ICON_SIZE} />
           ),
         }}
       />
@@ -111,7 +112,7 @@ const Main = ({ route, navigation }) => {
           tabBarBadge: newAlert,
           tabBarLabel: i18n.t('navigation.likes'),
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="heart" color={color} size={26} />
+            <MaterialCommunityIcons name="heart" color={color} size={ICON_SIZE} />
           ),
         }}
       />
@@ -121,7 +122,7 @@ const Main = ({ route, navigation }) => {
         options={{
           tabBarLabel: i18n.t('navigation.donate'),
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="cash-multiple" color={color} size={26} />
+            <MaterialCommunityIcons name="cash-multiple" color={color} size={ICON_SIZE} />
           ),
         }}
       />
