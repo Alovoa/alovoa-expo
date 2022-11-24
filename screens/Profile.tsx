@@ -6,22 +6,23 @@ import {
   FlatList,
   RefreshControl,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Pressable
 } from "react-native";
-import { useTheme, Text, Button, Chip, Card } from "react-native-paper";
+import { useTheme, Text, Button, Chip, Card, Menu } from "react-native-paper";
 import { YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import ProfileCardItem from "../components/ProfileCardItem";
 import styles, {
   DISLIKE_ACTIONS,
   FLASH_ACTIONS,
   LIKE_ACTIONS,
   STAR_ACTIONS,
   WHITE,
-  GRAY
+  GRAY,
+  DIMENSION_WIDTH
 } from "../assets/styles";
 import Icon from "../components/Icon";
 
@@ -88,6 +89,27 @@ const Profile = ({ route, navigation }) => {
   const [kidsString, setKidsString] = React.useState<String>();
   const [drugsString, setDrugsString] = React.useState<String>();
 
+  const [menuVisible, setMenuVisible] = React.useState(false);
+  const showMenu = () => { setMenuVisible(true) };
+  const hideMenu = () => { setMenuVisible(false) };
+
+  /*
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true, animationEnabled: false, headerRight: () => (
+        <View>
+          <Menu
+            visible={menuVisible}
+            onDismiss={hideMenu}
+            anchor={<Pressable style={{ backgroundColor: 'red' }} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} style={{ paddingLeft: 8, paddingRight: 8 }} /></Pressable>
+            }>
+            {!blocked && <Menu.Item leadingIcon="block-helper" onPress={blockUser} title={i18n.t('profile.block')} />}
+            {blocked && <Menu.Item leadingIcon="block-helper" onPress={unblockUser} title={i18n.t('profile.unblock')} />}
+          </Menu></View>
+      ),
+    })
+  }, [])
+  */
 
   function convertGenderText(text: string): Gender {
     switch (text) {
@@ -211,11 +233,13 @@ const Profile = ({ route, navigation }) => {
   async function blockUser() {
     await Global.Fetch(Global.format(URL.USER_BLOCK, idEnc), 'post');
     setBlocked(true);
+    hideMenu();
   }
 
   async function unblockUser() {
     await Global.Fetch(Global.format(URL.USER_UNBLOCK, idEnc), 'post');
     setBlocked(false);
+    hideMenu();
   }
 
   async function likeUser() {
@@ -228,8 +252,27 @@ const Profile = ({ route, navigation }) => {
     setHidden(true);
   }
 
+  async function goBack() {
+    navigation.goBack();
+  }
+
   return (
     <View>
+      <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8}]}>
+        <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{padding: 8}} /></Pressable>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View>
+            <Menu
+              visible={menuVisible}
+              onDismiss={hideMenu}
+              anchor={<Pressable style={{padding: 8}} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} /></Pressable>}>
+              {!blocked && <Menu.Item leadingIcon="block-helper" onPress={blockUser} title={i18n.t('profile.block')} />}
+              {blocked && <Menu.Item leadingIcon="block-helper" onPress={unblockUser} title={i18n.t('profile.unblock')} />}
+            </Menu>
+          </View>
+        </View>
+      </View>
+
       <ScrollView style={styles.containerProfile} keyboardShouldPersistTaps='handled'
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
 
@@ -257,27 +300,49 @@ const Profile = ({ route, navigation }) => {
             <View>
               <Card style={{ padding: 16 }}><Text style={{ fontSize: 18 }}>{description}</Text></Card>
             </View>
+
+
             <ScrollView horizontal={true} style={{ marginTop: 84 }}>
-              <ProfileCardItem title={i18n.t('gender.title')} subtitle={gender == Gender.MALE ? i18n.t('gender.male') :
-                gender == Gender.FEMALE ? i18n.t('gender.female') : i18n.t('gender.other')}></ProfileCardItem>
-              <ProfileCardItem title={i18n.t('profile.intention.title')} subtitle={intention == Intention.MEET ? i18n.t('profile.intention.meet') :
-                intention == Intention.DATE ? i18n.t('profile.intention.date') : i18n.t('profile.intention.sex')}></ProfileCardItem>
-              <ProfileCardItem title={i18n.t('profile.gender')} subtitle={getGendersText()}></ProfileCardItem>
-              <ProfileCardItem title={i18n.t('profile.preferred-age-range')} subtitle={String(minAge) + " - " + String(maxAge)}></ProfileCardItem>
+              <Button icon="gender-male-female" mode="elevated" style={styles.marginRight4}>
+                <Text>{gender == Gender.MALE ? i18n.t('gender.male') :
+                  gender == Gender.FEMALE ? i18n.t('gender.female') : i18n.t('gender.other')}</Text>
+              </Button>
+              <Button icon="drama-masks" mode="elevated" style={styles.marginRight4}>
+                <Text>{String(minAge) + " - " + String(maxAge)}</Text>
+              </Button>
+              <Button icon="magnify" mode="elevated" style={styles.marginRight4}>
+                <Text>{getGendersText()}</Text>
+              </Button>
+              <Button icon="magnify-plus-outline" mode="elevated" style={styles.marginRight4}>
+                <Text>{intention == Intention.MEET ? i18n.t('profile.intention.meet') :
+                  intention == Intention.DATE ? i18n.t('profile.intention.date') : i18n.t('profile.intention.sex')}</Text>
+              </Button>
             </ScrollView>
-            {(relationshipString || kidsString || drugsString) && <ScrollView horizontal={true} style={{ marginTop: 32 }}>
-              {relationshipString && <ProfileCardItem title={i18n.t('profile.misc-info.relationship.title')} subtitle={relationshipString}></ProfileCardItem>}
-              {kidsString && <ProfileCardItem title={i18n.t('profile.misc-info.kids.title')} subtitle={kidsString}></ProfileCardItem>}
-              {drugsString && <ProfileCardItem title={i18n.t('profile.misc-info.drugs.title')} subtitle={drugsString}></ProfileCardItem>}
-            </ScrollView>}
-            <ScrollView horizontal={true} style={{ marginTop: 32 }}>
-              <ProfileCardItem title={i18n.t('profile.donated')} subtitle={String(donated) + ' €'}></ProfileCardItem>
-              <ProfileCardItem title={i18n.t('profile.num-blocks')} subtitle={blocks}></ProfileCardItem>
+
+            {(relationshipString || kidsString || drugsString) && <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
+              {relationshipString &&
+                <Button icon="heart-multiple" mode="elevated" style={styles.marginRight4}>
+                  <Text>{relationshipString}</Text>
+                </Button>}
+              {kidsString && <Button icon="baby-carriage" mode="elevated" style={styles.marginRight4}>
+                <Text>{kidsString}</Text>
+              </Button>}
+              {drugsString && <Button icon="pill" mode="elevated" style={styles.marginRight4}>
+                <Text>{drugsString}</Text>
+              </Button>}
             </ScrollView>
-            <View style={{ marginTop: 12, marginBottom: 82 }}>
-              {!blocked && <Button icon="block-helper" mode="contained" onPress={blockUser}><Text>{i18n.t('profile.block')}</Text></Button>}
-              {blocked && <Button icon="block-helper" mode="contained" onPress={unblockUser} buttonColor={colors.secondary}><Text>{i18n.t('profile.unblock')}</Text></Button>}
-            </View>
+            }
+            <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
+              <Button icon="hand-coin" mode="elevated" style={styles.marginRight4}>
+                <Text>{String(donated) + ' €'}</Text>
+              </Button>
+              <Button icon="account-cancel" mode="elevated" style={styles.marginRight4}>
+                <Text>{'# ' + blocks}</Text>
+              </Button>
+            </ScrollView>
+            {
+              <View style={{marginTop: 48}}></View>
+            }
           </View>
         </View>
       </ScrollView>

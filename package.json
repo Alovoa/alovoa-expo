@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "expo start --tunnel",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
@@ -32,7 +32,7 @@
     "expo-secure-store": "~11.3.0",
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
-    "expo-updates": "~0.14.6",
+    "expo-updates": "~0.14.7",
     "expo-web-browser": "~11.0.0",
     "i18n-js": "^4.1.1",
     "lodash": "^4.17.21",

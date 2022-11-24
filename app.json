@@ -11,7 +11,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "photosPermission": "The app accesses your photos to let you share them with other users."
         }
       ]
     ],
@@ -40,24 +40,36 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ec407a"
       },
-      "intentFilters": [{
-        "action": "VIEW",
-        "data": [{
-          "scheme": "alovoa"
-        }],
-        "category": [
-          "BROWSABLE",
-          "DEFAULT"
-        ]
-      }],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "alovoa"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
       "package": "com.alovoa.expo",
-      "permissions": ["android.permission.ACCESS_COARSE_LOCATION",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
-      ]
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3bbd5ced-e23a-4183-83ec-cc77a15b96aa"
+      }
     }
   }
 }

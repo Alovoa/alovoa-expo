@@ -92,7 +92,7 @@ export default function App() {
             ></Stack.Screen>
             <Stack.Screen
               name="Profile"
-              options={{ headerShown: true, animationEnabled: false }}
+              options={{ headerShown: false, animationEnabled: false }}
               component={Profile}
             ></Stack.Screen>
             <Stack.Screen

@@ -8,7 +8,7 @@ import { createNavigationContainerRef } from '@react-navigation/native';
 import Toast from 'react-native-root-toast';
 import { ConversationDto } from "./types";
 
-export const FLAG_ENABLE_DONATION = true;
+export const FLAG_ENABLE_DONATION = false;
 
 export const navigationRef = createNavigationContainerRef()
 export const INDEX_REGISTER = "1"

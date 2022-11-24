@@ -46,6 +46,9 @@ export default StyleSheet.create({
     marginBottom: 12,
     marginTop: 12,
   },
+  marginRight4: {
+    marginRight: 4
+  },
   // COMPONENT - CARD ITEM
   containerCardItem: {
     borderRadius: 8,
