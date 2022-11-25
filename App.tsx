@@ -22,12 +22,7 @@ const APP_URL = Linking.createURL("");
 SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 1000);
 WebBrowser.maybeCompleteAuthSession();
-
 const Stack = createStackNavigator();
-
-const DIMENSION_WIDTH = Dimensions.get("window").width;
-const DIMENSION_HEIGHT = Dimensions.get("window").height;
-const showHeader = DIMENSION_WIDTH/DIMENSION_HEIGHT > 16/9;
 
 //TEST
 //const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking');
@@ -56,7 +51,7 @@ export default function App() {
       backgroundColor: isDarkTheme ? '#121212' : "#FFFFFF"
     },
   };
-  
+
   const themeNavigation = {
     ...isDarkTheme ? DarkTheme : DefaultTheme,
     colors: {
@@ -66,7 +61,7 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-       <StatusBar style= {isDarkTheme ? "light" : "dark"} hidden={showHeader}/>
+      <StatusBar style={isDarkTheme ? "light" : "dark"} />
       <RootSiblingParent>
         <NavigationContainer theme={themeNavigation} ref={Global.navigationRef}>
           <Stack.Navigator>

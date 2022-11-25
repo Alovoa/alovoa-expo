@@ -8,7 +8,7 @@ import {
 
 import { Text } from "react-native-paper";
 import { CardItem } from "../components";
-import styles from "../assets/styles";
+import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -44,6 +44,7 @@ const Likes = ({navigation}) => {
 
   return (
     <View style={styles.containerMatches} >
+      <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <View style={styles.top}>
         <Text style={styles.title}>{i18n.t('navigation.likes')}</Text>
       </View>

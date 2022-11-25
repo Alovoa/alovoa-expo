@@ -108,5 +108,8 @@
         "placeholder": "Write a message..."
     },
     "you": "You",
-    "sort": "Sort"
+    "sort": "Sort",
+    "chats": {
+        "title": "Chats"
+    }
 }

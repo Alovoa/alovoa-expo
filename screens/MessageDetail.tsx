@@ -13,7 +13,7 @@ import {
 
 import { useTheme, Text } from "react-native-paper";
 import { MessageDtoListModel, MessageDto } from "../types";
-import styles from "../assets/styles";
+import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import { ScrollView } from "react-native-gesture-handler";
@@ -104,6 +104,7 @@ const MessageDetail = ({ route, navigation }) => {
 
   return (
     <View style={[styles.containerMessages, { paddingHorizontal: 0 }]}>
+      <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <ScrollView
         style={{ margin: 8 }}
         ref={scrollViewRef}

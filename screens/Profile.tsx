@@ -196,7 +196,7 @@ const Profile = ({ route, navigation }) => {
       if (user) {
         await load(false);
       }
-      await load(true);
+      load(true);
     }
     loadData();
   }, []);

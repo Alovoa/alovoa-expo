@@ -7,12 +7,14 @@ import {
 import { useTheme, Text } from "react-native-paper";
 import { Message } from "../components";
 import { ChatsResource, ConversationDto } from "../types";
-import styles from "../assets/styles";
+import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
+import * as I18N from "../i18n";
 
 const Messages = ({ navigation }) => {
 
+  const i18n = I18N.getI18n()
   const { colors } = useTheme();
   const [refreshing, setRefreshing] = React.useState(false);
   const [results, setResults] = React.useState(Array<ConversationDto>);
@@ -31,9 +33,10 @@ const Messages = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <View style={styles.containerMessages}>
+    <View style={styles.containerMatches}>
+      <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <View style={styles.top}>
-        <Text style={styles.title}>Messages</Text>
+        <Text style={styles.title}>{i18n.t('chats.title')}</Text>
         {
           /*<TouchableOpacity>
             <Icon name="ellipsis-vertical" color={DARK_GRAY} size={20} />

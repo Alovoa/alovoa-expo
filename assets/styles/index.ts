@@ -20,6 +20,8 @@ export const FLASH_ACTIONS = "#5028D7";
 export const DIMENSION_WIDTH = Dimensions.get("window").width;
 export const DIMENSION_HEIGHT = Dimensions.get("window").height;
 
+export const STATUS_BAR_HEIGHT = 12;
+
 export default StyleSheet.create({
   link: {
     color: "#ec407a",

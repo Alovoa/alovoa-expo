@@ -8,7 +8,7 @@ import {
 
 import { useTheme, Text, Button, Menu } from "react-native-paper";
 import { CardItem } from "../components";
-import styles from "../assets/styles";
+import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -55,11 +55,12 @@ const Donate = () => {
 
   return (
     <View style={styles.containerMatches} >
-      <View style={[styles.top, {paddingBottom: 4}]}>
+      <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
+      <View style={[styles.top, { paddingBottom: 4 }]}>
         <Text style={styles.title}>{i18n.t('navigation.donate')}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {Global.FLAG_ENABLE_DONATION &&
-            <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{marginRight: 4}}>
+            <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{ marginRight: 4 }}>
               <Text>{i18n.t('navigation.donate')}</Text>
             </Button>}
           <View>
@@ -69,8 +70,8 @@ const Donate = () => {
               anchor={<Button icon="sort" mode="contained-tonal" onPress={() => showMenuSort()}>
                 <Text>{i18n.t('sort')}</Text>
               </Button>}>
-              <Menu.Item leadingIcon="sort-clock-ascending-outline" onPress={() => { updateFilter(1) }} title={i18n.t('donate.filter.recent')} />
-              <Menu.Item leadingIcon="sort-numeric-descending-variant" onPress={() => { updateFilter(2) }} title={i18n.t('donate.filter.amount')} />
+              <Menu.Item leadingIcon="sort-clock-ascending-outline" onPress={() => { updateFilter(FILTER_RECENT) }} title={i18n.t('donate.filter.recent')} />
+              <Menu.Item leadingIcon="sort-numeric-descending-variant" onPress={() => { updateFilter(FILTER_AMOUNT) }} title={i18n.t('donate.filter.amount')} />
             </Menu>
           </View>
         </View>

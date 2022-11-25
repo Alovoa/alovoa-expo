@@ -109,5 +109,8 @@
         "placeholder": "Schreib eine Nachricht..."
     },
     "you": "Du",
-    "sort": "Sort."
+    "sort": "Sort.",
+    "cgats": {
+        "title": "Chats"
+    }
 }
