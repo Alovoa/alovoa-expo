@@ -1,6 +1,5 @@
 import React from "react";
 import { Search, Likes, Messages, YourProfile, Donate } from "../screens";
-import * as Linking from 'expo-linking';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';

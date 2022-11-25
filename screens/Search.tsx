@@ -22,11 +22,7 @@ enum SORT {
 }
 
 const Search = () => {
-  const TAB_BAR_HEIGHT = 0;
-  const WINDOW_HEIGHT = Dimensions.get('window').height;
-  const HEIGHT = WINDOW_HEIGHT - TAB_BAR_HEIGHT;
-
-
+  
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState<UserDto>();
   const [swiper, setSwiper] = useState<CardStack | null>();
