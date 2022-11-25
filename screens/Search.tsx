@@ -68,15 +68,6 @@ const Search = () => {
     longitude = lon;
   }
 
-  async function loadResultsDefault() {
-    let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS_DEFAULT));
-    let result: SearchDto = response.data;
-    let incompatible: boolean = result.incompatible;
-    if (result.users && !incompatible) {
-      setResults(result.users);
-    }
-  }
-
   async function loadResults() {
     let lat = latitude;
     let lon = longitude;
