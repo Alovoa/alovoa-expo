@@ -6,13 +6,13 @@ import {
   RefreshControl
 } from "react-native";
 
-import { useTheme, Text, Button, IconButton, Portal, Menu, RadioButton } from "react-native-paper";
-import { CardItem, Icon } from "../components";
+import { useTheme, Text, Button, Menu } from "react-native-paper";
+import { CardItem } from "../components";
 import styles from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { DonationDtoListModel, DonationDto, UnitsEnum } from "../types";
+import { DonationDtoListModel, DonationDto } from "../types";
 import * as Linking from 'expo-linking';
 
 const Donate = () => {

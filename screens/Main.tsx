@@ -5,11 +5,9 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import * as I18N from "../i18n";
-import TabBarIcon from "../components/TabBarIcon";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const i18n = I18N.getI18n()
-const APP_URL = Linking.createURL("");
 const ICON_SIZE = 26;
 
 const Tab = createMaterialBottomTabNavigator();

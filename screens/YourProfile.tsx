@@ -5,14 +5,12 @@ import {
   ImageBackground,
   TouchableOpacity,
   Platform,
-  Pressable,
-  FlatList,
   Alert,
   RefreshControl,
   Keyboard
 } from "react-native";
 import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
-import styles, { WHITE, PRIMARY_COLOR, PRIMARY_COLOR_LIGHT, GRAY } from "../assets/styles";
+import styles, { GRAY } from "../assets/styles";
 import { UserInterestAutocomplete, YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";

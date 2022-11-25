@@ -1,20 +1,17 @@
 import React from "react";
 import {
-  TouchableOpacity,
-  ImageBackground,
   View,
   FlatList,
   RefreshControl
 } from "react-native";
-
-import { useTheme, Text, Button, IconButton, Portal, Menu, RadioButton } from "react-native-paper";
-import { Icon, Message } from "../components";
-import { ChatsResource, UserDto, ConversationDto } from "../types";
-import styles, { DARK_GRAY } from "../assets/styles";
+import { useTheme, Text } from "react-native-paper";
+import { Message } from "../components";
+import { ChatsResource, ConversationDto } from "../types";
+import styles from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
 
-const Messages = ({navigation}) => {
+const Messages = ({ navigation }) => {
 
   const { colors } = useTheme();
   const [refreshing, setRefreshing] = React.useState(false);

@@ -1,13 +1,11 @@
 import React from "react";
 import { useTheme, Text, Button, TextInput, Switch, RadioButton } from "react-native-paper";
-import { View, ScrollView, StyleSheet, Image } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
-import { FontAwesome } from '@expo/vector-icons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Picker } from '@react-native-picker/picker';
 import { RegisterBody } from "../types";
 
 const i18n = I18N.getI18n()

@@ -6,13 +6,13 @@ import {
   RefreshControl
 } from "react-native";
 
-import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
-import { CardItem, Icon } from "../components";
+import { Text } from "react-native-paper";
+import { CardItem } from "../components";
 import styles from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { AlertsResource, NotificationDto, UserDto, UnitsEnum } from "../types";
+import { AlertsResource, UserDto, UnitsEnum } from "../types";
 
 const Likes = ({navigation}) => {
 

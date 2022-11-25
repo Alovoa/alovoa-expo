@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { View, Dimensions, RefreshControl } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
-import { Filters, CardItem } from "../components";
-import styles from "../assets/styles";
-import { UserDto, SearchResource, SearchDto, UnitsEnum, SearchStageEnum } from "../types";
+import { CardItem } from "../components";
+import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";

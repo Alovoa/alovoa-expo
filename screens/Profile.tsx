@@ -10,17 +10,14 @@ import {
   Pressable
 } from "react-native";
 import { useTheme, Text, Button, Chip, Card, Menu } from "react-native-paper";
-import { YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto } from "../types";
+import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import styles, {
   DISLIKE_ACTIONS,
-  FLASH_ACTIONS,
   LIKE_ACTIONS,
-  STAR_ACTIONS,
-  WHITE,
   GRAY,
   DIMENSION_WIDTH
 } from "../assets/styles";
@@ -204,13 +201,6 @@ const Profile = ({ route, navigation }) => {
     loadData();
   }, []);
 
-  /*
-  React.useEffect(() => {
-    load(false);
-  }, [relationshipString]);
-  */
-
-
   function getGendersText() {
     let arr: string[] = [];
     preferredGenders.forEach(element => {
@@ -351,7 +341,7 @@ const Profile = ({ route, navigation }) => {
             disabled={hidden}>
             <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => likeUser()}>
+          <TouchableOpacity style={styles.button} onPress={() => likeUser()} disabled={compatible}>
             <Icon name="heart" color={LIKE_ACTIONS} size={25} />
           </TouchableOpacity>
         </View>

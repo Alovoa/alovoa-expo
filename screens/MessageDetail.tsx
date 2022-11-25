@@ -11,10 +11,9 @@ import {
   TextInput, Card
 } from "react-native-paper";
 
-import { useTheme, Text, Button, Chip } from "react-native-paper";
-import { Icon, Message } from "../components";
-import { ChatsResource, MessageDtoListModel, ConversationDto, MessageDto } from "../types";
-import styles, { DARK_GRAY } from "../assets/styles";
+import { useTheme, Text } from "react-native-paper";
+import { MessageDtoListModel, MessageDto } from "../types";
+import styles from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import { ScrollView } from "react-native-gesture-handler";
@@ -51,9 +50,11 @@ const MessageDetail = ({ route, navigation }) => {
   }, [navigation]);
 
   React.useEffect(() => {
-    navigation.setOptions({ title: conversation.userName, headerRight: () => (
-      <Image source={{ uri: conversation.userProfilePicture }} style={{height: 36, width: 36, borderRadius: 36, marginRight: 18}} />
-    ) });
+    navigation.setOptions({
+      title: conversation.userName, headerRight: () => (
+        <Image source={{ uri: conversation.userProfilePicture }} style={{ height: 36, width: 36, borderRadius: 36, marginRight: 18 }} />
+      )
+    });
     load();
     messageUpdateInterval = setInterval(() => {
       reloadMessages(false);
@@ -61,10 +62,10 @@ const MessageDetail = ({ route, navigation }) => {
   }, []);
 
   React.useEffect(() => {
-    setTimeout(function() {
+    setTimeout(function () {
       scrollViewRef?.current?.scrollToEnd();
-    }  
-  ,100);
+    }
+      , 100);
   }, [results]);
 
   async function load() {
@@ -104,7 +105,7 @@ const MessageDetail = ({ route, navigation }) => {
   return (
     <View style={[styles.containerMessages, { paddingHorizontal: 0 }]}>
       <ScrollView
-      style={{margin: 8}}
+        style={{ margin: 8 }}
         ref={scrollViewRef}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
         {
@@ -112,7 +113,7 @@ const MessageDetail = ({ route, navigation }) => {
             <View key={index} style={[{ flex: 1 }, item.from ? {} : { alignItems: 'flex-end' }]}>
               <Card style={[styleChat, item.from ? {} : styleYourChat]} >
                 {!item.allowedFormatting && <Text style={[item.from ? {} : styleYourChat]}>{item.content}</Text>}
-                {item.allowedFormatting && <Text style={[{textDecorationLine: 'underline'}, item.from ? {} : styleYourChat]} onPress={() => {
+                {item.allowedFormatting && <Text style={[{ textDecorationLine: 'underline' }, item.from ? {} : styleYourChat]} onPress={() => {
                   WebBrowser.openBrowserAsync(item.content);
                 }}>{item.content}</Text>}
               </Card>
@@ -121,8 +122,8 @@ const MessageDetail = ({ route, navigation }) => {
         }
       </ScrollView>
       <KeyboardAvoidingView style={{ marginTop: 8 }}>
-        <TextInput 
-        style={{backgroundColor: colors.surface}}
+        <TextInput
+          style={{ backgroundColor: colors.surface }}
           value={text}
           dense={true}
           onChangeText={text => setText(text)}
