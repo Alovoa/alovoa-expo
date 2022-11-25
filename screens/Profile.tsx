@@ -63,7 +63,8 @@ const Profile = ({ route, navigation }) => {
   const MIN_AGE = 16
   const MAX_AGE = 100
 
-  const { idEnc } = route.params;
+  var user = route.params.user;
+  var idEnc = route.params.idEnc;
   const { colors } = useTheme();
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -93,24 +94,6 @@ const Profile = ({ route, navigation }) => {
   const showMenu = () => { setMenuVisible(true) };
   const hideMenu = () => { setMenuVisible(false) };
 
-  /*
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: true, animationEnabled: false, headerRight: () => (
-        <View>
-          <Menu
-            visible={menuVisible}
-            onDismiss={hideMenu}
-            anchor={<Pressable style={{ backgroundColor: 'red' }} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} style={{ paddingLeft: 8, paddingRight: 8 }} /></Pressable>
-            }>
-            {!blocked && <Menu.Item leadingIcon="block-helper" onPress={blockUser} title={i18n.t('profile.block')} />}
-            {blocked && <Menu.Item leadingIcon="block-helper" onPress={unblockUser} title={i18n.t('profile.unblock')} />}
-          </Menu></View>
-      ),
-    })
-  }, [])
-  */
-
   function convertGenderText(text: string): Gender {
     switch (text) {
       case GenderText.MALE:
@@ -121,33 +104,37 @@ const Profile = ({ route, navigation }) => {
     return Gender.OTHER;
   }
 
-  async function load() {
-    navigation.setOptions({ title: "" });
-    let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, idEnc));
-    let data: ProfileResource = response.data;
-    setLiked(data.user.likedByCurrentUser);
-    setHidden(data.user.hiddenByCurrentUser);
-    setYou(data.currUserDto);
-    setCompatible(data.compatible);
-    setProfilePic(data.user.profilePicture);
-    setDistance(data.user.distanceToUser);
-    setName(data.user.firstName);
-    setDonated(data.user.totalDonations);
-    setAge(data.user.age);
-    setBlocked(data.user.blockedByCurrentUser);
-    setBlocks(data.user.numBlockedByUsers);
-    setMinAge(data.user.preferedMinAge);
-    setMaxAge(data.user.preferedMaxAge);
-    setDescription(data.user.description);
-    setGender(convertGenderText(data.user.gender.text));
+  async function load(fetch = false) {
+
+    if (fetch || !user) {
+      let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, user == null ? idEnc : user.idEncoded));
+      let data: ProfileResource = response.data;
+      user = data.user
+    }
+
+    setLiked(user.likedByCurrentUser);
+    setHidden(user.hiddenByCurrentUser);
+    setYou(user.currUserDto);
+    setCompatible(user.compatible);
+    setProfilePic(user.profilePicture);
+    setDistance(user.distanceToUser);
+    setName(user.firstName);
+    setDonated(user.totalDonations);
+    setAge(user.age);
+    setBlocked(user.blockedByCurrentUser);
+    setBlocks(user.numBlockedByUsers);
+    setMinAge(user.preferedMinAge);
+    setMaxAge(user.preferedMaxAge);
+    setDescription(user.description);
+    setGender(convertGenderText(user.gender.text));
     let prefGenders: Array<Gender> = [];
-    for (let i = 0; i < data.user.preferedGenders.length; i++) {
-      prefGenders.push(convertGenderText(data.user.preferedGenders[i].text));
+    for (let i = 0; i < user.preferedGenders.length; i++) {
+      prefGenders.push(convertGenderText(user.preferedGenders[i].text));
     }
     setPreferredGenders(prefGenders);
-    setInterests(data.user.interests);
+    setInterests(user.interests);
 
-    let intentionText = data.user.intention.text;
+    let intentionText = user.intention.text;
     switch (intentionText) {
       case IntentionText.MEET:
         setIntention(Intention.MEET);
@@ -160,7 +147,7 @@ const Profile = ({ route, navigation }) => {
         break;
     }
 
-    let miscInfoData = data.user.miscInfos.map(item => item.value);
+    let miscInfoData = user.miscInfos.map(item => item.value);
 
     let relationShip;
     if (miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_SINGLE)) {
@@ -204,13 +191,25 @@ const Profile = ({ route, navigation }) => {
       setDrugsString(s);
     }
   }
-  React.useEffect(() => {
-    load();
-  }, []);
+
 
   React.useEffect(() => {
-    load();
+    const loadData = async () => {
+      navigation.setOptions({ title: "" });
+      if (user) {
+        await load(false);
+      }
+      await load(true);
+    }
+    loadData();
+  }, []);
+
+  /*
+  React.useEffect(() => {
+    load(false);
   }, [relationshipString]);
+  */
+
 
   function getGendersText() {
     let arr: string[] = [];
@@ -231,24 +230,24 @@ const Profile = ({ route, navigation }) => {
   }
 
   async function blockUser() {
-    await Global.Fetch(Global.format(URL.USER_BLOCK, idEnc), 'post');
+    await Global.Fetch(Global.format(URL.USER_BLOCK, user.idEncoded), 'post');
     setBlocked(true);
     hideMenu();
   }
 
   async function unblockUser() {
-    await Global.Fetch(Global.format(URL.USER_UNBLOCK, idEnc), 'post');
+    await Global.Fetch(Global.format(URL.USER_UNBLOCK, user.idEncoded), 'post');
     setBlocked(false);
     hideMenu();
   }
 
   async function likeUser() {
-    await Global.Fetch(Global.format(URL.USER_LIKE, idEnc), 'post');
+    await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
     setLiked(true);
   }
 
   async function hideUser() {
-    await Global.Fetch(Global.format(URL.USER_HIDE, idEnc), 'post');
+    await Global.Fetch(Global.format(URL.USER_HIDE, user.idEncoded), 'post');
     setHidden(true);
   }
 
@@ -258,14 +257,14 @@ const Profile = ({ route, navigation }) => {
 
   return (
     <View>
-      <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8}]}>
-        <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{padding: 8}} /></Pressable>
+      <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8 }]}>
+        <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View>
             <Menu
               visible={menuVisible}
               onDismiss={hideMenu}
-              anchor={<Pressable style={{padding: 8}} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} /></Pressable>}>
+              anchor={<Pressable style={{ padding: 8 }} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} /></Pressable>}>
               {!blocked && <Menu.Item leadingIcon="block-helper" onPress={blockUser} title={i18n.t('profile.block')} />}
               {blocked && <Menu.Item leadingIcon="block-helper" onPress={unblockUser} title={i18n.t('profile.unblock')} />}
             </Menu>
@@ -341,7 +340,7 @@ const Profile = ({ route, navigation }) => {
               </Button>
             </ScrollView>
             {
-              <View style={{marginTop: 48}}></View>
+              <View style={{ marginTop: 48 }}></View>
             }
           </View>
         </View>

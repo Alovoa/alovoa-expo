@@ -17,7 +17,7 @@ const Message = ({ conversation }: MessageT) => {
   return (
     <View style={[styles.containerMessage]}>
       <View>
-        <TouchableOpacity onPress={() => Global.nagivateProfile(conversation.userIdEncoded)} >
+        <TouchableOpacity onPress={() => Global.nagivateProfile(null, conversation.userIdEncoded)} >
           <Image source={{ uri: conversation.userProfilePicture }} style={styles.avatar} />
         </TouchableOpacity>
       </View>

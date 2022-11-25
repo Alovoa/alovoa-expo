@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as URL from "./URL";
 import { createNavigationContainerRef } from '@react-navigation/native';
 import Toast from 'react-native-root-toast';
-import { ConversationDto } from "./types";
+import { ConversationDto, UserDto } from "./types";
 
 export const FLAG_ENABLE_DONATION = false;
 
@@ -48,8 +48,9 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
   }
 }
 
-export function nagivateProfile(idEnc: string) {
+export function nagivateProfile(user?: UserDto, idEnc?: string) {
   navigate("Profile", {
+    user: user,
     idEnc: idEnc
   });
 }
