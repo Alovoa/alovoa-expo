@@ -16,8 +16,8 @@ import { Photos } from "./screens/profile";
 
 
 LogBox.ignoreAllLogs();
-//SplashScreen.preventAutoHideAsync();
-//setTimeout(SplashScreen.hideAsync, 1000);
+SplashScreen.preventAutoHideAsync();
+setTimeout(SplashScreen.hideAsync, 1000);
 WebBrowser.maybeCompleteAuthSession();
 const Stack = createStackNavigator();
 
