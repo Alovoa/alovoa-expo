@@ -13,6 +13,7 @@ import styles, {
   GRAY
 } from "../assets/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { ScrollView } from "react-native-gesture-handler";
 
 const CardItem = ({
   user,
@@ -93,7 +94,9 @@ const CardItem = ({
 
       {/* DESCRIPTION */}
       {!hasVariant && user.description && (
-        <Text style={styles.descriptionCardItem}>{user.description}</Text>
+        <ScrollView style={{height: 64}}>
+          <Text style={styles.descriptionCardItem}>{user.description}</Text>
+        </ScrollView>
       )}
 
       {/* ACTIONS */}
