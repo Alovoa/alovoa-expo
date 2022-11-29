@@ -16,12 +16,8 @@ import { Photos } from "./screens/profile";
 
 
 LogBox.ignoreAllLogs();
-
-const i18n = I18N.getI18n()
-const APP_URL = Linking.createURL("");
-
-SplashScreen.preventAutoHideAsync();
-setTimeout(SplashScreen.hideAsync, 1000);
+//SplashScreen.preventAutoHideAsync();
+//setTimeout(SplashScreen.hideAsync, 1000);
 WebBrowser.maybeCompleteAuthSession();
 const Stack = createStackNavigator();
 
