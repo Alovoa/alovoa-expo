@@ -7,7 +7,8 @@ import {
   RefreshControl,
   Dimensions,
   TouchableOpacity,
-  Pressable
+  Pressable,
+  Image
 } from "react-native";
 import { useTheme, Text, Button, Chip, Card, Menu } from "react-native-paper";
 import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage } from "../types";
@@ -266,13 +267,15 @@ const Profile = ({ route, navigation }) => {
 
         <SwiperFlatList
           autoplay
-          autoplayDelay={4}
-          autoplayLoop
+          autoplayDelay={3}
           showPagination={false}
-          paginationDefaultColor="#9e9e9e"
-          paginationActiveColor="#EC407A"
         >
-          <ImageBackground source={{ uri: profilePic ? profilePic : undefined }} style={styles.photo}></ImageBackground>
+          <Image source={{ uri: profilePic ? profilePic : undefined }} style={styles.photo}/>
+          {
+            images?.map((image, index) => (
+              <Image source={{ uri: image.content ? image.content : undefined}} style={styles.photo}/>
+            ))
+          }
         </SwiperFlatList>
 
         <View style={[styles.containerProfileItem, { marginTop: 24, flexDirection: 'row', justifyContent: 'space-between' }]}>
