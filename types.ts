@@ -85,6 +85,7 @@ export type UserInterest = {
 }
 
 export type UserImage = {
+  id: number;
   content: string
 }
 

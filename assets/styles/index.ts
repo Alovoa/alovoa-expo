@@ -20,7 +20,7 @@ export const FLASH_ACTIONS = "#5028D7";
 export const DIMENSION_WIDTH = Dimensions.get("window").width;
 export const DIMENSION_HEIGHT = Dimensions.get("window").height;
 
-export const STATUS_BAR_HEIGHT = 12;
+export const STATUS_BAR_HEIGHT = 26;
 
 export default StyleSheet.create({
   link: {
@@ -283,6 +283,11 @@ export default StyleSheet.create({
   photo: {
     width: DIMENSION_WIDTH,
     height: DIMENSION_WIDTH,
+  },
+  profileImage: {
+    width: DIMENSION_WIDTH/2,
+    height: DIMENSION_WIDTH/2,
+    padding: 8
   },
   topIconLeft: {
     paddingLeft: 20,

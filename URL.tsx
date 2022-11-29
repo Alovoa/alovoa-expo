@@ -1,8 +1,6 @@
-import * as Global from "./Global";
-
 //export const DOMAIN : string = "http://localhost:8080"
-//const DOMAIN : string = "https://beta.alovoa.com"
-const DOMAIN : string = "https://alovoa.com"
+//exportconst DOMAIN : string = "https://beta.alovoa.com"
+export const DOMAIN : string = "https://alovoa.com"
 
 export const IMPRINT = DOMAIN + "/imprint"
 export const PRIVACY = DOMAIN + "/privacy"
@@ -54,5 +52,7 @@ export const USER_LIKE = DOMAIN + "/user/like/%s"
 export const USER_HIDE = DOMAIN + "/user/hide/%s"
 export const USER_BLOCK = DOMAIN + "/user/block/%s"
 export const USER_UNBLOCK = DOMAIN + "/user/unblock/%s"
+export const USER_ADD_IMAGE = DOMAIN + "/user/image/add"
+export const USER_DELETE_IMAGE = DOMAIN + "/user/image/delete/%s"
 
 export const MESSAGE_SEND = DOMAIN + "/message/send/%s";

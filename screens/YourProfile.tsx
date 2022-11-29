@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
 import styles, { GRAY } from "../assets/styles";
-import { UserInterestAutocomplete, YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum } from "../types";
+import { UserInterestAutocomplete, YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum, UserDto } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -25,7 +25,6 @@ import { debounce } from "lodash";
 import { StorageAccessFramework } from 'expo-file-system';
 
 const userdataFileName = "userdata-alovoa.json"
-const IMAGE_HEADER = "data:image/webp;base64,";
 const MIME_JSON = "application/json";
 
 const i18n = I18N.getI18n()
@@ -57,10 +56,12 @@ enum IntentionText {
   SEX = "sex"
 }
 
-const YourProfile = () => {
+const YourProfile = ({ route, navigation }) => {
 
   const { colors } = useTheme();
   const [refreshing, setRefreshing] = React.useState(false);
+  const [data, setData] = React.useState<YourProfileResource>();
+  const [user, setUser] = React.useState<UserDto>();
   const [profilePic, setProfilePic] = React.useState("");
   const [name, setName] = React.useState("");
   const [age, setAge] = React.useState(0);
@@ -98,6 +99,14 @@ const YourProfile = () => {
   const descriptionRef = React.useRef(description);
 
   const debounceDescriptionHandler = React.useCallback(debounce(updateDescription, 1500), []);
+
+  React.useEffect(() => {
+    if (route.params?.changed) {
+      load();
+    }
+  }, [route.params?.changed]);
+
+  
   React.useEffect(() => {
     descriptionRef.current = description;
     debounceDescriptionHandler();
@@ -106,28 +115,6 @@ const YourProfile = () => {
   React.useEffect(() => {
     addInterest();
   }, [interest]);
-
-  const IMG_SIZE_MAX = 600;
-
-  async function pickImage() {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-      base64: true,
-    });
-    if (!result.cancelled) {
-      const resizedImageData = await ImageManipulator.manipulateAsync(
-        result.uri,
-        [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
-        { compress: 0.8, format: ImageManipulator.SaveFormat.WEBP, base64: true, }
-      );
-      return resizedImageData;
-    } else {
-      return null;
-    }
-  };
 
   const toggleGenderMaleSwitch = () => {
     setIsGenderMaleEnabled(previousState => !previousState)
@@ -177,6 +164,7 @@ const YourProfile = () => {
   async function load() {
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
+    setUser(data.user)
     setIdEnc(data.user.idEncoded);
     setProfilePic(data.user.profilePicture);
     setName(data.user.firstName);
@@ -333,15 +321,6 @@ const YourProfile = () => {
     ]);
   }
 
-  async function updateProfilePicture() {
-    let imageData: ImageManipulator.ImageResult | null = await pickImage();
-    if (imageData != null) {
-      let b64 = IMAGE_HEADER + imageData.base64;
-      await Global.Fetch(URL.USER_UPDATE_PROFILE_PICTURE, 'post', b64, 'text/plain');
-      setProfilePic(b64);
-    }
-  }
-
   async function updateDescription() {
     if (descriptionRef.current) {
       Global.Fetch(URL.USER_UPDATE_DESCRIPTION, 'post', descriptionRef.current, 'text/plain');
@@ -405,11 +384,14 @@ const YourProfile = () => {
     <ScrollView style={[styles.containerProfile]} keyboardShouldPersistTaps='handled'
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
       <TouchableOpacity
-        onPress={updateProfilePicture}
-      >
+        onPress={() => Global.navigate("Profile.Fotos", { user: user })}>
         <ImageBackground source={{ uri: profilePic }} style={styles.photo}>
         </ImageBackground>
       </TouchableOpacity>
+
+      <View style={{alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54}}>
+        <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Fotos", { user: user })}>{i18n.t('profile.photos.manage')}</Button>
+      </View>
 
       <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
         <Text style={[styles.name, {}]}>{name + ", " + age}</Text>
@@ -658,7 +640,7 @@ const YourProfile = () => {
 
         <View style={{ marginTop: 128 }}>
           <Button mode='contained' onPress={() => logout()}>
-            <Text>Logout</Text>
+            <Text>{i18n.t('profile.logout')}</Text>
           </Button>
           <View style={{ marginTop: 24 }}>
             <Text style={[styles.link, { padding: 8 }]} onPress={() => {

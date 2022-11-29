@@ -56,8 +56,7 @@ const Donate = () => {
   return (
     <View style={styles.containerMatches} >
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
-      <View style={[styles.top, { paddingBottom: 4 }]}>
-        <Text style={styles.title}>{i18n.t('navigation.donate')}</Text>
+      <View style={[styles.top, { paddingBottom: 8, justifyContent:'flex-end' }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {Global.FLAG_ENABLE_DONATION &&
             <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{ marginRight: 4 }}>

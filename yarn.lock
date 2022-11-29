@@ -1851,6 +1851,14 @@
   dependencies:
     "@react-navigation/elements" "^1.3.6"
 
+"@react-navigation/material-top-tabs@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-6.3.1.tgz#a122d71ba4ef7ebb29447a348aae6bd60ad23d5e"
+  integrity sha512-OJpKp3kxvz1GJ/DFHVufqhpSKnKS1alCyYq5Gpqomw+12HMJ49s01GGKkVNBkVeXjxoDOrrqrQkE31gfS/8YeQ==
+  dependencies:
+    color "^4.2.3"
+    warn-once "^0.1.0"
+
 "@react-navigation/native@^3.8.4":
   version "3.8.4"
   resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-3.8.4.tgz#4d77f86506364ecf18b33c7f8740afb6763d0b37"
@@ -6257,6 +6265,11 @@ react-native-modal-datetime-picker@^14.0.0:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-pager-view@5.4.24:
+  version "5.4.24"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.24.tgz#8626e757ddc55e41eca66d2f8a8a75aec54591ee"
+  integrity sha512-dRMB7i3B+mu4NCeIN6gqbR/kC/rr2wzqO0gisXDdJwJr78G24sWoTNpLEDFo3G8TFHY9nTMutVl5CUvkN2dp6g==
+
 react-native-paper@5.0.0-rc.7:
   version "5.0.0-rc.7"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.0.0-rc.7.tgz#04d56c677f538290f9f342f4619cbe25c5fb0b92"
@@ -6327,6 +6340,13 @@ react-native-swiper-flatlist@^3.0.17:
   version "3.0.17"
   resolved "https://registry.yarnpkg.com/react-native-swiper-flatlist/-/react-native-swiper-flatlist-3.0.17.tgz#fd9ca81db7d2cc67f85265bf5d6a3b0771692679"
   integrity sha512-4sWHzMHhXohiePBtJcVwt/fYVLpKFab7H1bvUH8TI3iMFYTOlMaW2PerlTDqGSO1eLRc4BX1z3X6e1NYPoakMA==
+
+react-native-tab-view@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.3.0.tgz#3d24ae4f4c55cfd54cd1d2d1f8915b0b2c33a5da"
+  integrity sha512-xjAQe657Gp/de2QHb7ptksTg8Jcb+j3fLAdcYryzfavt/pe+HtKLpkCtQsxyIJpRrAO7YPxFsymi2N4MnNfePA==
+  dependencies:
+    use-latest-callback "^0.1.5"
 
 react-native-vector-icons@>=7.0.0, react-native-vector-icons@^9.2.0:
   version "9.2.0"

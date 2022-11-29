@@ -12,6 +12,7 @@ import { RootSiblingParent } from 'react-native-root-siblings';
 import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider } from 'react-native-paper';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { Photos } from "./screens/profile";
 
 
 LogBox.ignoreAllLogs();
@@ -94,6 +95,12 @@ export default function App() {
               name="MessageDetail"
               options={{ headerShown: true, animationEnabled: false }}
               component={MessageDetail}
+            ></Stack.Screen>
+
+            <Stack.Screen
+              name="Profile.Fotos"
+              options={{ headerShown: false, animationEnabled: false }}
+              component={Photos}
             ></Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>

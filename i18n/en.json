@@ -86,7 +86,14 @@
         "delete-account": "Delete account",
         "delete-account-success": "Success! Please follow the instructions in the email we sent you.",
         "download-userdata": "Download user data",
-        "download-userdata-success": "User data downloaded!"
+        "download-userdata-success": "User data downloaded!",
+        "details": "Details",
+        "photos": {
+            "manage": "Manage photos",
+            "delete": "Delete photo?",
+            "change-profile-pic": "Change profile picture"
+        },
+        "logout": "Logout"
     },
     "cancel": "Cancel",
     "ok": "OK",
@@ -108,8 +115,5 @@
         "placeholder": "Write a message..."
     },
     "you": "You",
-    "sort": "Sort",
-    "chats": {
-        "title": "Chats"
-    }
+    "sort": "Sort"
 }

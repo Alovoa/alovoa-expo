@@ -10,7 +10,7 @@ import {
   Pressable
 } from "react-native";
 import { useTheme, Text, Button, Chip, Card, Menu } from "react-native-paper";
-import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto } from "../types";
+import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -19,17 +19,14 @@ import styles, {
   DISLIKE_ACTIONS,
   LIKE_ACTIONS,
   GRAY,
-  DIMENSION_WIDTH
+  DIMENSION_WIDTH,
+  STATUS_BAR_HEIGHT
 } from "../assets/styles";
 import Icon from "../components/Icon";
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
-
-const IMAGE_HEADER = "data:image/png;base64,";
 
 const i18n = I18N.getI18n()
-const MAX_INTERESTS = 5;
-const MIN_AGE = 16
-const MAX_AGE = 100
 
 enum Gender {
   MALE = 1,
@@ -86,6 +83,7 @@ const Profile = ({ route, navigation }) => {
   const [relationshipString, setRelationshipString] = React.useState<String>();
   const [kidsString, setKidsString] = React.useState<String>();
   const [drugsString, setDrugsString] = React.useState<String>();
+  const [images, setImages] = React.useState(Array<UserImage>);
 
   const [menuVisible, setMenuVisible] = React.useState(false);
   const showMenu = () => { setMenuVisible(true) };
@@ -124,6 +122,7 @@ const Profile = ({ route, navigation }) => {
     setMaxAge(user.preferedMaxAge);
     setDescription(user.description);
     setGender(convertGenderText(user.gender.text));
+    setImages(user.images);
     let prefGenders: Array<Gender> = [];
     for (let i = 0; i < user.preferedGenders.length; i++) {
       prefGenders.push(convertGenderText(user.preferedGenders[i].text));
@@ -247,7 +246,7 @@ const Profile = ({ route, navigation }) => {
 
   return (
     <View>
-      <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8 }]}>
+      <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
         <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View>
@@ -265,8 +264,16 @@ const Profile = ({ route, navigation }) => {
       <ScrollView style={styles.containerProfile} keyboardShouldPersistTaps='handled'
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
 
-        <ImageBackground source={{ uri: profilePic ? profilePic : undefined }} style={styles.photo}>
-        </ImageBackground>
+        <SwiperFlatList
+          autoplay
+          autoplayDelay={4}
+          autoplayLoop
+          showPagination={false}
+          paginationDefaultColor="#9e9e9e"
+          paginationActiveColor="#EC407A"
+        >
+          <ImageBackground source={{ uri: profilePic ? profilePic : undefined }} style={styles.photo}></ImageBackground>
+        </SwiperFlatList>
 
         <View style={[styles.containerProfileItem, { marginTop: 24, flexDirection: 'row', justifyContent: 'space-between' }]}>
           <Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>

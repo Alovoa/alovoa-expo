@@ -35,15 +35,6 @@ const Messages = ({ navigation }) => {
   return (
     <View style={styles.containerMatches}>
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
-      <View style={styles.top}>
-        <Text style={styles.title}>{i18n.t('chats.title')}</Text>
-        {
-          /*<TouchableOpacity>
-            <Icon name="ellipsis-vertical" color={DARK_GRAY} size={20} />
-          </TouchableOpacity>*/
-        }
-      </View>
-
       <FlatList
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
         data={results}

@@ -45,11 +45,6 @@ const Likes = ({navigation}) => {
   return (
     <View style={styles.containerMatches} >
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
-      <View style={styles.top}>
-        <Text style={styles.title}>{i18n.t('navigation.likes')}</Text>
-      </View>
-
-
       <FlatList
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
         columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}

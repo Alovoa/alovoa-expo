@@ -87,7 +87,13 @@
         "delete-account": "Account löschen",
         "delete-account-success": "Erfolg! Bitte folge den Anweisungen in der E-Mail die wir Dir geschickt haben.",
         "download-userdata": "Nutzerdaten herunterladen",
-        "download-userdata-success": "Nutzerdaten erfolgreich herunterladen"
+        "download-userdata-success": "Nutzerdaten erfolgreich herunterladen",
+        "photos": {
+            "manage": "Fotos verwalten",
+            "delete": "Foto löschen?",
+            "change-profile-pic": "Profilbild ändern"
+        },
+        "logout": "Ausloggen"
     },
     "cancel": "Abbrechen",
     "ok": "OK",
@@ -109,8 +115,5 @@
         "placeholder": "Schreib eine Nachricht..."
     },
     "you": "Du",
-    "sort": "Sort.",
-    "cgats": {
-        "title": "Chats"
-    }
+    "sort": "Sort."
 }
