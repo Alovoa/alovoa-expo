@@ -1,0 +1,3 @@
+- Updated splash screen
+- User can now view and upload additional photos
+- Several UI improvements
