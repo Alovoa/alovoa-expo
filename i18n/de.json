@@ -93,7 +93,11 @@
             "delete": "Foto löschen?",
             "change-profile-pic": "Profilbild ändern"
         },
-        "logout": "Ausloggen"
+        "logout": "Ausloggen",
+        "report": {
+            "title": "Melden",
+            "subtitle": "Nutzer wegen Verstoßes gegen die Nutzungsbedingungen melden?"
+        }
     },
     "cancel": "Abbrechen",
     "ok": "OK",

@@ -8,7 +8,8 @@ import {
   Dimensions,
   TouchableOpacity,
   Pressable,
-  Image
+  Image,
+  Alert
 } from "react-native";
 import { useTheme, Text, Button, Chip, Card, Menu } from "react-native-paper";
 import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage } from "../types";
@@ -58,7 +59,7 @@ const Profile = ({ route, navigation }) => {
   const MIN_AGE = 16
   const MAX_AGE = 100
 
-  var user = route.params.user;
+  var user : UserDto = route.params.user;
   var idEnc = route.params.idEnc;
   const { colors } = useTheme();
 
@@ -73,12 +74,14 @@ const Profile = ({ route, navigation }) => {
   const [age, setAge] = React.useState(0);
   const [donated, setDonated] = React.useState(0);
   const [blocks, setBlocks] = React.useState(0);
+  const [reports, setReports] = React.useState(0);
   const [minAge, setMinAge] = React.useState(MIN_AGE);
   const [maxAge, setMaxAge] = React.useState(MAX_AGE);
   const [description, setDescription] = React.useState("");
   const [intention, setIntention] = React.useState(Intention.MEET);
   const [interests, setInterests] = React.useState(Array<UserInterest>);
   const [blocked, setBlocked] = React.useState(false)
+  const [reported, setReported] = React.useState(false)
   const [gender, setGender] = React.useState<Gender>()
   const [preferredGenders, setPreferredGenders] = React.useState(Array<Gender>);
   const [relationshipString, setRelationshipString] = React.useState<String>();
@@ -106,11 +109,11 @@ const Profile = ({ route, navigation }) => {
       let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, user == null ? idEnc : user.idEncoded));
       let data: ProfileResource = response.data;
       user = data.user
+      setYou(data.currUserDto);
     }
 
     setLiked(user.likedByCurrentUser);
     setHidden(user.hiddenByCurrentUser);
-    setYou(user.currUserDto);
     setCompatible(user.compatible);
     setProfilePic(user.profilePicture);
     setDistance(user.distanceToUser);
@@ -118,7 +121,9 @@ const Profile = ({ route, navigation }) => {
     setDonated(user.totalDonations);
     setAge(user.age);
     setBlocked(user.blockedByCurrentUser);
+    setReported(user.reportedByCurrentUser);
     setBlocks(user.numBlockedByUsers);
+    setReports(user.numReports);
     setMinAge(user.preferedMinAge);
     setMaxAge(user.preferedMaxAge);
     setDescription(user.description);
@@ -231,6 +236,25 @@ const Profile = ({ route, navigation }) => {
     hideMenu();
   }
 
+  async function reportUser() {
+    Alert.alert(i18n.t('profile.report.title'), i18n.t('profile.report.subtitle'), [
+      {
+        text: i18n.t('cancel'),
+        onPress: () => { },
+        style: 'cancel',
+      },
+      {
+        text: i18n.t('ok'),
+        onPress: async () => {
+          await Global.Fetch(Global.format(URL.USER_REPORT, user.idEncoded), 'post', ' ', 'text/plain');
+          setReported(true);
+          hideMenu();
+        }
+      }
+    ]);
+    
+  }
+
   async function likeUser() {
     await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
     setLiked(true);
@@ -257,6 +281,7 @@ const Profile = ({ route, navigation }) => {
               anchor={<Pressable style={{ padding: 8 }} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} /></Pressable>}>
               {!blocked && <Menu.Item leadingIcon="block-helper" onPress={blockUser} title={i18n.t('profile.block')} />}
               {blocked && <Menu.Item leadingIcon="block-helper" onPress={unblockUser} title={i18n.t('profile.unblock')} />}
+              {!reported && <Menu.Item leadingIcon="flag" onPress={reportUser} title={i18n.t('profile.report.title')} />}
             </Menu>
           </View>
         </View>
@@ -337,6 +362,9 @@ const Profile = ({ route, navigation }) => {
               </Button>
               <Button icon="account-cancel" mode="elevated" style={styles.marginRight4}>
                 <Text>{'# ' + blocks}</Text>
+              </Button>
+              <Button icon="flag" mode="elevated" style={styles.marginRight4}>
+                <Text>{'# ' + reports}</Text>
               </Button>
             </ScrollView>
             {

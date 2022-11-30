@@ -93,7 +93,11 @@
             "delete": "Delete photo?",
             "change-profile-pic": "Change profile picture"
         },
-        "logout": "Logout"
+        "logout": "Logout",
+        "report": {
+            "title": "Report",
+            "subtitle": "Report user for violating the Terms of Service?"
+        }
     },
     "cancel": "Cancel",
     "ok": "OK",

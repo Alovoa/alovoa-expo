@@ -52,6 +52,7 @@ export const USER_LIKE = DOMAIN + "/user/like/%s"
 export const USER_HIDE = DOMAIN + "/user/hide/%s"
 export const USER_BLOCK = DOMAIN + "/user/block/%s"
 export const USER_UNBLOCK = DOMAIN + "/user/unblock/%s"
+export const USER_REPORT = DOMAIN + "/user/report/%s"
 export const USER_ADD_IMAGE = DOMAIN + "/user/image/add"
 export const USER_DELETE_IMAGE = DOMAIN + "/user/image/delete/%s"
 
