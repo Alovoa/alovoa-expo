@@ -30,6 +30,7 @@ const Register = () => {
   const [gender, setGender] = React.useState("1");
   const [isTosEnabled, setIsTosEnabled] = React.useState(false);
   const [isPrivacyEnabled, setIsPrivacyEnabled] = React.useState(false);
+  const [referrerCode, setReferrerCode] = React.useState("");
 
   const minDate = subtractYears(MAX_AGE);
   const maxDate = subtractYears(MIN_AGE);
@@ -67,6 +68,7 @@ const Register = () => {
       data.gender = Number(gender);
       data.privacy = isPrivacyEnabled;
       data.termsConditions = isTosEnabled;
+      data.referrerCode = referrerCode
 
       try {
         await Global.Fetch(URL.REGISTER_OAUTH, 'post', data);
@@ -140,6 +142,8 @@ const Register = () => {
         <View style={[styles.container]}>
           <Text>{i18n.t('register.referral-code') + " (" + i18n.t('optional') + ")"}</Text>
           <TextInput
+            value={referrerCode}
+            onChangeText={text => setReferrerCode(text)}
             mode="outlined"
             autoCapitalize={"none"}
             autoCorrect={false}
