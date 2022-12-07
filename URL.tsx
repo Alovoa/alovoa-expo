@@ -1,5 +1,5 @@
 //export const DOMAIN : string = "http://localhost:8080"
-//exportconst DOMAIN : string = "https://beta.alovoa.com"
+//export const DOMAIN : string = "https://beta.alovoa.com"
 export const DOMAIN : string = "https://alovoa.com"
 
 export const IMPRINT = DOMAIN + "/imprint"
@@ -8,6 +8,8 @@ export const TOS = DOMAIN + "/tos"
 export const DONATE_LIST = DOMAIN + "/donate-list"
 
 export const AUTH_LOGIN = DOMAIN + "/login"
+export const AUTH_LOGIN_ERROR = DOMAIN + "/login?error"
+
 export const AUTH_GOOGLE = DOMAIN + "/oauth2/authorization/google"
 export const AUTH_FACEBOOK = DOMAIN + "/oauth2/authorization/facebook"
 export const AUTH_COOKIE = DOMAIN + "/oauth2/remember-me-cookie/%s/%s"
@@ -26,6 +28,8 @@ export const API_SEARCH_USERS = DOMAIN + "/api/v1/search/users/%s/%s/%s/%s"
 export const API_SEARCH_USERS_DEFAULT = DOMAIN + "/api/v1/search/users/default"
 export const API_DONATE_RECENT = DOMAIN + "/api/v1/donate/recent/%s";
 export const API_MESSAGE_UPDATE = DOMAIN + "/api/v1/message/update/%s/%s";
+
+export const CATPCHA_GENERATE = DOMAIN + "/captcha/generate";
 
 export const REGISTER_OAUTH = DOMAIN + "/register-oauth";
 

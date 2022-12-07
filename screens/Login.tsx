@@ -1,77 +1,144 @@
 import React from "react";
-import { useTheme, Text, Button } from "react-native-paper";
-import { View, Platform, StyleSheet, Image } from "react-native";
+import { useTheme, Text, Button, Dialog, Portal, Provider, TextInput, IconButton } from "react-native-paper";
+import { View, Platform, StyleSheet, Image, Dimensions } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
+import { ScrollView } from "react-native-gesture-handler";
+import { Captcha } from "../types";
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
+const IMAGE_HEADER = "data:image/webp;base64,";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const _handleRedirect = async (event: { url: string; }) => {
 
-  if (Platform.OS === 'ios') {
-    WebBrowser.dismissBrowser();
-  }
+const Login = () => {
 
-  let data = Linking.parse(event.url);
-  if (data.queryParams != null) {
-    let firstName: string = String(data.queryParams["firstName"]);
-    let page: string = String(data.queryParams["page"]);
-    let sessionId: string = String(data.queryParams["jsessionid"]);
-    let rememberMe = String(data.queryParams["remember-me"]);
-    await Global.Fetch(Global.format(URL.AUTH_COOKIE, rememberMe, sessionId));
-    await Global.SetStorage(Global.STORAGE_FIRSTNAME, firstName);
-    await Global.SetStorage(Global.STORAGE_PAGE, page);
-    await Global.SetStorage("loginDate", new Date().toISOString());
-
-    Global.loadPage(page);
-    
-  }
-};
-
-const loginGoogle = async () => {
-  let e = Linking.addEventListener('url', _handleRedirect);
-  await WebBrowser.openAuthSessionAsync(URL.AUTH_GOOGLE + "/" + Buffer.from(APP_URL).toString('base64'), '');
-  e.remove();
-};
-
-const loginFacebook = async () => {
-  let e = Linking.addEventListener('url', _handleRedirect);
-  await WebBrowser.openAuthSessionAsync(URL.AUTH_FACEBOOK + "/" + Buffer.from(APP_URL).toString('base64'), '');
-  e.remove();
-};
-
-
-
-
-
-const Login = () => { 
-  
   const { colors } = useTheme();
-  
+
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [captchaId, setCaptchaId] = React.useState(0);
+  const [captchaImage, setCaptchaImage] = React.useState("");
+  const [captchaText, setCaptchaText] = React.useState("");
+
+  //vars for dialog
+  const [visible, setVisible] = React.useState(false);
+  const showDialog = () => setVisible(true);
+  const hideDialog = () => setVisible(false);
+
+  const _handleRedirect = async (event: { url: string; }) => {
+
+    if (Platform.OS === 'ios') {
+      WebBrowser.dismissBrowser();
+    }
+
+    let data = Linking.parse(event.url);
+    if (data.queryParams != null) {
+      let firstName: string = String(data.queryParams["firstName"]);
+      let page: string = String(data.queryParams["page"]);
+      let sessionId: string = String(data.queryParams["jsessionid"]);
+      let rememberMe = String(data.queryParams["remember-me"]);
+      await Global.Fetch(Global.format(URL.AUTH_COOKIE, rememberMe, sessionId));
+      await Global.SetStorage(Global.STORAGE_FIRSTNAME, firstName);
+      await Global.SetStorage(Global.STORAGE_PAGE, page);
+      await Global.SetStorage("loginDate", new Date().toISOString());
+      Global.loadPage(page);
+    }
+  };
+
+  const loginGoogle = async () => {
+    let e = Linking.addEventListener('url', _handleRedirect);
+    await WebBrowser.openAuthSessionAsync(URL.AUTH_GOOGLE + "/" + Buffer.from(APP_URL).toString('base64'), '');
+    e.remove();
+  };
+
+  const loginFacebook = async () => {
+    let e = Linking.addEventListener('url', _handleRedirect);
+    await WebBrowser.openAuthSessionAsync(URL.AUTH_FACEBOOK + "/" + Buffer.from(APP_URL).toString('base64'), '');
+    e.remove();
+  };
+
+  const loginEmail = async () => {
+    if (captchaId && captchaText) {
+      hideDialog();
+      let url = URL.AUTH_LOGIN + "?username=" + email +
+        "&password=" + encodeURIComponent(password) +
+        "&remember-me=on" +
+        "&redirect-url=" + Buffer.from(APP_URL).toString('base64') +
+        "&captchaId=" + captchaId +
+        "&captchaText=" + captchaText;
+      try {
+        let res = await Global.Fetch(url, 'post', {}, "application/x-www-form-urlencoded");
+        let redirectHeader = res.headers['redirect-url'];
+        if (res.request?.responseURL && res.request?.responseURL != URL.AUTH_LOGIN_ERROR && redirectHeader) {
+          _handleRedirect({ url: redirectHeader });
+        } else {
+          Global.ShowToast(i18n.t('error.generic'));
+        }
+      } catch (e) {
+        console.log(e);
+        Global.ShowToast(i18n.t('error.generic'));
+      }
+    }
+  };
+
+  async function emailSignInPress() {
+    if (email && password) {
+      setCaptchaText("");
+      let res = await Global.Fetch(URL.CATPCHA_GENERATE);
+      let captcha: Captcha = res.data;
+      setCaptchaId(captcha.id);
+      setCaptchaImage(IMAGE_HEADER + captcha.image);
+      showDialog();
+    }
+  }
+
   return (
-  <View style={[{ flex: 1, padding: 12, justifyContent: "center", backgroundColor: colors.background}]}>
-    <View>
-      <Image resizeMode='contain' style={{ resizeMode: "contain", height: 200, width: '100%' }} source={require('../assets/splash.png')} />
+    <ScrollView style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]} keyboardShouldPersistTaps={true}>
+      <View style={{height: Dimensions.get("window").height}}>
+        <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
 
-      <Text style={{ textAlign: 'center', marginBottom: 48, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
+        <Text style={{ textAlign: 'center', marginBottom: 48, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
 
-      <Button icon="google" mode="contained" style={[styles.buttonGoogle]}
-        onPress={() => {
-          loginGoogle();
-        }}
-      ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
-      <Button icon="facebook" mode="contained" style={[styles.buttonFacebook, {marginTop: 8}]}
-        onPress={() => {
-          loginFacebook();
-        }}
-      ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+        <TextInput
+          style={{ backgroundColor: colors.background }}
+          label="Email"
+          value={email}
+          onChangeText={text => setEmail(text)}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={{ backgroundColor: colors.background }}
+          label="Password"
+          value={password}
+          onChangeText={text => setPassword(text)}
+          autoCapitalize="none"
+          secureTextEntry={true}
+        />
+
+        <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { emailSignInPress() }}
+        ><Text style={styles.buttonText}>{i18n.t('auth.email')}</Text></Button>
+
+        <View style={{ paddingBottom: 38 }}></View>
+
+        <Button icon="google" mode="contained" style={[styles.buttonGoogle]}
+          onPress={() => {
+            loginGoogle();
+          }}
+        ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+        <Button icon="facebook" mode="contained" style={[styles.buttonFacebook, { marginTop: 8 }]}
+          onPress={() => {
+            loginFacebook();
+          }}
+        ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+      </View>
       <View style={{ marginTop: 24 }}>
         <Text style={styles.link} onPress={() => {
           WebBrowser.openBrowserAsync(URL.PRIVACY);
@@ -83,9 +150,38 @@ const Login = () => {
           WebBrowser.openBrowserAsync(URL.IMPRINT);
         }}>{i18n.t('imprint')}</Text>
       </View>
-    </View>
-  </View>
-)};
+      <View style={{ paddingBottom: 38 }}></View>
+
+
+      <Dialog visible={visible} onDismiss={hideDialog}>
+        <Dialog.Title>{i18n.t('captcha.title')}</Dialog.Title>
+        <Dialog.Content>
+          <Image resizeMode='contain' style={{ height: 100 }} source={{ uri: captchaImage }} />
+          <TextInput
+            mode="outlined"
+            label={i18n.t('captcha.placeholder')}
+            value={captchaText}
+            onChangeText={text => setCaptchaText(text)}
+          />
+        </Dialog.Content>
+        <Dialog.Actions>
+          <IconButton
+            icon="reload"
+            iconColor={colors.primary}
+            size={20}
+            onPress={() => { emailSignInPress() }}
+          />
+          <IconButton
+            icon="login-variant"
+            iconColor={colors.primary}
+            size={20}
+            onPress={() => { loginEmail() }}
+          />
+        </Dialog.Actions>
+      </Dialog>
+    </ScrollView>
+  )
+};
 
 export default Login;
 

@@ -269,3 +269,8 @@ export type UserOnboardingResource = {
   mediaMaxSize: number
   interestMaxSize: number;
 }
+
+export type Captcha = {
+  id: number;
+  image: string;
+}

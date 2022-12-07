@@ -3,6 +3,7 @@
     "tos": "Terms of Service",
     "privacy-policy": "Privacy Policy",
     "auth": {
+        "email": "Sign in",
         "google": "Sign in with Google",
         "facebook": "Sign in with Facebook"
     },
@@ -119,5 +120,15 @@
         "placeholder": "Write a message..."
     },
     "you": "You",
-    "sort": "Sort"
+    "sort": "Sort",
+    "error": {
+        "generic": "An error occured. Please try again."
+    },
+    "email": "Email",
+    "password": "Password",
+    "captcha": {
+        "title": "Captcha",
+        "placeholder": "Type the text"
+    },
+    "register-email": "Sign up with email"
 }

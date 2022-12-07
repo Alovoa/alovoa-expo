@@ -3,6 +3,7 @@
     "tos": "Nutzungsbedingungen",
     "privacy-policy": "Datenschutzerklärung",
     "auth": {
+        "email": "Anmelden",
         "google": "Mit Google anmelden",
         "facebook": "Mit Facebook anmelden"
     },
@@ -119,5 +120,15 @@
         "placeholder": "Schreib eine Nachricht..."
     },
     "you": "Du",
-    "sort": "Sort."
+    "sort": "Sort.",
+    "error": {
+        "generic": "Ein Fehler ist aufgetreten. Bitte versuche es noch einmal."
+    },
+    "email": "E-mail",
+    "password": "Passwort",
+    "captcha": {
+        "title": "Captcha",
+        "placeholder": "Gib den Text ein"
+    },
+    "register-email": "Mit E-mail registrieren"
 }
