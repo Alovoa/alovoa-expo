@@ -102,7 +102,11 @@ export function ShowToast(text: string) {
       backgroundColor: "#424242"
     });
   }
+}
 
+export function isEmailValid(text: string) {
+  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+  return reg.test(text);
 }
 
 export const format = (str: string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);

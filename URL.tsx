@@ -31,6 +31,8 @@ export const API_MESSAGE_UPDATE = DOMAIN + "/api/v1/message/update/%s/%s";
 
 export const CATPCHA_GENERATE = DOMAIN + "/captcha/generate";
 
+export const PASSWORD_RESET = DOMAIN + "/password/reset"
+
 export const REGISTER = DOMAIN + "/register";
 export const REGISTER_OAUTH = DOMAIN + "/register-oauth";
 

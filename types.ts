@@ -274,3 +274,9 @@ export type Captcha = {
   id: number;
   image: string;
 }
+
+export type PasswordResetDto = {
+  captchaId: number;
+	captchaText: string;
+	email: string;
+}

@@ -22,6 +22,7 @@ const Login = () => {
   const { colors } = useTheme();
 
   const [email, setEmail] = React.useState("");
+  const [emailValid, setEmailValid] = React.useState(false);
   const [password, setPassword] = React.useState("");
   const [captchaId, setCaptchaId] = React.useState(0);
   const [captchaImage, setCaptchaImage] = React.useState("");
@@ -89,7 +90,7 @@ const Login = () => {
   };
 
   async function emailSignInPress() {
-    if (email && password) {
+    if (emailValid && password) {
       setCaptchaText("");
       let res = await Global.Fetch(URL.CATPCHA_GENERATE);
       let captcha: Captcha = res.data;
@@ -110,7 +111,10 @@ const Login = () => {
           style={{ backgroundColor: colors.background }}
           label="Email"
           value={email}
-          onChangeText={text => setEmail(text)}
+          onChangeText={text => {
+            setEmail(text);
+            setEmailValid(Global.isEmailValid(text));
+          }}
           keyboardType="email-address"
           autoCapitalize="none"
         />
@@ -145,6 +149,7 @@ const Login = () => {
           Global.navigate("Register", {registerEmail: true});
         }}>{i18n.t('register-email')}</Text>
         <Text style={styles.link} onPress={() => {
+          Global.navigate("PasswordReset");
         }}>{i18n.t('password-forget')}</Text>
       </View>
 

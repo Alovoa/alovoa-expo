@@ -1,27 +1,27 @@
 import React from "react";
 import { useTheme, Text, Button, Dialog, Portal, Provider, TextInput, IconButton } from "react-native-paper";
 import { View, Platform, StyleSheet, Image, Dimensions } from "react-native";
-import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
-import { ScrollView } from "react-native-gesture-handler";
-import { Captcha } from "../types";
+import SvgPasswordReset from "../assets/images/password-reset.svg";
+import { Captcha, PasswordResetDto } from "../types";
 
 const i18n = I18N.getI18n()
-const APP_URL = Linking.createURL("");
 const IMAGE_HEADER = "data:image/webp;base64,";
 
 WebBrowser.maybeCompleteAuthSession();
 
-
-const Login = () => {
+const PasswordReset = ({ route, navigation }) => {
 
   const { colors } = useTheme();
 
+  const svgHeight = 150;
+  const svgWidth = 200;
+
   const [email, setEmail] = React.useState("");
+  const [emailValid, setEmailValid] = React.useState(false);
   const [captchaId, setCaptchaId] = React.useState(0);
   const [captchaImage, setCaptchaImage] = React.useState("");
   const [captchaText, setCaptchaText] = React.useState("");
@@ -31,102 +31,57 @@ const Login = () => {
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
-  const _handleRedirect = async (event: { url: string; }) => {
+  React.useEffect(() => {
+    navigation.setOptions({
+      title: ''
+    });
+  }, []);
 
-    if (Platform.OS === 'ios') {
-      WebBrowser.dismissBrowser();
+  async function showCaptchaDialog() {
+    if (emailValid) {
+      setCaptchaText("");
+      let res = await Global.Fetch(URL.CATPCHA_GENERATE);
+      let captcha: Captcha = res.data;
+      setCaptchaId(captcha.id);
+      setCaptchaImage(IMAGE_HEADER + captcha.image);
+      showDialog();
     }
+  }
 
-    let data = Linking.parse(event.url);
-    if (data.queryParams != null) {
-      let firstName: string = String(data.queryParams["firstName"]);
-      let page: string = String(data.queryParams["page"]);
-      let sessionId: string = String(data.queryParams["jsessionid"]);
-      let rememberMe = String(data.queryParams["remember-me"]);
-      await Global.Fetch(Global.format(URL.AUTH_COOKIE, rememberMe, sessionId));
-      await Global.SetStorage(Global.STORAGE_FIRSTNAME, firstName);
-      await Global.SetStorage(Global.STORAGE_PAGE, page);
-      await Global.SetStorage("loginDate", new Date().toISOString());
-      Global.loadPage(page);
+  async function resetPassword() {
+    if (emailValid && captchaId && captchaText) {
+      setCaptchaText("");
+      let data: PasswordResetDto = {captchaId: captchaId, captchaText: captchaText, email: email}
+      let res = await Global.Fetch(URL.PASSWORD_RESET, 'post', data);
+      Global.ShowToast(i18n.t('password-reset-success'));
+      Global.navigate("Login");
     }
-  };
-
-  const loginGoogle = async () => {
-    let e = Linking.addEventListener('url', _handleRedirect);
-    await WebBrowser.openAuthSessionAsync(URL.AUTH_GOOGLE + "/" + Buffer.from(APP_URL).toString('base64'), '');
-    e.remove();
-  };
-
-  const loginFacebook = async () => {
-    let e = Linking.addEventListener('url', _handleRedirect);
-    await WebBrowser.openAuthSessionAsync(URL.AUTH_FACEBOOK + "/" + Buffer.from(APP_URL).toString('base64'), '');
-    e.remove();
-  };
-
+  }
 
   return (
-    <ScrollView style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]} keyboardShouldPersistTaps={true}>
+    <View style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]}>
       <View style={{height: Dimensions.get("window").height}}>
-        <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
 
-        <Text style={{ textAlign: 'center', marginBottom: 48, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
+        <View style={{ justifyContent: 'center',alignItems: 'center' }}>
+          <SvgPasswordReset style={styles.svg} height={svgHeight} width={svgWidth} />
+        </View>
+        
 
         <TextInput
           style={{ backgroundColor: colors.background }}
           label="Email"
           value={email}
-          onChangeText={text => setEmail(text)}
+          onChangeText={text => {
+            setEmail(text);
+            setEmailValid(Global.isEmailValid(text));
+          }}
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <TextInput
-          style={{ backgroundColor: colors.background }}
-          label="Password"
-          value={password}
-          onChangeText={text => setPassword(text)}
-          autoCapitalize="none"
-          secureTextEntry={true}
-        />
 
-        <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { emailSignInPress() }}
-        ><Text style={styles.buttonText}>{i18n.t('auth.email')}</Text></Button>
-
-        <View style={{ paddingBottom: 38 }}></View>
-
-        <Button icon="google" mode="contained" style={[styles.buttonGoogle]}
-          onPress={() => {
-            loginGoogle();
-          }}
-        ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
-        <Button icon="facebook" mode="contained" style={[styles.buttonFacebook, { marginTop: 8 }]}
-          onPress={() => {
-            loginFacebook();
-          }}
-        ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+          <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { showCaptchaDialog() }}
+        ><Text style={styles.buttonText}>{i18n.t('password-reset')}</Text></Button>
       </View>
-
-      <View style={{ marginTop: 8 }}>
-        <Text style={styles.link} onPress={() => {
-          WebBrowser.openBrowserAsync(URL.PRIVACY);
-        }}>{i18n.t('register-email')}</Text>
-        <Text style={styles.link} onPress={() => {
-          WebBrowser.openBrowserAsync(URL.TOS);
-        }}>{i18n.t('password-forget')}</Text>
-      </View>
-
-      <View style={{ marginTop: 24 }}>
-        <Text style={styles.link} onPress={() => {
-          WebBrowser.openBrowserAsync(URL.PRIVACY);
-        }}>{i18n.t('privacy-policy')}</Text>
-        <Text style={styles.link} onPress={() => {
-          WebBrowser.openBrowserAsync(URL.TOS);
-        }}>{i18n.t('tos')}</Text>
-        <Text style={styles.link} onPress={() => {
-          WebBrowser.openBrowserAsync(URL.IMPRINT);
-        }}>{i18n.t('imprint')}</Text>
-      </View>
-      <View style={{ paddingBottom: 38 }}></View>
-
 
       <Dialog visible={visible} onDismiss={hideDialog}>
         <Dialog.Title>{i18n.t('captcha.title')}</Dialog.Title>
@@ -144,25 +99,33 @@ const Login = () => {
             icon="reload"
             iconColor={colors.primary}
             size={20}
-            onPress={() => { emailSignInPress() }}
+            onPress={() => { showCaptchaDialog() }}
           />
           <IconButton
             icon="login-variant"
             iconColor={colors.primary}
             size={20}
-            onPress={() => { loginEmail() }}
+            onPress={() => { resetPassword() }}
           />
         </Dialog.Actions>
       </Dialog>
-    </ScrollView>
+    </View>
   )
 };
 
-export default Login;
+export default PasswordReset;
+
+const { height, width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  link: {
-    color: "#ec407a"
+  container: { flex: 1, backgroundColor: 'white' },
+  child: { width, justifyContent: 'center' },
+  text: { fontSize: width * 0.5, textAlign: 'center' },
+  view: {
+    width: width,
+    height: height,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   button: {
     alignItems: 'center',
@@ -171,20 +134,39 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: 'blue',
+    backgroundColor: '#ec407a',
     margin: 4,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
-  buttonGoogle: {
-    backgroundColor: '#4285f4',
+  svg: {
+    marginTop: 24,
+    marginBottom: 12
   },
-  buttonFacebook: {
-    backgroundColor: '#4267b2',
+  profilePicButton: {
+    width: 200,
+    height: 200
+  },
+  title: {
+    textAlign: 'center',
+    marginTop: 12,
+    marginBottom: 12,
+    fontSize: 18,
+  },
+  radioButton: {
+    marginBottom: 12,
+    marginTop: 12,
+  },
+  switchText: {
+    marginBottom: 12,
+    marginTop: 12,
+  },
+  warning: {
+    textAlign: 'center',
+    marginTop: 24,
+    opacity: 0.5,
+    fontSize: 10
   },
   buttonText: {
     color: 'white'
   },
-  icon: {
-    marginRight: 8
-  }
 });

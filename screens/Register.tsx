@@ -113,16 +113,6 @@ const Register = ({ route, navigation }) => {
     }
   }
 
-  function updateEmail(text: string) {
-    setEmail(text);
-    setEmailValid(isEmailValid(text));
-  }
-
-  function isEmailValid(text: string) {
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    return reg.test(text);
-  }
-
   return (
 
     <View style={{ flex: 1, padding: 12, backgroundColor: colors.background }}>
@@ -140,8 +130,12 @@ const Register = ({ route, navigation }) => {
             mode="outlined"
             value={email}
             autoCapitalize={"none"}
-            onChangeText={text => updateEmail(text)}
+            onChangeText={text => {
+              setEmail(text);
+              setEmailValid(Global.isEmailValid(text));
+            }}
             autoCorrect={false}
+            keyboardType="email-address"
           />
         </View>}
 

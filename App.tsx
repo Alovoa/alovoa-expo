@@ -1,5 +1,5 @@
 import React from "react";
-import { Login, Register, Onboarding, Main, Profile, MessageDetail } from "./screens";
+import { Login, Register, Onboarding, Main, Profile, MessageDetail, PasswordReset } from "./screens";
 import * as SplashScreen from 'expo-splash-screen';
 import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,6 +13,7 @@ import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider } from 'react-na
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { Photos } from "./screens/profile";
+import { ThemeProp } from "react-native-paper/lib/typescript/types";
 
 
 LogBox.ignoreAllLogs();
@@ -35,7 +36,7 @@ export default function App() {
 
   const isDarkTheme = useColorScheme() == 'dark';
 
-  const theme = {
+  const theme : ThemeProp = {
     ...isDarkTheme ? MD3DarkTheme : MD3LightTheme,
     dark: isDarkTheme,
     roundness: 2,
@@ -45,7 +46,7 @@ export default function App() {
       primary: '#EC407A',
       secondary: '#28C4ED',
       tertiary: '#F2D3DD',
-      backgroundColor: isDarkTheme ? '#121212' : "#FFFFFF"
+      background: isDarkTheme ? '#121212' : "#FFFFFF"
     },
   };
 
@@ -92,11 +93,15 @@ export default function App() {
               options={{ headerShown: true, animationEnabled: false }}
               component={MessageDetail}
             ></Stack.Screen>
-
             <Stack.Screen
               name="Profile.Fotos"
               options={{ headerShown: false, animationEnabled: false }}
               component={Photos}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="PasswordReset"
+              options={{ headerShown: true, animationEnabled: false }}
+              component={PasswordReset}
             ></Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>
