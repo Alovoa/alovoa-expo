@@ -130,5 +130,11 @@
         "title": "Captcha",
         "placeholder": "Gib den Text ein"
     },
-    "register-email": "Mit E-mail registrieren"
+    "register-email": "Mit E-mail registrieren",
+    "register-email-success": "Vielen Dank! Um den Registriervorgang abzuschließen, klicke einfach auf den Link, den wir Dir per E-mail geschickt haben.",
+    "register-password-warning": "Das Passwort muss mindestens 7 Zeichen lang sein und Zeichen und Zahlen enthalten.",
+    "password-forget": "Password vergessen?",
+    "password-reset": "Password zurücksetzen",
+    "password-reset-success": "Schaue in Deiner E-Mail Postface nach, ob Du eine Nachricht von uns erhalten hast, und befolge die darin enthaltenen Anweisungen, um Dein Passwort zurückzusetzen."
+    
 }

@@ -22,7 +22,6 @@ const Login = () => {
   const { colors } = useTheme();
 
   const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
   const [captchaId, setCaptchaId] = React.useState(0);
   const [captchaImage, setCaptchaImage] = React.useState("");
   const [captchaText, setCaptchaText] = React.useState("");
@@ -64,40 +63,6 @@ const Login = () => {
     e.remove();
   };
 
-  const loginEmail = async () => {
-    if (captchaId && captchaText) {
-      hideDialog();
-      let url = URL.AUTH_LOGIN + "?username=" + email +
-        "&password=" + encodeURIComponent(password) +
-        "&remember-me=on" +
-        "&redirect-url=" + Buffer.from(APP_URL).toString('base64') +
-        "&captchaId=" + captchaId +
-        "&captchaText=" + captchaText;
-      try {
-        let res = await Global.Fetch(url, 'post', {}, "application/x-www-form-urlencoded");
-        let redirectHeader = res.headers['redirect-url'];
-        if (res.request?.responseURL && res.request?.responseURL != URL.AUTH_LOGIN_ERROR && redirectHeader) {
-          _handleRedirect({ url: redirectHeader });
-        } else {
-          Global.ShowToast(i18n.t('error.generic'));
-        }
-      } catch (e) {
-        console.log(e);
-        Global.ShowToast(i18n.t('error.generic'));
-      }
-    }
-  };
-
-  async function emailSignInPress() {
-    if (email && password) {
-      setCaptchaText("");
-      let res = await Global.Fetch(URL.CATPCHA_GENERATE);
-      let captcha: Captcha = res.data;
-      setCaptchaId(captcha.id);
-      setCaptchaImage(IMAGE_HEADER + captcha.image);
-      showDialog();
-    }
-  }
 
   return (
     <ScrollView style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]} keyboardShouldPersistTaps={true}>
@@ -142,9 +107,10 @@ const Login = () => {
 
       <View style={{ marginTop: 8 }}>
         <Text style={styles.link} onPress={() => {
-          Global.navigate("Register", {registerEmail: true});
+          WebBrowser.openBrowserAsync(URL.PRIVACY);
         }}>{i18n.t('register-email')}</Text>
         <Text style={styles.link} onPress={() => {
+          WebBrowser.openBrowserAsync(URL.TOS);
         }}>{i18n.t('password-forget')}</Text>
       </View>
 

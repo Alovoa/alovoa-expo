@@ -13,6 +13,7 @@ const i18n = I18N.getI18n()
 const MIN_AGE = 16
 const MAX_AGE = 100
 const DEFAULT_AGE = 18
+const minPasswordLength = 7;
 
 function subtractYears(years: number): Date {
   const date = new Date();
@@ -20,11 +21,17 @@ function subtractYears(years: number): Date {
   return date;
 }
 
-const Register = () => {
+const Register = ({ route, navigation }) => {
 
+  const registerEmail = route.params?.registerEmail;
   const { colors } = useTheme();
+  const scrollRef = React.useRef(null);
 
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [emailValid, setEmailValid] = React.useState(false);
+  const [password, setPassword] = React.useState("");
+  const [passwordSecure, setPasswordSecure] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [dob, setDob] = React.useState(subtractYears(DEFAULT_AGE));
   const [gender, setGender] = React.useState("1");
@@ -61,7 +68,7 @@ const Register = () => {
   const togglePrivacySwitch = () => setIsPrivacyEnabled(previousState => !previousState);
 
   async function submit() {
-    if (isPrivacyEnabled && isTosEnabled && firstName) {
+    if (isPrivacyEnabled && isTosEnabled && firstName && (!registerEmail || registerEmail && emailValid && passwordSecure)) {
       let data = {} as RegisterBody;
       data.dateOfBirth = dob;
       data.firstName = firstName;
@@ -69,23 +76,91 @@ const Register = () => {
       data.privacy = isPrivacyEnabled;
       data.termsConditions = isTosEnabled;
       data.referrerCode = referrerCode
+      if(registerEmail) {
+        data.email = email;
+        data.password = password;
+        try {
+          await Global.Fetch(URL.REGISTER, 'post', data);
+          Global.ShowToast(i18n.t('register-email-success'));
+          Global.navigate("Login");
+        } catch (e) { }
+      } else {
+        try {
+          await Global.Fetch(URL.REGISTER_OAUTH, 'post', data);
+          await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_ONBOARDING);
+          Global.loadPage(Global.INDEX_ONBOARDING);
+        } catch (e) { }
+      }
 
-      try {
-        await Global.Fetch(URL.REGISTER_OAUTH, 'post', data);
-        await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_ONBOARDING);
-        Global.loadPage(Global.INDEX_ONBOARDING);
-      } catch (e) { }
+      
     } else {
+      scrollRef?.current?.scrollTo({ x: 0, y: 0, animated: true });
     }
+  }
+
+  function updatePassword(text: string) {
+    setPassword(text);
+    setPasswordSecure(isPasswordSecure(text));
+  }
+
+  function isPasswordSecure(password: string) {
+    if (password.length < minPasswordLength) {
+      return false;
+    } else if (password.match(/[a-z]/i) && password.match(/[0-9]+/)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function updateEmail(text: string) {
+    setEmail(text);
+    setEmailValid(isEmailValid(text));
+  }
+
+  function isEmailValid(text: string) {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    return reg.test(text);
   }
 
   return (
 
     <View style={{ flex: 1, padding: 12, backgroundColor: colors.background }}>
-      <ScrollView>
+      <ScrollView ref={scrollRef}>
 
         <Text style={{ textAlign: 'center', marginBottom: 4, fontSize: 32, fontWeight: '500' }}>{i18n.t('register.title')}</Text>
         <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 12 }}>{i18n.t('register.subtitle')}</Text>
+
+        { registerEmail && <View style={[styles.container]}>
+          <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
+            <Text>{i18n.t('email')}</Text>
+            <Text style={{ color: "red" }}>{" *"}</Text>
+          </View>
+          <TextInput
+            mode="outlined"
+            value={email}
+            autoCapitalize={"none"}
+            onChangeText={text => updateEmail(text)}
+            autoCorrect={false}
+          />
+        </View>}
+
+        {registerEmail && <View style={[styles.container]}>
+          <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
+            <Text>{i18n.t('password')}</Text>
+          </View>
+          <TextInput
+            mode="outlined"
+            value={password}
+            autoCapitalize={"none"}
+            onChangeText={text => updatePassword(text)}
+            autoCorrect={false}
+            secureTextEntry={true}
+          />
+          {
+            !passwordSecure && <Text style={{fontSize: 10, color: 'red'}}>{i18n.t('register-password-warning')}</Text>
+          }
+        </View>}
 
         <View style={[styles.container]}>
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>

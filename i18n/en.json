@@ -130,5 +130,10 @@
         "title": "Captcha",
         "placeholder": "Type the text"
     },
-    "register-email": "Sign up with email"
+    "register-email": "Sign up with email",
+    "register-email-success": "Thank you! To complete the sign up process, simply click on the link that we have sent you.",
+    "register-password-warning": "Your password needs to be at least 7 characters long and must contain characters and numbers.",
+    "password-forget": "Forgot password?",
+    "password-reset": "Reset password",
+    "password-reset-success": "Check your email for a message from us and follow the instructions on it to reset your password."
 }
