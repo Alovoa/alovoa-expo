@@ -109,4 +109,15 @@ export function isEmailValid(text: string) {
   return reg.test(text);
 }
 
+export function isPasswordSecure(password: string) {
+  const minPasswordLength = 7;
+  if (password.length < minPasswordLength) {
+    return false;
+  } else if (password.match(/[a-z]/i) && password.match(/[0-9]+/)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export const format = (str: string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);

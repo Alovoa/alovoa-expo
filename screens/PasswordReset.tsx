@@ -69,7 +69,7 @@ const PasswordReset = ({ route, navigation }) => {
 
         <TextInput
           style={{ backgroundColor: colors.background }}
-          label="Email"
+          label={i18n.t('email')}
           value={email}
           onChangeText={text => {
             setEmail(text);

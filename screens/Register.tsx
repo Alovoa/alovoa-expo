@@ -13,7 +13,6 @@ const i18n = I18N.getI18n()
 const MIN_AGE = 16
 const MAX_AGE = 100
 const DEFAULT_AGE = 18
-const minPasswordLength = 7;
 
 function subtractYears(years: number): Date {
   const date = new Date();
@@ -49,6 +48,9 @@ const Register = ({ route, navigation }) => {
 
   React.useEffect(() => {
     load();
+    navigation.setOptions({
+      title: ''
+    });
   }, []);
 
   const showDatePicker = () => {
@@ -76,7 +78,7 @@ const Register = ({ route, navigation }) => {
       data.privacy = isPrivacyEnabled;
       data.termsConditions = isTosEnabled;
       data.referrerCode = referrerCode
-      if(registerEmail) {
+      if (registerEmail) {
         data.email = email;
         data.password = password;
         try {
@@ -92,7 +94,7 @@ const Register = ({ route, navigation }) => {
         } catch (e) { }
       }
 
-      
+
     } else {
       scrollRef?.current?.scrollTo({ x: 0, y: 0, animated: true });
     }
@@ -100,18 +102,10 @@ const Register = ({ route, navigation }) => {
 
   function updatePassword(text: string) {
     setPassword(text);
-    setPasswordSecure(isPasswordSecure(text));
+    setPasswordSecure(Global.isPasswordSecure(text));
   }
 
-  function isPasswordSecure(password: string) {
-    if (password.length < minPasswordLength) {
-      return false;
-    } else if (password.match(/[a-z]/i) && password.match(/[0-9]+/)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+ 
 
   return (
 
@@ -121,30 +115,24 @@ const Register = ({ route, navigation }) => {
         <Text style={{ textAlign: 'center', marginBottom: 4, fontSize: 32, fontWeight: '500' }}>{i18n.t('register.title')}</Text>
         <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 12 }}>{i18n.t('register.subtitle')}</Text>
 
-        { registerEmail && <View style={[styles.container]}>
-          <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-            <Text>{i18n.t('email')}</Text>
-            <Text style={{ color: "red" }}>{" *"}</Text>
-          </View>
+        {registerEmail && <View style={[styles.container]}>
           <TextInput
-            mode="outlined"
+            style={{ backgroundColor: colors.background }}
+            label={i18n.t('email') + " *"}
             value={email}
-            autoCapitalize={"none"}
             onChangeText={text => {
               setEmail(text);
               setEmailValid(Global.isEmailValid(text));
             }}
-            autoCorrect={false}
             keyboardType="email-address"
+            autoCapitalize="none"
           />
         </View>}
 
         {registerEmail && <View style={[styles.container]}>
-          <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-            <Text>{i18n.t('password')}</Text>
-          </View>
           <TextInput
-            mode="outlined"
+            style={{ backgroundColor: colors.background }}
+            label={i18n.t('password')}
             value={password}
             autoCapitalize={"none"}
             onChangeText={text => updatePassword(text)}
@@ -152,19 +140,15 @@ const Register = ({ route, navigation }) => {
             secureTextEntry={true}
           />
           {
-            !passwordSecure && <Text style={{fontSize: 10, color: 'red'}}>{i18n.t('register-password-warning')}</Text>
+            !passwordSecure && <Text style={{ fontSize: 10, color: 'orange', marginTop: 4 }}>{i18n.t('register-password-warning')}</Text>
           }
         </View>}
 
         <View style={[styles.container]}>
-          <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-            <Text>{i18n.t('first-name')}</Text>
-            <Text style={{ color: "red" }}>{" *"}</Text>
-          </View>
           <TextInput
-            mode="outlined"
+            style={{ backgroundColor: colors.background }}
+            label={i18n.t('first-name') + " *"}
             value={firstName}
-            autoCapitalize={"none"}
             onChangeText={text => setFirstName(text)}
             maxLength={10}
             autoCorrect={false}
@@ -173,13 +157,12 @@ const Register = ({ route, navigation }) => {
 
         <View style={[styles.container]}>
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-            <Text>{i18n.t('dob')}</Text>
-            <Text style={{ color: "red" }}>{" *"}</Text>
+            <Text>{i18n.t('dob') + " *"}</Text>
           </View>
           <View style={{ paddingTop: 6 }}>
-            <Button onPress={showDatePicker} icon="calendar" mode="elevated">
+            <Button onPress={showDatePicker} icon="calendar" mode="elevated" style={{ width: 160 }}>
               <Text
-                style={{ fontSize: 18, color: "white" }}>{dob.toISOString().split('T')[0]}</Text>
+                style={{ color: "white" }}>{dob.toISOString().split('T')[0]?.replace(/-/g, '/')}</Text>
             </Button>
           </View>
         </View>
@@ -187,33 +170,33 @@ const Register = ({ route, navigation }) => {
         <View style={[styles.container]}>
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
             <Text>{i18n.t('gender.title')}</Text>
-            <Text style={{ color: "red" }}>{" *"}</Text>
+            <Text>{" *"}</Text>
           </View>
           <RadioButton.Group onValueChange={(itemValue) => { setGender(itemValue) }} value={gender}>
-          <RadioButton.Item
+            <RadioButton.Item
               label={i18n.t('gender.male')}
               value="1"
-              style={{ flexDirection: 'row-reverse'}}
+              style={{ flexDirection: 'row-reverse' }}
             />
             <RadioButton.Item
               label={i18n.t('gender.female')}
               value="2"
-              style={{ flexDirection: 'row-reverse'}}
+              style={{ flexDirection: 'row-reverse' }}
             />
             <RadioButton.Item
               label={i18n.t('gender.other')}
               value="3"
-              style={{ flexDirection: 'row-reverse'}}
+              style={{ flexDirection: 'row-reverse' }}
             />
           </RadioButton.Group>
         </View>
 
         <View style={[styles.container]}>
-          <Text>{i18n.t('register.referral-code') + " (" + i18n.t('optional') + ")"}</Text>
           <TextInput
             value={referrerCode}
+            label={i18n.t('register.referral-code') + " (" + i18n.t('optional') + ")"}
             onChangeText={text => setReferrerCode(text)}
-            mode="outlined"
+            style={{ backgroundColor: colors.background }}
             autoCapitalize={"none"}
             autoCorrect={false}
             placeholder={"c2f2-29be-4933-b9b9-3efa"}
@@ -237,8 +220,9 @@ const Register = ({ route, navigation }) => {
           }}>{" " + i18n.t('link')}</Text>
         </View>
 
-        <Text style={{ color: "red", marginBottom: 24 }}>{i18n.t('register.asterisk-warning')}</Text>
-
+        <View style={styles.container}>
+          <Text style={{ fontSize: 10, color: "orange" }}>{i18n.t('register.asterisk-warning')}</Text>
+        </View>
         <Button mode="contained" onPress={submit}>
           <Text style={{ color: "white" }}>{i18n.t('register.title')}</Text>
         </Button>

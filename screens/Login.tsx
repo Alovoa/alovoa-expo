@@ -83,7 +83,6 @@ const Login = () => {
           Global.ShowToast(i18n.t('error.generic'));
         }
       } catch (e) {
-        console.log(e);
         Global.ShowToast(i18n.t('error.generic'));
       }
     }
@@ -109,7 +108,7 @@ const Login = () => {
 
         <TextInput
           style={{ backgroundColor: colors.background }}
-          label="Email"
+          label={i18n.t('email')}
           value={email}
           onChangeText={text => {
             setEmail(text);
@@ -120,7 +119,7 @@ const Login = () => {
         />
         <TextInput
           style={{ backgroundColor: colors.background }}
-          label="Password"
+          label={i18n.t('password')}
           value={password}
           onChangeText={text => setPassword(text)}
           autoCapitalize="none"
@@ -136,7 +135,7 @@ const Login = () => {
           onPress={() => {
             loginGoogle();
           }}
-        ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+        ><Text style={styles.buttonText}>{i18n.t('auth.google')}</Text></Button>
         <Button icon="facebook" mode="contained" style={[styles.buttonFacebook, { marginTop: 8 }]}
           onPress={() => {
             loginFacebook();

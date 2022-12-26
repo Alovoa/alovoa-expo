@@ -70,7 +70,7 @@ export default function App() {
             ></Stack.Screen>
             <Stack.Screen
               name="Register"
-              options={{ headerShown: false, animationEnabled: false }}
+              options={{ headerShown: true, animationEnabled: false }}
               component={Register}
             ></Stack.Screen>
             <Stack.Screen
