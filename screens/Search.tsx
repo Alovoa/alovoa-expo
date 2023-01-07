@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Dimensions, RefreshControl } from "react-native";
+import { View, Dimensions, RefreshControl, ScrollView } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import { CardItem } from "../components";
 import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
@@ -7,7 +7,6 @@ import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
-import { ScrollView } from "react-native-gesture-handler";
 
 
 const i18n = I18N.getI18n()
@@ -25,10 +24,10 @@ const Search = () => {
   
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState<UserDto>();
-  const [swiper, setSwiper] = useState<CardStack | null>();
+  let swiper: any = React.useRef(null);
   const [results, setResults] = useState(Array<UserDto>);
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
-  const [distance, setDistance] = useState(50);
+  const [distance, setDistance] = React.useState(50);
   const [stackKey, setStackKey] = React.useState(0);
 
   let latitude: number | undefined;
@@ -37,7 +36,7 @@ const Search = () => {
   React.useEffect(() => {
     setStackKey(new Date().getTime());
     for (let i = 0; i < results.length; i++) {
-      swiper?.goBackFromTop();
+      swiper.current?.goBackFromTop();
     }
   }, [results]);
 
@@ -120,7 +119,7 @@ const Search = () => {
             }}
             verticalSwipe={false}
             renderNoMoreCards={() => null}
-            ref={(newSwiper): void => setSwiper(newSwiper)}
+            ref={swiper}
             key={stackKey}
             onSwipedLeft={(index: number) => { hideUser(index) }}
             onSwipedRight={(index: number) => { likeUser(index) }}>

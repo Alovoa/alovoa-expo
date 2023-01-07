@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Dimensions, TouchableOpacity } from "react-native";
+import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle } from "react-native";
 import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT, UserDto } from "../types";
@@ -39,7 +39,7 @@ const CardItem = ({
     },
   ];
 
-  const nameStyle = [
+  const nameStyle : StyleProp<TextStyle> = [
     {
       paddingTop: hasVariant ? 10 : 0,
       paddingBottom: hasVariant ? 5 : 7,
@@ -56,15 +56,11 @@ const CardItem = ({
 
 
   function onLikeUser() {
-    if (swiper) {
-      swiper.swipeRight();
-    }
+    swiper.current?.swipeRight();
   }
 
   function onhideUser() {
-    if (swiper) {
-      swiper.swipeLeft();
-    }
+    swiper.current?.swipeLeft();
   }
 
   return (

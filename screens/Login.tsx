@@ -100,7 +100,7 @@ const Login = () => {
   }
 
   return (
-    <ScrollView style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]} keyboardShouldPersistTaps={true}>
+    <ScrollView style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]} keyboardShouldPersistTaps='always'>
       <View style={{height: Dimensions.get("window").height}}>
         <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
 

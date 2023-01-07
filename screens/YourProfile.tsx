@@ -19,8 +19,6 @@ import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import { FontAwesome } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import * as WebBrowser from 'expo-web-browser';
-import * as ImagePicker from 'expo-image-picker';
-import * as ImageManipulator from 'expo-image-manipulator';
 import { debounce } from "lodash";
 import { StorageAccessFramework } from 'expo-file-system';
 

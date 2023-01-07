@@ -6,7 +6,7 @@ export type CardItemT = {
   hasVariant?: boolean;
   hasDonation?: boolean;
   unitsImperial?: boolean;
-  swiper?: CardStack;
+  swiper?: any;
   donation?: number;
 };
 
