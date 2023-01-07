@@ -135,5 +135,13 @@
     "register-password-warning": "Your password needs to be at least 7 characters long and must contain characters and numbers.",
     "password-forget": "Forgot password?",
     "password-reset": "Reset password",
-    "password-reset-success": "Check your email for a message from us and follow the instructions on it to reset your password."
+    "password-reset-success": "Check your email for a message from us and follow the instructions on it to reset your password.",
+    "likes-empty": {
+        "title": "No likes quite yet",
+        "subtitle": "Don't worry, new users are joining every day. Adjusting your preferences in your profile may also lead to more likes"
+    },
+    "convo-empty": {
+        "title": "Start chatting by getting matches",
+        "subtitle": "Get more matches by uploading attractive pictures and filling out your profile"
+    }
 }

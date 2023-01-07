@@ -135,6 +135,13 @@
     "register-password-warning": "Das Passwort muss mindestens 7 Zeichen lang sein und Zeichen und Zahlen enthalten.",
     "password-forget": "Password vergessen?",
     "password-reset": "Password zurücksetzen",
-    "password-reset-success": "Schaue in Deiner E-Mail Postface nach, ob Du eine Nachricht von uns erhalten hast, und befolge die darin enthaltenen Anweisungen, um Dein Passwort zurückzusetzen."
-    
+    "password-reset-success": "Schaue in Deiner E-Mail Postface nach, ob Du eine Nachricht von uns erhalten hast, und befolge die darin enthaltenen Anweisungen, um Dein Passwort zurückzusetzen.",
+    "likes-empty": {
+        "title": "Noch keine Likes",
+        "subtitle": "Keine Sorge, es kommen jeden Tag neue Nutzer hinzu. Die Anpassung deiner Einstellungen in deinem Profil kann auch zu mehr Likes führen"
+    },
+    "convo-empty": {
+        "title": "Starte Chats mit Matches",
+        "subtitle": "Erhalte mehr Matches indem du attraktive Bilder hochlädst und dein Profil ausfüllst"
+    }
 }
