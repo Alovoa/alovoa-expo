@@ -6,7 +6,8 @@ import {
   RefreshControl,
   Pressable,
   Image,
-  Alert
+  Alert,
+  Platform
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -27,6 +28,7 @@ const Photos = ({ route, navigation }) => {
   const i18n = I18N.getI18n()
   const MAX_IMAGES = 4;
   const IMAGE_HEADER = "data:image/webp;base64,";
+  const IMAGE_HEADER_JPEG = "data:image/jpeg;base64,";
   const IMG_SIZE_MAX = 600;
 
   const [profilePic, setProfilePic] = React.useState("");
@@ -58,10 +60,14 @@ const Photos = ({ route, navigation }) => {
       base64: true,
     });
     if (!result.cancelled) {
+      let format = ImageManipulator.SaveFormat.WEBP;
+      if(Platform.OS == 'ios') {
+        format = ImageManipulator.SaveFormat.JPEG;
+      }
       const resizedImageData = await ImageManipulator.manipulateAsync(
         result.uri,
         [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
-        { compress: 0.8, format: ImageManipulator.SaveFormat.WEBP, base64: true, }
+        { compress: 0.8, format: format, base64: true, }
       );
       return resizedImageData;
     } else {
@@ -84,13 +90,16 @@ const Photos = ({ route, navigation }) => {
     let imageData: ImageManipulator.ImageResult | null = await pickImage();
     if (imageData != null) {
       let b64 = IMAGE_HEADER + imageData.base64;
+      if(Platform.OS == 'ios') {
+        b64 = IMAGE_HEADER_JPEG + imageData.base64;
+      }
       await Global.Fetch(URL.USER_ADD_IMAGE, 'post', b64, 'text/plain');
       load();
     }
   }
 
   async function removeImage(id: number) {
-    Alert.alert(i18n.t('profile.interest-alert.title'), i18n.t('profile.photos.delete'), [
+    Alert.alert(i18n.t('profile.photos.delete')), [
       {
         text: i18n.t('cancel'),
         onPress: () => { },

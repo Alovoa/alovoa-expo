@@ -21,6 +21,7 @@ import Slider from '@react-native-community/slider';
 import * as WebBrowser from 'expo-web-browser';
 import { debounce } from "lodash";
 import { StorageAccessFramework } from 'expo-file-system';
+import { Dirs, FileSystem } from 'react-native-file-access';
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
@@ -293,7 +294,7 @@ const YourProfile = ({ route, navigation }) => {
       interests.push(newInterest);
       setInterests(interests);
       onClearPress();
-      dropdownController.current.setInputText("");
+      dropdownController.current?.setInputText("");
       Keyboard.dismiss();
     }
   }
@@ -368,9 +369,10 @@ const YourProfile = ({ route, navigation }) => {
         await StorageAccessFramework.writeAsStringAsync(newFile, userData);
         Global.ShowToast(i18n.t('profile.download-userdata-success'));
       }
+    } else if (Platform.OS == 'ios') {
+      await FileSystem.writeFile(Dirs.DocumentDir + '/alovoa.json', userData);
+      Global.ShowToast(i18n.t('profile.download-userdata-success'));
     }
-
-    //TODO iOS
   }
 
   async function deleteAccount() {

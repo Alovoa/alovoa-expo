@@ -25,7 +25,7 @@ export const STORAGE_DONATE = "donate"
 export const STORAGE_LATITUDE = "latitude"
 export const STORAGE_LONGITUDE = "longitude"
 
-export async function Fetch(url: string = "", method: string = "get", data: any = {},
+export async function Fetch(url: string = "", method: string = "get", data: any = undefined,
   contentType: string = "application/json"): Promise<AxiosResponse<any, any>> {
   try {
     let res = await axios({

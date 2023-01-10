@@ -42,6 +42,7 @@
     "react-native": "0.69.6",
     "react-native-autocomplete-dropdown": "^2.0.7",
     "react-native-card-stack-swiper": "^1.2.5",
+    "react-native-file-access": "^2.5.2",
     "react-native-gesture-handler": "~2.5.0",
     "react-native-modal-datetime-picker": "^14.0.0",
     "react-native-pager-view": "5.4.24",

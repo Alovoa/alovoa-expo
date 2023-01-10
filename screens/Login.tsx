@@ -55,14 +55,24 @@ const Login = () => {
 
   const loginGoogle = async () => {
     let e = Linking.addEventListener('url', _handleRedirect);
-    await WebBrowser.openAuthSessionAsync(URL.AUTH_GOOGLE + "/" + Buffer.from(APP_URL).toString('base64'), '');
+    let res = await WebBrowser.openAuthSessionAsync(URL.AUTH_GOOGLE + "/" + Buffer.from(APP_URL).toString('base64'));
     e.remove();
+
+    //_handleRedirect does not work on iOS, get url directly from WebBrowser.openAuthSessionAsync result instead
+    if (Platform.OS === 'ios' && res.type == "success" && res.url) {
+      _handleRedirect({ url: res.url });
+    }
   };
 
   const loginFacebook = async () => {
     let e = Linking.addEventListener('url', _handleRedirect);
-    await WebBrowser.openAuthSessionAsync(URL.AUTH_FACEBOOK + "/" + Buffer.from(APP_URL).toString('base64'), '');
+    let res = await WebBrowser.openAuthSessionAsync(URL.AUTH_FACEBOOK + "/" + Buffer.from(APP_URL).toString('base64'));
     e.remove();
+
+    //_handleRedirect does not work on iOS, get url directly from WebBrowser.openAuthSessionAsync result instead
+    if (Platform.OS === 'ios' && res.type == "success" && res.url) {
+      _handleRedirect({ url: res.url });
+    }
   };
 
   const loginEmail = async () => {
@@ -101,7 +111,7 @@ const Login = () => {
 
   return (
     <ScrollView style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]} keyboardShouldPersistTaps='always'>
-      <View style={{height: Dimensions.get("window").height}}>
+      <View style={{ height: Dimensions.get("window").height }}>
         <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
 
         <Text style={{ textAlign: 'center', marginBottom: 48, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
@@ -145,7 +155,7 @@ const Login = () => {
 
       <View style={{ marginTop: 8 }}>
         <Text style={styles.link} onPress={() => {
-          Global.navigate("Register", {registerEmail: true});
+          Global.navigate("Register", { registerEmail: true });
         }}>{i18n.t('register-email')}</Text>
         <Text style={styles.link} onPress={() => {
           Global.navigate("PasswordReset");
