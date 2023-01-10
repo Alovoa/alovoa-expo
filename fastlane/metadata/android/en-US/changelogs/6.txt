@@ -1,0 +1,2 @@
+Users can now register with email address
+Several bug fixes
