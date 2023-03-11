@@ -6,7 +6,7 @@ import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import * as Location from 'expo-location';
+import GetLocation, { Location } from 'react-native-get-location';
 
 
 const i18n = I18N.getI18n()
@@ -21,7 +21,7 @@ enum SORT {
 }
 
 const Search = () => {
-  
+
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState<UserDto>();
   let swiper: any = React.useRef(null);
@@ -65,14 +65,20 @@ const Search = () => {
   async function loadResults() {
     let lat = latitude;
     let lon = longitude;
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status == 'granted') {
-      try {
-        let location = await Location.getCurrentPositionAsync({});
-        lat = location.coords.latitude;
-        lon = location.coords.longitude;
-      } catch { }
-    }
+
+    try {
+      let location: Location = await GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 60000,
+        rationale: {
+          title: i18n.t('location-permission.title'),
+          message: i18n.t('location-permission.body'),
+          buttonPositive: i18n.t('ok'),
+        },
+      });
+      lat = location.latitude;
+      lon = location.longitude
+    } catch (e) { console.log(e) }
 
     let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
     let result: SearchDto = response.data;

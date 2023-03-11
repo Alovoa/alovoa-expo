@@ -143,5 +143,9 @@
     "convo-empty": {
         "title": "Start chatting by getting matches",
         "subtitle": "Get more matches by uploading attractive pictures and filling out your profile"
+    },
+    "location-permission": {
+        "title": "Location permission",
+        "body": "The app needs the permission to request your location."
     }
 }
