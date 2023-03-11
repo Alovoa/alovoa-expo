@@ -37,3 +37,10 @@ When installation is complete, run it :
 ```
 yarn start
 ```
+
+To create a native Android project:
+
+```
+cd script
+bash android.sh
+```
