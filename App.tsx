@@ -100,7 +100,7 @@ export default function App() {
             ></Stack.Screen>
             <Stack.Screen
               name="PasswordReset"
-              options={{ headerShown: true, animationEnabled: false }}
+              options={{ headerShown: false, animationEnabled: false }}
               component={PasswordReset}
             ></Stack.Screen>
           </Stack.Navigator>

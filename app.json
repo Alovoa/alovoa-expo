@@ -13,7 +13,8 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with other users."
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "splash": {
       "image": "./assets/splash.png",
@@ -34,9 +35,13 @@
       "supportsTablet": true,
       "usesAppleSignIn": true,
       "bundleIdentifier": "com.alovoa.expo",
-      "associatedDomains": ["applinks:alovoa.com"],
+      "associatedDomains": [
+        "applinks:alovoa.com"
+      ],
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["alovoa"],
+        "LSApplicationQueriesSchemes": [
+          "alovoa"
+        ],
         "NSLocationWhenInUseUsageDescription": "This app uses the location to list other users in close proximity",
         "NSDocumentsFolderUsageDescription": "This app uses the Documents folder to store the requested user data",
         "NSMicrophoneUsageDescription": "This app uses the microphone to record the users voice for other users"

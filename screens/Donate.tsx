@@ -6,7 +6,7 @@ import {
   RefreshControl
 } from "react-native";
 
-import { useTheme, Text, Button, Menu } from "react-native-paper";
+import { useTheme, Text, Button, Menu, Appbar } from "react-native-paper";
 import { CardItem } from "../components";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
@@ -55,8 +55,14 @@ const Donate = () => {
 
   return (
     <View style={styles.containerMatches} >
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => { }} />
+        <Appbar.Content title="Title" />
+        <Appbar.Action icon="calendar" onPress={() => { }} />
+        <Appbar.Action icon="magnify" onPress={() => { }} />
+      </Appbar.Header>
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
-      <View style={[styles.top, { paddingBottom: 8, justifyContent:'flex-end' }]}>
+      <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {Global.FLAG_ENABLE_DONATION &&
             <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{ marginRight: 4 }}>
