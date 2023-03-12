@@ -22,14 +22,15 @@ enum SORT {
 
 const Search = () => {
 
+  let swiper: any = React.useRef(null);
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState<UserDto>();
-  let swiper: any = React.useRef(null);
   const [results, setResults] = useState(Array<UserDto>);
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
   const [distance, setDistance] = React.useState(50);
   const [stackKey, setStackKey] = React.useState(0);
 
+  let startupLocationAsked: boolean = false;
   let latitude: number | undefined;
   let longitude: number | undefined;
 
@@ -67,17 +68,20 @@ const Search = () => {
     let lon = longitude;
 
     try {
-      let location: Location = await GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 60000,
-        rationale: {
-          title: i18n.t('location-permission.title'),
-          message: i18n.t('location-permission.body'),
-          buttonPositive: i18n.t('ok'),
-        },
-      });
-      lat = location.latitude;
-      lon = location.longitude
+      if (!startupLocationAsked) {
+        let location: Location = await GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 60000,
+          rationale: {
+            title: i18n.t('location-permission.title'),
+            message: i18n.t('location-permission.body'),
+            buttonPositive: i18n.t('ok'),
+          },
+        });
+        lat = location.latitude;
+        lon = location.longitude;
+        startupLocationAsked = true;
+      }
     } catch (e) { console.log(e) }
 
     let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
