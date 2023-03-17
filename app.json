@@ -14,6 +14,14 @@
           "photosPermission": "The app accesses your photos to let you share them with other users."
         }
       ],
+      ["expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 28,
+            "targetSdkVersion": 28
+          }
+        }
+      ],
       "expo-localization"
     ],
     "splash": {
@@ -53,20 +61,16 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ec407a"
       },
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "data": [
-            {
-              "scheme": "alovoa"
-            }
-          ],
-          "category": [
-            "BROWSABLE",
-            "DEFAULT"
-          ]
-        }
-      ],
+      "intentFilters": [{
+        "action": "VIEW",
+        "data": [{
+          "scheme": "alovoa"
+        }],
+        "category": [
+          "BROWSABLE",
+          "DEFAULT"
+        ]
+      }],
       "package": "com.alovoa.expo",
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
