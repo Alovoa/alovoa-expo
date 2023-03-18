@@ -4,7 +4,7 @@
 
 cd ..
 yarn
-npx expo run:android
+npx expo prebuild
 cd script
 bash ./adjust-node-modules.sh
 bash ./splash-android-12-remove.sh
