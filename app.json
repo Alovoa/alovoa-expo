@@ -27,7 +27,9 @@
       }
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "enabled": false,
+      "checkAutomatically": "ON_ERROR_RECOVERY",
+      "url": "https://github.com/Alovoa/alovoa-expo/releases/latest"
     },
     "assetBundlePatterns": [
       "**/*"
