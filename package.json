@@ -32,7 +32,6 @@
     "expo-secure-store": "~12.1.1",
     "expo-splash-screen": "~0.18.1",
     "expo-status-bar": "~1.4.4",
-    "expo-updates": "~0.16.3",
     "expo-web-browser": "~12.1.1",
     "i18n-js": "^4.1.1",
     "lodash": "^4.17.21",
