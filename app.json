@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alovoa",
     "slug": "alovoa-expo",
-    "version": "1.3.0",
+    "version": "1.3.3",
     "scheme": "alovoa",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -72,7 +72,8 @@
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO"
-      ],      "versionCode": 6
+      ],
+      "versionCode": 7
     },
     "web": {
       "favicon": "./assets/favicon.png"
