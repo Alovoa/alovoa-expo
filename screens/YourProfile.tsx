@@ -117,6 +117,7 @@ const YourProfile = ({ route, navigation }) => {
 
   const toggleGenderMaleSwitch = () => {
     setIsGenderMaleEnabled(previousState => !previousState)
+    console.log("TEST")
     updateGenders(Gender.MALE, isGenderMaleEnabled);
   };
   const toggleGenderFemaleSwitch = () => {
@@ -334,7 +335,7 @@ const YourProfile = ({ route, navigation }) => {
   }
 
   async function updateGenders(gender: Gender, state: boolean) {
-    await Global.Fetch(Global.format(URL.USER_UPDATE_PREFERED_GENDER, String(gender), state ? "1" : "0"), 'post');
+    await Global.Fetch(Global.format(URL.USER_UPDATE_PREFERED_GENDER, String(gender), state ? "0" : "1"), 'post');
   }
 
   async function updateMinAge(num: number) {

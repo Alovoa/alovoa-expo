@@ -85,13 +85,19 @@ const Onboarding = () => {
       quality: 1,
       base64: true,
     });
-    if (!result.cancelled) {
+    if (!result.canceled) {
+      let format = ImageManipulator.SaveFormat.JPEG;
+      if(Platform.OS == 'web') {
+        format = ImageManipulator.SaveFormat.WEBP;
+      }
+      const saveOptions : ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
+      console.log(saveOptions);
       const resizedImageData = await ImageManipulator.manipulateAsync(
-        result.uri,
+        result.assets[0].uri,
         [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
-        { compress: 0.8, format: ImageManipulator.SaveFormat.WEBP, base64: true, }
+        saveOptions
       );
-
+        console.log(resizedImageData.uri);
       setImage(resizedImageData.uri);
       setImageB64(IMAGE_HEADER + resizedImageData.base64);
     }

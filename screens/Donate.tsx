@@ -55,12 +55,6 @@ const Donate = () => {
 
   return (
     <View style={styles.containerMatches} >
-      <Appbar.Header>
-        <Appbar.BackAction onPress={() => { }} />
-        <Appbar.Content title="Title" />
-        <Appbar.Action icon="calendar" onPress={() => { }} />
-        <Appbar.Action icon="magnify" onPress={() => { }} />
-      </Appbar.Header>
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
