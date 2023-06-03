@@ -1,0 +1,3 @@
+Fix preferred gender switches in profile.
+Fix Donate UI.
+Improve image processing.
