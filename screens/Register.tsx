@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme, Text, Button, TextInput, Switch, RadioButton } from "react-native-paper";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { Alert, View, ScrollView, StyleSheet } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -83,7 +83,7 @@ const Register = ({ route, navigation }) => {
         data.password = password;
         try {
           await Global.Fetch(URL.REGISTER, 'post', data);
-          Global.ShowToast(i18n.t('register-email-success'));
+          Alert.alert(i18n.t('register-email-success'));
           Global.navigate("Login");
         } catch (e) { }
       } else {

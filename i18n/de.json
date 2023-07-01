@@ -143,9 +143,5 @@
     "convo-empty": {
         "title": "Starte Chats mit Matches",
         "subtitle": "Erhalte mehr Matches indem du attraktive Bilder hochlädst und dein Profil ausfüllst"
-    },
-    "location-permission": {
-        "title": "Standortberechtigung",
-        "body": "Die App benötigt die Berechtigung, Ihren Standort abzufragen."
     }
 }
