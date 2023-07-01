@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme, Text, Button, Dialog, Portal, Provider, TextInput, IconButton } from "react-native-paper";
-import { View, Platform, StyleSheet, Image, Dimensions } from "react-native";
+import { View, Platform, StyleSheet, Image, Dimensions, Alert } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
@@ -32,6 +32,19 @@ const Login = () => {
   const [visible, setVisible] = React.useState(false);
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
+
+  React.useEffect(() => {
+    load();
+  }, []);
+
+  async function load() {
+    if (Global.FLAG_FDROID) {
+      if (! await Global.GetStorage(Global.STORAGE_FDROID_LOCATION_ISSUE)) {
+        Alert.alert(i18n.t('location-fdroid'));
+        Global.SetStorage(Global.STORAGE_FDROID_LOCATION_ISSUE, "1");
+      }
+    }
+  }
 
   const _handleRedirect = async (event: { url: string; }) => {
 

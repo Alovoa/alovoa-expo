@@ -8,7 +8,7 @@ import { createNavigationContainerRef } from '@react-navigation/native';
 import Toast from 'react-native-root-toast';
 import { ConversationDto, UserDto } from "./types";
 
-export const FLAG_ENABLE_DONATION = true;
+export const FLAG_FDROID = true;
 
 export const navigationRef = createNavigationContainerRef()
 export const INDEX_REGISTER = "1"
@@ -16,6 +16,7 @@ export const INDEX_ONBOARDING = "2"
 export const INDEX_MAIN = "3"
 
 export const STORAGE_FIRSTNAME = "firstName";
+export const STORAGE_FDROID_LOCATION_ISSUE = "fdroid.location.issue";
 export const STORAGE_PAGE = "page";
 export const STORAGE_YOUR_PROFILE = "your-profile"
 export const STORAGE_YOUR_CHAT = "chat"

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { View, Dimensions, RefreshControl, ScrollView } from "react-native";
+import { View, RefreshControl, ScrollView } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import { CardItem } from "../components";
 import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import GetLocation, { Location } from 'react-native-get-location';
+import Location from 'expo-location';
 
 
 const i18n = I18N.getI18n()
@@ -30,7 +30,6 @@ const Search = () => {
   const [distance, setDistance] = React.useState(50);
   const [stackKey, setStackKey] = React.useState(0);
 
-  let startupLocationAsked: boolean = false;
   let latitude: number | undefined;
   let longitude: number | undefined;
 
@@ -67,22 +66,17 @@ const Search = () => {
     let lat = latitude;
     let lon = longitude;
 
-    try {
-      if (!startupLocationAsked) {
-        let location: Location = await GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: 60000,
-          rationale: {
-            title: i18n.t('location-permission.title'),
-            message: i18n.t('location-permission.body'),
-            buttonPositive: i18n.t('ok'),
-          },
-        });
-        lat = location.latitude;
-        lon = location.longitude;
-        startupLocationAsked = true;
-      }
-    } catch (e) { console.log(e) }
+    if(!Global.FLAG_FDROID) {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          return;
+        }
+        let location = await Location.getCurrentPositionAsync({});
+        lat = location.coords.latitude;
+        lon = location.coords.longitude;
+      } catch (e) { console.log(e) }
+    }
 
     let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
     let result: SearchDto = response.data;

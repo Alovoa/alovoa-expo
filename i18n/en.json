@@ -143,5 +143,6 @@
     "convo-empty": {
         "title": "Start chatting by getting matches",
         "subtitle": "Get more matches by uploading attractive pictures and filling out your profile"
-    }
+    },
+    "location-fdroid": "Unfortunately, the F-droid version of this app does not support setting your location yet. Please login using your browser and set it there first. Sorry for the inconvienience"
 }
