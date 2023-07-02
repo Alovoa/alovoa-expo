@@ -63,7 +63,6 @@ export function nagivateChatDetails(conversation: ConversationDto) {
 }
 
 export function navigate(name: string, reset: boolean = false, params?: any) {
-  console
   if (navigationRef.isReady()) {
     if (!reset) {
       navigationRef.navigate(name, params);
