@@ -1,0 +1,4 @@
+You can now see common interests in Search
+You can now see active state in Search and Profile
+Added warning for F-droid users
+Tons of bug fixes and visual improvements
