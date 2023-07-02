@@ -100,7 +100,7 @@ const Photos = ({ route, navigation }) => {
   }
 
   async function removeImage(id: number) {
-    Alert.alert(i18n.t('profile.photos.delete'), '', [
+    Alert.alert('', i18n.t('profile.photos.delete'), [
       {
         text: i18n.t('cancel'),
         onPress: () => { },

@@ -83,7 +83,7 @@ const Register = ({ route, navigation }) => {
         data.password = password;
         try {
           await Global.Fetch(URL.REGISTER, 'post', data);
-          Alert.alert(i18n.t('register-email-success'));
+          Alert.alert('', i18n.t('register-email-success'));
           Global.navigate("Login");
         } catch (e) { }
       } else {

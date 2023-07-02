@@ -40,7 +40,7 @@ const Login = () => {
   async function load() {
     if (Global.FLAG_FDROID) {
       if (! await Global.GetStorage(Global.STORAGE_FDROID_LOCATION_ISSUE)) {
-        Alert.alert(i18n.t('location-fdroid'));
+        Alert.alert('', i18n.t('location-fdroid'));
         Global.SetStorage(Global.STORAGE_FDROID_LOCATION_ISSUE, "1");
       }
     }
