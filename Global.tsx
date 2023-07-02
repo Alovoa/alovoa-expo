@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as URL from "./URL";
-import { createNavigationContainerRef } from '@react-navigation/native';
+import { createNavigationContainerRef, CommonActions } from '@react-navigation/native';
 import Toast from 'react-native-root-toast';
 import { ConversationDto, UserDto } from "./types";
 
@@ -50,21 +50,32 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
 }
 
 export function nagivateProfile(user?: UserDto, idEnc?: string) {
-  navigate("Profile", {
+  navigate("Profile", false, {
     user: user,
     idEnc: idEnc
   });
 }
 
 export function nagivateChatDetails(conversation: ConversationDto) {
-  navigate("MessageDetail", {
+  navigate("MessageDetail", false, {
     conversation: conversation
   });
 }
 
-export function navigate(name: string, params?: any) {
+export function navigate(name: string, reset: boolean = false, params?: any) {
+  console
   if (navigationRef.isReady()) {
-    navigationRef.navigate(name, params);
+    if (!reset) {
+      navigationRef.navigate(name, params);
+    } else {
+      navigationRef.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: name }],
+        })
+      );
+    }
+
   }
 }
 
@@ -88,7 +99,7 @@ export function loadPage(page: string = INDEX_REGISTER) {
   if (INDEX_ONBOARDING == page) {
     navigate("Onboarding");
   } else if (INDEX_MAIN == page) {
-    navigate("Main");
+    navigate("Main", true);
   } else {
     navigate("Register");
   }
