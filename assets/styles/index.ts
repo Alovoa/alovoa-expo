@@ -107,8 +107,8 @@ export default StyleSheet.create({
   actionsCardItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingBottom: 12,
-    paddingTop: 24
+    paddingBottom: 8,
+    paddingTop: 12
   },
   button: {
     width: 60,

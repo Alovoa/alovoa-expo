@@ -103,7 +103,7 @@ export type UserDto = {
   description: string;
   country: string;
   distanceToUser: number;
-  sameInterests: number;
+  commonInterests: Array<UserInterest>;
   totalDonations: number;
   numBlockedByUsers: number;
   numReports: number;

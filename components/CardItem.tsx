@@ -1,15 +1,12 @@
 import React from "react";
-import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle } from "react-native";
-import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
+import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle, FlatList } from "react-native";
+import { useTheme, Text, Chip } from "react-native-paper";
 import Icon from "./Icon";
-import { CardItemT, UserDto } from "../types";
+import { CardItemT } from "../types";
 import * as Global from "../Global";
 import styles, {
   DISLIKE_ACTIONS,
-  FLASH_ACTIONS,
   LIKE_ACTIONS,
-  STAR_ACTIONS,
-  WHITE,
   GRAY
 } from "../assets/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -29,6 +26,9 @@ const CardItem = ({
 
   // Custom styling
   const fullWidth = Dimensions.get("window").width;
+  const fullHeight = Dimensions.get("window").height;
+  const descriptionHeight = fullHeight - 585;
+  const descriptionHeightNoCommonInterest = fullHeight - 554;
 
   const imageStyle = [
     {
@@ -86,12 +86,25 @@ const CardItem = ({
             <Text style={[nameStyle, { paddingLeft: 4 }]}>{donation?.toFixed(2) + ' €'}</Text>
           </View>
         }
-
       </View>
+
+      {/* COMMON INTERESTS */}
+      {!hasVariant && <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingLeft: 20 }}>
+        <FlatList
+          style={{ marginBottom: 6 }}
+          horizontal={true}
+          data={user.commonInterests}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <Chip>{item.text}</Chip>
+          )}
+        />
+      </View>
+      }
 
       {/* DESCRIPTION */}
       {!hasVariant && user.description && (
-        <ScrollView style={{ height: 64 }}>
+        <ScrollView style={{ height: user.commonInterests.length != 0 ? descriptionHeight : descriptionHeightNoCommonInterest }}>
           <Text style={styles.descriptionCardItem}>{user.description}</Text>
         </ScrollView>
       )}

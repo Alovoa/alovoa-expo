@@ -292,8 +292,9 @@ const Profile = ({ route, navigation }) => {
 
         <SwiperFlatList
           autoplay
-          autoplayDelay={3}
-          showPagination={false}
+          autoplayLoop={true}
+          autoplayLoopKeepAnimation={true}
+          showPagination={true}
         >
           <Image source={{ uri: profilePic ? profilePic : undefined }} style={styles.photo} />
           {
@@ -306,12 +307,12 @@ const Profile = ({ route, navigation }) => {
         <View style={[styles.containerProfileItem, { marginTop: 24, flexDirection: 'row', justifyContent: 'space-between' }]}>
           <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
             {user.lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
-            { user.lastActiveState == 1 &&
-              <Text >{i18n.t('profile.active-state.1')}</Text>
-            }
-            { user.lastActiveState == 2 &&
-              <Text >{i18n.t('profile.active-state.2')}</Text>
-            }
+              {user.lastActiveState == 1 &&
+                <Text >{i18n.t('profile.active-state.1')}</Text>
+              }
+              {user.lastActiveState == 2 &&
+                <Text >{i18n.t('profile.active-state.2')}</Text>
+              }
             </View>}
 
           </View>
@@ -337,45 +338,45 @@ const Profile = ({ route, navigation }) => {
 
 
             <ScrollView horizontal={true} style={{ marginTop: 84 }}>
-              <Button icon="gender-male-female" mode="elevated" style={styles.marginRight4}>
+              <Chip icon="gender-male-female" style={styles.marginRight4}>
                 <Text>{gender == Gender.MALE ? i18n.t('gender.male') :
                   gender == Gender.FEMALE ? i18n.t('gender.female') : i18n.t('gender.other')}</Text>
-              </Button>
-              <Button icon="drama-masks" mode="elevated" style={styles.marginRight4}>
+              </Chip>
+              <Chip icon="drama-masks" style={styles.marginRight4}>
                 <Text>{String(minAge) + " - " + String(maxAge)}</Text>
-              </Button>
-              <Button icon="magnify" mode="elevated" style={styles.marginRight4}>
+              </Chip>
+              <Chip icon="magnify" style={styles.marginRight4}>
                 <Text>{getGendersText()}</Text>
-              </Button>
-              <Button icon="magnify-plus-outline" mode="elevated" style={styles.marginRight4}>
+              </Chip>
+              <Chip icon="magnify-plus-outline" style={styles.marginRight4}>
                 <Text>{intention == Intention.MEET ? i18n.t('profile.intention.meet') :
                   intention == Intention.DATE ? i18n.t('profile.intention.date') : i18n.t('profile.intention.sex')}</Text>
-              </Button>
+              </Chip>
             </ScrollView>
 
             {(relationshipString || kidsString || drugsString) && <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
               {relationshipString &&
-                <Button icon="heart-multiple" mode="elevated" style={styles.marginRight4}>
+                <Chip icon="heart-multiple" style={styles.marginRight4}>
                   <Text>{relationshipString}</Text>
-                </Button>}
-              {kidsString && <Button icon="baby-carriage" mode="elevated" style={styles.marginRight4}>
+                </Chip>}
+              {kidsString && <Chip icon="baby-carriage" style={styles.marginRight4}>
                 <Text>{kidsString}</Text>
-              </Button>}
-              {drugsString && <Button icon="pill" mode="elevated" style={styles.marginRight4}>
+              </Chip>}
+              {drugsString && <Chip icon="pill" style={styles.marginRight4}>
                 <Text>{drugsString}</Text>
-              </Button>}
+              </Chip>}
             </ScrollView>
             }
             <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
-              <Button icon="hand-coin" mode="elevated" style={styles.marginRight4}>
+              <Chip icon="hand-coin" style={styles.marginRight4}>
                 <Text>{String(donated) + ' €'}</Text>
-              </Button>
-              <Button icon="account-cancel" mode="elevated" style={styles.marginRight4}>
+              </Chip>
+              <Chip icon="account-cancel" style={styles.marginRight4}>
                 <Text>{'# ' + blocks}</Text>
-              </Button>
-              <Button icon="flag" mode="elevated" style={styles.marginRight4}>
+              </Chip>
+              <Chip icon="flag" style={styles.marginRight4}>
                 <Text>{'# ' + reports}</Text>
-              </Button>
+              </Chip>
             </ScrollView>
             {
               <View style={{ marginTop: 48 }}></View>
