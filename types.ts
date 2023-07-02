@@ -105,7 +105,6 @@ export type UserDto = {
   distanceToUser: number;
   sameInterests: number;
   totalDonations: number;
-  activeDate: Date;
   numBlockedByUsers: number;
   numReports: number;
   blockedByCurrentUser: boolean

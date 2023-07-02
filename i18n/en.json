@@ -98,6 +98,10 @@
         "report": {
             "title": "Report",
             "subtitle": "Report user for violating the Terms of Service?"
+        },
+        "active-state": {
+            "1": "Online",
+            "2": "Active today"
         }
     },
     "cancel": "Cancel",

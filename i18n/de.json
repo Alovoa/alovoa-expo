@@ -98,6 +98,10 @@
         "report": {
             "title": "Melden",
             "subtitle": "Nutzer wegen Verstoßes gegen die Nutzungsbedingungen melden?"
+        },
+        "active-state": {
+            "1": "Online",
+            "2": "Heute aktiv"
         }
     },
     "cancel": "Abbrechen",

@@ -59,7 +59,7 @@ const Profile = ({ route, navigation }) => {
   const MIN_AGE = 16
   const MAX_AGE = 100
 
-  var user : UserDto = route.params.user;
+  var user: UserDto = route.params.user;
   var idEnc = route.params.idEnc;
   const { colors } = useTheme();
 
@@ -252,7 +252,7 @@ const Profile = ({ route, navigation }) => {
         }
       }
     ]);
-    
+
   }
 
   async function likeUser() {
@@ -295,16 +295,26 @@ const Profile = ({ route, navigation }) => {
           autoplayDelay={3}
           showPagination={false}
         >
-          <Image source={{ uri: profilePic ? profilePic : undefined }} style={styles.photo}/>
+          <Image source={{ uri: profilePic ? profilePic : undefined }} style={styles.photo} />
           {
             images?.map((image, index) => (
-              <Image source={{ uri: image.content ? image.content : undefined}} style={styles.photo}/>
+              <Image source={{ uri: image.content ? image.content : undefined }} style={styles.photo} />
             ))
           }
         </SwiperFlatList>
 
         <View style={[styles.containerProfileItem, { marginTop: 24, flexDirection: 'row', justifyContent: 'space-between' }]}>
-          <Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
+          <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
+            {user.lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
+            { user.lastActiveState == 1 &&
+              <Text >{i18n.t('profile.active-state.1')}</Text>
+            }
+            { user.lastActiveState == 2 &&
+              <Text >{i18n.t('profile.active-state.2')}</Text>
+            }
+            </View>}
+
+          </View>
           <View style={{ flexDirection: 'row' }}>
             <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
             <Text>{distance}</Text>

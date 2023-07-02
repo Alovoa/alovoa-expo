@@ -39,14 +39,13 @@ const CardItem = ({
     },
   ];
 
-  const nameStyle : StyleProp<TextStyle> = [
+  const nameStyle: StyleProp<TextStyle> = [
     {
       paddingTop: hasVariant ? 10 : 0,
       paddingBottom: hasVariant ? 5 : 7,
       fontSize: hasVariant ? 15 : 20,
       textAlign: hasVariant && !hasDonation ? 'center' : 'auto',
       textAlignVertical: 'center',
-      flex: 1
     },
   ];
 
@@ -71,8 +70,10 @@ const CardItem = ({
       </TouchableOpacity>
 
       {/* NAME */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: hasVariant? 4: 20 }}>
-        <Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: hasVariant ? 4 : 20 }}>
+        <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
+          {!hasVariant && user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={18} color={"#64DD17"} style={{ padding: 4 }} />}
+        </View>
         {!hasVariant &&
           <View style={{ flexDirection: 'row' }}>
             <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
@@ -82,7 +83,7 @@ const CardItem = ({
         }
         {hasDonation &&
           <View style={{ alignItems: 'center' }}>
-            <Text style={[nameStyle, {paddingLeft: 4}]}>{donation?.toFixed(2) + ' €'}</Text>
+            <Text style={[nameStyle, { paddingLeft: 4 }]}>{donation?.toFixed(2) + ' €'}</Text>
           </View>
         }
 
@@ -90,7 +91,7 @@ const CardItem = ({
 
       {/* DESCRIPTION */}
       {!hasVariant && user.description && (
-        <ScrollView style={{height: 64}}>
+        <ScrollView style={{ height: 64 }}>
           <Text style={styles.descriptionCardItem}>{user.description}</Text>
         </ScrollView>
       )}
