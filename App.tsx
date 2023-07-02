@@ -28,15 +28,17 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
-  Global.GetStorage(Global.STORAGE_PAGE).then((value) => {
-    if (value && value != Global.INDEX_REGISTER) {
-      Global.loadPage(value);
-    }
-  });
+  React.useEffect(() => {
+    Global.GetStorage(Global.STORAGE_PAGE).then((value) => {
+      if (value && value != Global.INDEX_REGISTER) {
+        Global.loadPage(value);
+      }
+    });
+  }, []);
 
   const isDarkTheme = useColorScheme() == 'dark';
 
-  const theme : ThemeProp = {
+  const theme: ThemeProp = {
     ...isDarkTheme ? MD3DarkTheme : MD3LightTheme,
     dark: isDarkTheme,
     roundness: 2,
