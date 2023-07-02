@@ -48,6 +48,12 @@ const Search = () => {
     await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE).then(
       async (response) => {
         let data: SearchResource = response.data;
+        if(!latitude) {
+          latitude = data.user.locationLatitude;
+        }
+        if(!longitude) {
+          longitude = data.user.locationLongitude;
+        }
         setUser(data.user);
         updateLocationLocal(data.user.locationLatitude, data.user.locationLongitude);
         loadResults();
@@ -57,8 +63,8 @@ const Search = () => {
 
   async function updateLocationLocal(lat: number, lon: number) {
     await Global.SetStorage(Global.STORAGE_LATITUDE, String(lat));
-    await Global.SetStorage(Global.STORAGE_LONGITUDE, String(lon));
     latitude = lat;
+    await Global.SetStorage(Global.STORAGE_LONGITUDE, String(lon));
     longitude = lon;
   }
 
