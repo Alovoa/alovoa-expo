@@ -61,7 +61,7 @@ const YourProfile = ({ route, navigation }) => {
   const [requestingDeletion, setRequestingDeletion] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState<UserDto>();
-  const [profilePic, setProfilePic] = React.useState("");
+  const [profilePic, setProfilePic] = React.useState<string>();
   const [name, setName] = React.useState("");
   const [age, setAge] = React.useState(0);
   const [idEnc, setIdEnc] = React.useState("");
@@ -171,6 +171,8 @@ const YourProfile = ({ route, navigation }) => {
     setInterests(data.user.interests);
     setMinAge(data.user.preferedMinAge);
     setMaxAge(data.user.preferedMaxAge);
+    setMinAgeText(data.user.preferedMinAge);
+    setMaxAgeText(data.user.preferedMaxAge);
     setUnits(data.user.units);
 
     let intentionText = data.user.intention.text;
@@ -484,7 +486,7 @@ const YourProfile = ({ route, navigation }) => {
             />
           </View>
           <View style={{ marginTop: 24 }}>
-            <Text>{i18n.t('profile.onboarding.interests')}</Text>
+            <Text style={{marginBottom: 8}}>{i18n.t('profile.onboarding.interests')}</Text>
             {
               interests.map((item, index) => (
                 <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
