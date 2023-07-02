@@ -7,6 +7,7 @@ import * as URL from "../URL";
 import * as I18N from "../i18n";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { RegisterBody } from "../types";
+import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 
 const i18n = I18N.getI18n()
 
@@ -105,143 +106,144 @@ const Register = ({ route, navigation }) => {
     setPasswordSecure(Global.isPasswordSecure(text));
   }
 
- 
+
 
   return (
+    <AutocompleteDropdownContextProvider>
+      <View style={{ flex: 1, padding: 12, backgroundColor: colors.background }}>
+        <ScrollView ref={scrollRef}>
 
-    <View style={{ flex: 1, padding: 12, backgroundColor: colors.background }}>
-      <ScrollView ref={scrollRef}>
+          <Text style={{ textAlign: 'center', marginBottom: 4, fontSize: 32, fontWeight: '500' }}>{i18n.t('register.title')}</Text>
+          <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 12 }}>{i18n.t('register.subtitle')}</Text>
 
-        <Text style={{ textAlign: 'center', marginBottom: 4, fontSize: 32, fontWeight: '500' }}>{i18n.t('register.title')}</Text>
-        <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 12 }}>{i18n.t('register.subtitle')}</Text>
+          {registerEmail && <View style={[styles.container]}>
+            <TextInput
+              style={{ backgroundColor: colors.background }}
+              label={i18n.t('email') + " *"}
+              value={email}
+              onChangeText={text => {
+                setEmail(text);
+                setEmailValid(Global.isEmailValid(text));
+              }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>}
 
-        {registerEmail && <View style={[styles.container]}>
-          <TextInput
-            style={{ backgroundColor: colors.background }}
-            label={i18n.t('email') + " *"}
-            value={email}
-            onChangeText={text => {
-              setEmail(text);
-              setEmailValid(Global.isEmailValid(text));
-            }}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        </View>}
+          {registerEmail && <View style={[styles.container]}>
+            <TextInput
+              style={{ backgroundColor: colors.background }}
+              label={i18n.t('password')}
+              value={password}
+              autoCapitalize={"none"}
+              onChangeText={text => updatePassword(text)}
+              autoCorrect={false}
+              secureTextEntry={true}
+            />
+            {
+              !passwordSecure && <Text style={{ fontSize: 10, color: 'orange', marginTop: 4 }}>{i18n.t('register-password-warning')}</Text>
+            }
+          </View>}
 
-        {registerEmail && <View style={[styles.container]}>
-          <TextInput
-            style={{ backgroundColor: colors.background }}
-            label={i18n.t('password')}
-            value={password}
-            autoCapitalize={"none"}
-            onChangeText={text => updatePassword(text)}
-            autoCorrect={false}
-            secureTextEntry={true}
-          />
-          {
-            !passwordSecure && <Text style={{ fontSize: 10, color: 'orange', marginTop: 4 }}>{i18n.t('register-password-warning')}</Text>
-          }
-        </View>}
+          <View style={[styles.container]}>
+            <TextInput
+              style={{ backgroundColor: colors.background }}
+              label={i18n.t('first-name') + " *"}
+              value={firstName}
+              onChangeText={text => setFirstName(text)}
+              maxLength={10}
+              autoCorrect={false}
+            />
+          </View>
 
-        <View style={[styles.container]}>
-          <TextInput
-            style={{ backgroundColor: colors.background }}
-            label={i18n.t('first-name') + " *"}
-            value={firstName}
-            onChangeText={text => setFirstName(text)}
-            maxLength={10}
-            autoCorrect={false}
-          />
-        </View>
+          <View style={[styles.container]}>
+            <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
+              <Text>{i18n.t('dob') + " *"}</Text>
+            </View>
+            <View style={{ paddingTop: 6 }}>
+              <Button onPress={showDatePicker} icon="calendar" mode="elevated" style={{ width: 160 }}>
+                <Text
+                  style={{ color: "white" }}>{dob.toISOString().split('T')[0]?.replace(/-/g, '/')}</Text>
+              </Button>
+            </View>
+          </View>
 
-        <View style={[styles.container]}>
+          <View style={[styles.container]}>
+            <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
+              <Text>{i18n.t('gender.title')}</Text>
+              <Text>{" *"}</Text>
+            </View>
+            <RadioButton.Group onValueChange={(itemValue) => { setGender(itemValue) }} value={gender}>
+              <RadioButton.Item
+                label={i18n.t('gender.male')}
+                value="1"
+                style={{ flexDirection: 'row-reverse' }}
+              />
+              <RadioButton.Item
+                label={i18n.t('gender.female')}
+                value="2"
+                style={{ flexDirection: 'row-reverse' }}
+              />
+              <RadioButton.Item
+                label={i18n.t('gender.other')}
+                value="3"
+                style={{ flexDirection: 'row-reverse' }}
+              />
+            </RadioButton.Group>
+          </View>
+
+          <View style={[styles.container]}>
+            <TextInput
+              value={referrerCode}
+              label={i18n.t('register.referral-code') + " (" + i18n.t('optional') + ")"}
+              onChangeText={text => setReferrerCode(text)}
+              style={{ backgroundColor: colors.background }}
+              autoCapitalize={"none"}
+              autoCorrect={false}
+              placeholder={"c2f2-29be-4933-b9b9-3efa"}
+            />
+          </View>
+
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-            <Text>{i18n.t('dob') + " *"}</Text>
+            <Switch onValueChange={toggleTosSwitch}
+              value={isTosEnabled} />
+            <Text style={{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }}>{i18n.t('register.tos-agree')}</Text><Text style={styles.link} onPress={() => {
+              WebBrowser.openBrowserAsync(URL.TOS);
+            }}>{" " + i18n.t('link')}</Text>
           </View>
-          <View style={{ paddingTop: 6 }}>
-            <Button onPress={showDatePicker} icon="calendar" mode="elevated" style={{ width: 160 }}>
-              <Text
-                style={{ color: "white" }}>{dob.toISOString().split('T')[0]?.replace(/-/g, '/')}</Text>
-            </Button>
+
+          <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }]}>
+            <Switch onValueChange={togglePrivacySwitch}
+              value={isPrivacyEnabled} />
+            <Text style={{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }}>{i18n.t('register.privacy-agree')}</Text>
+            <Text style={styles.link} onPress={() => {
+              WebBrowser.openBrowserAsync(URL.PRIVACY);
+            }}>{" " + i18n.t('link')}</Text>
           </View>
-        </View>
 
-        <View style={[styles.container]}>
-          <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-            <Text>{i18n.t('gender.title')}</Text>
-            <Text>{" *"}</Text>
+          <View style={styles.container}>
+            <Text style={{ fontSize: 10, color: "orange" }}>{i18n.t('register.asterisk-warning')}</Text>
           </View>
-          <RadioButton.Group onValueChange={(itemValue) => { setGender(itemValue) }} value={gender}>
-            <RadioButton.Item
-              label={i18n.t('gender.male')}
-              value="1"
-              style={{ flexDirection: 'row-reverse' }}
-            />
-            <RadioButton.Item
-              label={i18n.t('gender.female')}
-              value="2"
-              style={{ flexDirection: 'row-reverse' }}
-            />
-            <RadioButton.Item
-              label={i18n.t('gender.other')}
-              value="3"
-              style={{ flexDirection: 'row-reverse' }}
-            />
-          </RadioButton.Group>
-        </View>
+          <Button mode="contained" onPress={submit}>
+            <Text style={{ color: "white" }}>{i18n.t('register.title')}</Text>
+          </Button>
 
-        <View style={[styles.container]}>
-          <TextInput
-            value={referrerCode}
-            label={i18n.t('register.referral-code') + " (" + i18n.t('optional') + ")"}
-            onChangeText={text => setReferrerCode(text)}
-            style={{ backgroundColor: colors.background }}
-            autoCapitalize={"none"}
-            autoCorrect={false}
-            placeholder={"c2f2-29be-4933-b9b9-3efa"}
-          />
-        </View>
-
-        <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-          <Switch onValueChange={toggleTosSwitch}
-            value={isTosEnabled} />
-          <Text style={{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }}>{i18n.t('register.tos-agree')}</Text><Text style={styles.link} onPress={() => {
-            WebBrowser.openBrowserAsync(URL.TOS);
-          }}>{" " + i18n.t('link')}</Text>
-        </View>
-
-        <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }]}>
-          <Switch onValueChange={togglePrivacySwitch}
-            value={isPrivacyEnabled} />
-          <Text style={{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }}>{i18n.t('register.privacy-agree')}</Text>
           <Text style={styles.link} onPress={() => {
-            WebBrowser.openBrowserAsync(URL.PRIVACY);
-          }}>{" " + i18n.t('link')}</Text>
-        </View>
+            WebBrowser.openBrowserAsync(URL.IMPRINT);
+          }}>{i18n.t('imprint')}</Text>
 
-        <View style={styles.container}>
-          <Text style={{ fontSize: 10, color: "orange" }}>{i18n.t('register.asterisk-warning')}</Text>
-        </View>
-        <Button mode="contained" onPress={submit}>
-          <Text style={{ color: "white" }}>{i18n.t('register.title')}</Text>
-        </Button>
-
-        <Text style={styles.link} onPress={() => {
-          WebBrowser.openBrowserAsync(URL.IMPRINT);
-        }}>{i18n.t('imprint')}</Text>
-
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={handleDateConfirm}
-          onCancel={hideDatePicker}
-          date={dob}
-          maximumDate={maxDate}
-          minimumDate={minDate}
-        />
-      </ScrollView>
-    </View>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleDateConfirm}
+            onCancel={hideDatePicker}
+            date={dob}
+            maximumDate={maxDate}
+            minimumDate={minDate}
+          />
+        </ScrollView>
+      </View>
+    </AutocompleteDropdownContextProvider>
   )
 };
 

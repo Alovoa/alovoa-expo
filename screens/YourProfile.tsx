@@ -15,7 +15,7 @@ import { UserInterestAutocomplete, YourProfileResource, UserMiscInfoEnum, UserIn
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+import { AutocompleteDropdown, AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import { FontAwesome } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import * as WebBrowser from 'expo-web-browser';
@@ -387,6 +387,7 @@ const YourProfile = ({ route, navigation }) => {
   }
 
   return (
+    <AutocompleteDropdownContextProvider>
     <ScrollView style={[styles.containerProfile]} keyboardShouldPersistTaps='handled'
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
       <TouchableOpacity
@@ -489,7 +490,13 @@ const YourProfile = ({ route, navigation }) => {
         </View>
         <View style={{ marginTop: 24 }}>
           <Text>{i18n.t('profile.onboarding.interests')}</Text>
-
+          {
+            interests.map((item, index) => (
+              <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+                <Text>{item.text}</Text>
+              </Button>
+            ))
+          }
           {interests.length < MAX_INTERESTS &&
             <View style={{ flexDirection: 'row', marginBottom: 8 }}>
               <AutocompleteDropdown
@@ -540,13 +547,6 @@ const YourProfile = ({ route, navigation }) => {
               />
               <IconButton icon='plus' mode='contained' style={{ width: 38, height: 38 }} size={20} onPress={() => addInterest()} />
             </View>}
-          {
-            interests.map((item, index) => (
-              <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
-                <Text>{item.text}</Text>
-              </Button>
-            ))
-          }
         </View>
 
 
@@ -669,6 +669,7 @@ const YourProfile = ({ route, navigation }) => {
         </View>
       </View>
     </ScrollView>
+    </AutocompleteDropdownContextProvider>
   );
 };
 
