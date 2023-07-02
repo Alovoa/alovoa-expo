@@ -168,7 +168,7 @@ const Login = () => {
 
       <View style={{ marginTop: 8 }}>
         <Text style={styles.link} onPress={() => {
-          Global.navigate("Register", { registerEmail: true });
+          Global.navigate("Register", false, { registerEmail: true });
         }}>{i18n.t('register-email')}</Text>
         <Text style={styles.link} onPress={() => {
           Global.navigate("PasswordReset");
