@@ -58,6 +58,7 @@ enum IntentionText {
 const YourProfile = ({ route, navigation }) => {
 
   const { colors } = useTheme();
+  const [requestingDeletion, setRequestingDeletion] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [data, setData] = React.useState<YourProfileResource>();
   const [user, setUser] = React.useState<UserDto>();
@@ -105,7 +106,7 @@ const YourProfile = ({ route, navigation }) => {
     }
   }, [route.params?.changed]);
 
-  
+
   React.useEffect(() => {
     descriptionRef.current = description;
     debounceDescriptionHandler();
@@ -377,8 +378,12 @@ const YourProfile = ({ route, navigation }) => {
   }
 
   async function deleteAccount() {
-    await Global.Fetch(URL.USER_DELETE_ACCOUNT, 'post');
-    Global.ShowToast(i18n.t('profile.delete-account-success'));
+    if (!requestingDeletion) {
+      setRequestingDeletion(true);
+      await Global.Fetch(URL.USER_DELETE_ACCOUNT, 'post');
+      Global.ShowToast(i18n.t('profile.delete-account-success'));
+      setRequestingDeletion(false);
+    }
   }
 
   return (
@@ -390,7 +395,7 @@ const YourProfile = ({ route, navigation }) => {
         </ImageBackground>
       </TouchableOpacity>
 
-      <View style={{alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54}}>
+      <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54 }}>
         <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Fotos", { user: user })}>{i18n.t('profile.photos.manage')}</Button>
       </View>
 
@@ -656,7 +661,7 @@ const YourProfile = ({ route, navigation }) => {
             <Text style={[styles.link, { padding: 8 }]} onPress={() => {
               downloadUserData();
             }}>{i18n.t('profile.download-userdata')}</Text>
-            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+            <Text style={[styles.link, { padding: 8, opacity: requestingDeletion ? 0.3 : 1 }]} onPress={() => {
               deleteAccount();
             }}>{i18n.t('profile.delete-account')}</Text>
           </View>
