@@ -2,7 +2,6 @@ import React from "react";
 import {
   ScrollView,
   View,
-  ImageBackground,
   FlatList,
   RefreshControl,
   Dimensions,
@@ -80,6 +79,7 @@ const Profile = ({ route, navigation }) => {
   const [description, setDescription] = React.useState("");
   const [intention, setIntention] = React.useState(Intention.MEET);
   const [interests, setInterests] = React.useState(Array<UserInterest>);
+  const [lastActiveState, setLastActiveState] = React.useState(Number.MAX_SAFE_INTEGER);
   const [blocked, setBlocked] = React.useState(false)
   const [reported, setReported] = React.useState(false)
   const [gender, setGender] = React.useState<Gender>()
@@ -88,6 +88,7 @@ const Profile = ({ route, navigation }) => {
   const [kidsString, setKidsString] = React.useState<String>();
   const [drugsString, setDrugsString] = React.useState<String>();
   const [images, setImages] = React.useState(Array<UserImage>);
+  const [swiperImages, setSwiperImages] = React.useState<Array<string>>();
 
   const [menuVisible, setMenuVisible] = React.useState(false);
   const showMenu = () => { setMenuVisible(true) };
@@ -129,12 +130,23 @@ const Profile = ({ route, navigation }) => {
     setDescription(user.description);
     setGender(convertGenderText(user.gender.text));
     setImages(user.images);
+    if (user.lastActiveState) {
+      setLastActiveState(user.lastActiveState);
+    }
     let prefGenders: Array<Gender> = [];
     for (let i = 0; i < user.preferedGenders.length; i++) {
       prefGenders.push(convertGenderText(user.preferedGenders[i].text));
     }
     setPreferredGenders(prefGenders);
     setInterests(user.interests);
+    var swiperImageData: Array<string> = [];
+    swiperImageData.push(user.profilePicture);
+    if (user.images) {
+      user.images.forEach(function (image) {
+        swiperImageData.push(image.content);
+      });
+    }
+    setSwiperImages(swiperImageData);
 
     let intentionText = user.intention.text;
     switch (intentionText) {
@@ -269,6 +281,14 @@ const Profile = ({ route, navigation }) => {
     navigation.goBack();
   }
 
+  const imagesContainer = () => {
+    return (
+      images?.map((image, index) => (
+        <Image source={{ uri: image.content ? image.content : undefined }} style={styles.photo} />
+      ))
+    );
+  };
+
   return (
     <View>
       <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
@@ -290,27 +310,32 @@ const Profile = ({ route, navigation }) => {
       <ScrollView style={styles.containerProfile} keyboardShouldPersistTaps='handled'
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
 
-        <SwiperFlatList
-          autoplay
-          autoplayLoop={true}
-          autoplayLoopKeepAnimation={true}
-          showPagination={true}
-        >
-          <Image source={{ uri: profilePic ? profilePic : undefined }} style={styles.photo} />
-          {
-            images?.map((image, index) => (
-              <Image source={{ uri: image.content ? image.content : undefined }} style={styles.photo} />
-            ))
-          }
-        </SwiperFlatList>
+        <View>
+          <SwiperFlatList
+            autoplay
+            autoplayDelay={5}
+            paginationActiveColor={colors?.primary}
+            paginationDefaultColor={colors?.secondary}
+            paginationStyleItem={{ height: 6, width: 6 }}
+            autoplayLoop={true}
+            autoplayLoopKeepAnimation={true}
+            showPagination={true}
+          >
+            {
+              swiperImages?.map((image) => (
+                <Image source={{ uri: image ? image : undefined }} style={styles.photo} />
+              ))
+            }
+          </SwiperFlatList>
+        </View>
 
         <View style={[styles.containerProfileItem, { marginTop: 24, flexDirection: 'row', justifyContent: 'space-between' }]}>
           <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
-            {user.lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
-              {user.lastActiveState == 1 &&
+            {lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
+              {lastActiveState == 1 &&
                 <Text >{i18n.t('profile.active-state.1')}</Text>
               }
-              {user.lastActiveState == 2 &&
+              {lastActiveState == 2 &&
                 <Text >{i18n.t('profile.active-state.2')}</Text>
               }
             </View>}
@@ -386,11 +411,11 @@ const Profile = ({ route, navigation }) => {
       </ScrollView>
       {!liked && <View style={{ marginBottom: 8, position: 'absolute', width: Dimensions.get('window').width, right: 0, bottom: 0, }}>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY }, hidden ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
+          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY }, hidden || !compatible ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
             disabled={hidden}>
             <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => likeUser()} disabled={compatible}>
+          <TouchableOpacity style={[styles.button, !compatible ? { opacity: 0.5 } : {}]} onPress={() => likeUser()} disabled={!compatible}>
             <Icon name="heart" color={LIKE_ACTIONS} size={25} />
           </TouchableOpacity>
         </View>
