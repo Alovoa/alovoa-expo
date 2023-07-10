@@ -1,0 +1,2 @@
+Fix app force closing
+Improve display of user images
