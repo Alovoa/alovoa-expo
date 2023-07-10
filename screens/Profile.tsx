@@ -218,6 +218,12 @@ const Profile = ({ route, navigation }) => {
     loadData();
   }, []);
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+       detachPreviousScreen: false
+    });
+  }, [navigation]);
+
   function getGendersText() {
     let arr: string[] = [];
     preferredGenders.forEach(element => {
