@@ -96,7 +96,7 @@ const CardItem = ({
           data={user.commonInterests}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <Chip>{item.text}</Chip>
+            <Chip style={styles.marginRight4}>{item.text}</Chip>
           )}
         />
       </View>
