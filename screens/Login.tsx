@@ -91,7 +91,7 @@ const Login = () => {
   const loginEmail = async () => {
     if (captchaId && captchaText) {
       hideDialog();
-      let url = URL.AUTH_LOGIN + "?username=" + email +
+      let url = URL.AUTH_LOGIN + "?username=" + encodeURIComponent(email) +
         "&password=" + encodeURIComponent(password) +
         "&remember-me=on" +
         "&redirect-url=" + Buffer.from(APP_URL).toString('base64') +
