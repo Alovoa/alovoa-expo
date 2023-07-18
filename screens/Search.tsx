@@ -112,7 +112,7 @@ const Search = () => {
       console.log(e)
     }
 
-    if(lat == undefined && lon == undefined) {
+    if(lat != undefined && lon != undefined) {
       let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
       let result: SearchDto = response.data;
       let incompatible = result.incompatible;
