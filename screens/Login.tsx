@@ -33,19 +33,6 @@ const Login = () => {
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
-  React.useEffect(() => {
-    load();
-  }, []);
-
-  async function load() {
-    if (Global.FLAG_FDROID) {
-      if (! await Global.GetStorage(Global.STORAGE_FDROID_LOCATION_ISSUE)) {
-        Alert.alert('', i18n.t('location-fdroid'));
-        Global.SetStorage(Global.STORAGE_FDROID_LOCATION_ISSUE, "1");
-      }
-    }
-  }
-
   const _handleRedirect = async (event: { url: string; }) => {
 
     if (Platform.OS === 'ios') {

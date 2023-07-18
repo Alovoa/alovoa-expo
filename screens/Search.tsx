@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { View, RefreshControl, ScrollView } from "react-native";
+import { View, RefreshControl, ScrollView, Alert } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import { CardItem } from "../components";
 import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import Location from 'expo-location';
+import * as Location from 'expo-location';
 
 
 const i18n = I18N.getI18n()
@@ -29,9 +29,17 @@ const Search = () => {
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
   const [distance, setDistance] = React.useState(50);
   const [stackKey, setStackKey] = React.useState(0);
+  let firstSearch = true;
 
   let latitude: number | undefined;
   let longitude: number | undefined;
+
+  const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
+    return Promise.race([
+      promise,
+      new Promise((resolve, reject) => setTimeout(() => reject(), timeoutMs)),
+    ]);
+  }
 
   React.useEffect(() => {
     setStackKey(new Date().getTime());
@@ -39,6 +47,10 @@ const Search = () => {
       swiper.current?.goBackFromTop();
     }
   }, [results]);
+
+  React.useEffect(() => {
+    load();
+  }, []);
 
   async function load() {
     let l1 = await Global.GetStorage(Global.STORAGE_LATITUDE);
@@ -48,10 +60,10 @@ const Search = () => {
     await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE).then(
       async (response) => {
         let data: SearchResource = response.data;
-        if(!latitude) {
+        if (!latitude) {
           latitude = data.user.locationLatitude;
         }
-        if(!longitude) {
+        if (!longitude) {
           longitude = data.user.locationLongitude;
         }
         setUser(data.user);
@@ -69,32 +81,46 @@ const Search = () => {
   }
 
   async function loadResults() {
+
     let lat = latitude;
     let lon = longitude;
 
-    if(!Global.FLAG_FDROID) {
-      try {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          return;
+    try {
+      let location : Location.LocationObject | undefined;
+      let hasLocationPermission = false;
+      let hasGpsEnabled = false;
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status == 'granted') {
+        hasLocationPermission = true;
+        try {
+          location = await promiseWithTimeout(1000, Location.getCurrentPositionAsync({}));
+          hasGpsEnabled = true;
+          lat = location?.coords.latitude;
+          lon = location?.coords.longitude;
+        } catch (e) {
         }
-        let location = await Location.getCurrentPositionAsync({});
-        lat = location.coords.latitude;
-        lon = location.coords.longitude;
-      } catch (e) { console.log(e) }
+      }
+      if (firstSearch) {
+        if (!hasLocationPermission) {
+          Global.ShowToast(i18n.t('location.no-permission'));
+        } else if (!hasGpsEnabled) {
+          Global.ShowToast(i18n.t('location.no-signal'));
+        }
+        firstSearch = false;
+      }
+    } catch (e) {
+      console.log(e)
     }
 
-    let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
-    let result: SearchDto = response.data;
-    let incompatible = result.incompatible;
-    if (!incompatible && result.users) {
-      setResults(result.users);
+    if(lat == undefined && lon == undefined) {
+      let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
+      let result: SearchDto = response.data;
+      let incompatible = result.incompatible;
+      if (!incompatible && result.users) {
+        setResults(result.users);
+      }
     }
   }
-
-  React.useEffect(() => {
-    load();
-  }, []);
 
   async function likeUser(index: number, swipe?: boolean) {
     if (index < results.length) {

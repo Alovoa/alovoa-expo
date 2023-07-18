@@ -16,7 +16,6 @@ export const INDEX_ONBOARDING = "2"
 export const INDEX_MAIN = "3"
 
 export const STORAGE_FIRSTNAME = "firstName";
-export const STORAGE_FDROID_LOCATION_ISSUE = "fdroid.location.issue";
 export const STORAGE_PAGE = "page";
 export const STORAGE_YOUR_PROFILE = "your-profile"
 export const STORAGE_YOUR_CHAT = "chat"

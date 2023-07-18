@@ -148,5 +148,8 @@
         "title": "Starte Chats mit Matches",
         "subtitle": "Erhalte mehr Matches indem du attraktive Bilder hochlädst und dein Profil ausfüllst"
     },
-    "location-fdroid": "Leider unterstützt die F-droid-Version dieser App noch nicht das Setzen des Standorts. Bitte melde dich über dein Browser an und setze ihn dort. Entschuldigung für die Unannehmlichkeiten."
+    "location": {
+        "no-permission": "Standortberechtigung nicht gesetzt",
+        "no-signal": "Kein GPS Signal gefunden"
+    }
 }
