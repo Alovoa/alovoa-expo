@@ -1,0 +1,2 @@
+Fix display issues on some pages
+Update dependencies
