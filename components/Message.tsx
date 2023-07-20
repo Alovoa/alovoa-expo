@@ -11,7 +11,7 @@ const i18n = I18N.getI18n()
 
 const Message = ({ conversation }: MessageT) => {
 
-  let text: string = conversation.lastMessage?.from ? i18n.t('you') + ": " : "";
+  let text: string = conversation.lastMessage?.from ? "" : i18n.t('you') + ": ";
   text += conversation.lastMessage ? conversation.lastMessage.content : i18n.t('chat.default');
 
   return (

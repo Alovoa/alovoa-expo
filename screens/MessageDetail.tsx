@@ -41,11 +41,6 @@ const MessageDetail = ({ route, navigation }) => {
   let messageUpdateInterval: NodeJS.Timeout | null = null;
 
   React.useEffect(() => {
-
-    navigation.setOptions({
-      detachPreviousScreen: false
-    });
-
     const unsubscribe = navigation.addListener('beforeRemove', () => {
       if (messageUpdateInterval) {
         clearInterval(messageUpdateInterval);

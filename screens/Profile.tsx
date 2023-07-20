@@ -218,12 +218,6 @@ const Profile = ({ route, navigation }) => {
     loadData();
   }, []);
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-       detachPreviousScreen: false
-    });
-  }, [navigation]);
-
   function getGendersText() {
     let arr: string[] = [];
     preferredGenders.forEach(element => {
@@ -287,14 +281,6 @@ const Profile = ({ route, navigation }) => {
     navigation.goBack();
   }
 
-  const imagesContainer = () => {
-    return (
-      images?.map((image, index) => (
-        <Image source={{ uri: image.content ? image.content : undefined }} style={styles.photo} />
-      ))
-    );
-  };
-
   return (
     <View>
       <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
@@ -328,8 +314,8 @@ const Profile = ({ route, navigation }) => {
             showPagination={true}
           >
             {
-              swiperImages?.map((image) => (
-                <Image source={{ uri: image ? image : undefined }} style={styles.photo} />
+              swiperImages?.map((image, index) => (
+                <Image key={index} source={{ uri: image ? image : undefined }} style={styles.photo} />
               ))
             }
           </SwiperFlatList>
@@ -353,6 +339,7 @@ const Profile = ({ route, navigation }) => {
             <Text>{you?.units == UnitsEnum.IMPERIAL ? ' mi' : ' km'}</Text>
           </View>
         </View>
+
         <View style={[styles.containerProfileItem, { marginTop: 0 }]}>
           <FlatList
             horizontal={true}
