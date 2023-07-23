@@ -55,6 +55,7 @@
       "icon": "./assets/icon-round.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
+        "monochromeImage": "./assets/monochrome-icon.png",
         "backgroundColor": "#ec407a"
       },
       "intentFilters": [{
