@@ -34,6 +34,9 @@ const Search = () => {
   let latitude: number | undefined;
   let longitude: number | undefined;
 
+  const LOCATION_TIMEOUT_SHORT = 2000;
+  const LOCATION_TIMEOUT_LONG = 5000;
+
   const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
     return Promise.race([
       promise,
@@ -84,35 +87,35 @@ const Search = () => {
 
     let lat = latitude;
     let lon = longitude;
-
-    try {
-      let location : Location.LocationObject | undefined;
-      let hasLocationPermission = false;
-      let hasGpsEnabled = false;
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status == 'granted') {
-        hasLocationPermission = true;
-        try {
-          location = await promiseWithTimeout(1000, Location.getCurrentPositionAsync({}));
-          hasGpsEnabled = true;
-          lat = location?.coords.latitude;
-          lon = location?.coords.longitude;
-        } catch (e) {
+    let hasLocation = lat != undefined && lon != undefined;
+    if (firstSearch && hasLocation) {
+      try {
+        let location: Location.LocationObject | undefined;
+        let hasLocationPermission = false;
+        let hasGpsEnabled = false;
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status == 'granted') {
+          hasLocationPermission = true;
+          try {
+            location = await promiseWithTimeout(hasLocation ? LOCATION_TIMEOUT_SHORT : LOCATION_TIMEOUT_LONG, Location.getCurrentPositionAsync({}));
+            hasGpsEnabled = true;
+            lat = location?.coords.latitude;
+            lon = location?.coords.longitude;
+          } catch (e) {
+          }
         }
-      }
-      if (firstSearch) {
         if (!hasLocationPermission) {
           Global.ShowToast(i18n.t('location.no-permission'));
         } else if (!hasGpsEnabled) {
           Global.ShowToast(i18n.t('location.no-signal'));
         }
         firstSearch = false;
+      } catch (e) {
+        console.log(e)
       }
-    } catch (e) {
-      console.log(e)
     }
 
-    if(lat != undefined && lon != undefined) {
+    if (lat != undefined && lon != undefined) {
       let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
       let result: SearchDto = response.data;
       let incompatible = result.incompatible;
