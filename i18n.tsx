@@ -15,3 +15,8 @@ export function getI18n() : I18n {
     i18n.defaultLocale = 'en';
     return i18n;
 }
+
+export function getLanguageTag(): string {
+    let languageTag = Localization.getLocales().at(0)?.languageTag;
+    return languageTag ? languageTag : "ja-JP";
+}

@@ -78,6 +78,7 @@
       "versionCode": 12
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
     "extra": {

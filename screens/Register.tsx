@@ -5,15 +5,18 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import * as Localization from 'expo-localization';
 import { RegisterBody } from "../types";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { DatePickerInput } from "react-native-paper-dates";
+import { ValidRangeType } from "react-native-paper-dates/lib/typescript/Date/Calendar";
 
 const i18n = I18N.getI18n()
 
 const MIN_AGE = 16
 const MAX_AGE = 100
-const DEFAULT_AGE = 18
+const DEFAULT_AGE = 20
 
 function subtractYears(years: number): Date {
   const date = new Date();
@@ -24,10 +27,12 @@ function subtractYears(years: number): Date {
 const Register = ({ route, navigation }) => {
 
   const registerEmail = route.params?.registerEmail;
+  const validDobRange: ValidRangeType = {
+    startDate: subtractYears(MAX_AGE),
+    endDate: subtractYears(MIN_AGE)
+  }
   const { colors } = useTheme();
   const scrollRef = React.useRef(null);
-
-  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [emailValid, setEmailValid] = React.useState(false);
   const [password, setPassword] = React.useState("");
@@ -38,9 +43,6 @@ const Register = ({ route, navigation }) => {
   const [isTosEnabled, setIsTosEnabled] = React.useState(false);
   const [isPrivacyEnabled, setIsPrivacyEnabled] = React.useState(false);
   const [referrerCode, setReferrerCode] = React.useState("");
-
-  const minDate = subtractYears(MAX_AGE);
-  const maxDate = subtractYears(MIN_AGE);
 
   async function load() {
     let name = await Global.GetStorage(Global.STORAGE_FIRSTNAME);
@@ -53,19 +55,6 @@ const Register = ({ route, navigation }) => {
       title: ''
     });
   }, []);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleDateConfirm = (date: Date) => {
-    hideDatePicker();
-    setDob(date);
-  };
 
   const toggleTosSwitch = () => setIsTosEnabled(previousState => !previousState);
   const togglePrivacySwitch = () => setIsPrivacyEnabled(previousState => !previousState);
@@ -105,8 +94,6 @@ const Register = ({ route, navigation }) => {
     setPassword(text);
     setPasswordSecure(Global.isPasswordSecure(text));
   }
-
-
 
   return (
     <AutocompleteDropdownContextProvider>
@@ -156,17 +143,19 @@ const Register = ({ route, navigation }) => {
             />
           </View>
 
-          <View style={[styles.container]}>
-            <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-              <Text>{i18n.t('dob') + " *"}</Text>
-            </View>
-            <View style={{ paddingTop: 6 }}>
-              <Button onPress={showDatePicker} icon="calendar" mode="elevated" style={{ width: 160 }}>
-                <Text
-                  style={{ color: "white" }}>{dob.toISOString().split('T')[0]?.replace(/-/g, '/')}</Text>
-              </Button>
-            </View>
-          </View>
+          <SafeAreaProvider>
+            <View style={[styles.container]}>
+                <DatePickerInput
+                  style={{ backgroundColor: colors.background }}
+                  locale={Localization.locale.startsWith("en") || Localization.locale.startsWith("de") ? Localization.locale : "en-GB"}
+                  label={i18n.t('dob') + " *"}
+                  value={dob}
+                  onChange={(d) => { if (d) { setDob(d) } }}
+                  inputMode="start"
+                  validRange={validDobRange}
+                />
+              </View>
+          </SafeAreaProvider>
 
           <View style={[styles.container]}>
             <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
@@ -231,16 +220,6 @@ const Register = ({ route, navigation }) => {
           <Text style={styles.link} onPress={() => {
             WebBrowser.openBrowserAsync(URL.IMPRINT);
           }}>{i18n.t('imprint')}</Text>
-
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleDateConfirm}
-            onCancel={hideDatePicker}
-            date={dob}
-            maximumDate={maxDate}
-            minimumDate={minDate}
-          />
         </ScrollView>
       </View>
     </AutocompleteDropdownContextProvider>
