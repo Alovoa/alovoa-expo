@@ -51,21 +51,25 @@ const PasswordReset = ({ route, navigation }) => {
   async function resetPassword() {
     if (emailValid && captchaId && captchaText) {
       setCaptchaText("");
-      let data: PasswordResetDto = {captchaId: captchaId, captchaText: captchaText, email: email}
-      let res = await Global.Fetch(URL.PASSWORD_RESET, 'post', data);
-      Global.ShowToast(i18n.t('password-reset-success'));
-      Global.navigate("Login");
+      let data: PasswordResetDto = { captchaId: captchaId, captchaText: captchaText, email: email }
+      try {
+        await Global.Fetch(URL.PASSWORD_RESET, 'post', data);
+        Global.ShowToast(i18n.t('password-reset-success'));
+        Global.navigate("Login");
+      } catch (e) {
+        hideDialog();
+        Global.ShowToast(i18n.t('error.generic'));
+      }
     }
   }
 
   return (
     <View style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]}>
-      <View style={{height: Dimensions.get("window").height}}>
+      <View style={{ height: Dimensions.get("window").height }}>
 
-        <View style={{ justifyContent: 'center',alignItems: 'center' }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <SvgPasswordReset style={styles.svg} height={svgHeight} width={svgWidth} />
         </View>
-        
 
         <TextInput
           style={{ backgroundColor: colors.background }}
@@ -79,7 +83,7 @@ const PasswordReset = ({ route, navigation }) => {
           autoCapitalize="none"
         />
 
-          <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { showCaptchaDialog() }}
+        <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { showCaptchaDialog() }}
         ><Text style={styles.buttonText}>{i18n.t('password-reset')}</Text></Button>
       </View>
 
