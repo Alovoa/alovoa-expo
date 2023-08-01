@@ -20,8 +20,9 @@ import { FontAwesome } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import * as WebBrowser from 'expo-web-browser';
 import { debounce } from "lodash";
+import * as FileSystem from 'expo-file-system';
 import { StorageAccessFramework } from 'expo-file-system';
-import { Dirs, FileSystem } from 'react-native-file-access';
+import * as Sharing from 'expo-sharing';
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
@@ -368,9 +369,13 @@ const YourProfile = ({ route, navigation }) => {
         await StorageAccessFramework.writeAsStringAsync(newFile, userData);
         Global.ShowToast(i18n.t('profile.download-userdata-success'));
       }
-    } else if (Platform.OS == 'ios') {
-      await FileSystem.writeFile(Dirs.DocumentDir + '/alovoa.json', userData);
+    } else {
+      let fileName = FileSystem.documentDirectory + '/alovoa.json';
+      await FileSystem.writeAsStringAsync(fileName, userData, { encoding: FileSystem.EncodingType.UTF8 });
       Global.ShowToast(i18n.t('profile.download-userdata-success'));
+      if(await Sharing.isAvailableAsync()) {
+        Sharing.shareAsync(fileName);
+      }
     }
   }
 
