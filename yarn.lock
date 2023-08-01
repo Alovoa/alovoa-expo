@@ -2520,6 +2520,11 @@ array-union@^2.1.0:
   resolved "https://registry.yarnpkg.com/array-union/-/array-union-2.1.0.tgz#b798420adbeb1de828d84acd8a2e23d3efe85e8d"
   integrity sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==
 
+art@^0.10.1:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/art/-/art-0.10.3.tgz#b01d84a968ccce6208df55a733838c96caeeaea2"
+  integrity sha512-HXwbdofRTiJT6qZX/FnchtldzJjS3vkLJxQilc3Xj+ma2MXjY4UAyQ0ls1XZYVnDvVIBiFZbC6QsvtW86TD6tQ==
+
 asap@~2.0.3, asap@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
@@ -3216,6 +3221,14 @@ cosmiconfig@^7.0.1:
     parse-json "^5.0.0"
     path-type "^4.0.0"
     yaml "^1.10.0"
+
+create-react-class@^15.6.2:
+  version "15.7.0"
+  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.7.0.tgz#7499d7ca2e69bb51d13faf59bd04f0c65a1d6c1e"
+  integrity sha512-QZv4sFWG9S5RUvkTYWbflxeZX+JG7Cz0Tn33rQBJ+WFQTqTfUTjMjiv9tnfXazjsO5r0KhPs+AqCjyrQX6h2ng==
+  dependencies:
+    loose-envify "^1.3.1"
+    object-assign "^4.1.1"
 
 cross-fetch@^3.1.5:
   version "3.1.7"
@@ -6303,6 +6316,16 @@ rc@~1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-art@^18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/react-art/-/react-art-18.2.0.tgz#73b3929b1a0ce781b088bce76186d3793f0106c5"
+  integrity sha512-HfSK9OBtPIpkdI4QZAyWSxCIbM/I7+nqjybxp2FLmiFS7RN+eCEvOY0KdPw+6//B1oIU31t2o35s5EEhe0Fodw==
+  dependencies:
+    art "^0.10.1"
+    create-react-class "^15.6.2"
+    loose-envify "^1.1.0"
+    scheduler "^0.23.0"
+
 react-devtools-core@^4.27.2:
   version "4.28.0"
   resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-4.28.0.tgz#3fa18709b24414adddadac33b6b9cea96db60f2f"
@@ -6311,7 +6334,7 @@ react-devtools-core@^4.27.2:
     shell-quote "^1.6.1"
     ws "^7"
 
-react-dom@18.2.0:
+react-dom@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -6494,10 +6517,10 @@ react-native-vector-icons@^9.2.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native-web@~0.19.6:
-  version "0.19.6"
-  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.19.6.tgz#d9bb880b28b30725c09e7efdb70f2c07df0a6ab2"
-  integrity sha512-lk0X4y4DhZxc2e7Wdc1NkvJVObZZOLAz9l7S5a5awLI5SsZoF5L0WZhiU/+qWu5cpV0wMkME9qx7CvegmO4snw==
+react-native-web@^0.19.7:
+  version "0.19.7"
+  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.19.7.tgz#feac895c1390c91072cbfb53272f3bb92227ca3c"
+  integrity sha512-AaU4EKCrhdXaKJT3oVm3DH1LJxbA7VEe4TWKBSabGA6+b+CVH2SrCSEKc1pJjqK9iq3gxPcRWnPgrTQ6eHLRmQ==
   dependencies:
     "@babel/runtime" "^7.18.6"
     "@react-native/normalize-color" "^2.1.0"
