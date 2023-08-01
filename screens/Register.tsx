@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, Text, Button, TextInput, Switch, RadioButton } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, Switch, RadioButton, HelperText } from "react-native-paper";
 import { Alert, View, ScrollView, StyleSheet } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
@@ -103,7 +103,7 @@ const Register = ({ route, navigation }) => {
           <Text style={{ textAlign: 'center', marginBottom: 4, fontSize: 32, fontWeight: '500' }}>{i18n.t('register.title')}</Text>
           <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 12 }}>{i18n.t('register.subtitle')}</Text>
 
-          {registerEmail && <View style={[styles.container]}>
+          {registerEmail && <View>
             <TextInput
               style={{ backgroundColor: colors.background }}
               label={i18n.t('email') + " *"}
@@ -115,9 +115,13 @@ const Register = ({ route, navigation }) => {
               keyboardType="email-address"
               autoCapitalize="none"
             />
-          </View>}
+            <HelperText type="error" visible={!emailValid}>
+              {i18n.t('email-invalid')}
+            </HelperText>
+          </View>
+          }
 
-          {registerEmail && <View style={[styles.container]}>
+          {registerEmail && <View>
             <TextInput
               style={{ backgroundColor: colors.background }}
               label={i18n.t('password')}
@@ -127,9 +131,9 @@ const Register = ({ route, navigation }) => {
               autoCorrect={false}
               secureTextEntry={true}
             />
-            {
-              !passwordSecure && <Text style={{ fontSize: 10, color: 'orange', marginTop: 4 }}>{i18n.t('register-password-warning')}</Text>
-            }
+            <HelperText type="error" visible={!passwordSecure}>
+              {i18n.t('register-password-warning')}
+            </HelperText>
           </View>}
 
           <View style={[styles.container]}>
@@ -145,16 +149,16 @@ const Register = ({ route, navigation }) => {
 
           <SafeAreaProvider>
             <View style={[styles.container]}>
-                <DatePickerInput
-                  style={{ backgroundColor: colors.background }}
-                  locale={Localization.locale.startsWith("en") || Localization.locale.startsWith("de") ? Localization.locale : "en-GB"}
-                  label={i18n.t('dob') + " *"}
-                  value={dob}
-                  onChange={(d) => { if (d) { setDob(d) } }}
-                  inputMode="start"
-                  validRange={validDobRange}
-                />
-              </View>
+              <DatePickerInput
+                style={{ backgroundColor: colors.background }}
+                locale={Localization.locale.startsWith("en") || Localization.locale.startsWith("de") ? Localization.locale : "en-GB"}
+                label={i18n.t('dob') + " *"}
+                value={dob}
+                onChange={(d) => { if (d) { setDob(d) } }}
+                inputMode="start"
+                validRange={validDobRange}
+              />
+            </View>
           </SafeAreaProvider>
 
           <View style={[styles.container]}>

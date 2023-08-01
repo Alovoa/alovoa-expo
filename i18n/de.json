@@ -151,5 +151,6 @@
     "location": {
         "no-permission": "Standortberechtigung nicht gesetzt",
         "no-signal": "Kein GPS Signal gefunden"
-    }
+    },
+    "email-invalid": "Die Emailadresse ist ungültig."
 }

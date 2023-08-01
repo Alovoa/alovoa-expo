@@ -151,5 +151,6 @@
     "location": {
         "no-permission": "Location permission not set",
         "no-signal": "No GPS signal found"
-    }
+    },
+    "email-invalid": "Invalid email address."
 }
