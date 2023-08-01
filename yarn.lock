@@ -3807,6 +3807,11 @@ expo-secure-store@~12.3.1:
   resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-12.3.1.tgz#7e5ba94f6e7374f132108c9feb5cc811568f3db6"
   integrity sha512-XLIgWDiIuiR0c+AA4NCWWibAMHCZUyRcy+lQBU49U6rvG+xmd3YrBJfQjfqAPyLroEqnLPGTWUX57GyRsfDOQw==
 
+expo-sharing@^11.5.0:
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-11.5.0.tgz#a8cad65874d882b7f75b12856b4ef55ea9b60a2d"
+  integrity sha512-uerM5YH1FKDZXfkP9ORebvlMVOPP/AfoYgYBez6a8G9fztNYHnRCA6mgK+3aQmpnb3ltmjnAZC39kH18bTNcVw==
+
 expo-splash-screen@0.20.5:
   version "0.20.5"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.20.5.tgz#ebeba3e3977606830f74f506ab2cc25042bb7efd"
@@ -6397,6 +6402,11 @@ react-native-paper-dates@^0.18.12:
   integrity sha512-CyOgwTGFIxSV3lHgvh1R506RTs9gxPVsPo5LXbjLG9NxqsTU17qO6UDXNjck1JhW1Hew98L88TnzvO3saZEYfA==
   dependencies:
     color "^3.2.1"
+
+react-native-paper-select@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-paper-select/-/react-native-paper-select-1.0.2.tgz#d25d0ee0862ed842fb35c82eb25ef87fe1926522"
+  integrity sha512-QRuHuPii4v3s6mhTcFaWIT5JyFiNMpu0cgkpG/MrB+ysht6edwq2q57hzvfjZy9fbVA5wctZwJrd6xIccBCs6Q==
 
 react-native-paper@5.9.1:
   version "5.9.1"
