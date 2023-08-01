@@ -28,7 +28,7 @@
     "expo-modules-autolinking": "~1.5.0",
     "expo-radio-button": "^1.0.8",
     "expo-secure-store": "~12.3.1",
-    "expo-splash-screen": "~0.20.4",
+    "expo-splash-screen": "0.20.5",
     "expo-status-bar": "~1.6.0",
     "expo-web-browser": "~12.3.2",
     "i18n-js": "4.2.0",
