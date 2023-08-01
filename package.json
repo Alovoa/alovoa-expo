@@ -38,7 +38,8 @@
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.7",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react-art": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-native": "0.72.3",
     "react-native-autocomplete-dropdown": "3.0.2",
     "react-native-card-stack-swiper": "^1.2.5",
@@ -55,7 +56,7 @@
     "react-native-swiper-flatlist": "3.2.3",
     "react-native-tab-view": "^3.3.0",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.19.6",
+    "react-native-web": "^0.19.7",
     "react-navigation": "^4.4.4",
     "semver": "^7.5.2",
     "xml2js": "^0.5.0"
