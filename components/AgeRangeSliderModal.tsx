@@ -100,7 +100,7 @@ const AgeRangeSliderModal = ({
           </View>
         </Modal>
       </Portal>
-      <Text style={{paddingBottom: 2}}>{title}</Text>
+      <Text style={{paddingBottom: 4}}>{title}</Text>
       <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
         style={{ alignSelf: 'stretch' }} onPress={showModal}>{buttonText}</Button>
     </View>

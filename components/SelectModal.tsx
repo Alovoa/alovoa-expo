@@ -3,12 +3,13 @@ import { SelectModalT } from "../types";
 import { Modal, Portal, Text, Button, Checkbox, useTheme, IconButton } from 'react-native-paper';
 import { View } from "react-native";
 
-const SelectModal = ({ multi = false, minItems = 0, title, data, selected, onValueChanged }: SelectModalT) => {
+const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, data, selected, onValueChanged }: SelectModalT) => {
 
   const { colors } = useTheme();
   const [selectedIds, setSelectedIds] = React.useState(selected);
   const [buttonText, setButtonText] = React.useState("");
   const [visible, setVisible] = React.useState(false);
+  const [buttonDisabled, setButtonDisabled] = React.useState(disabled);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: 12, borderRadius: 8 };
@@ -26,6 +27,10 @@ const SelectModal = ({ multi = false, minItems = 0, title, data, selected, onVal
     updateButtonText();
     setSelectedIds(selected);
   }, [selected]);
+
+  React.useEffect(() => {
+    setButtonDisabled(disabled);
+  }, [disabled]);
 
   return (
     <View>
@@ -61,6 +66,7 @@ const SelectModal = ({ multi = false, minItems = 0, title, data, selected, onVal
                   } else {
                     setSelectedIds([item.id]);
                     onValueChanged(item.id, true);
+                    hideModal();
                   }
                 }}
               />
@@ -68,8 +74,8 @@ const SelectModal = ({ multi = false, minItems = 0, title, data, selected, onVal
           </View>
         </Modal>
       </Portal>
-      <Text style={{paddingBottom: 2}}>{title}</Text>
-      <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
+      <Text style={{ paddingBottom: 4 }}>{title}</Text>
+      <Button disabled={buttonDisabled} icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
         style={{ alignSelf: 'stretch' }} onPress={showModal}>{buttonText}</Button>
     </View>
   );

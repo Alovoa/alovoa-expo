@@ -28,6 +28,7 @@ export type TabBarIconT = {
 };
 
 export type SelectModalT = {
+  disabled: boolean,
   multi: boolean,
   minItems: number,
   title: string;

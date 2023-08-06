@@ -303,19 +303,19 @@ const YourProfile = ({ route, navigation }) => {
                 autoCorrect={false}
               />
             </View>
+
             <View style={{ marginTop: 12 }}>
-              <Text>{i18n.t('profile.intention.title')}</Text>
-              <RadioButton.Group
-                value={intention.toString()}
-                onValueChange={(value: string) => updateIntention(Number(value))}>
-                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.meet')} value={String(Intention.MEET)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.MEET} />
-                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.date')} value={String(Intention.DATE)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.DATE} />
-                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.sex')} value={String(Intention.SEX)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.SEX || !isLegal} />
-              </RadioButton.Group>
+              <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
+                data={[{ id: Intention.MEET, title: i18n.t('profile.intention.meet')},
+                { id: Intention.DATE, title: i18n.t('profile.intention.date')},
+                { id: Intention.SEX, title: i18n.t('profile.intention.sex')}]}
+                selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
+                  updateIntention(id);
+                }}></SelectModal>
             </View>
 
             <View style={{ marginTop: 12 }}>
-              <SelectModal multi={true} minItems={1} title={i18n.t('profile.gender')} data={[{ id: GenderEnum.MALE, title: i18n.t('gender.male') },
+              <SelectModal disabled={false} multi={true} minItems={1} title={i18n.t('profile.gender')} data={[{ id: GenderEnum.MALE, title: i18n.t('gender.male') },
               { id: GenderEnum.FEMALE, title: i18n.t('gender.female') }, { id: GenderEnum.OTHER, title: i18n.t('gender.other') }]}
                 selected={preferredGenders} onValueChanged={function (id: number, checked: boolean): void {
                   updateGenders(id, checked);
@@ -395,7 +395,7 @@ const YourProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ marginTop: 12 }}>
-              <SelectModal multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
+              <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
                 data={[{ id: UserMiscInfoEnum.RELATIONSHIP_SINGLE, title: i18n.t('profile.misc-info.relationship.single') },
                 { id: UserMiscInfoEnum.RELATIONSHIP_TAKEN, title: i18n.t('profile.misc-info.relationship.taken') },
                 { id: UserMiscInfoEnum.RELATIONSHIP_OPEN, title: i18n.t('profile.misc-info.relationship.open') },
@@ -406,7 +406,7 @@ const YourProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ marginTop: 12 }}>
-              <SelectModal multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
+              <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
                 data={[{ id: UserMiscInfoEnum.KIDS_NO, title: i18n.t('profile.misc-info.kids.no') },
                 { id: UserMiscInfoEnum.KIDS_YES, title: i18n.t('profile.misc-info.kids.yes') }]}
                 selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
@@ -415,7 +415,7 @@ const YourProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ marginTop: 12 }}>
-              <SelectModal multi={true} minItems={0} title={i18n.t('profile.misc-info.drugs.title')}
+              <SelectModal disabled={false} multi={true} minItems={0} title={i18n.t('profile.misc-info.drugs.title')}
                 data={[{ id: UserMiscInfoEnum.DRUGS_ALCOHOL, title: i18n.t('profile.misc-info.drugs.alcohol') },
                 { id: UserMiscInfoEnum.DRUGS_TOBACCO, title: i18n.t('profile.misc-info.drugs.tobacco') },
                 { id: UserMiscInfoEnum.DRUGS_CANNABIS, title: i18n.t('profile.misc-info.drugs.cannabis') },
@@ -426,7 +426,7 @@ const YourProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ marginTop: 12 }}>
-              <SelectModal multi={false} minItems={1} title={i18n.t('profile.units.title')}
+              <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.units.title')}
                 data={[{ id: UnitsEnum.SI, title: i18n.t('profile.units.si') },
                 { id: UnitsEnum.IMPERIAL, title: i18n.t('profile.units.imperial') }]}
                 selected={[units]} onValueChanged={function (id: number, checked: boolean): void {
