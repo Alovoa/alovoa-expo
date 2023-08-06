@@ -275,193 +275,191 @@ const YourProfile = ({ route, navigation }) => {
 
   return (
     <AutocompleteDropdownContextProvider>
-      <PaperProvider>
-        <ScrollView style={[styles.containerProfile]} keyboardShouldPersistTaps='handled'
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
-          <TouchableOpacity
-            onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>
-            <ImageBackground source={{ uri: profilePic }} style={styles.photo}>
-            </ImageBackground>
-          </TouchableOpacity>
+      <ScrollView style={[styles.containerProfile]} keyboardShouldPersistTaps='handled'
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
+        <TouchableOpacity
+          onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>
+          <ImageBackground source={{ uri: profilePic }} style={styles.photo}>
+          </ImageBackground>
+        </TouchableOpacity>
 
-          <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54 }}>
-            <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
+        <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54 }}>
+          <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
+        </View>
+
+        <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
+          <Text style={[styles.name, {}]}>{name + ", " + age}</Text>
+          <View style={{ height: 140, width: 300, marginTop: 24 }}>
+            <TextInput
+              multiline
+              mode="outlined"
+              onChangeText={(text) => {
+                setDescription(text)
+              }}
+              placeholder={i18n.t('profile.onboarding.description-placeholder')}
+              maxLength={200}
+              value={description}
+              autoCorrect={false}
+            />
           </View>
 
-          <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
-            <Text style={[styles.name, {}]}>{name + ", " + age}</Text>
-            <View style={{ height: 140, width: 300, marginTop: 24 }}>
-              <TextInput
-                multiline
-                mode="outlined"
-                onChangeText={(text) => {
-                  setDescription(text)
-                }}
-                placeholder={i18n.t('profile.onboarding.description-placeholder')}
-                maxLength={200}
-                value={description}
-                autoCorrect={false}
-              />
-            </View>
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
+              data={[{ id: Intention.MEET, title: i18n.t('profile.intention.meet') },
+              { id: Intention.DATE, title: i18n.t('profile.intention.date') },
+              { id: Intention.SEX, title: i18n.t('profile.intention.sex') }]}
+              selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
+                updateIntention(id);
+              }}></SelectModal>
+          </View>
 
-            <View style={{ marginTop: 12 }}>
-              <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
-                data={[{ id: Intention.MEET, title: i18n.t('profile.intention.meet')},
-                { id: Intention.DATE, title: i18n.t('profile.intention.date')},
-                { id: Intention.SEX, title: i18n.t('profile.intention.sex')}]}
-                selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
-                  updateIntention(id);
-                }}></SelectModal>
-            </View>
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={true} minItems={1} title={i18n.t('profile.gender')} data={[{ id: GenderEnum.MALE, title: i18n.t('gender.male') },
+            { id: GenderEnum.FEMALE, title: i18n.t('gender.female') }, { id: GenderEnum.OTHER, title: i18n.t('gender.other') }]}
+              selected={preferredGenders} onValueChanged={function (id: number, checked: boolean): void {
+                updateGenders(id, checked);
+              }}></SelectModal>
+          </View>
 
-            <View style={{ marginTop: 12 }}>
-              <SelectModal disabled={false} multi={true} minItems={1} title={i18n.t('profile.gender')} data={[{ id: GenderEnum.MALE, title: i18n.t('gender.male') },
-              { id: GenderEnum.FEMALE, title: i18n.t('gender.female') }, { id: GenderEnum.OTHER, title: i18n.t('gender.other') }]}
-                selected={preferredGenders} onValueChanged={function (id: number, checked: boolean): void {
-                  updateGenders(id, checked);
-                }}></SelectModal>
-            </View>
-
-            <View style={{ marginTop: 12 }}>
-              <AgeRangeSliderModal title={i18n.t('profile.preferred-age-range')} titleLower={i18n.t('profile.age.min')} titleUpper={i18n.t('profile.age.max')}
-                valueLower={minAge} valueUpper={maxAge} onValueLowerChanged={updateMinAge} onValueUpperChanged={updateMaxAge}></AgeRangeSliderModal>
-            </View>
+          <View style={{ marginTop: 12 }}>
+            <AgeRangeSliderModal title={i18n.t('profile.preferred-age-range')} titleLower={i18n.t('profile.age.min')} titleUpper={i18n.t('profile.age.max')}
+              valueLower={minAge} valueUpper={maxAge} onValueLowerChanged={updateMinAge} onValueUpperChanged={updateMaxAge}></AgeRangeSliderModal>
+          </View>
 
 
-            <View style={{ marginTop: 24 }}>
-              <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>
-              {
-                interests.map((item, index) => (
-                  <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
-                    <Text>{item.text}</Text>
-                  </Button>
-                ))
-              }
-              {interests.length < MAX_INTERESTS &&
-                <View style={{ flexDirection: 'row', marginBottom: 8 }}>
-                  <AutocompleteDropdown
-                    EmptyResultComponent={<></>}
-                    controller={controller => {
-                      dropdownController.current = controller
-                    }}
-                    direction={Platform.select({ ios: 'down' })}
-                    dataSet={suggestionsList}
-                    onChangeText={text => {
-                      setInterest(text);
-                      getSuggestions(text);
-                    }
-                    }
-                    onSelectItem={item => {
-                      item && setInterest(item.id);
-                      item && addInterest(item.id);
-                    }}
-                    debounce={500}
-                    suggestionsListMaxHeight={200}
-                    onClear={onClearPress}
-                    loading={loading}
-                    useFilter={false}
-                    textInputProps={{
-                      backgroundColor: '#FDE7F4',
-                      placeholder: 'starwars',
-                      autoCorrect: false,
-                      autoCapitalize: 'none',
-                      style: {
-                        borderRadius: 25,
-                        paddingLeft: 18,
-                      },
-                    }}
-                    rightButtonsContainerStyle={{
-                      right: 8,
-                      height: 30,
-                      backgroundColor: '#FDE7F4',
-                      alignSelf: 'center',
-                    }}
-                    inputContainerStyle={{
-                      backgroundColor: '#FDE7F4',
-                      borderRadius: 25,
-                    }}
-                    suggestionsListContainerStyle={{
-                    }}
-                    containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-                    renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
-                    ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
-                    ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
-                    inputHeight={50}
-                    showChevron={false}
-                    closeOnBlur={false}
-                  />
-                  <IconButton icon='plus' mode='contained' style={{ width: 38, height: 38 }} size={20} onPress={() => addInterest(interest)} />
-                </View>}
-            </View>
-
-            <View style={{ marginTop: 12 }}>
-              <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
-                data={[{ id: UserMiscInfoEnum.RELATIONSHIP_SINGLE, title: i18n.t('profile.misc-info.relationship.single') },
-                { id: UserMiscInfoEnum.RELATIONSHIP_TAKEN, title: i18n.t('profile.misc-info.relationship.taken') },
-                { id: UserMiscInfoEnum.RELATIONSHIP_OPEN, title: i18n.t('profile.misc-info.relationship.open') },
-                { id: UserMiscInfoEnum.RELATIONSHIP_OTHER, title: i18n.t('profile.misc-info.relationship.other') }]}
-                selected={miscInfoRelationship} onValueChanged={function (id: number, checked: boolean): void {
-                  updateMiscInfo(id, checked);
-                }}></SelectModal>
-            </View>
-
-            <View style={{ marginTop: 12 }}>
-              <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
-                data={[{ id: UserMiscInfoEnum.KIDS_NO, title: i18n.t('profile.misc-info.kids.no') },
-                { id: UserMiscInfoEnum.KIDS_YES, title: i18n.t('profile.misc-info.kids.yes') }]}
-                selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
-                  updateMiscInfo(id, checked);
-                }}></SelectModal>
-            </View>
-
-            <View style={{ marginTop: 12 }}>
-              <SelectModal disabled={false} multi={true} minItems={0} title={i18n.t('profile.misc-info.drugs.title')}
-                data={[{ id: UserMiscInfoEnum.DRUGS_ALCOHOL, title: i18n.t('profile.misc-info.drugs.alcohol') },
-                { id: UserMiscInfoEnum.DRUGS_TOBACCO, title: i18n.t('profile.misc-info.drugs.tobacco') },
-                { id: UserMiscInfoEnum.DRUGS_CANNABIS, title: i18n.t('profile.misc-info.drugs.cannabis') },
-                { id: UserMiscInfoEnum.DRUGS_OTHER, title: i18n.t('profile.misc-info.drugs.other') }]}
-                selected={miscInfoDrugs} onValueChanged={function (id: number, checked: boolean): void {
-                  updateMiscInfo(id, checked);
-                }}></SelectModal>
-            </View>
-
-            <View style={{ marginTop: 12 }}>
-              <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.units.title')}
-                data={[{ id: UnitsEnum.SI, title: i18n.t('profile.units.si') },
-                { id: UnitsEnum.IMPERIAL, title: i18n.t('profile.units.imperial') }]}
-                selected={[units]} onValueChanged={function (id: number, checked: boolean): void {
-                  if (checked) {
-                    updateUnits(id);
+          <View style={{ marginTop: 24 }}>
+            <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>
+            {
+              interests.map((item, index) => (
+                <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+                  <Text>{item.text}</Text>
+                </Button>
+              ))
+            }
+            {interests.length < MAX_INTERESTS &&
+              <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+                <AutocompleteDropdown
+                  EmptyResultComponent={<></>}
+                  controller={controller => {
+                    dropdownController.current = controller
+                  }}
+                  direction={Platform.select({ ios: 'down' })}
+                  dataSet={suggestionsList}
+                  onChangeText={text => {
+                    setInterest(text);
+                    getSuggestions(text);
                   }
-                }}></SelectModal>
-            </View>
-
-            <View style={{ marginTop: 128 }}>
-              <Button mode='contained' onPress={() => logout()}>
-                <Text>{i18n.t('profile.logout')}</Text>
-              </Button>
-              <View style={{ marginTop: 24 }}>
-                <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-                  WebBrowser.openBrowserAsync(URL.PRIVACY);
-                }}>{i18n.t('privacy-policy')}</Text>
-                <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-                  WebBrowser.openBrowserAsync(URL.TOS);
-                }}>{i18n.t('tos')}</Text>
-                <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-                  WebBrowser.openBrowserAsync(URL.IMPRINT);
-                }}>{i18n.t('imprint')}</Text>
-                <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-                  downloadUserData();
-                }}>{i18n.t('profile.download-userdata')}</Text>
-                <Text style={[styles.link, { padding: 8, opacity: requestingDeletion ? 0.3 : 1 }]} onPress={() => {
-                  deleteAccount();
-                }}>{i18n.t('profile.delete-account')}</Text>
-              </View>
-            </View>
-
+                  }
+                  onSelectItem={item => {
+                    item && setInterest(item.id);
+                    item && addInterest(item.id);
+                  }}
+                  debounce={500}
+                  suggestionsListMaxHeight={200}
+                  onClear={onClearPress}
+                  loading={loading}
+                  useFilter={false}
+                  textInputProps={{
+                    backgroundColor: '#FDE7F4',
+                    placeholder: 'starwars',
+                    autoCorrect: false,
+                    autoCapitalize: 'none',
+                    style: {
+                      borderRadius: 25,
+                      paddingLeft: 18,
+                    },
+                  }}
+                  rightButtonsContainerStyle={{
+                    right: 8,
+                    height: 30,
+                    backgroundColor: '#FDE7F4',
+                    alignSelf: 'center',
+                  }}
+                  inputContainerStyle={{
+                    backgroundColor: '#FDE7F4',
+                    borderRadius: 25,
+                  }}
+                  suggestionsListContainerStyle={{
+                  }}
+                  containerStyle={{ flexGrow: 1, flexShrink: 1 }}
+                  renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
+                  ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
+                  ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
+                  inputHeight={50}
+                  showChevron={false}
+                  closeOnBlur={false}
+                />
+                <IconButton icon='plus' mode='contained' style={{ width: 38, height: 38 }} size={20} onPress={() => addInterest(interest)} />
+              </View>}
           </View>
-        </ScrollView>
-      </PaperProvider>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
+              data={[{ id: UserMiscInfoEnum.RELATIONSHIP_SINGLE, title: i18n.t('profile.misc-info.relationship.single') },
+              { id: UserMiscInfoEnum.RELATIONSHIP_TAKEN, title: i18n.t('profile.misc-info.relationship.taken') },
+              { id: UserMiscInfoEnum.RELATIONSHIP_OPEN, title: i18n.t('profile.misc-info.relationship.open') },
+              { id: UserMiscInfoEnum.RELATIONSHIP_OTHER, title: i18n.t('profile.misc-info.relationship.other') }]}
+              selected={miscInfoRelationship} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked);
+              }}></SelectModal>
+          </View>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
+              data={[{ id: UserMiscInfoEnum.KIDS_NO, title: i18n.t('profile.misc-info.kids.no') },
+              { id: UserMiscInfoEnum.KIDS_YES, title: i18n.t('profile.misc-info.kids.yes') }]}
+              selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked);
+              }}></SelectModal>
+          </View>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={true} minItems={0} title={i18n.t('profile.misc-info.drugs.title')}
+              data={[{ id: UserMiscInfoEnum.DRUGS_ALCOHOL, title: i18n.t('profile.misc-info.drugs.alcohol') },
+              { id: UserMiscInfoEnum.DRUGS_TOBACCO, title: i18n.t('profile.misc-info.drugs.tobacco') },
+              { id: UserMiscInfoEnum.DRUGS_CANNABIS, title: i18n.t('profile.misc-info.drugs.cannabis') },
+              { id: UserMiscInfoEnum.DRUGS_OTHER, title: i18n.t('profile.misc-info.drugs.other') }]}
+              selected={miscInfoDrugs} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked);
+              }}></SelectModal>
+          </View>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.units.title')}
+              data={[{ id: UnitsEnum.SI, title: i18n.t('profile.units.si') },
+              { id: UnitsEnum.IMPERIAL, title: i18n.t('profile.units.imperial') }]}
+              selected={[units]} onValueChanged={function (id: number, checked: boolean): void {
+                if (checked) {
+                  updateUnits(id);
+                }
+              }}></SelectModal>
+          </View>
+
+          <View style={{ marginTop: 128 }}>
+            <Button mode='contained' onPress={() => logout()}>
+              <Text>{i18n.t('profile.logout')}</Text>
+            </Button>
+            <View style={{ marginTop: 24 }}>
+              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                WebBrowser.openBrowserAsync(URL.PRIVACY);
+              }}>{i18n.t('privacy-policy')}</Text>
+              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                WebBrowser.openBrowserAsync(URL.TOS);
+              }}>{i18n.t('tos')}</Text>
+              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                WebBrowser.openBrowserAsync(URL.IMPRINT);
+              }}>{i18n.t('imprint')}</Text>
+              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                downloadUserData();
+              }}>{i18n.t('profile.download-userdata')}</Text>
+              <Text style={[styles.link, { padding: 8, opacity: requestingDeletion ? 0.3 : 1 }]} onPress={() => {
+                deleteAccount();
+              }}>{i18n.t('profile.delete-account')}</Text>
+            </View>
+          </View>
+
+        </View>
+      </ScrollView>
     </AutocompleteDropdownContextProvider>
   );
 };
