@@ -24,6 +24,7 @@ import * as FileSystem from 'expo-file-system';
 import { StorageAccessFramework } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import SelectModal from "../components/SelectModal";
+import AgeRangeSliderModal from "../components/RangeSliderModal";
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
@@ -64,8 +65,6 @@ const YourProfile = ({ route, navigation }) => {
   const [suggestionsList, setSuggestionsList] = React.useState(Array<any>)
   const [minAge, setMinAge] = React.useState(MIN_AGE)
   const [maxAge, setMaxAge] = React.useState(MAX_AGE)
-  const [minAgeText, setMinAgeText] = React.useState(MIN_AGE)
-  const [maxAgeText, setMaxAgeText] = React.useState(MAX_AGE)
   const dropdownController = React.useRef<AutocompleteDropdownRef>()
   const [units, setUnits] = React.useState(UnitsEnum.SI)
 
@@ -139,8 +138,6 @@ const YourProfile = ({ route, navigation }) => {
     setInterests(data.user.interests);
     setMinAge(data.user.preferedMinAge);
     setMaxAge(data.user.preferedMaxAge);
-    setMinAgeText(data.user.preferedMinAge);
-    setMaxAgeText(data.user.preferedMaxAge);
     setUnits(data.user.units);
 
     let intentionText = data.user.intention.text;
@@ -324,42 +321,13 @@ const YourProfile = ({ route, navigation }) => {
                   updateGenders(id, checked);
                 }}></SelectModal>
             </View>
+
             <View style={{ marginTop: 12 }}>
-              <Text>{i18n.t('profile.age.min')}</Text>
-              <Text>{minAgeText}</Text>
-              <Slider
-                value={minAge}
-                minimumValue={MIN_AGE}
-                maximumValue={maxAge}
-                minimumTrackTintColor={colors.secondary}
-                maximumTrackTintColor={GRAY}
-                thumbTintColor={colors.primary}
-                step={1}
-                onValueChange={value => {
-                  setMinAgeText(value);
-                }}
-                onSlidingComplete={value => {
-                  updateMinAge(value);
-                }}
-              />
-              <Text>{i18n.t('profile.age.max')}</Text>
-              <Text>{maxAgeText}</Text>
-              <Slider
-                value={maxAge}
-                minimumValue={minAge}
-                maximumValue={MAX_AGE}
-                minimumTrackTintColor={colors.secondary}
-                maximumTrackTintColor={GRAY}
-                thumbTintColor={colors.primary}
-                step={1}
-                onValueChange={value => {
-                  setMaxAgeText(value);
-                }}
-                onSlidingComplete={value => {
-                  updateMaxAge(value);
-                }}
-              />
+              <AgeRangeSliderModal title={i18n.t('profile.preferred-age-range')} titleLower={i18n.t('profile.age.min')} titleUpper={i18n.t('profile.age.max')}
+                valueLower={minAge} valueUpper={maxAge} onValueLowerChanged={updateMinAge} onValueUpperChanged={updateMaxAge}></AgeRangeSliderModal>
             </View>
+
+            
             <View style={{ marginTop: 24 }}>
               <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>
               {

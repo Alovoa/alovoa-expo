@@ -71,8 +71,8 @@ const SelectModal = ({ multi = false, minItems = 0, title, data, selected, onVal
           </View>
         </Modal>
       </Portal>
-      <Text>{title}</Text>
-      <Button icon="chevron-right" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
+      <Text style={{paddingBottom: 2}}>{title}</Text>
+      <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
         style={{ alignSelf: 'stretch' }} onPress={showModal}>{buttonText}</Button>
     </View>
   );

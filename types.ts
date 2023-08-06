@@ -30,10 +30,20 @@ export type TabBarIconT = {
 export type SelectModalT = {
   multi: boolean,
   minItems: number,
-  title: any;
+  title: string;
   data: Array<SelectModalDataT>;
   selected: Array<number>;
   onValueChanged: (id: number, checked: boolean) => void
+};
+
+export type RangeSliderModalT = {
+  title: any;
+  titleLower: string,
+  titleUpper: string,
+  valueLower: number,
+  valueUpper: number,
+  onValueLowerChanged: (value: number) => void,
+  onValueUpperChanged: (value: number) => void
 };
 
 export type SelectModalDataT = {
