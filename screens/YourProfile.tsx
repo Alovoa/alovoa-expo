@@ -9,9 +9,9 @@ import {
   RefreshControl,
   Keyboard
 } from "react-native";
-import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton, PaperProvider } from "react-native-paper";
 import styles, { GRAY } from "../assets/styles";
-import { UserInterestAutocomplete, YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum, UserDto } from "../types";
+import { UserInterestAutocomplete, YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum, UserDto, GenderEnum, Gender, GenderMap } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -23,26 +23,15 @@ import { debounce } from "lodash";
 import * as FileSystem from 'expo-file-system';
 import { StorageAccessFramework } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
+import SelectModal from "../components/SelectModal";
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
 
 const i18n = I18N.getI18n()
 const MAX_INTERESTS = 5;
-const MIN_AGE = 16;
+const MIN_AGE = 18;
 const MAX_AGE = 100;
-
-enum Gender {
-  MALE = 1,
-  FEMALE = 2,
-  OTHER = 3
-}
-
-enum GenderText {
-  MALE = "male",
-  FEMALE = "female",
-  OTHER = "other"
-}
 
 enum Intention {
   MEET = 1,
@@ -81,20 +70,11 @@ const YourProfile = ({ route, navigation }) => {
   const [units, setUnits] = React.useState(UnitsEnum.SI)
 
   const [isLegal, setIsLegal] = React.useState(false);
-  const [miscInfoDrugsTobacco, setMiscInfoDrugsTobacco] = React.useState(false)
-  const [miscInfoDrugsAlcohol, setMiscInfoDrugsAlcohol] = React.useState(false)
-  const [miscInfoDrugsCannabis, setMiscInfoDrugsCannabis] = React.useState(false)
-  const [miscInfoDrugsOther, setMiscInfoDrugsOther] = React.useState(false)
-  const [miscInfoKidsNo, setMiscInfoKidsNo] = React.useState(false)
-  const [miscInfoKidsYes, setMiscInfoKidsYes] = React.useState(false)
-  const [miscInfoRelationShipSingle, setMiscInfoRelationShipSingle] = React.useState(false)
-  const [miscInfoRelationShipTaken, setMiscInfoRelationShipTaken] = React.useState(false)
-  const [miscInfoRelationShipOpen, setMiscInfoRelationShipOpen] = React.useState(false)
-  const [miscInfoRelationShipOther, setMiscInfoRelationShipOther] = React.useState(false)
 
-  const [isGenderMaleEnabled, setIsGenderMaleEnabled] = React.useState(false);
-  const [isGenderFemaleEnabled, setIsGenderFemaleEnabled] = React.useState(false);
-  const [isGenderOtherEnabled, setIsGenderOtherEnabled] = React.useState(false);
+  const [preferredGenders, setPreferredGenders] = React.useState(Array<number>);
+  const [miscInfoKids, setMiscInfoKids] = React.useState(Array<number>);
+  const [miscInfoDrugs, setMiscInfoDrugs] = React.useState(Array<number>);
+  const [miscInfoRelationship, setMiscInfoRelationship] = React.useState(Array<number>);
 
   const descriptionRef = React.useRef(description);
 
@@ -112,19 +92,6 @@ const YourProfile = ({ route, navigation }) => {
     debounceDescriptionHandler();
   }, [description]);
 
-  const toggleGenderMaleSwitch = () => {
-    setIsGenderMaleEnabled(previousState => !previousState)
-    console.log("TEST")
-    updateGenders(Gender.MALE, isGenderMaleEnabled);
-  };
-  const toggleGenderFemaleSwitch = () => {
-    setIsGenderFemaleEnabled(previousState => !previousState);
-    updateGenders(Gender.FEMALE, isGenderFemaleEnabled);
-  };
-  const toggleGenderOtherSwitch = () => {
-    setIsGenderOtherEnabled(previousState => !previousState);
-    updateGenders(Gender.OTHER, isGenderOtherEnabled);
-  };
   const onClearPress = React.useCallback(() => {
     Keyboard.dismiss();
     setSuggestionsList([])
@@ -189,98 +156,20 @@ const YourProfile = ({ route, navigation }) => {
         break;
     }
 
-    let gendersData = data.user.preferedGenders.map(item => item.text);
-    setIsGenderMaleEnabled(gendersData.includes(GenderText.MALE));
-    setIsGenderFemaleEnabled(gendersData.includes(GenderText.FEMALE));
-    setIsGenderOtherEnabled(gendersData.includes(GenderText.OTHER));
+    setPreferredGenders(data.user.preferedGenders.map(item => item.id));
 
-    let miscInfoData = data.user.miscInfos.map(item => item.value);
-    setMiscInfoDrugsTobacco(miscInfoData.includes(UserMiscInfoEnum.DRUGS_TOBACCO));
-    setMiscInfoDrugsAlcohol(miscInfoData.includes(UserMiscInfoEnum.DRUGS_ALCOHOL));
-    setMiscInfoDrugsCannabis(miscInfoData.includes(UserMiscInfoEnum.DRUGS_CANNABIS));
-    setMiscInfoDrugsOther(miscInfoData.includes(UserMiscInfoEnum.DRUGS_OTHER));
-    setMiscInfoKidsNo(miscInfoData.includes(UserMiscInfoEnum.KIDS_NO));
-    setMiscInfoKidsYes(miscInfoData.includes(UserMiscInfoEnum.KIDS_YES));
-    setMiscInfoRelationShipSingle(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_SINGLE));
-    setMiscInfoRelationShipTaken(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_TAKEN));
-    setMiscInfoRelationShipOpen(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OPEN));
-    setMiscInfoRelationShipOther(miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OTHER));
+    setMiscInfoDrugs(data.user.miscInfos.filter(item => item.id <= UserMiscInfoEnum.DRUGS_OTHER && item.id >= UserMiscInfoEnum.DRUGS_TOBACCO)
+      .map(item => item.id));
+    setMiscInfoKids(data.user.miscInfos.filter(item => item.id <= UserMiscInfoEnum.KIDS_YES && item.id >= UserMiscInfoEnum.KIDS_NO)
+      .map(item => item.id));
+    setMiscInfoRelationship(data.user.miscInfos.filter(item => item.id <= UserMiscInfoEnum.RELATIONSHIP_OTHER && item.id >= UserMiscInfoEnum.RELATIONSHIP_SINGLE)
+      .map(item => item.id));
 
     setUnits(data.user.units);
   }
   React.useEffect(() => {
     load();
   }, []);
-
-  function toggleUserMisc(info: UserMiscInfoEnum, activated: boolean) {
-
-    switch (info) {
-      case UserMiscInfoEnum.KIDS_NO:
-        setMiscInfoKidsNo(activated);
-        break;
-      case UserMiscInfoEnum.KIDS_YES:
-        setMiscInfoKidsYes(activated);
-        break;
-      case UserMiscInfoEnum.RELATIONSHIP_SINGLE:
-        setMiscInfoRelationShipSingle(activated);
-        break;
-      case UserMiscInfoEnum.RELATIONSHIP_TAKEN:
-        setMiscInfoRelationShipTaken(activated);
-        break;
-      case UserMiscInfoEnum.RELATIONSHIP_OPEN:
-        setMiscInfoRelationShipOpen(activated);
-        break;
-      case UserMiscInfoEnum.RELATIONSHIP_OTHER:
-        setMiscInfoRelationShipOther(activated);
-        break;
-      case UserMiscInfoEnum.DRUGS_ALCOHOL:
-        setMiscInfoDrugsAlcohol(activated);
-        break;
-      case UserMiscInfoEnum.DRUGS_TOBACCO:
-        setMiscInfoDrugsTobacco(activated);
-        break;
-      case UserMiscInfoEnum.DRUGS_CANNABIS:
-        setMiscInfoDrugsCannabis(activated);
-        break;
-      case UserMiscInfoEnum.DRUGS_OTHER:
-        setMiscInfoDrugsOther(activated);
-        break;
-    }
-
-    if (activated) {
-      switch (info) {
-        case UserMiscInfoEnum.KIDS_NO:
-          setMiscInfoKidsYes(false);
-          break;
-        case UserMiscInfoEnum.KIDS_YES:
-          setMiscInfoKidsNo(false);
-          break;
-        case UserMiscInfoEnum.RELATIONSHIP_SINGLE:
-          setMiscInfoRelationShipTaken(false);
-          setMiscInfoRelationShipOpen(false);
-          setMiscInfoRelationShipOther(false);
-          break;
-        case UserMiscInfoEnum.RELATIONSHIP_TAKEN:
-          setMiscInfoRelationShipSingle(false);
-          setMiscInfoRelationShipOpen(false);
-          setMiscInfoRelationShipOther(false);
-          break;
-        case UserMiscInfoEnum.RELATIONSHIP_OPEN:
-          setMiscInfoRelationShipSingle(false);
-          setMiscInfoRelationShipTaken(false);
-          setMiscInfoRelationShipOther(false);
-          break;
-        case UserMiscInfoEnum.RELATIONSHIP_OTHER:
-          setMiscInfoRelationShipSingle(false);
-          setMiscInfoRelationShipTaken(false);
-          setMiscInfoRelationShipOpen(false);
-          break;
-      }
-    }
-
-    updateMiscInfo(info, activated);
-
-  }
 
   async function logout() {
     Global.SetStorage(Global.STORAGE_PAGE, "1");
@@ -333,8 +222,8 @@ const YourProfile = ({ route, navigation }) => {
     setShowIntention(false);
   }
 
-  async function updateGenders(gender: Gender, state: boolean) {
-    await Global.Fetch(Global.format(URL.USER_UPDATE_PREFERED_GENDER, String(gender), state ? "0" : "1"), 'post');
+  async function updateGenders(genderId: number, state: boolean) {
+    await Global.Fetch(Global.format(URL.USER_UPDATE_PREFERED_GENDER, genderId, state ? "1" : "0"), 'post');
   }
 
   async function updateMinAge(num: number) {
@@ -357,7 +246,6 @@ const YourProfile = ({ route, navigation }) => {
   }
 
   async function downloadUserData() {
-
     const response = await Global.Fetch(Global.format(URL.USER_USERDATA, idEnc));
     const userData = JSON.stringify(response.data);
 
@@ -373,7 +261,7 @@ const YourProfile = ({ route, navigation }) => {
       let fileName = FileSystem.documentDirectory + '/alovoa.json';
       await FileSystem.writeAsStringAsync(fileName, userData, { encoding: FileSystem.EncodingType.UTF8 });
       Global.ShowToast(i18n.t('profile.download-userdata-success'));
-      if(await Sharing.isAvailableAsync()) {
+      if (await Sharing.isAvailableAsync()) {
         Sharing.shareAsync(fileName);
       }
     }
@@ -390,292 +278,208 @@ const YourProfile = ({ route, navigation }) => {
 
   return (
     <AutocompleteDropdownContextProvider>
-      <ScrollView style={[styles.containerProfile]} keyboardShouldPersistTaps='handled'
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
-        <TouchableOpacity
-          onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>
-          <ImageBackground source={{ uri: profilePic }} style={styles.photo}>
-          </ImageBackground>
-        </TouchableOpacity>
+      <PaperProvider>
+        <ScrollView style={[styles.containerProfile]} keyboardShouldPersistTaps='handled'
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
+          <TouchableOpacity
+            onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>
+            <ImageBackground source={{ uri: profilePic }} style={styles.photo}>
+            </ImageBackground>
+          </TouchableOpacity>
 
-        <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54 }}>
-          <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
-        </View>
-
-        <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
-          <Text style={[styles.name, {}]}>{name + ", " + age}</Text>
-          <View style={{ height: 140, width: 300, marginTop: 24 }}>
-            <TextInput
-              multiline
-              mode="outlined"
-              onChangeText={(text) => {
-                setDescription(text)
-              }}
-              placeholder={i18n.t('profile.onboarding.description-placeholder')}
-              maxLength={200}
-              value={description}
-              autoCorrect={false}
-            />
-          </View>
-          <View style={{ marginTop: 12 }}>
-            <Text>{i18n.t('profile.intention.title')}</Text>
-            <RadioButton.Group
-              value={intention.toString()}
-              onValueChange={(value: string) => updateIntention(Number(value))}>
-              <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.meet')} value={String(Intention.MEET)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.MEET} />
-              <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.date')} value={String(Intention.DATE)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.DATE} />
-              <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.sex')} value={String(Intention.SEX)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.SEX || !isLegal} />
-            </RadioButton.Group>
+          <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54 }}>
+            <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
           </View>
 
-          <View style={{ marginTop: 12 }}>
-            <Text>{i18n.t('profile.gender')}</Text>
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 12 }}>
-                <Switch onValueChange={toggleGenderMaleSwitch}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={isGenderMaleEnabled ? '#EC407A' : '#eeeeee'}
-                  value={isGenderMaleEnabled} />
-                <Text style={styles.switchText}>{i18n.t('gender.male')}</Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 12 }}>
-                <Switch onValueChange={toggleGenderFemaleSwitch}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={isGenderFemaleEnabled ? '#EC407A' : '#eeeeee'}
-                  value={isGenderFemaleEnabled} />
-                <Text style={styles.switchText}>{i18n.t('gender.female')}</Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: 'center' }}>
-                <Switch onValueChange={toggleGenderOtherSwitch}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={isGenderOtherEnabled ? '#EC407A' : '#eeeeee'}
-                  value={isGenderOtherEnabled} />
-                <Text style={styles.switchText}>{i18n.t('gender.other')}</Text>
-              </View>
+          <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
+            <Text style={[styles.name, {}]}>{name + ", " + age}</Text>
+            <View style={{ height: 140, width: 300, marginTop: 24 }}>
+              <TextInput
+                multiline
+                mode="outlined"
+                onChangeText={(text) => {
+                  setDescription(text)
+                }}
+                placeholder={i18n.t('profile.onboarding.description-placeholder')}
+                maxLength={200}
+                value={description}
+                autoCorrect={false}
+              />
             </View>
-          </View>
-          <View style={{ marginTop: 12 }}>
-            <Text>{i18n.t('profile.age.min')}</Text>
-            <Text>{minAgeText}</Text>
-            <Slider
-              value={minAge}
-              minimumValue={MIN_AGE}
-              maximumValue={maxAge}
-              minimumTrackTintColor={colors.secondary}
-              maximumTrackTintColor={GRAY}
-              thumbTintColor={colors.primary}
-              step={1}
-              onValueChange={value => {
-                setMinAgeText(value);
-              }}
-              onSlidingComplete={value => {
-                updateMinAge(value);
-              }}
-            />
-            <Text>{i18n.t('profile.age.max')}</Text>
-            <Text>{maxAgeText}</Text>
-            <Slider
-              value={maxAge}
-              minimumValue={minAge}
-              maximumValue={MAX_AGE}
-              minimumTrackTintColor={colors.secondary}
-              maximumTrackTintColor={GRAY}
-              thumbTintColor={colors.primary}
-              step={1}
-              onValueChange={value => {
-                setMaxAgeText(value);
-              }}
-              onSlidingComplete={value => {
-                updateMaxAge(value);
-              }}
-            />
-          </View>
-          <View style={{ marginTop: 24 }}>
-            <Text style={{marginBottom: 8}}>{i18n.t('profile.onboarding.interests')}</Text>
-            {
-              interests.map((item, index) => (
-                <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
-                  <Text>{item.text}</Text>
-                </Button>
-              ))
-            }
-            {interests.length < MAX_INTERESTS &&
-              <View style={{ flexDirection: 'row', marginBottom: 8 }}>
-                <AutocompleteDropdown
-                  EmptyResultComponent={<></>}
-                  controller={controller => {
-                    dropdownController.current = controller
-                  }}
-                  direction={Platform.select({ ios: 'down' })}
-                  dataSet={suggestionsList}
-                  onChangeText={text => {
-                    setInterest(text);
-                    getSuggestions(text);
-                  }
-                  }
-                  onSelectItem={item => {
-                    item && setInterest(item.id);
-                    item && addInterest(item.id);
-                  }}
-                  debounce={500}
-                  suggestionsListMaxHeight={200}
-                  onClear={onClearPress}
-                  loading={loading}
-                  useFilter={false}
-                  textInputProps={{
-                    backgroundColor: '#FDE7F4',
-                    placeholder: 'starwars',
-                    autoCorrect: false,
-                    autoCapitalize: 'none',
-                    style: {
-                      borderRadius: 25,
-                      paddingLeft: 18,
-                    },
-                  }}
-                  rightButtonsContainerStyle={{
-                    right: 8,
-                    height: 30,
-                    backgroundColor: '#FDE7F4',
-                    alignSelf: 'center',
-                  }}
-                  inputContainerStyle={{
-                    backgroundColor: '#FDE7F4',
-                    borderRadius: 25,
-                  }}
-                  suggestionsListContainerStyle={{
-                  }}
-                  containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-                  renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
-                  ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
-                  ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
-                  inputHeight={50}
-                  showChevron={false}
-                  closeOnBlur={false}
-                />
-                <IconButton icon='plus' mode='contained' style={{ width: 38, height: 38 }} size={20} onPress={() => addInterest(interest)} />
-              </View>}
-          </View>
-
-
-          <View style={{ marginTop: 24 }}>
-            <Text>{i18n.t('profile.misc-info.relationship.title')}</Text>
-            <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
-              <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 12 }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.RELATIONSHIP_SINGLE, !miscInfoRelationShipSingle) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoRelationShipSingle ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoRelationShipSingle} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.relationship.single')}</Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 12 }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.RELATIONSHIP_TAKEN, !miscInfoRelationShipTaken) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoRelationShipTaken ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoRelationShipTaken} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.relationship.taken')}</Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 12 }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.RELATIONSHIP_OPEN, !miscInfoRelationShipOpen) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoRelationShipOpen ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoRelationShipOpen} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.relationship.open')}</Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: 'center' }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.RELATIONSHIP_OTHER, !miscInfoRelationShipOther) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoRelationShipOther ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoRelationShipOther} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.relationship.other')}</Text>
-              </View>
+            <View style={{ marginTop: 12 }}>
+              <Text>{i18n.t('profile.intention.title')}</Text>
+              <RadioButton.Group
+                value={intention.toString()}
+                onValueChange={(value: string) => updateIntention(Number(value))}>
+                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.meet')} value={String(Intention.MEET)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.MEET} />
+                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.date')} value={String(Intention.DATE)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.DATE} />
+                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.intention.sex')} value={String(Intention.SEX)} style={{ flexDirection: 'row-reverse' }} disabled={!showIntention && intention != Intention.SEX || !isLegal} />
+              </RadioButton.Group>
             </View>
 
-            <Text>{i18n.t('profile.misc-info.kids.title')}</Text>
-            <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
-              <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 12 }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.KIDS_NO, !miscInfoKidsNo) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoKidsNo ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoKidsNo} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.kids.no')}</Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 12 }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.KIDS_YES, !miscInfoKidsYes) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoKidsYes ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoKidsYes} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.kids.yes')}</Text>
-              </View>
+            <View style={{ marginTop: 12 }}>
+              <SelectModal multi={true} minItems={1} title={i18n.t('profile.gender')} data={[{ id: GenderEnum.MALE, title: i18n.t('gender.male') },
+              { id: GenderEnum.FEMALE, title: i18n.t('gender.female') }, { id: GenderEnum.OTHER, title: i18n.t('gender.other') }]}
+                selected={preferredGenders} onValueChanged={function (id: number, checked: boolean): void {
+                  updateGenders(id, checked);
+                }}></SelectModal>
             </View>
-
-            <Text>{i18n.t('profile.misc-info.drugs.title')}</Text>
-            <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
-              <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 12 }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.DRUGS_ALCOHOL, !miscInfoDrugsAlcohol) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoDrugsAlcohol ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoDrugsAlcohol} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.drugs.alcohol')}</Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 12 }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.DRUGS_TOBACCO, !miscInfoDrugsTobacco) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoDrugsTobacco ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoDrugsTobacco} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.drugs.tobacco')}</Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: 'center' }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.DRUGS_CANNABIS, !miscInfoDrugsCannabis) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoDrugsCannabis ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoDrugsCannabis} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.drugs.cannabis')}</Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: 'center' }}>
-                <Switch onValueChange={() => { toggleUserMisc(UserMiscInfoEnum.DRUGS_OTHER, !miscInfoDrugsOther) }}
-                  trackColor={{ true: '#F089AB', false: '#9e9e9e' }}
-                  thumbColor={miscInfoDrugsOther ? '#EC407A' : '#eeeeee'}
-                  value={miscInfoDrugsOther} />
-                <Text style={styles.switchText}>{i18n.t('profile.misc-info.drugs.other')}</Text>
-              </View>
+            <View style={{ marginTop: 12 }}>
+              <Text>{i18n.t('profile.age.min')}</Text>
+              <Text>{minAgeText}</Text>
+              <Slider
+                value={minAge}
+                minimumValue={MIN_AGE}
+                maximumValue={maxAge}
+                minimumTrackTintColor={colors.secondary}
+                maximumTrackTintColor={GRAY}
+                thumbTintColor={colors.primary}
+                step={1}
+                onValueChange={value => {
+                  setMinAgeText(value);
+                }}
+                onSlidingComplete={value => {
+                  updateMinAge(value);
+                }}
+              />
+              <Text>{i18n.t('profile.age.max')}</Text>
+              <Text>{maxAgeText}</Text>
+              <Slider
+                value={maxAge}
+                minimumValue={minAge}
+                maximumValue={MAX_AGE}
+                minimumTrackTintColor={colors.secondary}
+                maximumTrackTintColor={GRAY}
+                thumbTintColor={colors.primary}
+                step={1}
+                onValueChange={value => {
+                  setMaxAgeText(value);
+                }}
+                onSlidingComplete={value => {
+                  updateMaxAge(value);
+                }}
+              />
             </View>
-          </View>
-
-          <View style={{ marginTop: 24 }}>
-            <Text>{i18n.t('profile.units.title')}</Text>
-            <RadioButton.Group
-              value={units.toString()}
-              onValueChange={(value: string) => updateUnits(Number(value))}>
-              <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.units.si')} value={String(UnitsEnum.SI)} style={{ flexDirection: 'row-reverse' }} />
-              <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.units.imperial')} value={String(UnitsEnum.IMPERIAL)} style={{ flexDirection: 'row-reverse' }} />
-            </RadioButton.Group>
-          </View>
-
-          <View style={{ marginTop: 128 }}>
-            <Button mode='contained' onPress={() => logout()}>
-              <Text>{i18n.t('profile.logout')}</Text>
-            </Button>
             <View style={{ marginTop: 24 }}>
-              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-                WebBrowser.openBrowserAsync(URL.PRIVACY);
-              }}>{i18n.t('privacy-policy')}</Text>
-              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-                WebBrowser.openBrowserAsync(URL.TOS);
-              }}>{i18n.t('tos')}</Text>
-              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-                WebBrowser.openBrowserAsync(URL.IMPRINT);
-              }}>{i18n.t('imprint')}</Text>
-              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-                downloadUserData();
-              }}>{i18n.t('profile.download-userdata')}</Text>
-              <Text style={[styles.link, { padding: 8, opacity: requestingDeletion ? 0.3 : 1 }]} onPress={() => {
-                deleteAccount();
-              }}>{i18n.t('profile.delete-account')}</Text>
+              <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>
+              {
+                interests.map((item, index) => (
+                  <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+                    <Text>{item.text}</Text>
+                  </Button>
+                ))
+              }
+              {interests.length < MAX_INTERESTS &&
+                <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+                  <AutocompleteDropdown
+                    EmptyResultComponent={<></>}
+                    controller={controller => {
+                      dropdownController.current = controller
+                    }}
+                    direction={Platform.select({ ios: 'down' })}
+                    dataSet={suggestionsList}
+                    onChangeText={text => {
+                      setInterest(text);
+                      getSuggestions(text);
+                    }
+                    }
+                    onSelectItem={item => {
+                      item && setInterest(item.id);
+                      item && addInterest(item.id);
+                    }}
+                    debounce={500}
+                    suggestionsListMaxHeight={200}
+                    onClear={onClearPress}
+                    loading={loading}
+                    useFilter={false}
+                    textInputProps={{
+                      backgroundColor: '#FDE7F4',
+                      placeholder: 'starwars',
+                      autoCorrect: false,
+                      autoCapitalize: 'none',
+                      style: {
+                        borderRadius: 25,
+                        paddingLeft: 18,
+                      },
+                    }}
+                    rightButtonsContainerStyle={{
+                      right: 8,
+                      height: 30,
+                      backgroundColor: '#FDE7F4',
+                      alignSelf: 'center',
+                    }}
+                    inputContainerStyle={{
+                      backgroundColor: '#FDE7F4',
+                      borderRadius: 25,
+                    }}
+                    suggestionsListContainerStyle={{
+                    }}
+                    containerStyle={{ flexGrow: 1, flexShrink: 1 }}
+                    renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
+                    ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
+                    ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
+                    inputHeight={50}
+                    showChevron={false}
+                    closeOnBlur={false}
+                  />
+                  <IconButton icon='plus' mode='contained' style={{ width: 38, height: 38 }} size={20} onPress={() => addInterest(interest)} />
+                </View>}
+            </View>
+
+
+            <View style={{ marginTop: 24 }}>
+              <Text>{i18n.t('profile.misc-info.relationship.title')}</Text>
+              <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
+
+              </View>
+
+              <Text>{i18n.t('profile.misc-info.kids.title')}</Text>
+              <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
+
+              </View>
+
+              <Text>{i18n.t('profile.misc-info.drugs.title')}</Text>
+              <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
+
+              </View>
+            </View>
+
+            <View style={{ marginTop: 24 }}>
+              <Text>{i18n.t('profile.units.title')}</Text>
+              <RadioButton.Group
+                value={units.toString()}
+                onValueChange={(value: string) => updateUnits(Number(value))}>
+                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.units.si')} value={String(UnitsEnum.SI)} style={{ flexDirection: 'row-reverse' }} />
+                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.units.imperial')} value={String(UnitsEnum.IMPERIAL)} style={{ flexDirection: 'row-reverse' }} />
+              </RadioButton.Group>
+            </View>
+
+            <View style={{ marginTop: 128 }}>
+              <Button mode='contained' onPress={() => logout()}>
+                <Text>{i18n.t('profile.logout')}</Text>
+              </Button>
+              <View style={{ marginTop: 24 }}>
+                <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                  WebBrowser.openBrowserAsync(URL.PRIVACY);
+                }}>{i18n.t('privacy-policy')}</Text>
+                <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                  WebBrowser.openBrowserAsync(URL.TOS);
+                }}>{i18n.t('tos')}</Text>
+                <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                  WebBrowser.openBrowserAsync(URL.IMPRINT);
+                }}>{i18n.t('imprint')}</Text>
+                <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                  downloadUserData();
+                }}>{i18n.t('profile.download-userdata')}</Text>
+                <Text style={[styles.link, { padding: 8, opacity: requestingDeletion ? 0.3 : 1 }]} onPress={() => {
+                  deleteAccount();
+                }}>{i18n.t('profile.delete-account')}</Text>
+              </View>
             </View>
 
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </PaperProvider>
     </AutocompleteDropdownContextProvider>
   );
 };

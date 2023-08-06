@@ -27,6 +27,20 @@ export type TabBarIconT = {
   text: string;
 };
 
+export type SelectModalT = {
+  multi: boolean,
+  minItems: number,
+  title: any;
+  data: Array<SelectModalDataT>;
+  selected: Array<number>;
+  onValueChanged: (id: number, checked: boolean) => void
+};
+
+export type SelectModalDataT = {
+  id: number;
+  title: string;
+};
+
 export type DonationDtoListModel = {
   list: Array<DonationDto>;
 }
@@ -57,10 +71,12 @@ export type UserOnboarding = {
 }
 
 export type Gender = {
+  id: number;
   text: string
 }
 
 export type UserMiscInfo = {
+  id: number;
   value: number;
 }
 
@@ -181,6 +197,12 @@ export enum UserMiscInfoEnum {
   KIDS_YES = 22
 }
 
+export enum GenderEnum {
+  MALE = 1,
+  FEMALE = 2,
+  OTHER = 3
+}
+
 export type SearchDto = {
   users: Array<UserDto>;
   message: string;
@@ -268,3 +290,9 @@ export type PasswordResetDto = {
 	captchaText: string;
 	email: string;
 }
+
+export const GenderMap = new Map<number, string>([
+  [GenderEnum.MALE, "male"],
+  [GenderEnum.FEMALE, "female"],
+  [GenderEnum.OTHER, "other"],
+]);
