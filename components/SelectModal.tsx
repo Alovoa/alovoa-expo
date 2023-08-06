@@ -57,14 +57,11 @@ const SelectModal = ({ multi = false, minItems = 0, title, data, selected, onVal
                       copy.push(item.id)
                       setSelectedIds(copy);
                     }
+                    onValueChanged(item.id, !hasItem);
                   } else {
-                    if (hasItem) {
-                      setSelectedIds(Array());
-                    } else {
-                      setSelectedIds(Array(item.id));
-                    }
+                    setSelectedIds([item.id]);
+                    onValueChanged(item.id, true);
                   }
-                  onValueChanged(item.id, !hasItem);
                 }}
               />
             ))}

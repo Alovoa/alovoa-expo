@@ -24,7 +24,7 @@ import * as FileSystem from 'expo-file-system';
 import { StorageAccessFramework } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import SelectModal from "../components/SelectModal";
-import AgeRangeSliderModal from "../components/RangeSliderModal";
+import AgeRangeSliderModal from "../components/AgeRangeSliderModal";
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
@@ -155,12 +155,12 @@ const YourProfile = ({ route, navigation }) => {
 
     setPreferredGenders(data.user.preferedGenders.map(item => item.id));
 
-    setMiscInfoDrugs(data.user.miscInfos.filter(item => item.id <= UserMiscInfoEnum.DRUGS_OTHER && item.id >= UserMiscInfoEnum.DRUGS_TOBACCO)
-      .map(item => item.id));
-    setMiscInfoKids(data.user.miscInfos.filter(item => item.id <= UserMiscInfoEnum.KIDS_YES && item.id >= UserMiscInfoEnum.KIDS_NO)
-      .map(item => item.id));
-    setMiscInfoRelationship(data.user.miscInfos.filter(item => item.id <= UserMiscInfoEnum.RELATIONSHIP_OTHER && item.id >= UserMiscInfoEnum.RELATIONSHIP_SINGLE)
-      .map(item => item.id));
+    setMiscInfoDrugs(data.user.miscInfos.filter(item => item.value <= UserMiscInfoEnum.DRUGS_OTHER && item.value >= UserMiscInfoEnum.DRUGS_TOBACCO)
+      .map(item => item.value));
+    setMiscInfoKids(data.user.miscInfos.filter(item => item.value <= UserMiscInfoEnum.KIDS_YES && item.value >= UserMiscInfoEnum.KIDS_NO)
+      .map(item => item.value));
+    setMiscInfoRelationship(data.user.miscInfos.filter(item => item.value <= UserMiscInfoEnum.RELATIONSHIP_OTHER && item.value >= UserMiscInfoEnum.RELATIONSHIP_SINGLE)
+      .map(item => item.value));
 
     setUnits(data.user.units);
   }
@@ -327,7 +327,7 @@ const YourProfile = ({ route, navigation }) => {
                 valueLower={minAge} valueUpper={maxAge} onValueLowerChanged={updateMinAge} onValueUpperChanged={updateMaxAge}></AgeRangeSliderModal>
             </View>
 
-            
+
             <View style={{ marginTop: 24 }}>
               <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>
               {
@@ -394,32 +394,46 @@ const YourProfile = ({ route, navigation }) => {
                 </View>}
             </View>
 
-
-            <View style={{ marginTop: 24 }}>
-              <Text>{i18n.t('profile.misc-info.relationship.title')}</Text>
-              <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
-
-              </View>
-
-              <Text>{i18n.t('profile.misc-info.kids.title')}</Text>
-              <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
-
-              </View>
-
-              <Text>{i18n.t('profile.misc-info.drugs.title')}</Text>
-              <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
-
-              </View>
+            <View style={{ marginTop: 12 }}>
+              <SelectModal multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
+                data={[{ id: UserMiscInfoEnum.RELATIONSHIP_SINGLE, title: i18n.t('profile.misc-info.relationship.single') },
+                { id: UserMiscInfoEnum.RELATIONSHIP_TAKEN, title: i18n.t('profile.misc-info.relationship.taken') },
+                { id: UserMiscInfoEnum.RELATIONSHIP_OPEN, title: i18n.t('profile.misc-info.relationship.open') },
+                { id: UserMiscInfoEnum.RELATIONSHIP_OTHER, title: i18n.t('profile.misc-info.relationship.other') }]}
+                selected={miscInfoRelationship} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked);
+                }}></SelectModal>
             </View>
 
-            <View style={{ marginTop: 24 }}>
-              <Text>{i18n.t('profile.units.title')}</Text>
-              <RadioButton.Group
-                value={units.toString()}
-                onValueChange={(value: string) => updateUnits(Number(value))}>
-                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.units.si')} value={String(UnitsEnum.SI)} style={{ flexDirection: 'row-reverse' }} />
-                <RadioButton.Item labelVariant="bodyMedium" label={i18n.t('profile.units.imperial')} value={String(UnitsEnum.IMPERIAL)} style={{ flexDirection: 'row-reverse' }} />
-              </RadioButton.Group>
+            <View style={{ marginTop: 12 }}>
+              <SelectModal multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
+                data={[{ id: UserMiscInfoEnum.KIDS_NO, title: i18n.t('profile.misc-info.kids.no') },
+                { id: UserMiscInfoEnum.KIDS_YES, title: i18n.t('profile.misc-info.kids.yes') }]}
+                selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked);
+                }}></SelectModal>
+            </View>
+
+            <View style={{ marginTop: 12 }}>
+              <SelectModal multi={true} minItems={0} title={i18n.t('profile.misc-info.drugs.title')}
+                data={[{ id: UserMiscInfoEnum.DRUGS_ALCOHOL, title: i18n.t('profile.misc-info.drugs.alcohol') },
+                { id: UserMiscInfoEnum.DRUGS_TOBACCO, title: i18n.t('profile.misc-info.drugs.tobacco') },
+                { id: UserMiscInfoEnum.DRUGS_CANNABIS, title: i18n.t('profile.misc-info.drugs.cannabis') },
+                { id: UserMiscInfoEnum.DRUGS_OTHER, title: i18n.t('profile.misc-info.drugs.other') }]}
+                selected={miscInfoDrugs} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked);
+                }}></SelectModal>
+            </View>
+
+            <View style={{ marginTop: 12 }}>
+              <SelectModal multi={false} minItems={1} title={i18n.t('profile.units.title')}
+                data={[{ id: UnitsEnum.SI, title: i18n.t('profile.units.si') },
+                { id: UnitsEnum.IMPERIAL, title: i18n.t('profile.units.imperial') }]}
+                selected={[units]} onValueChanged={function (id: number, checked: boolean): void {
+                  if (checked) {
+                    updateUnits(id);
+                  }
+                }}></SelectModal>
             </View>
 
             <View style={{ marginTop: 128 }}>
