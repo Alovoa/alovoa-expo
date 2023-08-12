@@ -38,13 +38,17 @@ export type SelectModalT = {
 };
 
 export type RangeSliderModalT = {
-  title: any;
+  title: string;
   titleLower: string,
   titleUpper: string,
   valueLower: number,
   valueUpper: number,
   onValueLowerChanged: (value: number) => void,
   onValueUpperChanged: (value: number) => void
+};
+
+export type InterestModalT = {
+  data: Array<UserInterest>;
 };
 
 export type SelectModalDataT = {
@@ -146,6 +150,11 @@ export type UserDto = {
   locationLatitude: number;
   locationLongitude: number;
   lastActiveState: number;
+}
+
+export type UserInterestDto = {
+  id: string,
+  number: string
 }
 
 export type DonationDto = {
