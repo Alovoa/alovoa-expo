@@ -223,6 +223,12 @@ export enum GenderEnum {
   OTHER = 3
 }
 
+export enum IntentionEnum {
+  MEET = 1,
+  DATE = 2,
+  SEX = 3,
+}
+
 export type SearchDto = {
   users: Array<UserDto>;
   message: string;

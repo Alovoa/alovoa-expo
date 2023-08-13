@@ -7,7 +7,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from "react-native";
-import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton, Checkbox } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as ImagePicker from 'expo-image-picker';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
@@ -21,7 +21,7 @@ import * as I18N from "../i18n";
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import * as URL from "../URL";
 import * as Global from "../Global";
-import { UserInterestAutocomplete, UserOnboarding, UserOnboardingResource } from "../types";
+import { IntentionEnum, UserInterestAutocomplete, UserOnboarding, UserOnboardingResource } from "../types";
 import * as ImageManipulator from 'expo-image-manipulator';
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -29,7 +29,7 @@ const IMAGE_HEADER = "data:image/png;base64,";
 
 const i18n = I18N.getI18n()
 
-enum Intention {
+enum Interest {
   One,
   Two,
   Three,
@@ -87,17 +87,15 @@ const Onboarding = () => {
     });
     if (!result.canceled) {
       let format = ImageManipulator.SaveFormat.JPEG;
-      if(Platform.OS == 'web') {
+      if (Platform.OS == 'web') {
         format = ImageManipulator.SaveFormat.WEBP;
       }
-      const saveOptions : ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
-      console.log(saveOptions);
+      const saveOptions: ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
       const resizedImageData = await ImageManipulator.manipulateAsync(
         result.assets[0].uri,
         [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
         saveOptions
       );
-        console.log(resizedImageData.uri);
       setImage(resizedImageData.uri);
       setImageB64(IMAGE_HEADER + resizedImageData.base64);
     }
@@ -114,19 +112,19 @@ const Onboarding = () => {
     return text;
   }
 
-  const getSuggestions = React.useCallback(async (i: Intention, q: string) => {
+  const getSuggestions = React.useCallback(async (i: Interest, q: string) => {
     const filterToken = cleanInterest(q)
 
     switch (i) {
-      case Intention.One:
+      case Interest.One:
         dropdownController.current.setInputText(filterToken);
         setInterest1(filterToken);
         break;
-      case Intention.Two:
+      case Interest.Two:
         dropdownController2.current.setInputText(filterToken);
         setInterest2(filterToken);
         break;
-      case Intention.Three:
+      case Interest.Three:
         dropdownController3.current.setInputText(filterToken);
         setInterest3(filterToken);
         break;
@@ -134,26 +132,26 @@ const Onboarding = () => {
 
     if (typeof q !== 'string' || q.length < 2) {
       switch (i) {
-        case Intention.One:
+        case Interest.One:
           setSuggestionsList([])
           break;
-        case Intention.Two:
+        case Interest.Two:
           setSuggestionsList2([])
           break;
-        case Intention.Three:
+        case Interest.Three:
           setSuggestionsList3([])
           break;
       }
       return
     }
     switch (i) {
-      case Intention.One:
+      case Interest.One:
         setLoading(true)
         break;
-      case Intention.Two:
+      case Interest.Two:
         setLoading2(true)
         break;
-      case Intention.Three:
+      case Interest.Three:
         setLoading3(true)
         break;
     }
@@ -165,15 +163,15 @@ const Onboarding = () => {
         title: item.name + " (" + item.countString + ")",
       }))
     switch (i) {
-      case Intention.One:
+      case Interest.One:
         setSuggestionsList(suggestions)
         setLoading(false)
         break;
-      case Intention.Two:
+      case Interest.Two:
         setSuggestionsList2(suggestions)
         setLoading2(false)
         break;
-      case Intention.Three:
+      case Interest.Three:
         setSuggestionsList3(suggestions)
         setLoading3(false)
         break;
@@ -244,26 +242,27 @@ const Onboarding = () => {
         <View style={[styles.view]}>
           <SvgProfilePic style={styles.svg} height={svgHeight} width={svgWidth} />
           <Text style={styles.title}>{i18n.t('profile.onboarding.profile-picture')}</Text>
-          
+
           {!image && <IconButton icon="plus" mode="contained-tonal" size={60} onPress={pickImage} style={[styles.profilePicButton]} />}
           {image && <TouchableOpacity onPress={pickImage} ><Image source={{ uri: image }} style={{ width: 200, height: 200 }} /></TouchableOpacity>}
-          
+
+          <Text style={styles.warning}>{i18n.t('profile.onboarding.profile-picture-subtitle')}</Text>
         </View>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
           style={[styles.view]}>
           <SvgDescription style={styles.svg} height={svgHeight} width={svgWidth} />
           <Text style={styles.title}>{i18n.t('profile.onboarding.description')}</Text>
-          <View style={{height: 120, width: 300}}>
-          <TextInput
-            multiline
-            mode="outlined"
-            onChangeText={(text) => setDescription(text)}
-            placeholder={i18n.t('profile.onboarding.description-placeholder')}
-            maxLength={200}
-            value={description}
-            autoCorrect={false}
-          />
+          <View style={{ height: 120, width: 300 }}>
+            <TextInput
+              multiline
+              mode="outlined"
+              onChangeText={(text) => setDescription(text)}
+              placeholder={i18n.t('profile.onboarding.description-placeholder')}
+              maxLength={200}
+              value={description}
+              autoCorrect={false}
+            />
           </View>
         </KeyboardAvoidingView>
         <View style={[styles.view]}>
@@ -271,19 +270,16 @@ const Onboarding = () => {
           <Text style={styles.title}>{i18n.t('profile.gender')}</Text>
           <View>
             <View style={{ flexDirection: "row" }}>
-              <Switch onValueChange={toggleGenderMaleSwitch}
-                value={isGenderMaleEnabled} />
-              <Text style={styles.switchText}>{i18n.t('gender.male')}</Text>
+              <Checkbox.Item onPress={toggleGenderMaleSwitch} position="leading"
+                status={isGenderMaleEnabled ? 'checked' : 'unchecked'} label={i18n.t('gender.male')} />
             </View>
             <View style={{ flexDirection: "row" }}>
-              <Switch onValueChange={toggleGenderFemaleSwitch}
-                value={isGenderFemaleEnabled} />
-              <Text style={styles.switchText}>{i18n.t('gender.female')}</Text>
+              <Checkbox.Item onPress={toggleGenderFemaleSwitch} position="leading"
+                status={isGenderFemaleEnabled ? 'checked' : 'unchecked'} label={i18n.t('gender.female')} />
             </View>
             <View style={{ flexDirection: "row" }}>
-              <Switch onValueChange={toggleGenderOtherSwitch}
-                value={isGenderOtherEnabled} />
-              <Text style={styles.switchText}>{i18n.t('gender.other')}</Text>
+              <Checkbox.Item onPress={toggleGenderOtherSwitch} position="leading"
+                status={isGenderOtherEnabled ? 'checked' : 'unchecked'} label={i18n.t('gender.other')} />
             </View>
           </View>
         </View>
@@ -293,9 +289,9 @@ const Onboarding = () => {
           <RadioButton.Group
             value={intention}
             onValueChange={(value: string) => setIntention(value)}>
-            <RadioButton.Item label={i18n.t('profile.intention.meet')} value="1" style={{ flexDirection: 'row-reverse'}} />
-            <RadioButton.Item label={i18n.t('profile.intention.date')} value="2" style={{ flexDirection: 'row-reverse'}} />
-            <RadioButton.Item label={i18n.t('profile.intention.sex')} value="3" disabled={!isLegal} style={{ flexDirection: 'row-reverse'}} />
+            <RadioButton.Item label={i18n.t('profile.intention.meet')} value={String(IntentionEnum.MEET)} style={{ flexDirection: 'row-reverse' }} />
+            <RadioButton.Item label={i18n.t('profile.intention.date')} value={String(IntentionEnum.DATE)} style={{ flexDirection: 'row-reverse' }} />
+            <RadioButton.Item label={i18n.t('profile.intention.sex')} value={String(IntentionEnum.SEX)} disabled={!isLegal} style={{ flexDirection: 'row-reverse' }} />
           </RadioButton.Group>
 
           <Text style={styles.warning}>{i18n.t('profile.intention.warning')}</Text>
@@ -314,7 +310,7 @@ const Onboarding = () => {
               }}
               direction={Platform.select({ ios: 'down' })}
               dataSet={suggestionsList}
-              onChangeText={text => getSuggestions(Intention.One, text)}
+              onChangeText={text => getSuggestions(Interest.One, text)}
               onSelectItem={item => {
                 item && setInterest1(item.id)
               }}
@@ -360,7 +356,7 @@ const Onboarding = () => {
               }}
               direction={Platform.select({ ios: 'down' })}
               dataSet={suggestionsList2}
-              onChangeText={text => getSuggestions(Intention.Two, text)}
+              onChangeText={text => getSuggestions(Interest.Two, text)}
               onSelectItem={item => {
                 item && setInterest2(item.id)
               }}
@@ -407,7 +403,7 @@ const Onboarding = () => {
               // initialValue={'1'}
               direction={Platform.select({ ios: 'down' })}
               dataSet={suggestionsList3}
-              onChangeText={text => getSuggestions(Intention.Three, text)}
+              onChangeText={text => getSuggestions(Interest.Three, text)}
               onSelectItem={item => {
                 item && setInterest3(item.id)
               }}

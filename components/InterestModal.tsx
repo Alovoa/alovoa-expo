@@ -42,7 +42,6 @@ const InterestModal = ({ data }: InterestModalT) => {
   }, [data]);
 
   React.useEffect(() => {
-    console.log("interests updated")
     updateButtonText();
   }, [interests]);
 

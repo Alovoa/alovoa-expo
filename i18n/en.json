@@ -28,8 +28,9 @@
     "profile": {
         "onboarding": {
             "profile-picture": "I look like this",
+            "profile-picture-subtitle": "More pictures can be added later",
             "description": "Something about myself",
-            "description-placeholder": "I really love ice cream!",
+            "description-placeholder": "I really love ice cream! 🍨",
             "interests": "I really like these things...",
             "match": {
                 "title": "Start getting likes!",

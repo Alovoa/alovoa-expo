@@ -28,8 +28,9 @@
     "profile": {
         "onboarding": {
             "profile-picture": "So sehe ich aus",
+            "profile-picture-subtitle": "Mehr Bilder können später hinzugefügt werden",
             "description": "Etwas über mich",
-            "description-placeholder": "Ich liebe Eiscreme!",
+            "description-placeholder": "Ich liebe Eiscreme! 🍨",
             "interests": "Ich mag diese Dinge wirklich gerne...",
             "intention-warning": "Kann erst nach 24 Stunden wieder geändert werden",
             "match": {
