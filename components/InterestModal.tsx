@@ -22,7 +22,7 @@ const InterestModal = ({ data }: InterestModalT) => {
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: 12, borderRadius: 8, height: 3000 };
+  const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: 12, borderRadius: 8 };
 
   const interestRef = React.useRef(interestDebounce);
   const debounceInterestHandler = React.useCallback(debounce(getSuggestions, 700), []);
