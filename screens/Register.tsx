@@ -105,7 +105,7 @@ const Register = ({ route, navigation }) => {
 
           {registerEmail && <View>
             <TextInput
-              style={{ backgroundColor: colors.background }}
+              mode="outlined"
               label={i18n.t('email') + " *"}
               value={email}
               onChangeText={text => {
@@ -123,8 +123,8 @@ const Register = ({ route, navigation }) => {
 
           {registerEmail && <View>
             <TextInput
-              style={{ backgroundColor: colors.background }}
-              label={i18n.t('password')}
+              mode="outlined"
+              label={i18n.t('password') + " *"}
               value={password}
               autoCapitalize={"none"}
               onChangeText={text => updatePassword(text)}
@@ -138,7 +138,7 @@ const Register = ({ route, navigation }) => {
 
           <View style={[styles.container]}>
             <TextInput
-              style={{ backgroundColor: colors.background }}
+              mode="outlined"
               label={i18n.t('first-name') + " *"}
               value={firstName}
               onChangeText={text => setFirstName(text)}
@@ -150,6 +150,7 @@ const Register = ({ route, navigation }) => {
           <SafeAreaProvider>
             <View style={[styles.container]}>
               <DatePickerInput
+                mode="outlined"
                 style={{ backgroundColor: colors.background }}
                 locale={Localization.locale.startsWith("en") || Localization.locale.startsWith("de") ? Localization.locale : "en-GB"}
                 label={i18n.t('dob') + " *"}
