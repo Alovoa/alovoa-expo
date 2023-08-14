@@ -27,15 +27,16 @@ const CardItem = ({
   // Custom styling
   const fullWidth = Dimensions.get("window").width;
   const fullHeight = Dimensions.get("window").height;
-  const descriptionHeight = fullHeight - 585;
-  const descriptionHeightNoCommonInterest = fullHeight - 554;
+  const descriptionHeight = fullHeight - 577 - 18;
+  const descriptionHeightNoCommonInterest = fullHeight - 546 - 18;
 
   const imageStyle = [
     {
       borderRadius: 8,
-      width: hasVariant ? fullWidth / 2 - 30 : fullWidth - 60,
-      height: hasVariant ? fullWidth / 2 - 30 : fullWidth - 60,
-      margin: hasVariant ? 0 : 20,
+      width: hasVariant ? fullWidth / 2 - 30 : fullWidth - 30,
+      height: hasVariant ? fullWidth / 2 - 30 : fullWidth - 30,
+      marginTop: hasVariant ? 0 : 26,
+      marginBottom: hasVariant ? 0 : 4,
     },
   ];
 
@@ -45,7 +46,7 @@ const CardItem = ({
       paddingBottom: hasVariant ? 5 : 7,
       fontSize: hasVariant ? 15 : 20,
       textAlign: hasVariant && !hasDonation ? 'center' : 'auto',
-      textAlignVertical: 'center',
+      textAlignVertical: 'center'
     },
   ];
 
@@ -72,10 +73,10 @@ const CardItem = ({
       {/* NAME */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: hasVariant ? 4 : 20 }}>
         <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
-          {!hasVariant && user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={18} color={"#64DD17"} style={{ padding: 4 }} />}
+          {!hasVariant && user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 6, paddingTop: 7 }} />}
         </View>
         {!hasVariant &&
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', marginTop: 6 }}>
             <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
             <Text>{user.distanceToUser}</Text>
             <Text>{unitsImperial ? ' mi' : ' km'}</Text>
@@ -91,12 +92,12 @@ const CardItem = ({
       {/* COMMON INTERESTS */}
       {!hasVariant && <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingLeft: 20 }}>
         <FlatList
-          style={{ marginBottom: 6 }}
+          style={{ marginBottom: 4 }}
           horizontal={true}
           data={user.commonInterests}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <Chip style={styles.marginRight4}>{item.text}</Chip>
+            <Chip style={[styles.marginRight4, {transform: [{ scale: 0.8 }] }]}>{item.text}</Chip>
           )}
         />
       </View>

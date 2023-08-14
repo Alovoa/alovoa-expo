@@ -55,14 +55,14 @@ export default StyleSheet.create({
   containerCardItem: {
     borderRadius: 8,
     alignItems: "center",
-    margin: 10,
+    margin: 4,
     elevation: 1,
     shadowOpacity: 0.05,
     shadowRadius: 10,
     shadowColor: GRAY,
     shadowOffset: { height: 0, width: 0 },
     flexGrow: 1,
-    width: DIMENSION_WIDTH - 22
+    width: DIMENSION_WIDTH - 8
   },
   matchesCardItem: {
     marginTop: -35,
