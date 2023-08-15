@@ -11,7 +11,7 @@ const i18n = I18N.getI18n()
 
 const Message = ({ conversation }: MessageT) => {
 
-  let text: string = conversation.lastMessage?.from ? "" : i18n.t('you') + ": ";
+  let text: string = !conversation.lastMessage ? "" : conversation.lastMessage.from ? "" : i18n.t('you') + ": ";
   text += conversation.lastMessage ? conversation.lastMessage.content : i18n.t('chat.default');
 
   return (
@@ -21,11 +21,11 @@ const Message = ({ conversation }: MessageT) => {
           <Image source={{ uri: conversation.userProfilePicture }} style={styles.avatar} />
         </TouchableOpacity>
       </View>
-      <View style={{flexGrow: 1}}>
-      <TouchableOpacity onPress={() => Global.nagivateChatDetails(conversation)} >
-        <Text>{conversation.userName}</Text>
-        <Text numberOfLines={2} style={styles.message}>{text}</Text>
-      </TouchableOpacity>
+      <View style={{ flexGrow: 1 }}>
+        <TouchableOpacity onPress={() => Global.nagivateChatDetails(conversation)} >
+          <Text>{conversation.userName}</Text>
+          <Text numberOfLines={2} style={styles.message}>{text}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
