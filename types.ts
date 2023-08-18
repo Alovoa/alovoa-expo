@@ -306,6 +306,18 @@ export type UserOnboardingResource = {
   interestMaxSize: number;
 }
 
+export type AlertModel = {
+  visible: boolean;
+  message: string; 
+  buttons: Array<AlertButtonModel>;
+  setVisible: (bool: boolean) => void;
+}
+
+export type AlertButtonModel = {
+  text: string;
+  onPress: () => void;
+}
+
 export type Captcha = {
   id: number;
   image: string;

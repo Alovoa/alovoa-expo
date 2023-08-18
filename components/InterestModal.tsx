@@ -1,11 +1,12 @@
 import React from "react";
-import { InterestModalT, UserInterest, UserInterestAutocomplete, UserInterestDto } from "../types";
+import { AlertModel, InterestModalT, UserInterest, UserInterestAutocomplete, UserInterestDto } from "../types";
 import { Modal, Portal, Text, Button, useTheme, IconButton, TextInput, Searchbar } from 'react-native-paper';
-import { Alert, Keyboard, View } from "react-native";
+import { Keyboard, View } from "react-native";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
 import { debounce } from "lodash";
+import Alert from "./Alert";
 
 const InterestModal = ({ data }: InterestModalT) => {
 
@@ -15,14 +16,37 @@ const InterestModal = ({ data }: InterestModalT) => {
   const [interests, setInterests] = React.useState(data);
   const [buttonText, setButtonText] = React.useState("");
   const [visible, setVisible] = React.useState(false);
+  const [alertVisible, setAlertVisible] = React.useState(false);
   const [interest, setInterest] = React.useState("");
   const [interestDebounce, setInterestDebounce] = React.useState("");
   const [suggestionsList, setSuggestionsList] = React.useState(Array<UserInterestDto>);
   const [loading, setLoading] = React.useState(false);
+  const [interestToBeDeleted, setInterestToBeDeleted] = React.useState<UserInterest | null>();
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: 12, borderRadius: 8 };
+  const alertButtons = [
+    {
+      text: i18n.t('cancel'),
+      onPress: () => { setAlertVisible(false); },
+    },
+    {
+      text: i18n.t('ok'),
+      onPress: async () => {
+        if (interestToBeDeleted) {
+          await Global.Fetch(Global.format(URL.USER_REMOVE_INTEREST, interestToBeDeleted.text), 'post');
+          let interestsCopy = [...interests];
+          interestsCopy.forEach((item, index) => {
+            if (item === interestToBeDeleted) interestsCopy.splice(index, 1);
+          });
+          setInterests(interestsCopy);
+          setInterestToBeDeleted(null);
+          setAlertVisible(false);
+        }
+      }
+    }
+  ]
 
   const interestRef = React.useRef(interestDebounce);
   const debounceInterestHandler = React.useCallback(debounce(getSuggestions, 700), []);
@@ -44,6 +68,12 @@ const InterestModal = ({ data }: InterestModalT) => {
   React.useEffect(() => {
     updateButtonText();
   }, [interests]);
+
+  React.useEffect(() => {
+    if (interestToBeDeleted) {
+      setAlertVisible(true);
+    }
+  }, [interestToBeDeleted]);
 
   function updateButtonText() {
     let text = interests.map(item => item.text).join(", ");
@@ -82,24 +112,7 @@ const InterestModal = ({ data }: InterestModalT) => {
   }
 
   async function removeInterest(interest: UserInterest) {
-    Alert.alert(i18n.t('profile.interest-alert.title'), Global.format(i18n.t('profile.interest-alert.subtitle'), interest.text), [
-      {
-        text: i18n.t('cancel'),
-        onPress: () => { },
-        style: 'cancel'
-      },
-      {
-        text: i18n.t('ok'),
-        onPress: async () => {
-          await Global.Fetch(Global.format(URL.USER_REMOVE_INTEREST, interest.text), 'post');
-          let interestsCopy = [...interests];
-          interestsCopy.forEach((item, index) => {
-            if (item === interest) interestsCopy.splice(index, 1);
-          });
-          setInterests(interestsCopy);
-        }
-      }
-    ]);
+    setInterestToBeDeleted(interest);
   }
 
   function cleanInterest(txt: string) {
@@ -133,7 +146,7 @@ const InterestModal = ({ data }: InterestModalT) => {
                 onChangeText={(text) => { setInterest(text) }}
                 onSubmitEditing={() => addInterest(interest)}
                 autoCorrect={false}
-                style={{marginBottom: 18}}
+                style={{ marginBottom: 18 }}
               />
             }
 
@@ -153,9 +166,9 @@ const InterestModal = ({ data }: InterestModalT) => {
                 </Button>
               ))
             }
-
           </View>
         </Modal>
+        <Alert visible={alertVisible} setVisible={setAlertVisible} message={Global.format(i18n.t('profile.interest-alert-delete'), interestToBeDeleted?.text)} buttons={alertButtons} />
       </Portal>
       <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.onboarding.interests')}</Text>
       <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}

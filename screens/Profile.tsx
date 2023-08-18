@@ -8,9 +8,8 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
-  Alert
 } from "react-native";
-import { useTheme, Text, Button, Chip, Card, Menu } from "react-native-paper";
+import { useTheme, Text, Button, Chip, Card, Menu, Portal } from "react-native-paper";
 import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
@@ -25,6 +24,7 @@ import styles, {
 } from "../assets/styles";
 import Icon from "../components/Icon";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import Alert from "../components/Alert";
 
 
 const i18n = I18N.getI18n()
@@ -89,10 +89,26 @@ const Profile = ({ route, navigation }) => {
   const [drugsString, setDrugsString] = React.useState<String>();
   const [images, setImages] = React.useState(Array<UserImage>);
   const [swiperImages, setSwiperImages] = React.useState<Array<string>>();
+  const [alertVisible, setAlertVisible] = React.useState(false);
 
   const [menuVisible, setMenuVisible] = React.useState(false);
   const showMenu = () => { setMenuVisible(true) };
   const hideMenu = () => { setMenuVisible(false) };
+
+  const alertButtons = [
+    {
+      text: i18n.t('cancel'),
+      onPress: () => { setAlertVisible(false); },
+    },
+    {
+      text: i18n.t('ok'),
+      onPress: async () => {
+        await Global.Fetch(Global.format(URL.USER_REPORT, user.idEncoded), 'post', ' ', 'text/plain');
+        setReported(true);
+        setAlertVisible(false);
+      }
+    }
+  ]
 
   function convertGenderText(text: string): Gender {
     switch (text) {
@@ -238,33 +254,19 @@ const Profile = ({ route, navigation }) => {
 
   async function blockUser() {
     await Global.Fetch(Global.format(URL.USER_BLOCK, user.idEncoded), 'post');
-    setBlocked(true);
     hideMenu();
+    setBlocked(true);
   }
 
   async function unblockUser() {
     await Global.Fetch(Global.format(URL.USER_UNBLOCK, user.idEncoded), 'post');
-    setBlocked(false);
     hideMenu();
+    setBlocked(false);
   }
 
   async function reportUser() {
-    Alert.alert(i18n.t('profile.report.title'), i18n.t('profile.report.subtitle'), [
-      {
-        text: i18n.t('cancel'),
-        onPress: () => { },
-        style: 'cancel',
-      },
-      {
-        text: i18n.t('ok'),
-        onPress: async () => {
-          await Global.Fetch(Global.format(URL.USER_REPORT, user.idEncoded), 'post', ' ', 'text/plain');
-          setReported(true);
-          hideMenu();
-        }
-      }
-    ]);
-
+    hideMenu();
+    setAlertVisible(true);
   }
 
   async function likeUser() {
@@ -283,136 +285,139 @@ const Profile = ({ route, navigation }) => {
 
   return (
     <View>
-      <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
-        <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View>
-            <Menu
-              visible={menuVisible}
-              onDismiss={hideMenu}
-              anchor={<Pressable style={{ padding: 8 }} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} /></Pressable>}>
-              {!blocked && <Menu.Item leadingIcon="block-helper" onPress={blockUser} title={i18n.t('profile.block')} />}
-              {blocked && <Menu.Item leadingIcon="block-helper" onPress={unblockUser} title={i18n.t('profile.unblock')} />}
-              {!reported && <Menu.Item leadingIcon="flag" onPress={reportUser} title={i18n.t('profile.report.title')} />}
-            </Menu>
-          </View>
-        </View>
-      </View>
-
-      <ScrollView style={styles.containerProfile} keyboardShouldPersistTaps='handled'
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
-
-        <View>
-          <SwiperFlatList
-            autoplay
-            autoplayDelay={5}
-            paginationActiveColor={colors?.primary}
-            paginationDefaultColor={colors?.secondary}
-            paginationStyleItem={{ height: 6, width: 6 }}
-            autoplayLoop={true}
-            autoplayLoopKeepAnimation={true}
-            showPagination={true}
-          >
-            {
-              swiperImages?.map((image, index) => (
-                <Image key={index} source={{ uri: image ? image : undefined }} style={styles.photo} />
-              ))
-            }
-          </SwiperFlatList>
-        </View>
-
-        <View style={[styles.containerProfileItem, { marginTop: 24, flexDirection: 'row', justifyContent: 'space-between' }]}>
-          <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
-            {lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
-              {lastActiveState == 1 &&
-                <Text >{i18n.t('profile.active-state.1')}</Text>
-              }
-              {lastActiveState == 2 &&
-                <Text >{i18n.t('profile.active-state.2')}</Text>
-              }
-            </View>}
-
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
-            <Text>{distance}</Text>
-            <Text>{you?.units == UnitsEnum.IMPERIAL ? ' mi' : ' km'}</Text>
-          </View>
-        </View>
-
-        <View style={[styles.containerProfileItem, { marginTop: 0 }]}>
-          <FlatList
-            horizontal={true}
-            data={interests}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <Chip style={{ marginRight: 4, marginBottom: 4 }}><Text>{item.text}</Text></Chip>
-            )}
-          />
-          <View style={{ marginTop: 16 }}>
+      <Portal>
+        <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
+          <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View>
-              <Card style={{ padding: 16 }}><Text style={{ fontSize: 18 }}>{description}</Text></Card>
+              <Menu
+                visible={menuVisible}
+                onDismiss={hideMenu}
+                anchor={<Pressable style={{ padding: 8 }} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} /></Pressable>}>
+                {!blocked && <Menu.Item leadingIcon="block-helper" onPress={blockUser} title={i18n.t('profile.block')} />}
+                {blocked && <Menu.Item leadingIcon="block-helper" onPress={unblockUser} title={i18n.t('profile.unblock')} />}
+                {!reported && <Menu.Item leadingIcon="flag" onPress={reportUser} title={i18n.t('profile.report.title')} />}
+              </Menu>
             </View>
-
-
-            <ScrollView horizontal={true} style={{ marginTop: 84 }}>
-              <Chip icon="gender-male-female" style={styles.marginRight4}>
-                <Text>{gender == Gender.MALE ? i18n.t('gender.male') :
-                  gender == Gender.FEMALE ? i18n.t('gender.female') : i18n.t('gender.other')}</Text>
-              </Chip>
-              <Chip icon="drama-masks" style={styles.marginRight4}>
-                <Text>{String(minAge) + " - " + String(maxAge)}</Text>
-              </Chip>
-              <Chip icon="magnify" style={styles.marginRight4}>
-                <Text>{getGendersText()}</Text>
-              </Chip>
-              <Chip icon="magnify-plus-outline" style={styles.marginRight4}>
-                <Text>{intention == Intention.MEET ? i18n.t('profile.intention.meet') :
-                  intention == Intention.DATE ? i18n.t('profile.intention.date') : i18n.t('profile.intention.sex')}</Text>
-              </Chip>
-            </ScrollView>
-
-            {(relationshipString || kidsString || drugsString) && <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
-              {relationshipString &&
-                <Chip icon="heart-multiple" style={styles.marginRight4}>
-                  <Text>{relationshipString}</Text>
-                </Chip>}
-              {kidsString && <Chip icon="baby-carriage" style={styles.marginRight4}>
-                <Text>{kidsString}</Text>
-              </Chip>}
-              {drugsString && <Chip icon="pill" style={styles.marginRight4}>
-                <Text>{drugsString}</Text>
-              </Chip>}
-            </ScrollView>
-            }
-            <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
-              <Chip icon="hand-coin" style={styles.marginRight4}>
-                <Text>{String(donated) + ' €'}</Text>
-              </Chip>
-              <Chip icon="account-cancel" style={styles.marginRight4}>
-                <Text>{'# ' + blocks}</Text>
-              </Chip>
-              <Chip icon="flag" style={styles.marginRight4}>
-                <Text>{'# ' + reports}</Text>
-              </Chip>
-            </ScrollView>
-            {
-              <View style={{ marginTop: 48 }}></View>
-            }
           </View>
         </View>
-      </ScrollView>
-      {!liked && <View style={{ marginBottom: 8, position: 'absolute', width: Dimensions.get('window').width, right: 0, bottom: 0, }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY }, hidden || !compatible ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
-            disabled={hidden}>
-            <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, !compatible ? { opacity: 0.5 } : {}]} onPress={() => likeUser()} disabled={!compatible}>
-            <Icon name="heart" color={LIKE_ACTIONS} size={25} />
-          </TouchableOpacity>
-        </View>
-      </View>}
+
+        <ScrollView style={styles.containerProfile} keyboardShouldPersistTaps='handled'
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
+
+          <View>
+            <SwiperFlatList
+              autoplay
+              autoplayDelay={5}
+              paginationActiveColor={colors?.primary}
+              paginationDefaultColor={colors?.secondary}
+              paginationStyleItem={{ height: 6, width: 6 }}
+              autoplayLoop={true}
+              autoplayLoopKeepAnimation={true}
+              showPagination={true}
+            >
+              {
+                swiperImages?.map((image, index) => (
+                  <Image key={index} source={{ uri: image ? image : undefined }} style={styles.photo} />
+                ))
+              }
+            </SwiperFlatList>
+          </View>
+
+          <View style={[styles.containerProfileItem, { marginTop: 24, flexDirection: 'row', justifyContent: 'space-between' }]}>
+            <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
+              {lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
+                {lastActiveState == 1 &&
+                  <Text >{i18n.t('profile.active-state.1')}</Text>
+                }
+                {lastActiveState == 2 &&
+                  <Text >{i18n.t('profile.active-state.2')}</Text>
+                }
+              </View>}
+
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
+              <Text>{distance}</Text>
+              <Text>{you?.units == UnitsEnum.IMPERIAL ? ' mi' : ' km'}</Text>
+            </View>
+          </View>
+
+          <View style={[styles.containerProfileItem, { marginTop: 0 }]}>
+            <FlatList
+              horizontal={true}
+              data={interests}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <Chip style={{ marginRight: 4, marginBottom: 4 }}><Text>{item.text}</Text></Chip>
+              )}
+            />
+            <View style={{ marginTop: 16 }}>
+              <View>
+                <Card style={{ padding: 16 }}><Text style={{ fontSize: 18 }}>{description}</Text></Card>
+              </View>
+
+
+              <ScrollView horizontal={true} style={{ marginTop: 84 }}>
+                <Chip icon="gender-male-female" style={styles.marginRight4}>
+                  <Text>{gender == Gender.MALE ? i18n.t('gender.male') :
+                    gender == Gender.FEMALE ? i18n.t('gender.female') : i18n.t('gender.other')}</Text>
+                </Chip>
+                <Chip icon="drama-masks" style={styles.marginRight4}>
+                  <Text>{String(minAge) + " - " + String(maxAge)}</Text>
+                </Chip>
+                <Chip icon="magnify" style={styles.marginRight4}>
+                  <Text>{getGendersText()}</Text>
+                </Chip>
+                <Chip icon="magnify-plus-outline" style={styles.marginRight4}>
+                  <Text>{intention == Intention.MEET ? i18n.t('profile.intention.meet') :
+                    intention == Intention.DATE ? i18n.t('profile.intention.date') : i18n.t('profile.intention.sex')}</Text>
+                </Chip>
+              </ScrollView>
+
+              {(relationshipString || kidsString || drugsString) && <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
+                {relationshipString &&
+                  <Chip icon="heart-multiple" style={styles.marginRight4}>
+                    <Text>{relationshipString}</Text>
+                  </Chip>}
+                {kidsString && <Chip icon="baby-carriage" style={styles.marginRight4}>
+                  <Text>{kidsString}</Text>
+                </Chip>}
+                {drugsString && <Chip icon="pill" style={styles.marginRight4}>
+                  <Text>{drugsString}</Text>
+                </Chip>}
+              </ScrollView>
+              }
+              <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
+                <Chip icon="hand-coin" style={styles.marginRight4}>
+                  <Text>{String(donated) + ' €'}</Text>
+                </Chip>
+                <Chip icon="account-cancel" style={styles.marginRight4}>
+                  <Text>{'# ' + blocks}</Text>
+                </Chip>
+                <Chip icon="flag" style={styles.marginRight4}>
+                  <Text>{'# ' + reports}</Text>
+                </Chip>
+              </ScrollView>
+              {
+                <View style={{ marginTop: 48 }}></View>
+              }
+            </View>
+          </View>
+        </ScrollView>
+        {!liked && <View style={{ marginBottom: 8, position: 'absolute', width: Dimensions.get('window').width, right: 0, bottom: 0, }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: GRAY }, hidden || !compatible ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
+              disabled={hidden}>
+              <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, !compatible ? { opacity: 0.5 } : {}]} onPress={() => likeUser()} disabled={!compatible}>
+              <Icon name="heart" color={LIKE_ACTIONS} size={25} />
+            </TouchableOpacity>
+          </View>
+        </View>}
+        <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.report.subtitle')} buttons={alertButtons} />
+      </Portal>
     </View>
   );
 };

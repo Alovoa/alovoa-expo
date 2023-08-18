@@ -47,10 +47,7 @@
             "warning": "Kann erst nach 24 Stunden wieder geändert werden"
         },
         "gender": "Ich suche nach...",
-        "interest-alert": {
-            "title": "Interesse entfernen?",
-            "subtitle": "Interesse '%s' entfernen?"
-        },
+        "interest-alert-delete": "Interesse '%s' entfernen?",
         "units": {
             "title": "Einheiten",
             "si": "SI",
