@@ -62,11 +62,14 @@ const MessageDetail = ({ route, navigation }) => {
   }, []);
 
   React.useEffect(() => {
+    scrollToEnd();
+  }, [results]);
+
+  function scrollToEnd() {
     setTimeout(function () {
       scrollViewRef?.current?.scrollToEnd();
-    }
-      , 100);
-  }, [results]);
+    }, 100);
+  }
 
   async function load() {
     reloadMessages(true);
@@ -124,6 +127,7 @@ const MessageDetail = ({ route, navigation }) => {
       </ScrollView>
       <KeyboardAvoidingView style={{ marginTop: 8 }}>
         <TextInput
+          onPressIn={scrollToEnd}
           style={{ backgroundColor: colors.surface }}
           value={text}
           dense={true}
