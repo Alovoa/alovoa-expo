@@ -84,7 +84,7 @@ const CardItem = ({
         }
         {hasDonation &&
           <View style={{ alignItems: 'center' }}>
-            <Text style={[nameStyle, { paddingLeft: 4 }]}>{donation?.toFixed(2) + ' €'}</Text>
+            <Text style={[nameStyle, { paddingLeft: 4 }]}>{donation + ' €'}</Text>
           </View>
         }
       </View>
