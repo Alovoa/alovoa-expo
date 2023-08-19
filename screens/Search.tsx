@@ -29,7 +29,7 @@ const Search = () => {
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
   const [distance, setDistance] = React.useState(50);
   const [stackKey, setStackKey] = React.useState(0);
-  let firstSearch = true;
+  const [firstSearch, setFirstSearch] = React.useState(true);
 
   let latitude: number | undefined;
   let longitude: number | undefined;
@@ -109,7 +109,7 @@ const Search = () => {
         } else if (!hasGpsEnabled) {
           Global.ShowToast(i18n.t('location.no-signal'));
         }
-        firstSearch = false;
+        setFirstSearch(false);
       } catch (e) {
         console.log(e)
       }
