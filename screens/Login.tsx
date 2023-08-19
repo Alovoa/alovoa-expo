@@ -33,6 +33,14 @@ const Login = () => {
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
+  React.useEffect(() => {
+    Global.GetStorage(Global.STORAGE_PAGE).then((value) => {
+      if (value && value != Global.INDEX_REGISTER) {
+        Global.loadPage(value);
+      }
+    });
+  }, []);
+
   const _handleRedirect = async (event: { url: string; }) => {
 
     if (Platform.OS === 'ios') {

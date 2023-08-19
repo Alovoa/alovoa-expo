@@ -5,6 +5,7 @@ import * as URL from "../URL";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import * as I18N from "../i18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Text } from 'react-native-paper';
 
 const i18n = I18N.getI18n()
 const ICON_SIZE = 26;
@@ -75,7 +76,7 @@ const Main = ({ route, navigation }) => {
         name="YourProfile"
         component={YourProfile}
         options={{
-          tabBarLabel: i18n.t('navigation.profile'),
+          tabBarLabel: <Text>{i18n.t('navigation.profile')}</Text>,
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={ICON_SIZE} />
           ),
@@ -86,7 +87,7 @@ const Main = ({ route, navigation }) => {
         component={Messages}
         options={{
           tabBarBadge: newMessage,
-          tabBarLabel: i18n.t('navigation.chat'),
+          tabBarLabel: <Text>{i18n.t('navigation.chat')}</Text>,
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="chat" color={color} size={ICON_SIZE} />
           ),
@@ -96,7 +97,7 @@ const Main = ({ route, navigation }) => {
         name="Search"
         component={Search}
         options={{
-          tabBarLabel: i18n.t('navigation.search'),
+          tabBarLabel: <Text>{i18n.t('navigation.search')}</Text>,
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="magnify" color={color} size={ICON_SIZE} />
           ),
@@ -107,7 +108,7 @@ const Main = ({ route, navigation }) => {
         component={Likes}
         options={{
           tabBarBadge: newAlert,
-          tabBarLabel: i18n.t('navigation.likes'),
+          tabBarLabel: <Text>{i18n.t('navigation.likes')}</Text>,
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="heart" color={color} size={ICON_SIZE} />
           ),
@@ -117,7 +118,7 @@ const Main = ({ route, navigation }) => {
         name="Donate"
         component={Donate}
         options={{
-          tabBarLabel: i18n.t('navigation.donate'),
+          tabBarLabel: <Text>{i18n.t('navigation.donate')}</Text>,
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="cash-multiple" color={color} size={ICON_SIZE} />
           ),

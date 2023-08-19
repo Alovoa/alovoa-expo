@@ -11,6 +11,7 @@ import { ConversationDto, UserDto } from "./types";
 export const FLAG_FDROID = true;
 
 export const navigationRef = createNavigationContainerRef()
+export const INDEX_LOGIN = "0"
 export const INDEX_REGISTER = "1"
 export const INDEX_ONBOARDING = "2"
 export const INDEX_MAIN = "3"
@@ -39,7 +40,8 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
 
     })
     if (res.request.responseURL == URL.AUTH_LOGIN) {
-      navigate("Login")
+      SetStorage(STORAGE_PAGE, INDEX_LOGIN);
+      navigate("Login");
       throw new Error("Not authenticated")
     }
     return res;
@@ -73,7 +75,6 @@ export function navigate(name: string, reset: boolean = false, params?: any) {
         })
       );
     }
-
   }
 }
 

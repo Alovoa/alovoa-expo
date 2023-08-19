@@ -3,22 +3,23 @@ import { Login, Register, Onboarding, Main, Profile, MessageDetail, PasswordRese
 import * as SplashScreen from 'expo-splash-screen';
 import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from "@react-navigation/native";
-import * as Linking from 'expo-linking';
 import * as Global from "./Global";
 import { createStackNavigator } from "@react-navigation/stack";
-import * as I18N from "./i18n";
 import { Dimensions, LogBox, useColorScheme } from 'react-native';
 import { RootSiblingParent } from 'react-native-root-siblings';
-import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider } from 'react-native-paper';
+import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider, configureFonts } from 'react-native-paper';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { Photos } from "./screens/profile";
-import { ThemeProp } from "react-native-paper/lib/typescript/types";
-
+import { ThemeProp } from "react-native-paper/lib/typescript/src/types";
+import {
+  useFonts, Montserrat_400Regular, Montserrat_500Medium, Montserrat_500Medium_Italic, 
+  Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_700Bold_Italic
+} from '@expo-google-fonts/montserrat';
 
 LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();
-setTimeout(SplashScreen.hideAsync, 1000);
+setTimeout(SplashScreen.hideAsync, 1000)
 WebBrowser.maybeCompleteAuthSession();
 const Stack = createStackNavigator();
 
@@ -28,13 +29,43 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
-  React.useEffect(() => {
-    Global.GetStorage(Global.STORAGE_PAGE).then((value) => {
-      if (value && value != Global.INDEX_REGISTER) {
-        Global.loadPage(value);
-      }
-    });
-  }, []);
+  let [fontsLoaded] = useFonts({
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+    Montserrat_500Medium_Italic,
+    Montserrat_600SemiBold,
+    Montserrat_700Bold,
+    Montserrat_700Bold_Italic
+  });
+
+  const baseFont = {
+    fontFamily: 'Montserrat_400Regular',
+  } as const;
+
+  const baseVariants = configureFonts({ config: baseFont });
+
+  const customVariants = {
+    displayMedium: {
+      ...baseVariants.displayMedium,
+      fontFamily: 'Montserrat_500Medium',
+    },
+    bold: {
+      ...baseVariants.bodyMedium,
+      fontFamily: 'Montserrat_700Bold',
+    },
+    italic: {
+      ...baseVariants.bodyMedium,
+      fontFamily: 'Montserrat_500Medium_Italic',
+    },
+    boldItalic: {
+      ...baseVariants.bodyMedium,
+      fontFamily: 'Montserrat_700Bold_Italic',
+    },
+    semiBold: {
+      ...baseVariants.bodyMedium,
+      fontFamily: 'Montserrat_600SemiBold',
+    }
+  } as const;
 
   const isDarkTheme = useColorScheme() == 'dark';
 
@@ -59,8 +90,19 @@ export default function App() {
     },
   };
 
+  const fonts = configureFonts({
+    config: {
+      ...baseVariants,
+      ...customVariants,
+    },
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <PaperProvider theme={theme}>
+    <PaperProvider theme={{ ...theme, fonts }}>
       <StatusBar style={isDarkTheme ? "light" : "dark"} />
       <RootSiblingParent>
         <NavigationContainer theme={themeNavigation} ref={Global.navigationRef}>
