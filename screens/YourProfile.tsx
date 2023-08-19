@@ -9,7 +9,7 @@ import {
   RefreshControl,
   Keyboard
 } from "react-native";
-import { Text, TextInput, Button } from "react-native-paper";
+import { Text, TextInput, Button, Surface, Card } from "react-native-paper";
 import styles from "../assets/styles";
 import { YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum, UserDto, GenderEnum, } from "../types";
 import * as I18N from "../i18n";
@@ -221,6 +221,12 @@ const YourProfile = ({ route, navigation }) => {
             value={description}
             autoCorrect={false}
           />
+        </View>
+
+        <View style={{ margin: 24 }}>
+          <Card mode="contained" style={{ padding: 12 }}>
+            <Text style={{ textAlign: 'center' }}>{i18n.t('profile.donated') + ": " +  String(user?.totalDonations) + ' €'}</Text>
+          </Card>
         </View>
 
         <View style={{ marginTop: 12 }}>
