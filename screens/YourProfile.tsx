@@ -122,7 +122,7 @@ const YourProfile = ({ route, navigation }) => {
   }, []);
 
   async function logout() {
-    Global.SetStorage(Global.STORAGE_PAGE, "1");
+    Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_LOGIN);
     Global.navigate("Login");
   }
 
