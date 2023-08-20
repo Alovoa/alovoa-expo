@@ -27,8 +27,8 @@ const CardItem = ({
   // Custom styling
   const fullWidth = Dimensions.get("window").width;
   const fullHeight = Dimensions.get("window").height;
-  const descriptionHeight = fullHeight - 577 - 18;
-  const descriptionHeightNoCommonInterest = fullHeight - 546 - 18;
+  const descriptionHeight = fullHeight - 597;
+  const descriptionHeightNoCommonInterest = fullHeight - 566;
 
   const imageStyle = [
     {
@@ -42,7 +42,7 @@ const CardItem = ({
 
   const nameStyle: StyleProp<TextStyle> = [
     {
-      paddingTop: hasVariant ? 10 : 0,
+      paddingTop: hasVariant ? 10 : 4,
       paddingBottom: hasVariant ? 5 : 7,
       fontSize: hasVariant ? 15 : 20,
       textAlign: hasVariant && !hasDonation ? 'center' : 'auto',
@@ -76,7 +76,7 @@ const CardItem = ({
           {!hasVariant && user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 6, paddingTop: 7 }} />}
         </View>
         {!hasVariant &&
-          <View style={{ flexDirection: 'row', marginTop: 6 }}>
+          <View style={{ flexDirection: 'row', marginTop: 8 }}>
             <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
             <Text>{user.distanceToUser}</Text>
             <Text>{unitsImperial ? ' mi' : ' km'}</Text>
@@ -97,7 +97,7 @@ const CardItem = ({
           data={user.commonInterests}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <Chip style={[styles.marginRight4, {transform: [{ scale: 0.8 }] }]}>{item.text}</Chip>
+            <Chip style={[styles.marginRight4, { transform: [{ scale: 0.8 }] }]}>{item.text}</Chip>
           )}
         />
       </View>
