@@ -1,0 +1,3 @@
+New and improved UI and elements
+Quality of life improvements
+Lots of bug fixes
