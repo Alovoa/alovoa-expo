@@ -76,6 +76,7 @@ const YourProfile = ({ route, navigation }) => {
   React.useEffect(() => {
     if (route.params?.changed) {
       load();
+      route.params.changed = false;
     }
   }, [route.params?.changed]);
 

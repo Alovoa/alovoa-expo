@@ -55,6 +55,8 @@ const Main = ({ route, navigation }) => {
 
     updateNewAlert();
     updateNewMessage();
+    
+    Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_SEARCH);
   }, []);
 
   React.useEffect(() => {
@@ -69,12 +71,32 @@ const Main = ({ route, navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
+  function saveScreen(target : string | undefined) {
+    if(target) {
+      let targetSplitArr = target.split("-");
+      let screen = targetSplitArr[0];
+
+      switch(screen) {
+        case Global.SCREEN_YOURPROFILE:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_YOURPROFILE);
+        case Global.SCREEN_CHAT:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_CHAT);
+        case Global.SCREEN_SEARCH:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_SEARCH);
+        case Global.SCREEN_LIKES:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_LIKES);
+        case Global.SCREEN_DONATE:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_DONATE);
+      }
+    }
+   
+  }
 
   return (
-    <Tab.Navigator initialRouteName="Search">
+    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH}>
       <Tab.Screen
-        name="YourProfile"
+        name={Global.SCREEN_YOURPROFILE}
         component={YourProfile}
+        listeners={{
+          tabPress: e => {
+            saveScreen(e.target);
+          },
+        }}
         options={{
           tabBarLabel: <Text>{i18n.t('navigation.profile')}</Text>,
           tabBarIcon: ({ color }) => (
@@ -83,8 +105,13 @@ const Main = ({ route, navigation }) => {
         }}
       />
       <Tab.Screen
-        name="Chat"
+        name={Global.SCREEN_CHAT}
         component={Messages}
+        listeners={{
+          tabPress: e => {
+            saveScreen(e.target);
+          },
+        }}
         options={{
           tabBarBadge: newMessage,
           tabBarLabel: <Text>{i18n.t('navigation.chat')}</Text>,
@@ -94,8 +121,13 @@ const Main = ({ route, navigation }) => {
         }}
       />
       <Tab.Screen
-        name="Search"
+        name={Global.SCREEN_SEARCH}
         component={Search}
+        listeners={{
+          tabPress: e => {
+            saveScreen(e.target);
+          },
+        }}
         options={{
           tabBarLabel: <Text>{i18n.t('navigation.search')}</Text>,
           tabBarIcon: ({ color }) => (
@@ -104,8 +136,13 @@ const Main = ({ route, navigation }) => {
         }}
       />
       <Tab.Screen
-        name="Likes"
+        name={Global.SCREEN_LIKES}
         component={Likes}
+        listeners={{
+          tabPress: e => {
+            saveScreen(e.target);
+          },
+        }}
         options={{
           tabBarBadge: newAlert,
           tabBarLabel: <Text>{i18n.t('navigation.likes')}</Text>,
@@ -115,8 +152,13 @@ const Main = ({ route, navigation }) => {
         }}
       />
       <Tab.Screen
-        name="Donate"
+        name={Global.SCREEN_DONATE}
         component={Donate}
+        listeners={{
+          tabPress: e => {
+            saveScreen(e.target);
+          },
+        }}
         options={{
           tabBarLabel: <Text>{i18n.t('navigation.donate')}</Text>,
           tabBarIcon: ({ color }) => (

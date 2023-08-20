@@ -20,7 +20,7 @@ enum SORT {
   NEWEST_USER = 6
 }
 
-const Search = () => {
+const Search = ({ route, navigation }) => {
 
   let swiper: any = React.useRef(null);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -30,7 +30,8 @@ const Search = () => {
   const [distance, setDistance] = React.useState(50);
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
-
+  var cardStackRef = React.createRef<CardStack>();
+  
   let latitude: number | undefined;
   let longitude: number | undefined;
 
@@ -54,6 +55,16 @@ const Search = () => {
   React.useEffect(() => {
     load();
   }, []);
+
+  React.useEffect(() => {
+    if (route.params?.changed) {
+      cardStackRef.current?.swipeTop();
+      let resultsCopy = [...results];
+      resultsCopy.shift();
+      setResults(resultsCopy);
+      route.params.changed = false;
+    }
+  }, [route.params?.changed]);
 
   async function load() {
     let l1 = await Global.GetStorage(Global.STORAGE_LATITUDE);
@@ -153,6 +164,7 @@ const Search = () => {
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
           <CardStack
+            ref={cardStackRef}
             style={{
               justifyContent: 'flex-end'
             }}

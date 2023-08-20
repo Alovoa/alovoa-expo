@@ -136,6 +136,15 @@ const Photos = ({ route, navigation }) => {
     });
   }
 
+  React.useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e: any) => {
+        e.preventDefault();
+        goBack();
+      }),
+    [navigation]
+  );
+
   return (
     <Portal>
       <View style={{ flex: 1 }}>

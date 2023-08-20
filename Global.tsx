@@ -18,6 +18,7 @@ export const INDEX_MAIN = "3"
 
 export const STORAGE_FIRSTNAME = "firstName";
 export const STORAGE_PAGE = "page";
+export const STORAGE_SCREEN = "screen";
 export const STORAGE_YOUR_PROFILE = "your-profile"
 export const STORAGE_YOUR_CHAT = "chat"
 export const STORAGE_YOUR_CHAT_DETAIL = "chat/%s"
@@ -25,6 +26,12 @@ export const STORAGE_LIKES = "likes"
 export const STORAGE_DONATE = "donate"
 export const STORAGE_LATITUDE = "latitude"
 export const STORAGE_LONGITUDE = "longitude"
+
+export const SCREEN_YOURPROFILE = "YourProfile"
+export const SCREEN_CHAT = "Chat"
+export const SCREEN_SEARCH = "Search"
+export const SCREEN_LIKES = "Likes"
+export const SCREEN_DONATE = "Donate"
 
 export async function Fetch(url: string = "", method: string = "get", data: any = undefined,
   contentType: string = "application/json"): Promise<AxiosResponse<any, any>> {

@@ -90,8 +90,9 @@ const Profile = ({ route, navigation }) => {
   const [images, setImages] = React.useState(Array<UserImage>);
   const [swiperImages, setSwiperImages] = React.useState<Array<string>>();
   const [alertVisible, setAlertVisible] = React.useState(false);
-
+  const [removeUser, setRemoveUser] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
+  const [previousScreen, setPreviousScreen] = React.useState<String | null>();
   const showMenu = () => { setMenuVisible(true) };
   const hideMenu = () => { setMenuVisible(false) };
 
@@ -222,7 +223,6 @@ const Profile = ({ route, navigation }) => {
     }
   }
 
-
   React.useEffect(() => {
     const loadData = async () => {
       navigation.setOptions({ title: "" });
@@ -232,7 +232,12 @@ const Profile = ({ route, navigation }) => {
       load(true);
     }
     loadData();
+    loadPreviousScreen();
   }, []);
+
+  async function loadPreviousScreen() {
+    setPreviousScreen(await Global.GetStorage(Global.STORAGE_SCREEN));
+  }
 
   function getGendersText() {
     let arr: string[] = [];
@@ -272,22 +277,37 @@ const Profile = ({ route, navigation }) => {
   async function likeUser() {
     await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
     setLiked(true);
+    setRemoveUser(true);
   }
 
   async function hideUser() {
     await Global.Fetch(Global.format(URL.USER_HIDE, user.idEncoded), 'post');
     setHidden(true);
+    setRemoveUser(true);
   }
 
   async function goBack() {
-    navigation.goBack();
+    navigation.navigate({
+      name: 'Search',
+      params: { changed: true },
+      merge: true,
+    });
   }
+
+  React.useEffect(() => {
+      navigation.addListener('beforeRemove', (e: any) => {
+        if (Global.SCREEN_SEARCH == previousScreen && removeUser) {
+          e.preventDefault();
+          goBack();
+        }
+      });
+  }, [previousScreen, removeUser]);
 
   return (
     <View>
       <Portal>
         <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
-          <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
+          <Pressable onPress={navigation.goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View>
               <Menu
@@ -405,17 +425,17 @@ const Profile = ({ route, navigation }) => {
             </View>
           </View>
         </ScrollView>
-        {!liked && <View style={{ marginBottom: 8, position: 'absolute', width: Dimensions.get('window').width, right: 0, bottom: 0, }}>
+        <View style={{ marginBottom: 8, position: 'absolute', width: Dimensions.get('window').width, right: 0, bottom: 0, }}>
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <TouchableOpacity style={[styles.button, { backgroundColor: GRAY }, hidden || !compatible ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
-              disabled={hidden}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: GRAY }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
+              disabled={hidden || liked}>
               <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, !compatible ? { opacity: 0.5 } : {}]} onPress={() => likeUser()} disabled={!compatible}>
+            <TouchableOpacity style={[styles.button, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => likeUser()} disabled={!compatible || liked}>
               <Icon name="heart" color={LIKE_ACTIONS} size={25} />
             </TouchableOpacity>
           </View>
-        </View>}
+        </View>
         <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.report.subtitle')} buttons={alertButtons} />
       </Portal>
     </View>

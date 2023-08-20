@@ -33,8 +33,7 @@ const MessageDetail = ({ route, navigation }) => {
   const { colors } = useTheme();
   const [refreshing, setRefreshing] = React.useState(false);
   const [results, setResults] = React.useState(Array<MessageDto>);
-  let scrollViewRef = React.useRef(null);
-  let textInputRef = React.useRef(null);
+  let scrollViewRef = React.useRef<ScrollView>(null);
   const [text, setText] = React.useState("");
 
 
@@ -134,7 +133,7 @@ const MessageDetail = ({ route, navigation }) => {
           onChangeText={text => setText(text)}
           onSubmitEditing={sendMessage}
           placeholder={i18n.t('chat.placeholder')}
-          ref={textInputRef} right={<TextInput.Icon iconColor={colors.secondary} onPress={() => sendMessage()} icon="send" />}></TextInput>
+          right={<TextInput.Icon iconColor={colors.secondary} onPress={() => sendMessage()} icon="send" />}></TextInput>
       </KeyboardAvoidingView>
     </View>
   )
