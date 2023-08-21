@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, RefreshControl, ScrollView, Alert } from "react-native";
+import { View, RefreshControl, ScrollView, Alert, Dimensions } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import { CardItem } from "../components";
 import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
@@ -7,6 +7,7 @@ import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
+import { ActivityIndicator } from "react-native-paper";
 
 
 const i18n = I18N.getI18n()
@@ -30,10 +31,12 @@ const Search = ({ route, navigation }) => {
   const [distance, setDistance] = React.useState(50);
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
-  var cardStackRef = React.createRef<CardStack>();
+  const [loading, setLoading] = React.useState(false);
   
   let latitude: number | undefined;
   let longitude: number | undefined;
+
+  const { height, width } = Dimensions.get('window');
 
   const LOCATION_TIMEOUT_SHORT = 2000;
   const LOCATION_TIMEOUT_LONG = 5000;
@@ -58,11 +61,14 @@ const Search = ({ route, navigation }) => {
 
   React.useEffect(() => {
     if (route.params?.changed) {
-      cardStackRef.current?.swipeTop();
+      swiper.current?.swipeTop();
       let resultsCopy = [...results];
       resultsCopy.shift();
       setResults(resultsCopy);
       route.params.changed = false;
+      if(resultsCopy.length == 0) {
+        load();
+      }
     }
   }, [route.params?.changed]);
 
@@ -71,6 +77,7 @@ const Search = ({ route, navigation }) => {
     latitude = l1 ? Number(l1) : undefined;
     let l2 = await Global.GetStorage(Global.STORAGE_LONGITUDE);
     longitude = l2 ? Number(l2) : undefined;
+    setLoading(true);
     await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE).then(
       async (response) => {
         let data: SearchResource = response.data;
@@ -85,6 +92,7 @@ const Search = ({ route, navigation }) => {
         loadResults();
       }
     );
+    setLoading(false);
   }
 
   async function updateLocationLocal(lat: number, lon: number) {
@@ -161,16 +169,20 @@ const Search = ({ route, navigation }) => {
   return (
     <ScrollView contentContainerStyle={{ flex: 1 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
+      { loading &&
+        <View style={{height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute"}} >
+          <ActivityIndicator animating={loading} size={80} />
+        </View>
+      }
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+       <View style={{ flex: 1, justifyContent: 'flex-end' }}>      
           <CardStack
-            ref={cardStackRef}
+            ref={swiper}
             style={{
               justifyContent: 'flex-end'
             }}
             verticalSwipe={false}
             renderNoMoreCards={() => null}
-            ref={swiper}
             key={stackKey}
             onSwipedLeft={(index: number) => { hideUser(index) }}
             onSwipedRight={(index: number) => { likeUser(index) }}>
