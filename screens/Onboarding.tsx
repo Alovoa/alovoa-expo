@@ -6,6 +6,7 @@ import {
   Image,
   Platform,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from "react-native";
 import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton, Checkbox } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
