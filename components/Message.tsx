@@ -1,10 +1,9 @@
 import React from "react";
-import { View, Image } from "react-native";
+import { View, Image, TouchableOpacity } from "react-native";
 import { Text } from "react-native-paper";
 import { MessageT } from "../types";
 import styles from "../assets/styles";
 import * as I18N from "../i18n";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Global from "../Global";
 
 const i18n = I18N.getI18n()

@@ -5,7 +5,8 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Dimensions,
-  Image
+  Image,
+  ScrollView
 } from "react-native";
 import {
   TextInput, Card
@@ -16,7 +17,6 @@ import { MessageDtoListModel, MessageDto } from "../types";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { ScrollView } from "react-native-gesture-handler";
 import * as WebBrowser from 'expo-web-browser';
 import * as I18N from "../i18n";
 

@@ -1,13 +1,12 @@
 import React from "react";
 import { useTheme, Text, Button, Dialog, Portal, Provider, TextInput, IconButton } from "react-native-paper";
-import { View, Platform, StyleSheet, Image, Dimensions, Alert } from "react-native";
+import { View, Platform, StyleSheet, Image, Dimensions, Alert, ScrollView } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
-import { ScrollView } from "react-native-gesture-handler";
 import { Captcha } from "../types";
 
 const i18n = I18N.getI18n()

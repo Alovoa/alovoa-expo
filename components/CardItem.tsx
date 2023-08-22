@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle, FlatList } from "react-native";
+import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView } from "react-native";
 import { useTheme, Text, Chip } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT } from "../types";
@@ -10,7 +10,6 @@ import styles, {
   GRAY
 } from "../assets/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { ScrollView } from "react-native-gesture-handler";
 
 const CardItem = ({
   user,

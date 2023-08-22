@@ -23,7 +23,6 @@ import * as URL from "../URL";
 import * as Global from "../Global";
 import { IntentionEnum, UserInterestAutocomplete, UserOnboarding, UserOnboardingResource } from "../types";
 import * as ImageManipulator from 'expo-image-manipulator';
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const IMAGE_HEADER = "data:image/png;base64,";
 
