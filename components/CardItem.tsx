@@ -72,7 +72,7 @@ const CardItem = ({
       {/* NAME */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: hasVariant ? 4 : 20 }}>
         <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
-          {!hasVariant && user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 6, paddingTop: 7 }} />}
+          {!hasVariant && user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 6, paddingTop: 10 }} />}
         </View>
         {!hasVariant &&
           <View style={{ flexDirection: 'row', marginTop: 8 }}>
