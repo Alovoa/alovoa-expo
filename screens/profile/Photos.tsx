@@ -145,7 +145,7 @@ const Photos = ({ route, navigation }) => {
   return (
     <ScrollView>
       <View>
-        <View style={[styles.top, {zIndex: 1, position: "absolute", width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
+        <View style={[styles.top, { zIndex: 1, position: "absolute", width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
           <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
         </View>
         <TouchableOpacity
@@ -156,6 +156,7 @@ const Photos = ({ route, navigation }) => {
           <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => updateProfilePicture()}>{i18n.t('profile.photos.change-profile-pic')}</Button>
         </View>
         <FlatList
+          scrollEnabled={false}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
           numColumns={2}
           data={images}
