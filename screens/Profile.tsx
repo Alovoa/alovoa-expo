@@ -426,7 +426,7 @@ const Profile = ({ route, navigation }) => {
       </ScrollView>
       <View style={{ marginBottom: 8, position: 'absolute', width: Dimensions.get('window').width, right: 0, bottom: 0, }}>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
+          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
             disabled={hidden || liked}>
             <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
