@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from "react-native";
-import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton, Checkbox } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton, Checkbox, HelperText } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as ImagePicker from 'expo-image-picker';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
@@ -66,6 +66,7 @@ const Onboarding = () => {
   const scrollRef = React.useRef(null);
   const svgHeight = 150;
   const svgWidth = 200;
+  const maxDescriptionLength = 200;
   const IMG_SIZE_MAX = 600;
 
   async function load() {
@@ -259,10 +260,15 @@ const Onboarding = () => {
               mode="outlined"
               onChangeText={(text) => setDescription(text)}
               placeholder={i18n.t('profile.onboarding.description-placeholder')}
-              maxLength={200}
+              maxLength={maxDescriptionLength}
               value={description}
               autoCorrect={false}
             />
+            <View>
+              <HelperText type="info" style={{ textAlign: 'right' }} visible>
+                {description.length} / {maxDescriptionLength}
+              </HelperText>
+            </View>
           </View>
         </KeyboardAvoidingView>
         <View style={[styles.view]}>

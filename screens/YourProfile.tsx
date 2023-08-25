@@ -9,7 +9,7 @@ import {
   RefreshControl,
   Keyboard
 } from "react-native";
-import { Text, TextInput, Button, Surface, Card } from "react-native-paper";
+import { Text, TextInput, Button, Surface, Card, HelperText } from "react-native-paper";
 import styles from "../assets/styles";
 import { YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum, UserDto, GenderEnum, } from "../types";
 import * as I18N from "../i18n";
@@ -64,6 +64,7 @@ const YourProfile = ({ route, navigation }) => {
   const [miscInfoKids, setMiscInfoKids] = React.useState(Array<number>);
   const [miscInfoDrugs, setMiscInfoDrugs] = React.useState(Array<number>);
   const [miscInfoRelationship, setMiscInfoRelationship] = React.useState(Array<number>);
+  const maxDescriptionLength = 200;
 
   const descriptionRef = React.useRef(description);
   const debounceDescriptionHandler = React.useCallback(debounce(updateDescription, 1500), []);
@@ -218,15 +219,20 @@ const YourProfile = ({ route, navigation }) => {
               setDescription(text)
             }}
             placeholder={i18n.t('profile.onboarding.description-placeholder')}
-            maxLength={200}
+            maxLength={maxDescriptionLength}
             value={description}
             autoCorrect={false}
           />
+          <View>
+            <HelperText type="info" style={{textAlign: 'right'}} visible>
+              {description.length} / {maxDescriptionLength}
+            </HelperText>
+          </View>
         </View>
 
         <View style={{ margin: 24 }}>
           <Card mode="contained" style={{ padding: 12 }}>
-            <Text style={{ textAlign: 'center' }}>{i18n.t('profile.donated') + ": " +  String(user?.totalDonations) + ' €'}</Text>
+            <Text style={{ textAlign: 'center' }}>{i18n.t('profile.donated') + ": " + String(user?.totalDonations) + ' €'}</Text>
           </Card>
         </View>
 
