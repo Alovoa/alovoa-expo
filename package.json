@@ -46,6 +46,7 @@
     "react-native-autocomplete-dropdown": "3.0.2",
     "react-native-card-stack-swiper": "^1.2.5",
     "react-native-file-access": "^2.5.2",
+    "react-native-gesture-handler": "^2.12.1",
     "react-native-pager-view": "6.2.0",
     "react-native-paper": "5.9.1",
     "react-native-paper-dates": "^0.18.12",

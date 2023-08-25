@@ -18,6 +18,7 @@ import { UserDto, UserImage, YourProfileResource } from "../../types";
 import { FAB, Button } from 'react-native-paper';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Alert from "../../components/Alert";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Photos = ({ route, navigation }) => {
 
@@ -69,11 +70,7 @@ const Photos = ({ route, navigation }) => {
   }
 
   React.useEffect(() => {
-    navigation.setOptions({
-      title: i18n.t('profile.photos.manage')
-    });
-    setProfilePic(user.profilePicture);
-    setImages(user.images)
+    load();
   }, []);
 
   async function pickImage() {
@@ -146,9 +143,9 @@ const Photos = ({ route, navigation }) => {
   );
 
   return (
-    <Portal>
-      <View style={{ flex: 1 }}>
-        <View style={[styles.top, { zIndex: 10, position: 'absolute', width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
+    <ScrollView>
+      <View>
+        <View style={[styles.top, {zIndex: 1, position: "absolute", width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
           <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
         </View>
         <TouchableOpacity
@@ -183,7 +180,7 @@ const Photos = ({ route, navigation }) => {
         }
       </View>
       <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.photos.delete')} buttons={alertButtons} />
-    </Portal>
+    </ScrollView>
   )
 };
 

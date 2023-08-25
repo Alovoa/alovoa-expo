@@ -16,6 +16,7 @@ import {
   useFonts, Montserrat_400Regular, Montserrat_500Medium, Montserrat_500Medium_Italic, 
   Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_700Bold_Italic
 } from '@expo-google-fonts/montserrat';
+import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types";
 
 LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();
@@ -37,6 +38,18 @@ export default function App() {
     Montserrat_700Bold,
     Montserrat_700Bold_Italic
   });
+
+  const config : TransitionSpec = {
+    animation: 'spring',
+    config: {
+      stiffness: 3000,
+      damping: 400,
+      mass: 5,
+      overshootClamping: true,
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 0.01,
+    },
+  };
 
   const baseFont = {
     fontFamily: 'Montserrat_400Regular',
@@ -109,42 +122,66 @@ export default function App() {
           <Stack.Navigator>
             <Stack.Screen
               name="Login"
-              options={{ headerShown: false, animationEnabled: false }}
+              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+                open: config,
+                close: config,
+              }, }}
               component={Login}
             ></Stack.Screen>
             <Stack.Screen
               name="Register"
-              options={{ headerShown: true, animationEnabled: false }}
+              options={{ headerShown: true, animationEnabled: true, transitionSpec: {
+                open: config,
+                close: config,
+              }, }}
               component={Register}
             ></Stack.Screen>
             <Stack.Screen
               name="Onboarding"
-              options={{ headerShown: false, animationEnabled: false }}
+              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+                open: config,
+                close: config,
+              }, }}
               component={Onboarding}
             ></Stack.Screen>
             <Stack.Screen
               name="Main"
-              options={{ headerShown: false, animationEnabled: false }}
+              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+                open: config,
+                close: config,
+              }, }}
               component={Main}
             ></Stack.Screen>
             <Stack.Screen
               name="Profile"
-              options={{ headerShown: false, animationEnabled: false }}
+              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+                open: config,
+                close: config,
+              }, }}
               component={Profile}
             ></Stack.Screen>
             <Stack.Screen
               name="MessageDetail"
-              options={{ headerShown: true, animationEnabled: false }}
+              options={{ headerShown: true, animationEnabled: true, transitionSpec: {
+                open: config,
+                close: config,
+              }, }}
               component={MessageDetail}
             ></Stack.Screen>
             <Stack.Screen
               name="Profile.Fotos"
-              options={{ headerShown: false, animationEnabled: false }}
+              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+                open: config,
+                close: config,
+              }, }}
               component={Photos}
             ></Stack.Screen>
             <Stack.Screen
               name="PasswordReset"
-              options={{ headerShown: false, animationEnabled: false }}
+              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+                open: config,
+                close: config,
+              }, }}
               component={PasswordReset}
             ></Stack.Screen>
           </Stack.Navigator>

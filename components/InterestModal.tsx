@@ -127,49 +127,47 @@ const InterestModal = ({ data }: InterestModalT) => {
 
   return (
     <View>
-      <Portal>
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >
-          <View>
-            <IconButton
-              style={{ alignSelf: 'flex-end' }}
-              icon="close"
-              size={20}
-              onPress={hideModal}
+      <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >
+        <View>
+          <IconButton
+            style={{ alignSelf: 'flex-end' }}
+            icon="close"
+            size={20}
+            onPress={hideModal}
+          />
+        </View>
+        <View style={{ padding: 12 }}>
+
+          {interests.length < MAX_INTERESTS &&
+            <Searchbar
+              placeholder={i18n.t('profile.interest')}
+              value={interest}
+              onChangeText={(text) => { setInterest(text) }}
+              onSubmitEditing={() => addInterest(interest)}
+              autoCorrect={false}
+              style={{ marginBottom: 18 }}
             />
-          </View>
-          <View style={{ padding: 12 }}>
+          }
 
-            {interests.length < MAX_INTERESTS &&
-              <Searchbar
-                placeholder={i18n.t('profile.interest')}
-                value={interest}
-                onChangeText={(text) => { setInterest(text) }}
-                onSubmitEditing={() => addInterest(interest)}
-                autoCorrect={false}
-                style={{ marginBottom: 18 }}
-              />
-            }
+          {
+            suggestionsList.map((item, index) => (
+              <Button key={index} onPress={() => { addInterest(item.id) }} mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+                <Text>{item.number}</Text>
+              </Button>
+            ))
+          }
 
-            {
-              suggestionsList.map((item, index) => (
-                <Button key={index} onPress={() => { addInterest(item.id) }} mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
-                  <Text>{item.number}</Text>
-                </Button>
-              ))
-            }
-
-            {suggestionsList?.length == 0 && <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>}
-            {suggestionsList?.length == 0 &&
-              interests.map((item, index) => (
-                <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
-                  <Text>{item.text}</Text>
-                </Button>
-              ))
-            }
-          </View>
-        </Modal>
-        <Alert visible={alertVisible} setVisible={setAlertVisible} message={Global.format(i18n.t('profile.interest-alert-delete'), interestToBeDeleted?.text)} buttons={alertButtons} />
-      </Portal>
+          {suggestionsList?.length == 0 && <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>}
+          {suggestionsList?.length == 0 &&
+            interests.map((item, index) => (
+              <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+                <Text>{item.text}</Text>
+              </Button>
+            ))
+          }
+        </View>
+      </Modal>
+      <Alert visible={alertVisible} setVisible={setAlertVisible} message={Global.format(i18n.t('profile.interest-alert-delete'), interestToBeDeleted?.text)} buttons={alertButtons} />
       <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.onboarding.interests')}</Text>
       <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
         style={{ alignSelf: 'stretch' }} onPress={showModal}>{buttonText}</Button>
