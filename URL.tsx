@@ -22,6 +22,9 @@ export const API_RESOURCE_CHATS = DOMAIN + "/api/v1/resource/chats"
 export const API_RESOURCE_CHATS_DETAIL = DOMAIN + "/api/v1/resource/chats/%s"
 export const API_RESOURCE_DONATE = DOMAIN + "/api/v1/resource/donate"
 export const API_RESOURCE_USER_ONBOARDING = DOMAIN + "/api/v1/resource/user/onboarding"
+export const API_RESOURCE_USER_BLOCKED = DOMAIN + "/api/v1/resource/blocked-users"
+export const API_RESOURCE_USER_LIKED = DOMAIN + "/api/v1/resource/liked-users"
+export const API_RESOURCE_USER_HIDDEN = DOMAIN + "/api/v1/resource/disliked-users"
 
 //lat: number, lon: number, distance: number, sort: number
 export const API_SEARCH_USERS = DOMAIN + "/api/v1/search/users/%s/%s/%s/%s"

@@ -151,5 +151,11 @@
         "no-permission": "Standortberechtigung nicht gesetzt",
         "no-signal": "Kein GPS Signal gefunden"
     },
-    "email-invalid": "Die Emailadresse ist ungültig."
+    "email-invalid": "Die Emailadresse ist ungültig.",
+    "likes": {
+        "received-likes": "Mögen dich",
+        "given-likes": "Vergebene Likes",
+        "hidden": "Versteckte Nutzer",
+        "blocked": "Geblockte Nutzer"
+    }
 }

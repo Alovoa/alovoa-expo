@@ -101,7 +101,7 @@
             "1": "Online",
             "2": "Active today"
         },
-        "interest": "Interest"
+        "interest": "Interest",
     },
     "cancel": "Cancel",
     "ok": "OK",
@@ -151,5 +151,11 @@
         "no-permission": "Location permission not set",
         "no-signal": "No GPS signal found"
     },
-    "email-invalid": "Invalid email address."
+    "email-invalid": "Invalid email address.",
+    "likes": {
+        "received-likes": "Like you",
+        "given-likes": "Given Likes",
+        "hidden": "Hidden users",
+        "blocked": "Blocked users"
+    }
 }

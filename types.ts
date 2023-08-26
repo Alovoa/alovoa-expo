@@ -306,6 +306,11 @@ export type UserOnboardingResource = {
   interestMaxSize: number;
 }
 
+export type UserUsersResource = {
+  users: Array<UserDto>;
+  user: UserDto;
+}
+
 export type AlertModel = {
   visible: boolean;
   message: string; 

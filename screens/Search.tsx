@@ -171,7 +171,7 @@ const Search = ({ route, navigation }) => {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
       { loading &&
         <View style={{height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute"}} >
-          <ActivityIndicator animating={loading} size={80} />
+          <ActivityIndicator animating={loading} size="large" />
         </View>
       }
       <View style={{ flex: 1 }}>
