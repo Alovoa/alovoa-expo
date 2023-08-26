@@ -1,0 +1,2 @@
+You can now see your liked, hidden and blocked users.
+Visual improvements.
