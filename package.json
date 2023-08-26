@@ -42,7 +42,7 @@
     "react": "18.2.0",
     "react-art": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native": "0.72.3",
+    "react-native": "0.72.4",
     "react-native-autocomplete-dropdown": "3.0.2",
     "react-native-card-stack-swiper": "^1.2.5",
     "react-native-file-access": "^2.5.2",
