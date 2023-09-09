@@ -106,7 +106,7 @@ export function loadPage(page: string = INDEX_REGISTER) {
     navigate("Onboarding");
   } else if (INDEX_MAIN == page) {
     navigate("Main", true);
-  } else {
+  } else if(INDEX_REGISTER == page) {
     navigate("Register");
   }
 }
