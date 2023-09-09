@@ -65,8 +65,8 @@ const Login = () => {
     let res = await WebBrowser.openAuthSessionAsync(URL.AUTH_GOOGLE + "/" + Buffer.from(APP_URL).toString('base64'));
     e.remove();
 
-    //_handleRedirect does not work on iOS, get url directly from WebBrowser.openAuthSessionAsync result instead
-    if (Platform.OS === 'ios' && res.type == "success" && res.url) {
+    //_handleRedirect does not work on iOS and web, get url directly from WebBrowser.openAuthSessionAsync result instead
+    if ((Platform.OS === 'ios' || Platform.OS === 'web') && res.type == "success" && res.url) {
       _handleRedirect({ url: res.url });
     }
   };
@@ -76,8 +76,8 @@ const Login = () => {
     let res = await WebBrowser.openAuthSessionAsync(URL.AUTH_FACEBOOK + "/" + Buffer.from(APP_URL).toString('base64'));
     e.remove();
 
-    //_handleRedirect does not work on iOS, get url directly from WebBrowser.openAuthSessionAsync result instead
-    if (Platform.OS === 'ios' && res.type == "success" && res.url) {
+    //_handleRedirect does not work on iOS and web, get url directly from WebBrowser.openAuthSessionAsync result instead
+    if ((Platform.OS === 'ios' || Platform.OS === 'web') && res.type == "success" && res.url) {
       _handleRedirect({ url: res.url });
     }
   };
