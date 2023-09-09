@@ -86,7 +86,6 @@
         "delete-account-success": "Success! Please follow the instructions in the email we sent you.",
         "download-userdata": "Download user data",
         "download-userdata-success": "User data downloaded!",
-        "details": "Details",
         "photos": {
             "manage": "Manage photos",
             "delete": "Delete photo?",
