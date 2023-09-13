@@ -74,7 +74,7 @@
                 "title": "Beziehungsstatus",
                 "single": "Single",
                 "taken": "In einer Beziehung",
-                "open" : "Offene Beziehung",
+                "open": "Offene Beziehung",
                 "other": "Es ist kompliziert"
             }
         },
@@ -101,7 +101,8 @@
             "1": "Online",
             "2": "Heute aktiv"
         },
-        "interest": "Interesse"
+        "interest": "Interesse",
+        "details": "Details"
     },
     "cancel": "Abbrechen",
     "ok": "OK",
