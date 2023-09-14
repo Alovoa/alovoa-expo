@@ -1,0 +1,151 @@
+{
+    "imprint": "Contatti",
+    "tos": "Termini di utilizzo",
+    "privacy-policy": "Informativa sulla privacy",
+    "auth": {
+        "email": "Accedi",
+        "google": "Accedi con Google",
+        "facebook": "Accedi con Facebook"
+    },
+    "first-name": "Nome",
+    "dob": "Data di nascita",
+    "link": "Link",
+    "optional": "Facoltativo",
+    "register": {
+        "title": "Registrati",
+        "subtitle": "Crea un nuovo profilo",
+        "tos-agree": "Accetto i termini di utilizzo",
+        "privacy-agree": "Accetto l'Informativa sulla privacy",
+        "referral-code": "Codice del referente",
+        "asterisk-warning": "I campi con l'asterisco (*) non possono essere modificati in seguito"
+    },
+    "gender": {
+        "title": "Genere",
+        "male": "Maschio",
+        "female": "Femmina",
+        "other": "Altro"
+    },
+    "profile": {
+        "onboarding": {
+            "profile-picture": "Questo è il mio aspetto",
+            "description": "Qualcosa su di me",
+            "description-placeholder": "Adoro il gelato!",
+            "interests": "Mi piacciono molto queste cose...",
+            "match": {
+                "title": "Inizia a ricevere like!",
+                "subtitle": "I messaggi possono essere inviati solo dopo un interesse reciproco"
+            },
+            "submit": "Andiamo!"
+        },
+        "intention": {
+            "title": "Vorrei...",
+            "meet": "incontrare nuove persone",
+            "date": "una relazione romantica",
+            "sex": "intimità sessuale",
+            "warning": "Può essere cambiato di nuovo solo dopo 24 ore"
+        },
+        "gender": "Sto cercando...",
+        "interest-alert": {
+            "title": "Rimuovere l'interesse?",
+            "subtitle": "Rimuovere l'interesse '%s' ?"
+        },
+        "units": {
+            "title": "Unità di misura",
+            "si": "SI",
+            "imperial": "Imperiale"
+        },
+        "age": {
+            "min": "Età minima",
+            "max": "Età massima"
+        },
+        "misc-info": {
+            "drugs": {
+                "title": "Vizi",
+                "alcohol": "Alcol",
+                "tobacco": "Tabacco",
+                "cannabis": "Cannabis",
+                "other": "Altre droghe"
+            },
+            "kids": {
+                "title": "Bambini",
+                "no": "Nessun figlio",
+                "yes": "Ha figli"
+            },
+            "relationship": {
+                "title": "Stato di relazione",
+                "single": "Singolo",
+                "taken": "In una relazione",
+                "open" : "Rapporto aperto",
+                "other": "È complicato"
+            }
+        },
+        "intention-toast": "L'intenzione è cambiata. Non si può cambiare nelle prossime 24 ore.",
+        "preferred-age-range": "Fascia d'età preferita",
+        "donated": "Donato",
+        "block": "Blocca",
+        "unblock": "Sblocca",
+        "delete-account": "Elimina profilo",
+        "delete-account-success": "Fatto! Segui le istruzioni nell'email che ti abbiamo inviato.",
+        "download-userdata": "Scarica dati utente",
+        "download-userdata-success": "Dati utente scaricati!",
+        "details": "Dettagli",
+        "photos": {
+            "manage": "Gestisci foto",
+            "delete": "Eliminare la foto?",
+            "change-profile-pic": "Cambia foto del profilo"
+        },
+        "logout": "Disconnettiti",
+        "report": {
+            "title": "Segnala",
+            "subtitle": "Segnalare l'utente per violazione dei termini d'utilizzo?"
+        }
+    },
+    "cancel": "Annulla",
+    "ok": "OK",
+    "navigation": {
+        "profile": "Profilo",
+        "chat": "Chat",
+        "search": "Cerca",
+        "likes": "Like",
+        "donate": "Dona"
+    },
+    "donate": {
+        "filter": {
+            "recent": "Recenti",
+            "amount": "Maggiori"
+        }
+    },
+    "chat": {
+        "default": "Un interesse reciproco! Tocca qui per inviare un messaggio :)",
+        "placeholder": "Scrivi un messaggio..."
+    },
+    "you": "Tu",
+    "sort": "Ordina",
+    "error": {
+        "generic": "Si è verificato un errore. Riprova."
+    },
+    "email": "Email",
+    "password": "Password",
+    "captcha": {
+        "title": "Captcha",
+        "placeholder": "Digita il testo"
+    },
+    "register-email": "Registrati con l'e-mail",
+    "register-email-success": "Grazie! Per completare la registrazione, clicca il link che ti abbiamo inviato.",
+    "register-password-warning": "La password deve essere di almeno 7 caratteri e deve contenere caratteri e numeri.",
+    "password-forget": "Password dimenticata?",
+    "password-reset": "Reimposta la password",
+    "password-reset-success": "Cerca nella tua email un messaggio da parte nostra e segui le istruzioni per reimpostare la password.",
+    "likes-empty": {
+        "title": "Ancora nessun like",
+        "subtitle": "Non preoccuparti, stanno arrivando nuovi utenti ogni giorno. Regolare le tue preferenze nel profilo potrebbe aiutare a ricevere like"
+    },
+    "convo-empty": {
+        "title": "Inizia a parlare trovando un interesse reciproco",
+        "subtitle": "Ottieni più interessi reciproci caricando foto attraenti e completando il tuo profilo"
+    },
+    "location-permission": {
+        "title": "Autorizzazione per la posizione",
+        "body": "L'app ha bisogno dell'autorizzazione di richiedere la tua posizione."
+    }
+}
