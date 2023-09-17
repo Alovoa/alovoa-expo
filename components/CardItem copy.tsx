@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView, useWindowDimensions } from "react-native";
+import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView } from "react-native";
 import { useTheme, Text, Chip } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT } from "../types";
@@ -7,9 +7,7 @@ import * as Global from "../Global";
 import styles, {
   DISLIKE_ACTIONS,
   LIKE_ACTIONS,
-  GRAY,
-  NAVIGATION_BAR_HEIGHT,
-  WIDESCREEN_HORIZONTAL_MAX
+  GRAY
 } from "../assets/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -25,31 +23,36 @@ const CardItem = ({
 
   const { colors } = useTheme();
 
-  const { height, width } = useWindowDimensions();
-  const imageSize = height < 840 ? height < 640 ? height / 2 : height / 1.5 : height;
-  const imagePadding = 30;
+  // Custom styling
+  const fullWidth = Dimensions.get("window").width;
+  const fullHeight = Dimensions.get("window").height;
+  const descriptionHeight = fullHeight - 597;
+  const descriptionHeightNoCommonInterest = fullHeight - 566;
 
   const imageStyle = [
     {
       borderRadius: 8,
-      width: imageSize - imagePadding,
-      height: imageSize - imagePadding,
-      maxWidth: WIDESCREEN_HORIZONTAL_MAX - imagePadding,
-      maxHeight: WIDESCREEN_HORIZONTAL_MAX - imagePadding,
-      marginTop: 26,
-      marginBottom: 4,
+      width: hasVariant ? fullWidth / 2 - 30 : fullWidth - 30,
+      height: hasVariant ? fullWidth / 2 - 30 : fullWidth - 30,
+      marginTop: hasVariant ? 0 : 26,
+      marginBottom: hasVariant ? 0 : 4,
     },
   ];
 
   const nameStyle: StyleProp<TextStyle> = [
     {
-      paddingTop: 4,
-      paddingBottom: 7,
-      fontSize: 20,
-      textAlign: 'auto',
+      paddingTop: hasVariant ? 10 : 4,
+      paddingBottom: hasVariant ? 5 : 7,
+      fontSize: hasVariant ? 15 : 20,
+      textAlign: hasVariant && !hasDonation ? 'center' : 'auto',
       textAlignVertical: 'center'
     },
   ];
+
+  const cardVariant = hasVariant ? {
+    width: 150, paddingBottom: 4
+  } : {}
+
 
   function onLikeUser() {
     swiper.current?.swipeRight();
@@ -60,7 +63,7 @@ const CardItem = ({
   }
 
   return (
-    <View style={[styles.containerCardItem, { backgroundColor: colors.background, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - 8, width: width - 8}]}>
+    <View style={[styles.containerCardItem, cardVariant, { backgroundColor: colors.background }]}>
       {/* IMAGE */}
       <TouchableOpacity onPress={() => Global.nagivateProfile(user)}>
         <Image source={{ uri: user.profilePicture ? user.profilePicture : undefined }} style={imageStyle} />
@@ -101,7 +104,7 @@ const CardItem = ({
 
       {/* DESCRIPTION */}
       {!hasVariant && user.description && (
-        <ScrollView>
+        <ScrollView style={{ height: user.commonInterests.length != 0 ? descriptionHeight : descriptionHeightNoCommonInterest }}>
           <Text style={styles.descriptionCardItem}>{user.description}</Text>
         </ScrollView>
       )}

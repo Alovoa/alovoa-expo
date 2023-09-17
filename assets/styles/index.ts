@@ -17,10 +17,12 @@ export const LIKE_ACTIONS = WHITE;
 export const DISLIKE_ACTIONS = WHITE;
 export const FLASH_ACTIONS = "#5028D7";
 
-export const DIMENSION_WIDTH = Dimensions.get("window").width;
-export const DIMENSION_HEIGHT = Dimensions.get("window").height;
+// export const width = Dimensions.get("window").width;
+// export const height = Dimensions.get("window").height;
 
 export const STATUS_BAR_HEIGHT = 26;
+export const NAVIGATION_BAR_HEIGHT = 80;
+export const WIDESCREEN_HORIZONTAL_MAX = 600;
 
 export default StyleSheet.create({
   link: {
@@ -62,7 +64,7 @@ export default StyleSheet.create({
     shadowColor: GRAY,
     shadowOffset: { height: 0, width: 0 },
     flexGrow: 1,
-    width: DIMENSION_WIDTH - 8
+    // width: width - 8
   },
   matchesCardItem: {
     marginTop: -35,
@@ -183,7 +185,7 @@ export default StyleSheet.create({
     justifyContent: "flex-start",
     flexDirection: "row",
     paddingHorizontal: 10,
-    width: DIMENSION_WIDTH - 100,
+    // width: width - 100,
   },
   avatar: {
     borderRadius: 30,
@@ -248,8 +250,8 @@ export default StyleSheet.create({
   bg: {
     flex: 1,
     resizeMode: "cover",
-    width: DIMENSION_WIDTH,
-    height: DIMENSION_HEIGHT,
+    // width: width,
+    // height: height,
   },
   top: {
     paddingTop: 12,
@@ -258,7 +260,7 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  title: { paddingBottom: 10, fontSize: 22},
+  title: { paddingBottom: 10, fontSize: 22 },
 
   // CONTAINER - HOME
   containerHome: {
@@ -281,12 +283,12 @@ export default StyleSheet.create({
   // CONTAINER - PROFILE
   containerProfile: { marginHorizontal: 0 },
   photo: {
-    width: DIMENSION_WIDTH,
-    height: DIMENSION_WIDTH,
+    width: WIDESCREEN_HORIZONTAL_MAX,
+    height: WIDESCREEN_HORIZONTAL_MAX,
   },
   profileImage: {
-    width: DIMENSION_WIDTH/2,
-    height: DIMENSION_WIDTH/2,
+    width: WIDESCREEN_HORIZONTAL_MAX / 2,
+    height: WIDESCREEN_HORIZONTAL_MAX / 2,
     padding: 8
   },
   topIconLeft: {

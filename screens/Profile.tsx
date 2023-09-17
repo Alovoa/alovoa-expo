@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  useWindowDimensions,
 } from "react-native";
 import { useTheme, Text, Button, Chip, Card, Menu, Portal } from "react-native-paper";
 import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage } from "../types";
@@ -61,6 +62,7 @@ const Profile = ({ route, navigation }) => {
   var user: UserDto = route.params.user;
   var idEnc = route.params.idEnc;
   const { colors } = useTheme();
+  const { height, width } = useWindowDimensions();
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [compatible, setCompatible] = React.useState(false);
@@ -424,7 +426,7 @@ const Profile = ({ route, navigation }) => {
           </View>
         </View>
       </ScrollView>
-      <View style={{ marginBottom: 8, position: 'absolute', width: Dimensions.get('window').width, right: 0, bottom: 0, }}>
+      <View style={{ marginBottom: 8, position: 'absolute', width: width, right: 0, bottom: 0, }}>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
             disabled={hidden || liked}>

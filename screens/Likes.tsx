@@ -5,7 +5,8 @@ import {
   FlatList,
   RefreshControl,
   Dimensions,
-  Pressable
+  Pressable,
+  useWindowDimensions
 } from "react-native";
 
 import { ActivityIndicator, Button, Menu, Text, useTheme } from "react-native-paper";
@@ -37,7 +38,7 @@ const Likes = ({ navigation }) => {
   const [menuFilterVisible, setMenuFilterVisible] = React.useState(false);
   const [filter, setFilter] = React.useState(FILTER.RECEIVED_LIKES);
   const [loading, setLoading] = React.useState(false);
-  const { height, width } = Dimensions.get('window');
+  const { height, width } = useWindowDimensions();
 
   const svgHeight = 150;
   const svgWidth = 200;

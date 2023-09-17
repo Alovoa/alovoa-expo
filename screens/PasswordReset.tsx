@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme, Text, Button, Dialog, Portal, Provider, TextInput, IconButton } from "react-native-paper";
-import { View, Platform, StyleSheet, Image, Dimensions } from "react-native";
+import { View, Platform, StyleSheet, Image, Dimensions, useWindowDimensions } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -19,6 +19,7 @@ const PasswordReset = ({ route, navigation }) => {
 
   const svgHeight = 150;
   const svgWidth = 200;
+  const { height, width } = useWindowDimensions();
 
   const [email, setEmail] = React.useState("");
   const [emailValid, setEmailValid] = React.useState(false);
@@ -30,6 +31,60 @@ const PasswordReset = ({ route, navigation }) => {
   const [visible, setVisible] = React.useState(false);
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
+
+  const styles = StyleSheet.create({
+    container: { flex: 1, backgroundColor: 'white' },
+    child: { width, justifyContent: 'center' },
+    text: { fontSize: width * 0.5, textAlign: 'center' },
+    view: {
+      width: width,
+      height: height,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    button: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 4,
+      elevation: 3,
+      backgroundColor: '#ec407a',
+      margin: 4,
+      flexDirection: 'row',
+    },
+    svg: {
+      marginTop: 24,
+      marginBottom: 12
+    },
+    profilePicButton: {
+      width: 200,
+      height: 200
+    },
+    title: {
+      textAlign: 'center',
+      marginTop: 12,
+      marginBottom: 12,
+      fontSize: 18,
+    },
+    radioButton: {
+      marginBottom: 12,
+      marginTop: 12,
+    },
+    switchText: {
+      marginBottom: 12,
+      marginTop: 12,
+    },
+    warning: {
+      textAlign: 'center',
+      marginTop: 24,
+      opacity: 0.5,
+      fontSize: 10
+    },
+    buttonText: {
+      color: 'white'
+    },
+  });  
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -65,7 +120,7 @@ const PasswordReset = ({ route, navigation }) => {
 
   return (
     <View style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]}>
-      <View style={{ height: Dimensions.get("window").height }}>
+      <View style={{ height: height }}>
 
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <SvgPasswordReset style={styles.svg} height={svgHeight} width={svgWidth} />
@@ -118,59 +173,3 @@ const PasswordReset = ({ route, navigation }) => {
 };
 
 export default PasswordReset;
-
-const { height, width } = Dimensions.get('window');
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'white' },
-  child: { width, justifyContent: 'center' },
-  text: { fontSize: width * 0.5, textAlign: 'center' },
-  view: {
-    width: width,
-    height: height,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: '#ec407a',
-    margin: 4,
-    flexDirection: 'row',
-  },
-  svg: {
-    marginTop: 24,
-    marginBottom: 12
-  },
-  profilePicButton: {
-    width: 200,
-    height: 200
-  },
-  title: {
-    textAlign: 'center',
-    marginTop: 12,
-    marginBottom: 12,
-    fontSize: 18,
-  },
-  radioButton: {
-    marginBottom: 12,
-    marginTop: 12,
-  },
-  switchText: {
-    marginBottom: 12,
-    marginTop: 12,
-  },
-  warning: {
-    textAlign: 'center',
-    marginTop: 24,
-    opacity: 0.5,
-    fontSize: 10
-  },
-  buttonText: {
-    color: 'white'
-  },
-});

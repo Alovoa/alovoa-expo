@@ -6,7 +6,8 @@ import {
   Keyboard,
   Dimensions,
   Image,
-  ScrollView
+  ScrollView,
+  useWindowDimensions
 } from "react-native";
 import {
   TextInput, Card
@@ -21,16 +22,15 @@ import * as WebBrowser from 'expo-web-browser';
 import * as I18N from "../i18n";
 
 const i18n = I18N.getI18n()
-
 const SECOND_MS = 1000;
 const POLL_MESSAGE = 5 * SECOND_MS;
-const DIMENSION_WIDTH = Dimensions.get("window").width;
 
 const MessageDetail = ({ route, navigation }) => {
 
   const { conversation } = route.params;
 
   const { colors } = useTheme();
+  const { height, width } = useWindowDimensions();
   const [refreshing, setRefreshing] = React.useState(false);
   const [results, setResults] = React.useState(Array<MessageDto>);
   let scrollViewRef = React.useRef<ScrollView>(null);
@@ -101,7 +101,7 @@ const MessageDetail = ({ route, navigation }) => {
     marginBottom: 6,
     padding: 10,
     borderRadius: 10,
-    width: DIMENSION_WIDTH * 0.85
+    width: width * 0.85
   }
 
   return (

@@ -6,6 +6,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import * as I18N from "../i18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Text } from 'react-native-paper';
+import { NAVIGATION_BAR_HEIGHT } from "../assets/styles";
 
 const i18n = I18N.getI18n()
 const ICON_SIZE = 26;
@@ -55,7 +56,7 @@ const Main = ({ route, navigation }) => {
 
     updateNewAlert();
     updateNewMessage();
-    
+
     Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_SEARCH);
   }, []);
 
@@ -71,24 +72,24 @@ const Main = ({ route, navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
-  function saveScreen(target : string | undefined) {
-    if(target) {
+  function saveScreen(target: string | undefined) {
+    if (target) {
       let targetSplitArr = target.split("-");
       let screen = targetSplitArr[0];
 
-      switch(screen) {
-        case Global.SCREEN_YOURPROFILE:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_YOURPROFILE);
-        case Global.SCREEN_CHAT:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_CHAT);
-        case Global.SCREEN_SEARCH:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_SEARCH);
-        case Global.SCREEN_LIKES:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_LIKES);
-        case Global.SCREEN_DONATE:  Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_DONATE);
+      switch (screen) {
+        case Global.SCREEN_YOURPROFILE: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_YOURPROFILE);
+        case Global.SCREEN_CHAT: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_CHAT);
+        case Global.SCREEN_SEARCH: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_SEARCH);
+        case Global.SCREEN_LIKES: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_LIKES);
+        case Global.SCREEN_DONATE: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_DONATE);
       }
     }
-   
+
   }
 
   return (
-    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH}>
+    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH} barStyle={{height: NAVIGATION_BAR_HEIGHT}}>
       <Tab.Screen
         name={Global.SCREEN_YOURPROFILE}
         component={YourProfile}

@@ -7,6 +7,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   TouchableOpacity,
+  useWindowDimensions,
 } from "react-native";
 import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton, Checkbox, HelperText } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
@@ -42,6 +43,7 @@ const GENDER_OTHER = 3
 const Onboarding = () => {
 
   const { colors } = useTheme();
+  const { height, width } = useWindowDimensions();
 
   const [image, setImage] = React.useState("");
   const [imageB64, setImageB64] = React.useState("");
@@ -68,6 +70,57 @@ const Onboarding = () => {
   const svgWidth = 200;
   const maxDescriptionLength = 200;
   const IMG_SIZE_MAX = 600;
+
+  const styles = StyleSheet.create({
+    container: { flex: 1, backgroundColor: 'white' },
+    child: { width, justifyContent: 'center' },
+    text: { fontSize: width * 0.5, textAlign: 'center' },
+    view: {
+      width: width,
+      height: height,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    button: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 4,
+      elevation: 3,
+      backgroundColor: '#ec407a',
+      margin: 4,
+      flexDirection: 'row',
+    },
+    svg: {
+      marginTop: 24,
+      marginBottom: 12,
+    },
+    profilePicButton: {
+      width: 200,
+      height: 200
+    },
+    title: {
+      textAlign: 'center',
+      marginTop: 12,
+      marginBottom: 12,
+      fontSize: 18,
+    },
+    radioButton: {
+      marginBottom: 12,
+      marginTop: 12,
+    },
+    switchText: {
+      marginBottom: 12,
+      marginTop: 12,
+    },
+    warning: {
+      textAlign: 'center',
+      marginTop: 24,
+      opacity: 0.5,
+      fontSize: 10
+    }
+  });  
 
   async function load() {
     let response = await Global.Fetch(URL.API_RESOURCE_USER_ONBOARDING);
@@ -463,58 +516,5 @@ const Onboarding = () => {
     </View>
   )
 }
-
-const { height, width } = Dimensions.get('window');
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'white' },
-  child: { width, justifyContent: 'center' },
-  text: { fontSize: width * 0.5, textAlign: 'center' },
-  view: {
-    width: width,
-    height: height,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: '#ec407a',
-    margin: 4,
-    flexDirection: 'row',
-  },
-  svg: {
-    marginTop: 24,
-    marginBottom: 12,
-  },
-  profilePicButton: {
-    width: 200,
-    height: 200
-  },
-  title: {
-    textAlign: 'center',
-    marginTop: 12,
-    marginBottom: 12,
-    fontSize: 18,
-  },
-  radioButton: {
-    marginBottom: 12,
-    marginTop: 12,
-  },
-  switchText: {
-    marginBottom: 12,
-    marginTop: 12,
-  },
-  warning: {
-    textAlign: 'center',
-    marginTop: 24,
-    opacity: 0.5,
-    fontSize: 10
-  }
-});
 
 export default Onboarding;

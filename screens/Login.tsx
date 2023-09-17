@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme, Text, Button, Dialog, Portal, Provider, TextInput, IconButton } from "react-native-paper";
-import { View, Platform, StyleSheet, Image, Dimensions, Alert, ScrollView } from "react-native";
+import { View, Platform, StyleSheet, Image, Dimensions, Alert, ScrollView, useWindowDimensions } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
@@ -31,6 +31,7 @@ const Login = () => {
   const [visible, setVisible] = React.useState(false);
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
+  const { height, width } = useWindowDimensions();
 
   React.useEffect(() => {
     Global.GetStorage(Global.STORAGE_PAGE).then((value) => {
@@ -118,7 +119,7 @@ const Login = () => {
 
   return (
     <ScrollView style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]} keyboardShouldPersistTaps='always'>
-      <View style={{ height: Dimensions.get("window").height }}>
+      <View style={{ height: height }}>
         <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
 
         <Text style={{ textAlign: 'center', marginBottom: 48, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>

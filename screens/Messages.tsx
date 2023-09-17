@@ -3,7 +3,8 @@ import {
   View,
   FlatList,
   RefreshControl,
-  Dimensions
+  Dimensions,
+  useWindowDimensions
 } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { Message } from "../components";
@@ -22,7 +23,7 @@ const Messages = ({ navigation }) => {
   const [loaded, setLoaded] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [results, setResults] = React.useState(Array<ConversationDto>);
-  const { height, width } = Dimensions.get('window');
+  const { height, width } = useWindowDimensions();
 
   const svgHeight = 150;
   const svgWidth = 200;

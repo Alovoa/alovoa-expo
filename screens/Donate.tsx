@@ -54,50 +54,50 @@ const Donate = () => {
   }, []);
 
   return (
-    <View style={styles.containerMatches} >
-      <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
-      <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Global.FLAG_FDROID &&
-            <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{ marginRight: 4 }}>
-              <Text>{i18n.t('navigation.donate')}</Text>
-            </Button>}
-          <View>
-            <Menu
-              visible={menuSortVisible}
-              onDismiss={hideMenuSort}
-              anchor={<Button icon="sort" mode="contained-tonal" onPress={() => showMenuSort()}>
-                <Text>{i18n.t('sort')}</Text>
-              </Button>}>
-              <Menu.Item leadingIcon="sort-clock-ascending-outline" onPress={() => { updateFilter(FILTER_RECENT) }} title={i18n.t('donate.filter.recent')} />
-              <Menu.Item leadingIcon="sort-numeric-descending-variant" onPress={() => { updateFilter(FILTER_AMOUNT) }} title={i18n.t('donate.filter.amount')} />
-            </Menu>
+    <View style={styles.centerHorizontal}>
+      <View style={[styles.containerMatches, styles.screenVertical]}>
+        <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
+        <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {Global.FLAG_FDROID &&
+              <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{ marginRight: 4 }}>
+                <Text>{i18n.t('navigation.donate')}</Text>
+              </Button>}
+            <View>
+              <Menu
+                visible={menuSortVisible}
+                onDismiss={hideMenuSort}
+                anchor={<Button icon="sort" mode="contained-tonal" onPress={() => showMenuSort()}>
+                  <Text>{i18n.t('sort')}</Text>
+                </Button>}>
+                <Menu.Item leadingIcon="sort-clock-ascending-outline" onPress={() => { updateFilter(FILTER_RECENT) }} title={i18n.t('donate.filter.recent')} />
+                <Menu.Item leadingIcon="sort-numeric-descending-variant" onPress={() => { updateFilter(FILTER_AMOUNT) }} title={i18n.t('donate.filter.amount')} />
+              </Menu>
+            </View>
           </View>
         </View>
+
+
+        <FlatList
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
+          columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
+          numColumns={2}
+          data={results}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity>
+              <CardItem
+                user={item.user}
+                hasActions={false}
+                hasVariant
+                hasDonation
+                donation={item.amount}
+              />
+            </TouchableOpacity>
+          )}
+        />
       </View>
-
-
-      <FlatList
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
-        columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
-        numColumns={2}
-        data={results}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity>
-            <CardItem
-              user={item.user}
-              hasActions={false}
-              hasVariant
-              hasDonation
-              donation={item.amount}
-            />
-          </TouchableOpacity>
-        )}
-      />
-
-
-    </View>
+    </View >
   )
 };
 

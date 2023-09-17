@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, RefreshControl, ScrollView, Alert, Dimensions } from "react-native";
+import { View, RefreshControl, ScrollView, Alert, Dimensions, useWindowDimensions } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import { CardItem } from "../components";
 import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
@@ -36,7 +36,7 @@ const Search = ({ route, navigation }) => {
   let latitude: number | undefined;
   let longitude: number | undefined;
 
-  const { height, width } = Dimensions.get('window');
+  const { height, width } = useWindowDimensions();
 
   const LOCATION_TIMEOUT_SHORT = 2000;
   const LOCATION_TIMEOUT_LONG = 5000;
@@ -175,11 +175,12 @@ const Search = ({ route, navigation }) => {
         </View>
       }
       <View style={{ flex: 1 }}>
-       <View style={{ flex: 1, justifyContent: 'flex-end' }}>      
+       <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>      
           <CardStack
             ref={swiper}
             style={{
-              justifyContent: 'flex-end'
+              justifyContent: 'flex-end',
+              alignItems: 'center' 
             }}
             verticalSwipe={false}
             renderNoMoreCards={() => null}
