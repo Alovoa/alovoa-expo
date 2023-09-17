@@ -7,6 +7,7 @@ import * as URL from "../URL";
 import * as I18N from "../i18n";
 import SvgPasswordReset from "../assets/images/password-reset.svg";
 import { Captcha, PasswordResetDto } from "../types";
+import VerticalView from "../components/VerticalView";
 
 const i18n = I18N.getI18n()
 const IMAGE_HEADER = "data:image/webp;base64,";
@@ -84,7 +85,7 @@ const PasswordReset = ({ route, navigation }) => {
     buttonText: {
       color: 'white'
     },
-  });  
+  });
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -119,28 +120,28 @@ const PasswordReset = ({ route, navigation }) => {
   }
 
   return (
-    <View style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]}>
-      <View style={{ height: height }}>
+    <VerticalView>
 
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <SvgPasswordReset style={styles.svg} height={svgHeight} width={svgWidth} />
-        </View>
+      <Text style={{ textAlign: 'center', marginBottom: 12, fontSize: 32, fontWeight: '500' }}>{i18n.t('password-reset')}</Text>
 
-        <TextInput
-          style={{ backgroundColor: colors.background }}
-          label={i18n.t('email')}
-          value={email}
-          onChangeText={text => {
-            setEmail(text);
-            setEmailValid(Global.isEmailValid(text));
-          }}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-
-        <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { showCaptchaDialog() }}
-        ><Text style={styles.buttonText}>{i18n.t('password-reset')}</Text></Button>
+      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <SvgPasswordReset style={styles.svg} height={svgHeight} width={svgWidth} />
       </View>
+
+      <TextInput
+        style={{ backgroundColor: colors.background }}
+        label={i18n.t('email')}
+        value={email}
+        onChangeText={text => {
+          setEmail(text);
+          setEmailValid(Global.isEmailValid(text));
+        }}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+
+      <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { showCaptchaDialog() }}
+      ><Text style={styles.buttonText}>{i18n.t('password-reset')}</Text></Button>
 
       <Dialog visible={visible} onDismiss={hideDialog}>
         <Dialog.Title>{i18n.t('captcha.title')}</Dialog.Title>
@@ -168,7 +169,7 @@ const PasswordReset = ({ route, navigation }) => {
           />
         </Dialog.Actions>
       </Dialog>
-    </View>
+    </VerticalView>
   )
 };
 

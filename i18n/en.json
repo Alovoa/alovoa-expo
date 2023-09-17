@@ -9,7 +9,6 @@
     },
     "first-name": "First name",
     "dob": "Date of birth",
-    "link": "Link",
     "optional": "Optional",
     "register": {
         "title": "Register",

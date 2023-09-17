@@ -92,7 +92,7 @@ export default function App() {
       primary: '#EC407A',
       secondary: '#28C4ED',
       tertiary: '#F2D3DD',
-      background: isDarkTheme ? '#121212' : "#FFFFFF"
+      background: isDarkTheme ? '#000000' : "#FFFFFF"
     },
   };
 
@@ -178,7 +178,7 @@ export default function App() {
             ></Stack.Screen>
             <Stack.Screen
               name="PasswordReset"
-              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+              options={{ headerShown: true, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
               }, }}

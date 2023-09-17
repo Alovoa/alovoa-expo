@@ -8,6 +8,7 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
 import { Captcha } from "../types";
+import VerticalView from "../components/VerticalView";
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
@@ -118,71 +119,72 @@ const Login = () => {
   }
 
   return (
-    <ScrollView style={[{ flex: 1, padding: 12, backgroundColor: colors.background }]} keyboardShouldPersistTaps='always'>
-      <View style={{ height: height }}>
-        <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
+    <VerticalView>
+      <View >
+        <View style={{ height: height }}>
+          <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
 
-        <Text style={{ textAlign: 'center', marginBottom: 48, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
+          <Text style={{ textAlign: 'center', marginBottom: 48, marginTop: 24, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
 
-        <TextInput
-          style={{ backgroundColor: colors.background }}
-          label={i18n.t('email')}
-          value={email}
-          onChangeText={text => {
-            setEmail(text);
-            setEmailValid(Global.isEmailValid(text));
-          }}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={{ backgroundColor: colors.background }}
-          label={i18n.t('password')}
-          value={password}
-          onChangeText={text => setPassword(text)}
-          autoCapitalize="none"
-          secureTextEntry={true}
-        />
+          <TextInput
+            style={{ backgroundColor: colors.background }}
+            label={i18n.t('email')}
+            value={email}
+            onChangeText={text => {
+              setEmail(text);
+              setEmailValid(Global.isEmailValid(text));
+            }}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={{ backgroundColor: colors.background }}
+            label={i18n.t('password')}
+            value={password}
+            onChangeText={text => setPassword(text)}
+            autoCapitalize="none"
+            secureTextEntry={true}
+          />
 
-        <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { emailSignInPress() }}
-        ><Text style={styles.buttonText}>{i18n.t('auth.email')}</Text></Button>
+          <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { emailSignInPress() }}
+          ><Text style={styles.buttonText}>{i18n.t('auth.email')}</Text></Button>
 
+          <View style={{ paddingBottom: 38 }}></View>
+
+          <Button icon="google" mode="contained" style={[styles.buttonGoogle]}
+            onPress={() => {
+              loginGoogle();
+            }}
+          ><Text style={styles.buttonText}>{i18n.t('auth.google')}</Text></Button>
+          <Button icon="facebook" mode="contained" style={[styles.buttonFacebook, { marginTop: 8 }]}
+            onPress={() => {
+              loginFacebook();
+            }}
+          ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+        </View>
+
+        <View style={{ marginTop: 8 }}>
+          <Text style={styles.link} onPress={() => {
+            Global.navigate("Register", false, { registerEmail: true });
+          }}>{i18n.t('register-email')}</Text>
+          <Text style={styles.link} onPress={() => {
+            Global.navigate("PasswordReset", false, {});
+          }}>{i18n.t('password-forget')}</Text>
+        </View>
+
+        <View style={{ marginTop: 24 }}>
+          <Text style={styles.link} onPress={() => {
+            WebBrowser.openBrowserAsync(URL.PRIVACY);
+          }}>{i18n.t('privacy-policy')}</Text>
+          <Text style={styles.link} onPress={() => {
+            WebBrowser.openBrowserAsync(URL.TOS);
+          }}>{i18n.t('tos')}</Text>
+          <Text style={styles.link} onPress={() => {
+            WebBrowser.openBrowserAsync(URL.IMPRINT);
+          }}>{i18n.t('imprint')}</Text>
+        </View>
         <View style={{ paddingBottom: 38 }}></View>
-
-        <Button icon="google" mode="contained" style={[styles.buttonGoogle]}
-          onPress={() => {
-            loginGoogle();
-          }}
-        ><Text style={styles.buttonText}>{i18n.t('auth.google')}</Text></Button>
-        <Button icon="facebook" mode="contained" style={[styles.buttonFacebook, { marginTop: 8 }]}
-          onPress={() => {
-            loginFacebook();
-          }}
-        ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
       </View>
-
-      <View style={{ marginTop: 8 }}>
-        <Text style={styles.link} onPress={() => {
-          Global.navigate("Register", false, { registerEmail: true });
-        }}>{i18n.t('register-email')}</Text>
-        <Text style={styles.link} onPress={() => {
-          Global.navigate("PasswordReset");
-        }}>{i18n.t('password-forget')}</Text>
-      </View>
-
-      <View style={{ marginTop: 24 }}>
-        <Text style={styles.link} onPress={() => {
-          WebBrowser.openBrowserAsync(URL.PRIVACY);
-        }}>{i18n.t('privacy-policy')}</Text>
-        <Text style={styles.link} onPress={() => {
-          WebBrowser.openBrowserAsync(URL.TOS);
-        }}>{i18n.t('tos')}</Text>
-        <Text style={styles.link} onPress={() => {
-          WebBrowser.openBrowserAsync(URL.IMPRINT);
-        }}>{i18n.t('imprint')}</Text>
-      </View>
-      <View style={{ paddingBottom: 38 }}></View>
-
 
       <Dialog visible={visible} onDismiss={hideDialog}>
         <Dialog.Title>{i18n.t('captcha.title')}</Dialog.Title>
@@ -210,7 +212,7 @@ const Login = () => {
           />
         </Dialog.Actions>
       </Dialog>
-    </ScrollView>
+    </VerticalView>
   )
 };
 
