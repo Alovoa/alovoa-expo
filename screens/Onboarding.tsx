@@ -1,7 +1,6 @@
 import React from "react";
 import {
   View,
-  Dimensions,
   StyleSheet,
   Image,
   Platform,
@@ -9,7 +8,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
-import { useTheme, Text, Button, TextInput, Switch, RadioButton, IconButton, Checkbox, HelperText } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as ImagePicker from 'expo-image-picker';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
@@ -36,11 +35,15 @@ enum Interest {
   Three,
 }
 
-const GENDER_MALE = 1
-const GENDER_FEMALE = 2
-const GENDER_OTHER = 3
-
 const Onboarding = () => {
+
+  const GENDER_MALE = 1;
+  const GENDER_FEMALE = 2;
+  const GENDER_OTHER = 3;
+
+  const PAGE_PROFILE_PIC = 1;
+  const PAGE_DESCRIPTION = 2;
+  const PAGE_PREF_GENDER = 3;
 
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -65,7 +68,7 @@ const Onboarding = () => {
   const dropdownController = React.useRef({})
   const dropdownController2 = React.useRef({})
   const dropdownController3 = React.useRef({})
-  const scrollRef = React.useRef(null);
+  const scrollRef = React.useRef<SwiperFlatList>(null);
   const svgHeight = 150;
   const svgWidth = 200;
   const maxDescriptionLength = 200;
@@ -120,7 +123,7 @@ const Onboarding = () => {
       opacity: 0.5,
       fontSize: 10
     }
-  });  
+  });
 
   async function load() {
     let response = await Global.Fetch(URL.API_RESOURCE_USER_ONBOARDING);
@@ -238,13 +241,13 @@ const Onboarding = () => {
 
   async function submit() {
     if (!imageB64) {
-      scrollRef.current.scrollToIndex({ index: 0 });
+      scrollRef?.current?.scrollToIndex({ index: PAGE_PROFILE_PIC });
       return;
     } else if (!description) {
-      scrollRef.current.scrollToIndex({ index: 1 });
+      scrollRef?.current?.scrollToIndex({ index: PAGE_DESCRIPTION });
       return;
     } else if (!isGenderMaleEnabled && !isGenderFemaleEnabled && !isGenderOtherEnabled) {
-      scrollRef.current.scrollToIndex({ index: 2 });
+      scrollRef?.current?.scrollToIndex({ index: PAGE_PREF_GENDER });
       return;
     }
 
@@ -285,13 +288,14 @@ const Onboarding = () => {
   }
 
   return (
-    <View style={{ backgroundColor: colors.background }}>
+    <View>
       <SwiperFlatList
         ref={scrollRef}
         showPagination={true}
         renderAll={true}
         paginationDefaultColor="#9e9e9e"
-        paginationActiveColor="#EC407A"
+        paginationActiveColor={colors.primary}
+        paginationStyleItem={{ maxHeight: 20, maxWidth: 20, height: width / 30, width: width / 30, marginHorizontal: width / 90 }}
       >
         <View style={[styles.view]}>
           <SvgProfilePic style={styles.svg} height={svgHeight} width={svgWidth} />
