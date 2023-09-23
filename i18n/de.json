@@ -75,7 +75,8 @@
                 "taken": "In einer Beziehung",
                 "open" : "Offene Beziehung",
                 "other": "Es ist kompliziert"
-            }
+            },
+            "none": "Keine"
         },
         "intention-toast": "Intention geändert. Du kannst dies in 24h wieder ändern.",
         "preferred-age-range": "Bevorzugte Altersspanne",

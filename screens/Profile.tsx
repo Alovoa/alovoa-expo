@@ -4,7 +4,7 @@ import {
   View,
   FlatList,
   RefreshControl,
-  Dimensions,
+  StyleSheet,
   TouchableOpacity,
   Pressable,
   Image,
@@ -20,12 +20,13 @@ import styles, {
   DISLIKE_ACTIONS,
   LIKE_ACTIONS,
   GRAY,
-  DIMENSION_WIDTH,
-  STATUS_BAR_HEIGHT
+  STATUS_BAR_HEIGHT,
+  WIDESCREEN_HORIZONTAL_MAX
 } from "../assets/styles";
 import Icon from "../components/Icon";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import Alert from "../components/Alert";
+import VerticalView from "../components/VerticalView";
 
 
 const i18n = I18N.getI18n()
@@ -97,6 +98,16 @@ const Profile = ({ route, navigation }) => {
   const [previousScreen, setPreviousScreen] = React.useState<String | null>();
   const showMenu = () => { setMenuVisible(true) };
   const hideMenu = () => { setMenuVisible(false) };
+
+  const style = StyleSheet.create({
+    image: {
+      width: width,
+      height: width,
+      maxWidth: WIDESCREEN_HORIZONTAL_MAX,
+      maxHeight: WIDESCREEN_HORIZONTAL_MAX,
+      aspectRatio: 1,
+    },
+  });
 
   const alertButtons = [
     {
@@ -306,8 +317,19 @@ const Profile = ({ route, navigation }) => {
   }, [previousScreen, removeUser]);
 
   return (
-    <View>
-      <View style={[styles.top, { zIndex: 1, position: "absolute", width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
+    <View style={{ height: height }}>
+      <View style={{ zIndex: 1, marginBottom: 16, position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
+            disabled={hidden || liked}>
+            <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, hidden || !compatible || liked ? { opacity: 0.5 } : {}, {backgroundColor: colors.primary}]} onPress={() => likeUser()} disabled={!compatible || liked}>
+            <Icon name="heart" color={LIKE_ACTIONS} size={25} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
         <Pressable onPress={navigation.goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View>
@@ -322,10 +344,7 @@ const Profile = ({ route, navigation }) => {
           </View>
         </View>
       </View>
-
-      <ScrollView style={styles.containerProfile} keyboardShouldPersistTaps='handled'
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
-
+      <VerticalView style={{padding: 0}} onRefresh={load}>
         <View>
           <SwiperFlatList
             autoplay
@@ -339,7 +358,7 @@ const Profile = ({ route, navigation }) => {
           >
             {
               swiperImages?.map((image, index) => (
-                <Image key={index} source={{ uri: image ? image : undefined }} style={styles.photo} />
+                <Image key={index} source={{ uri: image ? image : undefined }} style={style.image} />
               ))
             }
           </SwiperFlatList>
@@ -421,23 +440,12 @@ const Profile = ({ route, navigation }) => {
               </Chip>
             </ScrollView>
             {
-              <View style={{ marginTop: 48 }}></View>
+              <View style={{ marginTop: 80 }}></View>
             }
           </View>
         </View>
-      </ScrollView>
-      <View style={{ marginBottom: 8, position: 'absolute', width: width, right: 0, bottom: 0, }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
-            disabled={hidden || liked}>
-            <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => likeUser()} disabled={!compatible || liked}>
-            <Icon name="heart" color={LIKE_ACTIONS} size={25} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.report.subtitle')} buttons={alertButtons} />
+        <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.report.subtitle')} buttons={alertButtons} />
+      </VerticalView>
     </View>
   );
 };

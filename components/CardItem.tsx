@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView, useWindowDimensions } from "react-native";
+import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView, StyleSheet, useWindowDimensions } from "react-native";
 import { useTheme, Text, Chip } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT } from "../types";
@@ -9,7 +9,8 @@ import styles, {
   LIKE_ACTIONS,
   GRAY,
   NAVIGATION_BAR_HEIGHT,
-  WIDESCREEN_HORIZONTAL_MAX
+  WIDESCREEN_HORIZONTAL_MAX,
+  STATUS_BAR_HEIGHT
 } from "../assets/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -26,20 +27,25 @@ const CardItem = ({
   const { colors } = useTheme();
 
   const { height, width } = useWindowDimensions();
-  const imageSize = height < 840 ? height < 640 ? height / 2 : height / 1.5 : height;
-  const imagePadding = 30;
 
-  const imageStyle = [
-    {
+  const style = StyleSheet.create({
+    image: {
       borderRadius: 8,
-      width: imageSize - imagePadding,
-      height: imageSize - imagePadding,
-      maxWidth: WIDESCREEN_HORIZONTAL_MAX - imagePadding,
-      maxHeight: WIDESCREEN_HORIZONTAL_MAX - imagePadding,
-      marginTop: 26,
+      width: calcImageSize(),
+      height: 'auto',
+      maxWidth: WIDESCREEN_HORIZONTAL_MAX,
+      marginTop: STATUS_BAR_HEIGHT ? STATUS_BAR_HEIGHT + 4 : 4,
       marginBottom: 4,
+      aspectRatio: 1,
     },
-  ];
+  });
+
+  function calcImageSize(): number {
+    if (width <= 380) {
+      return width - (380 - width);
+    }
+    return width + 200 < height ? width - 16 : height / 2;
+  }
 
   const nameStyle: StyleProp<TextStyle> = [
     {
@@ -60,10 +66,10 @@ const CardItem = ({
   }
 
   return (
-    <View style={[styles.containerCardItem, { backgroundColor: colors.background, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - 8, width: width - 8}]}>
+    <View style={[styles.containerCardItem, { backgroundColor: colors.surface, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - 8, width: width - 8 }]}>
       {/* IMAGE */}
       <TouchableOpacity onPress={() => Global.nagivateProfile(user)}>
-        <Image source={{ uri: user.profilePicture ? user.profilePicture : undefined }} style={imageStyle} />
+        <Image source={{ uri: user.profilePicture ? user.profilePicture : undefined }} style={style.image} />
       </TouchableOpacity>
 
       {/* NAME */}
@@ -112,7 +118,7 @@ const CardItem = ({
           <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onhideUser()}>
             <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => onLikeUser()}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: colors.primary}]} onPress={() => onLikeUser()}>
             <Icon name="heart" color={LIKE_ACTIONS} size={25} />
           </TouchableOpacity>
         </View>

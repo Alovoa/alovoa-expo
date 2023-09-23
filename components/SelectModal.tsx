@@ -2,9 +2,11 @@ import React from "react";
 import { SelectModalT } from "../types";
 import { Modal, Portal, Text, Button, Checkbox, useTheme, IconButton } from 'react-native-paper';
 import { View } from "react-native";
+import * as I18N from "../i18n";
 
 const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, data, selected, onValueChanged }: SelectModalT) => {
 
+  const i18n = I18N.getI18n();
   const { colors } = useTheme();
   const [selectedIds, setSelectedIds] = React.useState(selected);
   const [buttonText, setButtonText] = React.useState("");
@@ -16,6 +18,9 @@ const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, dat
 
   function updateButtonText() {
     let text = data.filter(item => selectedIds.includes(item.id)).map(item => item.title).join(", ");
+    if(!text) {
+      text = i18n.t('profile.misc-info.none');
+    }
     setButtonText(text);
   }
 

@@ -1,16 +1,14 @@
 import React from "react";
 import {
-  ScrollView,
   View,
   ImageBackground,
   TouchableOpacity,
   Platform,
-  Alert,
-  RefreshControl,
-  Keyboard
+  StyleSheet,
+  useWindowDimensions
 } from "react-native";
 import { Text, TextInput, Button, Surface, Card, HelperText } from "react-native-paper";
-import styles from "../assets/styles";
+import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import { YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum, UserDto, GenderEnum, } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
@@ -23,6 +21,7 @@ import * as Sharing from 'expo-sharing';
 import SelectModal from "../components/SelectModal";
 import AgeRangeSliderModal from "../components/AgeRangeSliderModal";
 import InterestModal from "../components/InterestModal";
+import VerticalView from "../components/VerticalView";
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
@@ -44,6 +43,8 @@ enum IntentionText {
 }
 
 const YourProfile = ({ route, navigation }) => {
+
+  const { height, width } = useWindowDimensions();
 
   const [requestingDeletion, setRequestingDeletion] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -68,6 +69,15 @@ const YourProfile = ({ route, navigation }) => {
 
   const descriptionRef = React.useRef(description);
   const debounceDescriptionHandler = React.useCallback(debounce(updateDescription, 1500), []);
+
+  const style = StyleSheet.create({
+    image: {
+      width: '100%',
+      height: 'auto',
+      maxWidth: WIDESCREEN_HORIZONTAL_MAX,
+      aspectRatio: 1,
+    },
+  });
 
   React.useEffect(() => {
     descriptionRef.current = description;
@@ -196,11 +206,10 @@ const YourProfile = ({ route, navigation }) => {
   }
 
   return (
-    <ScrollView style={[styles.containerProfile]} keyboardShouldPersistTaps='handled'
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
+    <VerticalView onRefresh={load} style={{padding: 0}}>
       <TouchableOpacity
         onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>
-        <ImageBackground source={{ uri: profilePic }} style={styles.photo}>
+        <ImageBackground source={{ uri: profilePic }} style={style.image}>
         </ImageBackground>
       </TouchableOpacity>
 
@@ -224,7 +233,7 @@ const YourProfile = ({ route, navigation }) => {
             autoCorrect={false}
           />
           <View>
-            <HelperText type="info" style={{textAlign: 'right'}} visible>
+            <HelperText type="info" style={{ textAlign: 'right' }} visible>
               {description.length} / {maxDescriptionLength}
             </HelperText>
           </View>
@@ -331,7 +340,7 @@ const YourProfile = ({ route, navigation }) => {
         </View>
 
       </View>
-    </ScrollView>
+    </VerticalView>
   );
 };
 

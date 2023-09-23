@@ -1,46 +1,29 @@
-import { StyleSheet, Dimensions, useColorScheme } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 
-export const PRIMARY_COLOR = "#EC407A";
-export const PRIMARY_COLOR_LIGHT = "#F2D3DD";
-export const SECONDARY_COLOR = "#28C4ED";
-export const SECONDARY_COLOR_LIGHT = "#71D7F0";
 export const WHITE = "#FFFFFF";
 export const GRAY = "#757E90";
 export const DARK_GRAY = "#363636";
 export const BLACK = "#000000";
+export const LINK = "#ec407a";
 
 export const ONLINE_STATUS = "#46A575";
 export const OFFLINE_STATUS = "#D04949";
 
-export const STAR_ACTIONS = "#FFA200";
 export const LIKE_ACTIONS = WHITE;
 export const DISLIKE_ACTIONS = WHITE;
-export const FLASH_ACTIONS = "#5028D7";
 
-// export const width = Dimensions.get("window").width;
-// export const height = Dimensions.get("window").height;
-
-export const STATUS_BAR_HEIGHT = 26;
+export const STATUS_BAR_HEIGHT = StatusBar.currentHeight;
 export const NAVIGATION_BAR_HEIGHT = 80;
 export const WIDESCREEN_HORIZONTAL_MAX = 600;
 
 export default StyleSheet.create({
   link: {
-    color: "#ec407a",
+    color: LINK,
     flex: 1,
   },
   center: {
     alignItems: "center",
     justifyContent: "center",
-  },
-  profileButton: {
-    backgroundColor: PRIMARY_COLOR,
-    padding: 12,
-    borderRadius: 8
-  },
-  profileButtonLight: {
-    backgroundColor: PRIMARY_COLOR_LIGHT,
-    padding: 12
   },
   radioButton: {
     marginBottom: 12,
@@ -65,13 +48,6 @@ export default StyleSheet.create({
     shadowOffset: { height: 0, width: 0 },
     flexGrow: 1,
     // width: width - 8
-  },
-  matchesCardItem: {
-    marginTop: -35,
-    backgroundColor: PRIMARY_COLOR,
-    paddingVertical: 7,
-    paddingHorizontal: 20,
-    borderRadius: 20,
   },
   matchesTextCardItem: {
     color: WHITE,
@@ -116,7 +92,6 @@ export default StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "#EC407A",
     marginHorizontal: 7,
     alignItems: "center",
     justifyContent: "center",
@@ -206,15 +181,6 @@ export default StyleSheet.create({
     paddingBottom: 25,
     margin: 20,
   },
-  matchesProfileItem: {
-    width: 135,
-    marginTop: -15,
-    backgroundColor: PRIMARY_COLOR,
-    paddingVertical: 7,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    alignSelf: "center",
-  },
   matchesTextProfileItem: {
     color: WHITE,
     textAlign: "center",
@@ -282,15 +248,6 @@ export default StyleSheet.create({
 
   // CONTAINER - PROFILE
   containerProfile: { marginHorizontal: 0 },
-  photo: {
-    width: WIDESCREEN_HORIZONTAL_MAX,
-    height: WIDESCREEN_HORIZONTAL_MAX,
-  },
-  profileImage: {
-    width: WIDESCREEN_HORIZONTAL_MAX / 2,
-    height: WIDESCREEN_HORIZONTAL_MAX / 2,
-    padding: 8
-  },
   topIconLeft: {
     paddingLeft: 20,
   },
@@ -306,25 +263,6 @@ export default StyleSheet.create({
     fontSize: 15,
     color: WHITE,
     paddingLeft: 5,
-  },
-  circledButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: PRIMARY_COLOR,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-  },
-  roundedButton: {
-    justifyContent: "center",
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: 10,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: SECONDARY_COLOR,
-    paddingHorizontal: 20,
   },
 
   // MENU

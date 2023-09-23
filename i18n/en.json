@@ -74,7 +74,8 @@
                 "taken": "In a relationship",
                 "open" : "Open relationship",
                 "other": "It's complicated"
-            }
+            },
+            "none": "None"
         },
         "intention-toast": "Intention changed. You cannot change it for another 24 hours.",
         "preferred-age-range": "Preferred age range",

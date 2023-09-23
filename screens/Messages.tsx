@@ -1,19 +1,17 @@
 import React from "react";
 import {
   View,
-  FlatList,
-  RefreshControl,
-  Dimensions,
   useWindowDimensions
 } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { Message } from "../components";
 import { ChatsResource, ConversationDto } from "../types";
-import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
+import { STATUS_BAR_HEIGHT } from "../assets/styles";
 import ConvoEmpty from "../assets/images/convo-empty.svg";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
+import VerticalView from "../components/VerticalView";
 
 const Messages = ({ navigation }) => {
 
@@ -43,26 +41,23 @@ const Messages = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <View style={styles.containerMatches}>
+    <VerticalView onRefresh={load}>
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
-      <FlatList
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
-        data={results}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Message
+      {
+        results.map((item, index) => (
+          <Message key={index}
             conversation={item}
           />
-        )}
-      />
-      {results && results.length == 0 && loaded && 
+        ))
+      }
+      {results && results.length == 0 && loaded &&
         <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center' }}>
           <ConvoEmpty height={svgHeight} width={svgWidth}></ConvoEmpty>
           <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('convo-empty.title')}</Text>
           <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48 }}>{i18n.t('convo-empty.subtitle')}</Text>
         </View>
       }
-    </View>
+    </VerticalView>
   )
 };
 

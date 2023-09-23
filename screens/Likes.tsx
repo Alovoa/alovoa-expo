@@ -18,6 +18,7 @@ import * as URL from "../URL";
 import { AlertsResource, UserDto, UnitsEnum, UserUsersResource } from "../types";
 import LikesEmpty from "../assets/images/likes-empty.svg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import VerticalView from "../components/VerticalView";
 
 const Likes = ({ navigation }) => {
 
@@ -92,7 +93,7 @@ const Likes = ({ navigation }) => {
   }, [filter]);
 
   return (
-    <View style={styles.containerMatches} >
+    <VerticalView onRefresh={load} style={styles.containerMatches} >
       {loading &&
         <View style={{ zIndex: 1, height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
@@ -141,7 +142,7 @@ const Likes = ({ navigation }) => {
           <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48 }}>{i18n.t('likes-empty.subtitle')}</Text>
         </View>
       }
-    </View>
+    </VerticalView>
   )
 };
 

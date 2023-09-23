@@ -5,12 +5,14 @@ import {
   FlatList,
   Pressable,
   Image,
-  Platform
+  Platform,
+  StyleSheet,
+  useWindowDimensions
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { Portal, useTheme } from "react-native-paper";
-import styles, { DIMENSION_WIDTH, STATUS_BAR_HEIGHT } from "../../assets/styles";
+import { useTheme } from "react-native-paper";
+import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -18,11 +20,13 @@ import { UserDto, UserImage, YourProfileResource } from "../../types";
 import { FAB, Button } from 'react-native-paper';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Alert from "../../components/Alert";
-import { ScrollView } from "react-native-gesture-handler";
+import VerticalView from "../../components/VerticalView";
 
 const Photos = ({ route, navigation }) => {
 
   var user: UserDto = route.params.user;
+
+  const { height, width } = useWindowDimensions();
   const { colors } = useTheme();
   const i18n = I18N.getI18n()
   const MAX_IMAGES = 4;
@@ -65,6 +69,7 @@ const Photos = ({ route, navigation }) => {
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
     let dto: UserDto = data.user;
+    console.log(dto.images.length)
     setImages(dto.images);
     setProfilePic(dto.profilePicture);
   }
@@ -142,31 +147,41 @@ const Photos = ({ route, navigation }) => {
     [navigation]
   );
 
+  const style = StyleSheet.create({
+    image: {
+      width: '100%',
+      height: 'auto',
+      maxWidth: WIDESCREEN_HORIZONTAL_MAX,
+      aspectRatio: 1,
+    },
+    imageSmall: {
+      width: '50%',
+      maxWidth: '50%',
+    }
+  });
+
   return (
-    <ScrollView>
-      <View>
-        <View style={[styles.top, { zIndex: 1, position: "absolute", width: DIMENSION_WIDTH, marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
-          <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
-        </View>
+    <View style={{ height: height }}>
+      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
+        <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
+      </View>
+      <VerticalView style={{ padding: 0 }} onRefresh={load}>
         <TouchableOpacity
           onPress={() => { updateProfilePicture() }}>
-          <Image source={{ uri: profilePic ? profilePic : undefined }} style={styles.photo} />
+          <Image source={{ uri: profilePic ? profilePic : undefined }} style={style.image} />
         </TouchableOpacity>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -54, marginBottom: 24 }}>
           <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => updateProfilePicture()}>{i18n.t('profile.photos.change-profile-pic')}</Button>
         </View>
-        <FlatList
-          scrollEnabled={false}
-          columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
-          numColumns={2}
-          data={images}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => removeImage(item.id)}>
-              <Image source={{ uri: item.content }} style={styles.profileImage} />
-            </TouchableOpacity>
-          )}
-        />
+        <View style={{ flexDirection: 'row', width: '100%' }}>
+          {
+            images.map((item, index) => (
+              <TouchableOpacity key={index} style={[style.image, style.imageSmall, { flex: 1 }]} onPress={() => removeImage(item.id)}>
+                <Image source={{ uri: item.content }} style={[style.image]} />
+              </TouchableOpacity>
+            ))
+          }
+        </View>
         {images.length < MAX_IMAGES &&
           <FAB
             icon="image-plus"
@@ -179,9 +194,9 @@ const Photos = ({ route, navigation }) => {
             onPress={() => addImage()}
           />
         }
-      </View>
+      </VerticalView>
       <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.photos.delete')} buttons={alertButtons} />
-    </ScrollView>
+    </View>
   )
 };
 

@@ -121,7 +121,7 @@ const Login = () => {
   return (
     <VerticalView>
       <View >
-        <View style={{ height: height }}>
+        <View style={{ minHeight: height }}>
           <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
 
           <Text style={{ textAlign: 'center', marginBottom: 48, marginTop: 24, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
@@ -163,7 +163,7 @@ const Login = () => {
           ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
         </View>
 
-        <View style={{ marginTop: 8 }}>
+        <View style={{ marginTop: 64 }}>
           <Text style={styles.link} onPress={() => {
             Global.navigate("Register", false, { registerEmail: true });
           }}>{i18n.t('register-email')}</Text>

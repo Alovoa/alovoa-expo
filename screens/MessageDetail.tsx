@@ -15,7 +15,7 @@ import {
 
 import { useTheme, Text } from "react-native-paper";
 import { MessageDtoListModel, MessageDto } from "../types";
-import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
+import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as WebBrowser from 'expo-web-browser';
@@ -101,7 +101,7 @@ const MessageDetail = ({ route, navigation }) => {
     marginBottom: 6,
     padding: 10,
     borderRadius: 10,
-    width: width * 0.85
+    maxWidth: width * 0.85,
   }
 
   return (
@@ -113,7 +113,7 @@ const MessageDetail = ({ route, navigation }) => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
         {
           results.map((item, index) => (
-            <View key={index} style={[{ flex: 1 }, item.from ? {} : { alignItems: 'flex-end' }]}>
+            <View key={index} style={[{ flex: 1 }, item.from ? {alignItems : 'flex-start'} : { alignItems: 'flex-end' }]}>
               <Card style={[styleChat, item.from ? {} : styleYourChat]} >
                 {!item.allowedFormatting && <Text style={[item.from ? {} : styleYourChat]}>{item.content}</Text>}
                 {item.allowedFormatting && <Text style={[{ textDecorationLine: 'underline' }, item.from ? {} : styleYourChat]} onPress={() => {

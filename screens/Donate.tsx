@@ -14,14 +14,14 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import { DonationDtoListModel, DonationDto } from "../types";
 import * as Linking from 'expo-linking';
+import VerticalView from "../components/VerticalView";
 
 const Donate = () => {
 
   const FILTER_RECENT = 1;
   const FILTER_AMOUNT = 2;
 
-  const i18n = I18N.getI18n()
-  const { colors } = useTheme();
+  const i18n = I18N.getI18n();
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [results, setResults] = React.useState(Array<DonationDto>);
@@ -54,8 +54,8 @@ const Donate = () => {
   }, []);
 
   return (
-    <View style={styles.centerHorizontal}>
-      <View style={[styles.containerMatches, styles.screenVertical]}>
+    <VerticalView>
+      <View style={[styles.containerMatches]}>
         <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
         <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -77,7 +77,6 @@ const Donate = () => {
           </View>
         </View>
 
-
         <FlatList
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
@@ -97,7 +96,7 @@ const Donate = () => {
           )}
         />
       </View>
-    </View >
+    </VerticalView >
   )
 };
 
