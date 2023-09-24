@@ -220,7 +220,7 @@ const YourProfile = ({ route, navigation }) => {
       <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
         <Text style={[styles.name]}>{name + ", " + age}</Text>
         <View style={{ marginTop: 24 }}>
-          <TextInput
+          <TextInput style={{height: 128}}
             label={i18n.t('profile.onboarding.description')}
             multiline={true}
             mode="outlined"

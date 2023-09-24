@@ -121,7 +121,6 @@ const PasswordReset = ({ route, navigation }) => {
 
   return (
     <VerticalView>
-
       <Text style={{ textAlign: 'center', marginBottom: 12, fontSize: 32, fontWeight: '500' }}>{i18n.t('password-reset')}</Text>
 
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>

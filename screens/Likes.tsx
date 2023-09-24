@@ -4,13 +4,12 @@ import {
   TouchableOpacity,
   FlatList,
   RefreshControl,
-  Dimensions,
   Pressable,
   useWindowDimensions
 } from "react-native";
 
 import { ActivityIndicator, Button, Menu, Text, useTheme } from "react-native-paper";
-import { CardItem } from "../components";
+import { CardItemLikes } from "../components";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
@@ -93,14 +92,14 @@ const Likes = ({ navigation }) => {
   }, [filter]);
 
   return (
-    <VerticalView onRefresh={load} style={styles.containerMatches} >
+    <View style={{height: height}}>
       {loading &&
         <View style={{ zIndex: 1, height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
         </View>
       }
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
-      <View style={[styles.top, { paddingBottom: 8, justifyContent: 'space-between' }]}>
+      <View style={[styles.top, { paddingBottom: 8, justifyContent: 'space-between', width: width }]}>
         {filter == FILTER.RECEIVED_LIKES && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.received-likes')}</Text>}
         {filter == FILTER.GIVEN_LIKES && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.given-likes')}</Text>}
         {filter == FILTER.HIDDEN && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.hidden')}</Text>}
@@ -117,32 +116,31 @@ const Likes = ({ navigation }) => {
           </Menu>
         </View>
       </View>
-
-      <FlatList
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
-        columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
-        numColumns={2}
-        data={results}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity>
-            <CardItem
-              user={item}
-              hasActions={false}
-              unitsImperial={user?.units == UnitsEnum.IMPERIAL}
-              hasVariant
-            />
-          </TouchableOpacity>
-        )}
-      />
-      {results && results.length == 0 && loaded && filter == FILTER.RECEIVED_LIKES &&
-        <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center' }}>
-          <LikesEmpty height={svgHeight} width={svgWidth}></LikesEmpty>
-          <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('likes-empty.title')}</Text>
-          <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48 }}>{i18n.t('likes-empty.subtitle')}</Text>
-        </View>
-      }
-    </VerticalView>
+      <VerticalView onRefresh={load}>
+        <FlatList
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
+          columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
+          numColumns={2}
+          data={results}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity>
+              <CardItemLikes
+                user={item}
+                unitsImperial={user?.units == UnitsEnum.IMPERIAL}
+              />
+            </TouchableOpacity>
+          )}
+        />
+        {results && results.length == 0 && loaded && filter == FILTER.RECEIVED_LIKES &&
+          <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center' }}>
+            <LikesEmpty height={svgHeight} width={svgWidth}></LikesEmpty>
+            <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('likes-empty.title')}</Text>
+            <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48 }}>{i18n.t('likes-empty.subtitle')}</Text>
+          </View>
+        }
+      </VerticalView>
+    </View>
   )
 };
 

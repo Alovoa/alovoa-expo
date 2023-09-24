@@ -69,7 +69,6 @@ const Photos = ({ route, navigation }) => {
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
     let dto: UserDto = data.user;
-    console.log(dto.images.length)
     setImages(dto.images);
     setProfilePic(dto.profilePicture);
   }
@@ -161,7 +160,7 @@ const Photos = ({ route, navigation }) => {
   });
 
   return (
-    <View style={{ height: height }}>
+    <View style={{ height: height}}>
       <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
         <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
       </View>
@@ -182,20 +181,20 @@ const Photos = ({ route, navigation }) => {
             ))
           }
         </View>
-        {images.length < MAX_IMAGES &&
-          <FAB
-            icon="image-plus"
-            style={{
-              position: 'absolute',
-              margin: 16,
-              right: 0,
-              bottom: 0,
-            }}
-            onPress={() => addImage()}
-          />
-        }
       </VerticalView>
       <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.photos.delete')} buttons={alertButtons} />
+      {images.length < MAX_IMAGES &&
+        <FAB
+          icon="image-plus"
+          style={{
+            position: 'absolute',
+            margin: 16,
+            right: 0,
+            bottom: 0,
+          }}
+          onPress={() => addImage()}
+        />
+      }
     </View>
   )
 };

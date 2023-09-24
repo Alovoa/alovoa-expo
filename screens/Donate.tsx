@@ -3,11 +3,12 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-  RefreshControl
+  RefreshControl,
+  useWindowDimensions
 } from "react-native";
 
-import { useTheme, Text, Button, Menu, Appbar } from "react-native-paper";
-import { CardItem } from "../components";
+import { Text, Button, Menu } from "react-native-paper";
+import { CardItemDonate } from "../components";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
@@ -22,6 +23,7 @@ const Donate = () => {
   const FILTER_AMOUNT = 2;
 
   const i18n = I18N.getI18n();
+  const { height, width } = useWindowDimensions();
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [results, setResults] = React.useState(Array<DonationDto>);
@@ -54,29 +56,28 @@ const Donate = () => {
   }, []);
 
   return (
-    <VerticalView>
-      <View style={[styles.containerMatches]}>
-        <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
-        <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            {Global.FLAG_FDROID &&
-              <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{ marginRight: 4 }}>
-                <Text>{i18n.t('navigation.donate')}</Text>
-              </Button>}
-            <View>
-              <Menu
-                visible={menuSortVisible}
-                onDismiss={hideMenuSort}
-                anchor={<Button icon="sort" mode="contained-tonal" onPress={() => showMenuSort()}>
-                  <Text>{i18n.t('sort')}</Text>
-                </Button>}>
-                <Menu.Item leadingIcon="sort-clock-ascending-outline" onPress={() => { updateFilter(FILTER_RECENT) }} title={i18n.t('donate.filter.recent')} />
-                <Menu.Item leadingIcon="sort-numeric-descending-variant" onPress={() => { updateFilter(FILTER_AMOUNT) }} title={i18n.t('donate.filter.amount')} />
-              </Menu>
-            </View>
+    <View style={{ height: height }}>
+      <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
+      <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {Global.FLAG_FDROID &&
+            <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{ marginRight: 4 }}>
+              <Text>{i18n.t('navigation.donate')}</Text>
+            </Button>}
+          <View>
+            <Menu
+              visible={menuSortVisible}
+              onDismiss={hideMenuSort}
+              anchor={<Button icon="sort" mode="contained-tonal" onPress={() => showMenuSort()}>
+                <Text>{i18n.t('sort')}</Text>
+              </Button>}>
+              <Menu.Item leadingIcon="sort-clock-ascending-outline" onPress={() => { updateFilter(FILTER_RECENT) }} title={i18n.t('donate.filter.recent')} />
+              <Menu.Item leadingIcon="sort-numeric-descending-variant" onPress={() => { updateFilter(FILTER_AMOUNT) }} title={i18n.t('donate.filter.amount')} />
+            </Menu>
           </View>
         </View>
-
+      </View>
+      <VerticalView>
         <FlatList
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
@@ -85,18 +86,15 @@ const Donate = () => {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity>
-              <CardItem
+              <CardItemDonate
                 user={item.user}
-                hasActions={false}
-                hasVariant
-                hasDonation
                 donation={item.amount}
               />
             </TouchableOpacity>
           )}
         />
-      </View>
-    </VerticalView >
+      </VerticalView>
+    </View>
   )
 };
 

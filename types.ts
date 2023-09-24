@@ -1,13 +1,8 @@
-import CardStack from "react-native-card-stack-swiper";
-
 export type CardItemT = {
   user: UserDto;
-  hasActions?: boolean;
-  hasVariant?: boolean;
-  hasDonation?: boolean;
+  donation?: number;
   unitsImperial?: boolean;
   swiper?: any;
-  donation?: number;
 };
 
 export type IconT = {

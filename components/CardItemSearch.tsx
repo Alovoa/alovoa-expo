@@ -16,26 +16,23 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const CardItem = ({
   user,
-  hasActions,
-  hasVariant,
-  hasDonation,
   unitsImperial,
   swiper,
-  donation
 }: CardItemT) => {
 
   const { colors } = useTheme();
 
   const { height, width } = useWindowDimensions();
+  const cardPadding = 8;
 
   const style = StyleSheet.create({
     image: {
-      borderRadius: 8,
+      borderRadius: cardPadding,
       width: calcImageSize(),
       height: 'auto',
       maxWidth: WIDESCREEN_HORIZONTAL_MAX,
-      marginTop: STATUS_BAR_HEIGHT ? STATUS_BAR_HEIGHT + 4 : 4,
-      marginBottom: 4,
+      marginTop: cardPadding / 2 + 2,
+      marginBottom: cardPadding / 2,
       aspectRatio: 1,
     },
   });
@@ -44,7 +41,7 @@ const CardItem = ({
     if (width <= 380) {
       return width - (380 - width);
     }
-    return width + 200 < height ? width - 16 : height / 2;
+    return width + 300 < height ? width - cardPadding * 2 : height / (height < 900 ? 2 : 1.5) - cardPadding;
   }
 
   const nameStyle: StyleProp<TextStyle> = [
@@ -66,33 +63,26 @@ const CardItem = ({
   }
 
   return (
-    <View style={[styles.containerCardItem, { backgroundColor: colors.surface, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - 8, width: width - 8 }]}>
+    <View style={[styles.containerCardItem, { backgroundColor: colors.surface, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - cardPadding - STATUS_BAR_HEIGHT, width: width - cardPadding }]}>
       {/* IMAGE */}
       <TouchableOpacity onPress={() => Global.nagivateProfile(user)}>
         <Image source={{ uri: user.profilePicture ? user.profilePicture : undefined }} style={style.image} />
       </TouchableOpacity>
 
       {/* NAME */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: hasVariant ? 4 : 20 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: 20 }}>
         <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
-          {!hasVariant && user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 6, paddingTop: 10 }} />}
+          {user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 6, paddingTop: 10 }} />}
         </View>
-        {!hasVariant &&
-          <View style={{ flexDirection: 'row', marginTop: 8 }}>
-            <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
-            <Text>{user.distanceToUser}</Text>
-            <Text>{unitsImperial ? ' mi' : ' km'}</Text>
-          </View>
-        }
-        {hasDonation &&
-          <View style={{ alignItems: 'center' }}>
-            <Text style={[nameStyle, { paddingLeft: 4 }]}>{donation + ' €'}</Text>
-          </View>
-        }
+        <View style={{ flexDirection: 'row', marginTop: 8 }}>
+          <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
+          <Text>{user.distanceToUser}</Text>
+          <Text>{unitsImperial ? ' mi' : ' km'}</Text>
+        </View>
       </View>
 
       {/* COMMON INTERESTS */}
-      {!hasVariant && <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingLeft: 20 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingLeft: 20 }}>
         <FlatList
           style={{ marginBottom: 4 }}
           horizontal={true}
@@ -103,26 +93,24 @@ const CardItem = ({
           )}
         />
       </View>
-      }
+
 
       {/* DESCRIPTION */}
-      {!hasVariant && user.description && (
+      {user.description && (
         <ScrollView>
           <Text style={styles.descriptionCardItem}>{user.description}</Text>
         </ScrollView>
       )}
 
       {/* ACTIONS */}
-      {hasActions && (
-        <View style={styles.actionsCardItem}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onhideUser()}>
-            <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: colors.primary}]} onPress={() => onLikeUser()}>
-            <Icon name="heart" color={LIKE_ACTIONS} size={25} />
-          </TouchableOpacity>
-        </View>
-      )}
+      <View style={styles.actionsCardItem}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onhideUser()}>
+          <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={() => onLikeUser()}>
+          <Icon name="heart" color={LIKE_ACTIONS} size={25} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

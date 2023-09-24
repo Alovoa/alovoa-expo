@@ -12,7 +12,7 @@ export const OFFLINE_STATUS = "#D04949";
 export const LIKE_ACTIONS = WHITE;
 export const DISLIKE_ACTIONS = WHITE;
 
-export const STATUS_BAR_HEIGHT = StatusBar.currentHeight;
+export const STATUS_BAR_HEIGHT : number = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
 export const NAVIGATION_BAR_HEIGHT = 80;
 export const WIDESCREEN_HORIZONTAL_MAX = 600;
 
@@ -221,7 +221,7 @@ export default StyleSheet.create({
   },
   top: {
     paddingTop: 12,
-    marginHorizontal: 10,
+    paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

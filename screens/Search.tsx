@@ -8,6 +8,7 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
 import { ActivityIndicator } from "react-native-paper";
+import CardItemSearch from "../components/CardItemSearch";
 
 
 const i18n = I18N.getI18n()
@@ -190,9 +191,8 @@ const Search = ({ route, navigation }) => {
             {
               results.map((card, index) => (
                 <Card key={card.idEncoded}>
-                  <CardItem
+                  <CardItemSearch
                     user={card}
-                    hasActions={true}
                     unitsImperial={user?.units == UnitsEnum.IMPERIAL}
                     swiper={swiper}
                   />

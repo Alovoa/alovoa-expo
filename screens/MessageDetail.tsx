@@ -106,7 +106,6 @@ const MessageDetail = ({ route, navigation }) => {
 
   return (
     <View style={[styles.containerMessages, { paddingHorizontal: 0 }]}>
-      <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <ScrollView
         style={{ margin: 8 }}
         ref={scrollViewRef}
