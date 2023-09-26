@@ -1,12 +1,11 @@
-import React from "react";
-import { Platform , ToastAndroid} from 'react-native';
+import * as React from 'react-native';
 import axios, { AxiosResponse } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as URL from "./URL";
 import { createNavigationContainerRef, CommonActions } from '@react-navigation/native';
-import Toast from 'react-native-root-toast';
 import { ConversationDto, UserDto } from "./types";
+import Toast from 'react-native-toast-message';
 
 export const FLAG_FDROID = true;
 
@@ -86,7 +85,7 @@ export function navigate(name: string, reset: boolean = false, params?: any) {
 }
 
 export async function GetStorage(key: string): Promise<string | null> {
-  if (Platform.OS === 'web') {
+  if (React.Platform.OS === 'web') {
     return await AsyncStorage.getItem(key);
   } else {
     return await SecureStore.getItemAsync(key);
@@ -94,7 +93,7 @@ export async function GetStorage(key: string): Promise<string | null> {
 }
 
 export async function SetStorage(key: string, value: string) {
-  if (Platform.OS === 'web') {
+  if (React.Platform.OS === 'web') {
     await AsyncStorage.setItem(key, value);
   } else {
     await SecureStore.setItemAsync(key, value);
@@ -106,18 +105,19 @@ export function loadPage(page: string = INDEX_REGISTER) {
     navigate("Onboarding");
   } else if (INDEX_MAIN == page) {
     navigate("Main", true);
-  } else if(INDEX_REGISTER == page) {
+  } else if (INDEX_REGISTER == page) {
     navigate("Register");
   }
 }
 
 export function ShowToast(text: string) {
-  if (Platform.OS === 'android') {
-    ToastAndroid.show(text, ToastAndroid.LONG);
+  if (React.Platform.OS === 'android') {
+    React.ToastAndroid.show(text, React.ToastAndroid.LONG);
   } else {
-    Toast.show(text, {
-      duration: Toast.durations.LONG,
-      backgroundColor: "#424242"
+    Toast.show({
+      text1: text,
+      visibilityTime: 2000,
+      position: 'bottom'
     });
   }
 }
@@ -131,11 +131,8 @@ export function isPasswordSecure(password: string) {
   const minPasswordLength = 7;
   if (password.length < minPasswordLength) {
     return false;
-  } else if (password.match(/[a-z]/i) && password.match(/[0-9]+/)) {
-    return true;
-  } else {
-    return false;
-  }
+  } 
+  return password.match(/[a-z]/i) && password.match(/[0-9]+/);
 }
 
 export const format = (str: string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);

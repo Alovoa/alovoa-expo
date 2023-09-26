@@ -42,6 +42,7 @@ const Likes = ({ navigation }) => {
 
   const svgHeight = 150;
   const svgWidth = 200;
+  const topBarHeight = 62;
 
   async function load() {
     setLoading(true);
@@ -92,7 +93,7 @@ const Likes = ({ navigation }) => {
   }, [filter]);
 
   return (
-    <View style={{height: height}}>
+    <View style={{ height: height }}>
       {loading &&
         <View style={{ zIndex: 1, height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
@@ -116,7 +117,7 @@ const Likes = ({ navigation }) => {
           </Menu>
         </View>
       </View>
-      <VerticalView onRefresh={load}>
+      <VerticalView onRefresh={load} style={{ paddingBottom: topBarHeight + 24 }}>
         <FlatList
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}

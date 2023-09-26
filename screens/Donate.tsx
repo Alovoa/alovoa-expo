@@ -21,6 +21,7 @@ const Donate = () => {
 
   const FILTER_RECENT = 1;
   const FILTER_AMOUNT = 2;
+  const topBarHeight = 62;
 
   const i18n = I18N.getI18n();
   const { height, width } = useWindowDimensions();
@@ -77,7 +78,7 @@ const Donate = () => {
           </View>
         </View>
       </View>
-      <VerticalView>
+      <VerticalView style={{ paddingBottom: topBarHeight + 24 }}>
         <FlatList
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}

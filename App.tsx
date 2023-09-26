@@ -5,15 +5,15 @@ import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from "@react-navigation/native";
 import * as Global from "./Global";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Dimensions, LogBox, useColorScheme } from 'react-native';
-import { RootSiblingParent } from 'react-native-root-siblings';
-import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider, configureFonts } from 'react-native-paper';
+import { LogBox, useColorScheme } from 'react-native';
+import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider, configureFonts, useTheme } from 'react-native-paper';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { Photos } from "./screens/profile";
 import { ThemeProp } from "react-native-paper/lib/typescript/src/types";
+import Toast, { BaseToast, InfoToast } from 'react-native-toast-message';
 import {
-  useFonts, Montserrat_400Regular, Montserrat_500Medium, Montserrat_500Medium_Italic, 
+  useFonts, Montserrat_400Regular, Montserrat_500Medium, Montserrat_500Medium_Italic,
   Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_700Bold_Italic
 } from '@expo-google-fonts/montserrat';
 import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types";
@@ -30,6 +30,8 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
+  const { colors } = useTheme();
+
   let [fontsLoaded] = useFonts({
     Montserrat_400Regular,
     Montserrat_500Medium,
@@ -39,7 +41,7 @@ export default function App() {
     Montserrat_700Bold_Italic
   });
 
-  const config : TransitionSpec = {
+  const config: TransitionSpec = {
     animation: 'spring',
     config: {
       stiffness: 3000,
@@ -84,7 +86,6 @@ export default function App() {
 
   const theme: ThemeProp = {
     ...isDarkTheme ? MD3DarkTheme : MD3LightTheme,
-    dark: isDarkTheme,
     roundness: 2,
     version: 3,
     colors: {
@@ -94,6 +95,19 @@ export default function App() {
       tertiary: '#F2D3DD',
       background: isDarkTheme ? '#000000' : "#FFFFFF"
     },
+  };
+  
+  const toastConfig = {
+    success: (props: any) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: theme.colors?.primary, backgroundColor: theme.colors?.surface }}
+        text1Style={{
+          fontFamily: 'Montserrat_400Regular',
+          color: theme.colors?.onSurface
+        }}
+      />
+    ),
   };
 
   const themeNavigation = {
@@ -117,76 +131,91 @@ export default function App() {
   return (
     <PaperProvider theme={{ ...theme, fonts }}>
       <StatusBar style={isDarkTheme ? "light" : "dark"} />
-      <RootSiblingParent>
-        <NavigationContainer theme={themeNavigation} ref={Global.navigationRef}>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Login"
-              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+      <NavigationContainer theme={themeNavigation} ref={Global.navigationRef}>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            options={{
+              headerShown: false, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
-              }, }}
-              component={Login}
-            ></Stack.Screen>
-            <Stack.Screen
-              name="Register"
-              options={{ headerShown: true, animationEnabled: true, transitionSpec: {
+              },
+            }}
+            component={Login}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Register"
+            options={{
+              headerShown: true, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
-              }, }}
-              component={Register}
-            ></Stack.Screen>
-            <Stack.Screen
-              name="Onboarding"
-              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+              },
+            }}
+            component={Register}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Onboarding"
+            options={{
+              headerShown: false, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
-              }, }}
-              component={Onboarding}
-            ></Stack.Screen>
-            <Stack.Screen
-              name="Main"
-              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+              },
+            }}
+            component={Onboarding}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Main"
+            options={{
+              headerShown: false, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
-              }, }}
-              component={Main}
-            ></Stack.Screen>
-            <Stack.Screen
-              name="Profile"
-              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+              },
+            }}
+            component={Main}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Profile"
+            options={{
+              headerShown: false, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
-              }, }}
-              component={Profile}
-            ></Stack.Screen>
-            <Stack.Screen
-              name="MessageDetail"
-              options={{ headerShown: true, animationEnabled: true, transitionSpec: {
+              },
+            }}
+            component={Profile}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="MessageDetail"
+            options={{
+              headerShown: true, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
-              }, }}
-              component={MessageDetail}
-            ></Stack.Screen>
-            <Stack.Screen
-              name="Profile.Fotos"
-              options={{ headerShown: false, animationEnabled: true, transitionSpec: {
+              },
+            }}
+            component={MessageDetail}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Profile.Fotos"
+            options={{
+              headerShown: false, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
-              }, }}
-              component={Photos}
-            ></Stack.Screen>
-            <Stack.Screen
-              name="PasswordReset"
-              options={{ headerShown: true, animationEnabled: true, transitionSpec: {
+              },
+            }}
+            component={Photos}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="PasswordReset"
+            options={{
+              headerShown: true, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
-              }, }}
-              component={PasswordReset}
-            ></Stack.Screen>
-          </Stack.Navigator>
-        </NavigationContainer>
-      </RootSiblingParent>
+              },
+            }}
+            component={PasswordReset}
+          ></Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+      <Toast config={toastConfig}/>
     </PaperProvider>
   );
 }

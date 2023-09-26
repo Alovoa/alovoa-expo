@@ -7,7 +7,7 @@ import {
   StyleSheet,
   useWindowDimensions
 } from "react-native";
-import { Text, TextInput, Button, Surface, Card, HelperText } from "react-native-paper";
+import { Text, TextInput, Button, Surface, Card, HelperText, ActivityIndicator } from "react-native-paper";
 import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import { YourProfileResource, UserMiscInfoEnum, UserInterest, UnitsEnum, UserDto, GenderEnum, } from "../types";
 import * as I18N from "../i18n";
@@ -47,7 +47,6 @@ const YourProfile = ({ route, navigation }) => {
   const { height, width } = useWindowDimensions();
 
   const [requestingDeletion, setRequestingDeletion] = React.useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState<UserDto>();
   const [profilePic, setProfilePic] = React.useState<string>();
   const [name, setName] = React.useState("");
@@ -65,6 +64,7 @@ const YourProfile = ({ route, navigation }) => {
   const [miscInfoKids, setMiscInfoKids] = React.useState(Array<number>);
   const [miscInfoDrugs, setMiscInfoDrugs] = React.useState(Array<number>);
   const [miscInfoRelationship, setMiscInfoRelationship] = React.useState(Array<number>);
+  const [loading, setLoading] = React.useState(false);
   const maxDescriptionLength = 200;
 
   const descriptionRef = React.useRef(description);
@@ -206,141 +206,149 @@ const YourProfile = ({ route, navigation }) => {
   }
 
   return (
-    <VerticalView onRefresh={load} style={{padding: 0}}>
-      <TouchableOpacity
-        onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>
-        <ImageBackground source={{ uri: profilePic }} style={style.image}>
-        </ImageBackground>
-      </TouchableOpacity>
+    <View style={{ height: height }}>
+      {loading &&
+        <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
+          <ActivityIndicator animating={loading} size="large" />
+        </View>
+      }
 
-      <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54 }}>
-        <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
-      </View>
+      <VerticalView onRefresh={load} style={{ padding: 0 }}>
+        <TouchableOpacity
+          onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>
+          <ImageBackground source={{ uri: profilePic }} style={style.image}>
+          </ImageBackground>
+        </TouchableOpacity>
 
-      <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
-        <Text style={[styles.name]}>{name + ", " + age}</Text>
-        <View style={{ marginTop: 24 }}>
-          <TextInput style={{height: 128}}
-            label={i18n.t('profile.onboarding.description')}
-            multiline={true}
-            mode="outlined"
-            onChangeText={(text) => {
-              setDescription(text)
-            }}
-            placeholder={i18n.t('profile.onboarding.description-placeholder')}
-            maxLength={maxDescriptionLength}
-            value={description}
-            autoCorrect={false}
-          />
-          <View>
-            <HelperText type="info" style={{ textAlign: 'right' }} visible>
-              {description.length} / {maxDescriptionLength}
-            </HelperText>
-          </View>
+        <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54 }}>
+          <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
         </View>
 
-        <View style={{ margin: 24 }}>
-          <Card mode="contained" style={{ padding: 12 }}>
-            <Text style={{ textAlign: 'center' }}>{i18n.t('profile.donated') + ": " + String(user?.totalDonations) + ' €'}</Text>
-          </Card>
-        </View>
-
-        <View style={{ marginTop: 12 }}>
-          <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
-            data={[{ id: Intention.MEET, title: i18n.t('profile.intention.meet') },
-            { id: Intention.DATE, title: i18n.t('profile.intention.date') },
-            { id: Intention.SEX, title: i18n.t('profile.intention.sex') }]}
-            selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
-              updateIntention(id);
-            }}></SelectModal>
-        </View>
-
-        <View style={{ marginTop: 12 }}>
-          <SelectModal disabled={false} multi={true} minItems={1} title={i18n.t('profile.gender')} data={[{ id: GenderEnum.MALE, title: i18n.t('gender.male') },
-          { id: GenderEnum.FEMALE, title: i18n.t('gender.female') }, { id: GenderEnum.OTHER, title: i18n.t('gender.other') }]}
-            selected={preferredGenders} onValueChanged={function (id: number, checked: boolean): void {
-              updateGenders(id, checked);
-            }}></SelectModal>
-        </View>
-
-        {isLegal &&
-          <View style={{ marginTop: 12 }}>
-            <AgeRangeSliderModal title={i18n.t('profile.preferred-age-range')} titleLower={i18n.t('profile.age.min')} titleUpper={i18n.t('profile.age.max')}
-              valueLower={minAge} valueUpper={maxAge} onValueLowerChanged={updateMinAge} onValueUpperChanged={updateMaxAge}></AgeRangeSliderModal>
-          </View>
-        }
-
-        <View style={{ marginTop: 12 }}>
-          <InterestModal data={interests} />
-        </View>
-
-        <View style={{ marginTop: 12 }}>
-          <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
-            data={[{ id: UserMiscInfoEnum.RELATIONSHIP_SINGLE, title: i18n.t('profile.misc-info.relationship.single') },
-            { id: UserMiscInfoEnum.RELATIONSHIP_TAKEN, title: i18n.t('profile.misc-info.relationship.taken') },
-            { id: UserMiscInfoEnum.RELATIONSHIP_OPEN, title: i18n.t('profile.misc-info.relationship.open') },
-            { id: UserMiscInfoEnum.RELATIONSHIP_OTHER, title: i18n.t('profile.misc-info.relationship.other') }]}
-            selected={miscInfoRelationship} onValueChanged={function (id: number, checked: boolean): void {
-              updateMiscInfo(id, checked);
-            }}></SelectModal>
-        </View>
-
-        <View style={{ marginTop: 12 }}>
-          <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
-            data={[{ id: UserMiscInfoEnum.KIDS_NO, title: i18n.t('profile.misc-info.kids.no') },
-            { id: UserMiscInfoEnum.KIDS_YES, title: i18n.t('profile.misc-info.kids.yes') }]}
-            selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
-              updateMiscInfo(id, checked);
-            }}></SelectModal>
-        </View>
-
-        <View style={{ marginTop: 12 }}>
-          <SelectModal disabled={false} multi={true} minItems={0} title={i18n.t('profile.misc-info.drugs.title')}
-            data={[{ id: UserMiscInfoEnum.DRUGS_ALCOHOL, title: i18n.t('profile.misc-info.drugs.alcohol') },
-            { id: UserMiscInfoEnum.DRUGS_TOBACCO, title: i18n.t('profile.misc-info.drugs.tobacco') },
-            { id: UserMiscInfoEnum.DRUGS_CANNABIS, title: i18n.t('profile.misc-info.drugs.cannabis') },
-            { id: UserMiscInfoEnum.DRUGS_OTHER, title: i18n.t('profile.misc-info.drugs.other') }]}
-            selected={miscInfoDrugs} onValueChanged={function (id: number, checked: boolean): void {
-              updateMiscInfo(id, checked);
-            }}></SelectModal>
-        </View>
-
-        <View style={{ marginTop: 12 }}>
-          <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.units.title')}
-            data={[{ id: UnitsEnum.SI, title: i18n.t('profile.units.si') },
-            { id: UnitsEnum.IMPERIAL, title: i18n.t('profile.units.imperial') }]}
-            selected={[units]} onValueChanged={function (id: number, checked: boolean): void {
-              if (checked) {
-                updateUnits(id);
-              }
-            }}></SelectModal>
-        </View>
-
-        <View style={{ marginTop: 128 }}>
-          <Button mode='contained' onPress={() => logout()}>
-            <Text>{i18n.t('profile.logout')}</Text>
-          </Button>
+        <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
+          <Text style={[styles.name]}>{name + ", " + age}</Text>
           <View style={{ marginTop: 24 }}>
-            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-              WebBrowser.openBrowserAsync(URL.PRIVACY);
-            }}>{i18n.t('privacy-policy')}</Text>
-            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-              WebBrowser.openBrowserAsync(URL.TOS);
-            }}>{i18n.t('tos')}</Text>
-            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-              WebBrowser.openBrowserAsync(URL.IMPRINT);
-            }}>{i18n.t('imprint')}</Text>
-            <Text style={[styles.link, { padding: 8 }]} onPress={() => {
-              downloadUserData();
-            }}>{i18n.t('profile.download-userdata')}</Text>
-            <Text style={[styles.link, { padding: 8, opacity: requestingDeletion ? 0.3 : 1 }]} onPress={() => {
-              deleteAccount();
-            }}>{i18n.t('profile.delete-account')}</Text>
+            <TextInput style={{ height: 128 }}
+              label={i18n.t('profile.onboarding.description')}
+              multiline={true}
+              mode="outlined"
+              onChangeText={(text) => {
+                setDescription(text)
+              }}
+              placeholder={i18n.t('profile.onboarding.description-placeholder')}
+              maxLength={maxDescriptionLength}
+              value={description}
+              autoCorrect={false}
+            />
+            <View>
+              <HelperText type="info" style={{ textAlign: 'right' }} visible>
+                {description.length} / {maxDescriptionLength}
+              </HelperText>
+            </View>
           </View>
-        </View>
 
-      </View>
-    </VerticalView>
+          <View style={{ margin: 24 }}>
+            <Card mode="contained" style={{ padding: 12 }}>
+              <Text style={{ textAlign: 'center' }}>{i18n.t('profile.donated') + ": " + String(user?.totalDonations) + ' €'}</Text>
+            </Card>
+          </View>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
+              data={[{ id: Intention.MEET, title: i18n.t('profile.intention.meet') },
+              { id: Intention.DATE, title: i18n.t('profile.intention.date') },
+              { id: Intention.SEX, title: i18n.t('profile.intention.sex') }]}
+              selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
+                updateIntention(id);
+              }}></SelectModal>
+          </View>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={true} minItems={1} title={i18n.t('profile.gender')} data={[{ id: GenderEnum.MALE, title: i18n.t('gender.male') },
+            { id: GenderEnum.FEMALE, title: i18n.t('gender.female') }, { id: GenderEnum.OTHER, title: i18n.t('gender.other') }]}
+              selected={preferredGenders} onValueChanged={function (id: number, checked: boolean): void {
+                updateGenders(id, checked);
+              }}></SelectModal>
+          </View>
+
+          {isLegal &&
+            <View style={{ marginTop: 12 }}>
+              <AgeRangeSliderModal title={i18n.t('profile.preferred-age-range')} titleLower={i18n.t('profile.age.min')} titleUpper={i18n.t('profile.age.max')}
+                valueLower={minAge} valueUpper={maxAge} onValueLowerChanged={updateMinAge} onValueUpperChanged={updateMaxAge}></AgeRangeSliderModal>
+            </View>
+          }
+
+          <View style={{ marginTop: 12 }}>
+            <InterestModal data={interests} />
+          </View>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
+              data={[{ id: UserMiscInfoEnum.RELATIONSHIP_SINGLE, title: i18n.t('profile.misc-info.relationship.single') },
+              { id: UserMiscInfoEnum.RELATIONSHIP_TAKEN, title: i18n.t('profile.misc-info.relationship.taken') },
+              { id: UserMiscInfoEnum.RELATIONSHIP_OPEN, title: i18n.t('profile.misc-info.relationship.open') },
+              { id: UserMiscInfoEnum.RELATIONSHIP_OTHER, title: i18n.t('profile.misc-info.relationship.other') }]}
+              selected={miscInfoRelationship} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked);
+              }}></SelectModal>
+          </View>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
+              data={[{ id: UserMiscInfoEnum.KIDS_NO, title: i18n.t('profile.misc-info.kids.no') },
+              { id: UserMiscInfoEnum.KIDS_YES, title: i18n.t('profile.misc-info.kids.yes') }]}
+              selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked);
+              }}></SelectModal>
+          </View>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={true} minItems={0} title={i18n.t('profile.misc-info.drugs.title')}
+              data={[{ id: UserMiscInfoEnum.DRUGS_ALCOHOL, title: i18n.t('profile.misc-info.drugs.alcohol') },
+              { id: UserMiscInfoEnum.DRUGS_TOBACCO, title: i18n.t('profile.misc-info.drugs.tobacco') },
+              { id: UserMiscInfoEnum.DRUGS_CANNABIS, title: i18n.t('profile.misc-info.drugs.cannabis') },
+              { id: UserMiscInfoEnum.DRUGS_OTHER, title: i18n.t('profile.misc-info.drugs.other') }]}
+              selected={miscInfoDrugs} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked);
+              }}></SelectModal>
+          </View>
+
+          <View style={{ marginTop: 12 }}>
+            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.units.title')}
+              data={[{ id: UnitsEnum.SI, title: i18n.t('profile.units.si') },
+              { id: UnitsEnum.IMPERIAL, title: i18n.t('profile.units.imperial') }]}
+              selected={[units]} onValueChanged={function (id: number, checked: boolean): void {
+                if (checked) {
+                  updateUnits(id);
+                }
+              }}></SelectModal>
+          </View>
+
+          <View style={{ marginTop: 128 }}>
+            <Button mode='contained' onPress={() => logout()}>
+              <Text>{i18n.t('profile.logout')}</Text>
+            </Button>
+            <View style={{ marginTop: 24 }}>
+              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                WebBrowser.openBrowserAsync(URL.PRIVACY);
+              }}>{i18n.t('privacy-policy')}</Text>
+              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                WebBrowser.openBrowserAsync(URL.TOS);
+              }}>{i18n.t('tos')}</Text>
+              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                WebBrowser.openBrowserAsync(URL.IMPRINT);
+              }}>{i18n.t('imprint')}</Text>
+              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                downloadUserData();
+              }}>{i18n.t('profile.download-userdata')}</Text>
+              <Text style={[styles.link, { padding: 8, opacity: requestingDeletion ? 0.3 : 1 }]} onPress={() => {
+                deleteAccount();
+              }}>{i18n.t('profile.delete-account')}</Text>
+            </View>
+          </View>
+
+        </View>
+      </VerticalView>
+    </View>
   );
 };
 
