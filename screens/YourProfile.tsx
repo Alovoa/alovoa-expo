@@ -66,6 +66,7 @@ const YourProfile = ({ route, navigation }) => {
   const [miscInfoRelationship, setMiscInfoRelationship] = React.useState(Array<number>);
   const [loading, setLoading] = React.useState(false);
   const maxDescriptionLength = 200;
+  const topBarHeight = 62;
 
   const descriptionRef = React.useRef(description);
   const debounceDescriptionHandler = React.useCallback(debounce(updateDescription, 1500), []);
@@ -323,7 +324,7 @@ const YourProfile = ({ route, navigation }) => {
               }}></SelectModal>
           </View>
 
-          <View style={{ marginTop: 128 }}>
+          <View style={{ marginTop: 128, paddingBottom: topBarHeight + 24 }}>
             <Button mode='contained' onPress={() => logout()}>
               <Text>{i18n.t('profile.logout')}</Text>
             </Button>

@@ -72,10 +72,10 @@ const CardItem = ({
       {/* NAME */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: 20 }}>
         <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
-          {user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 6, paddingTop: 10 }} />}
+          {user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 6, paddingTop: 8 }} />}
         </View>
         <View style={{ flexDirection: 'row', marginTop: 8 }}>
-          <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
+          <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: colors?.secondary }]} />
           <Text>{user.distanceToUser}</Text>
           <Text>{unitsImperial ? ' mi' : ' km'}</Text>
         </View>

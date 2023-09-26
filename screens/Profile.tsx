@@ -318,18 +318,19 @@ const Profile = ({ route, navigation }) => {
 
   return (
     <View style={{ height: height }}>
+      <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <View style={{ zIndex: 1, marginBottom: 16, position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
             disabled={hidden || liked}>
             <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, hidden || !compatible || liked ? { opacity: 0.5 } : {}, {backgroundColor: colors.primary}]} onPress={() => likeUser()} disabled={!compatible || liked}>
+          <TouchableOpacity style={[styles.button, hidden || !compatible || liked ? { opacity: 0.5 } : {}, { backgroundColor: colors.primary }]} onPress={() => likeUser()} disabled={!compatible || liked}>
             <Icon name="heart" color={LIKE_ACTIONS} size={25} />
           </TouchableOpacity>
         </View>
       </View>
-      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
+      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0 }]}>
         <Pressable onPress={navigation.goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View>
@@ -344,7 +345,7 @@ const Profile = ({ route, navigation }) => {
           </View>
         </View>
       </View>
-      <VerticalView style={{padding: 0}} onRefresh={load}>
+      <VerticalView style={{ padding: 0 }} onRefresh={load}>
         <View>
           <SwiperFlatList
             autoplay
@@ -368,10 +369,10 @@ const Profile = ({ route, navigation }) => {
           <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
             {lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
               {lastActiveState == 1 &&
-                <Text >{i18n.t('profile.active-state.1')}</Text>
+                <Text style={{ alignSelf: 'center' }}>{i18n.t('profile.active-state.1')}</Text>
               }
               {lastActiveState == 2 &&
-                <Text >{i18n.t('profile.active-state.2')}</Text>
+                <Text style={{ alignSelf: 'center' }}>{i18n.t('profile.active-state.2')}</Text>
               }
             </View>}
 

@@ -7,6 +7,7 @@ import * as I18N from "../i18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Text } from 'react-native-paper';
 import { NAVIGATION_BAR_HEIGHT } from "../assets/styles";
+import { useWindowDimensions } from "react-native";
 
 const i18n = I18N.getI18n()
 const ICON_SIZE = 26;
@@ -19,6 +20,8 @@ const POLL_MESSAGE = 5 * SECOND_MS;
 
 const Main = ({ route, navigation }) => {
 
+  const { height, width } = useWindowDimensions();
+  
   let messageUpdateInterval: NodeJS.Timeout | undefined;
   let alertUpdateInterval: NodeJS.Timeout | undefined;
   let langIso: string | undefined;
@@ -89,7 +92,7 @@ const Main = ({ route, navigation }) => {
   }
 
   return (
-    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH} barStyle={{height: NAVIGATION_BAR_HEIGHT}}>
+    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH} barStyle={{height: NAVIGATION_BAR_HEIGHT}} style={{maxHeight: height}}>
       <Tab.Screen
         name={Global.SCREEN_YOURPROFILE}
         component={YourProfile}

@@ -11,7 +11,7 @@ import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { Photos } from "./screens/profile";
 import { ThemeProp } from "react-native-paper/lib/typescript/src/types";
-import Toast, { BaseToast, InfoToast } from 'react-native-toast-message';
+import Toast, { BaseToast } from 'react-native-toast-message';
 import {
   useFonts, Montserrat_400Regular, Montserrat_500Medium, Montserrat_500Medium_Italic,
   Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_700Bold_Italic
