@@ -1,0 +1,1 @@
+New and improved UI, now supports all kind of devices and screen sizes :)
