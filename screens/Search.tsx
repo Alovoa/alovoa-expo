@@ -33,7 +33,7 @@ const Search = ({ route, navigation }) => {
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
-  
+
   let latitude: number | undefined;
   let longitude: number | undefined;
 
@@ -67,7 +67,7 @@ const Search = ({ route, navigation }) => {
       resultsCopy.shift();
       setResults(resultsCopy);
       route.params.changed = false;
-      if(resultsCopy.length == 0) {
+      if (resultsCopy.length == 0) {
         load();
       }
     }
@@ -89,8 +89,8 @@ const Search = ({ route, navigation }) => {
           longitude = data.user.locationLongitude;
         }
         setUser(data.user);
-        updateLocationLocal(data.user.locationLatitude, data.user.locationLongitude);
-        loadResults();
+        await updateLocationLocal(data.user.locationLatitude, data.user.locationLongitude);
+        await loadResults();
       }
     );
     setLoading(false);
@@ -170,18 +170,18 @@ const Search = ({ route, navigation }) => {
   return (
     <ScrollView contentContainerStyle={{ flex: 1 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
-      { loading &&
-        <View style={{height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute"}} >
+      {loading &&
+        <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
         </View>
       }
       <View style={{ flex: 1 }}>
-       <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>      
+        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
           <CardStack
             ref={swiper}
             style={{
               justifyContent: 'flex-end',
-              alignItems: 'center' 
+              alignItems: 'center'
             }}
             verticalSwipe={false}
             renderNoMoreCards={() => null}

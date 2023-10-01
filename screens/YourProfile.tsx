@@ -93,6 +93,7 @@ const YourProfile = ({ route, navigation }) => {
   }, [route.params?.changed]);
 
   async function load() {
+    setLoading(true);
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
     setUser(data.user)
@@ -129,6 +130,7 @@ const YourProfile = ({ route, navigation }) => {
     setMiscInfoRelationship(data.user.miscInfos.filter(item => item.value <= UserMiscInfoEnum.RELATIONSHIP_OTHER && item.value >= UserMiscInfoEnum.RELATIONSHIP_SINGLE)
       .map(item => item.value));
     setUnits(data.user.units);
+    setLoading(false);
   }
   React.useEffect(() => {
     load();
@@ -209,7 +211,7 @@ const YourProfile = ({ route, navigation }) => {
   return (
     <View style={{ height: height }}>
       {loading &&
-        <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
+        <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
         </View>
       }
@@ -221,7 +223,7 @@ const YourProfile = ({ route, navigation }) => {
           </ImageBackground>
         </TouchableOpacity>
 
-        <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: -54 }}>
+        <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -54 }}>
           <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Fotos", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
         </View>
 
