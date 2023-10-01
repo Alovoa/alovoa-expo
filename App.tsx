@@ -6,11 +6,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import * as Global from "./Global";
 import { createStackNavigator } from "@react-navigation/stack";
 import { LogBox, useColorScheme } from 'react-native';
-import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider, configureFonts, useTheme } from 'react-native-paper';
+import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider, configureFonts } from 'react-native-paper';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { Photos } from "./screens/profile";
-import { ThemeProp } from "react-native-paper/lib/typescript/src/types";
+import * as ScreenOrientation from 'expo-screen-orientation';
+import * as Device from 'expo-device';
+import { ThemeProp } from "react-native-paper/lib/typescript/types";
 import Toast, { BaseToast } from 'react-native-toast-message';
 import {
   useFonts, Montserrat_400Regular, Montserrat_500Medium, Montserrat_500Medium_Italic,
@@ -30,7 +32,9 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
-  const { colors } = useTheme();
+  if (Device.deviceType != Device.DeviceType.PHONE) {
+    ScreenOrientation.unlockAsync();
+  }
 
   let [fontsLoaded] = useFonts({
     Montserrat_400Regular,
@@ -96,7 +100,7 @@ export default function App() {
       background: isDarkTheme ? '#000000' : "#FFFFFF"
     },
   };
-  
+
   const toastConfig = {
     success: (props: any) => (
       <BaseToast
@@ -215,7 +219,7 @@ export default function App() {
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
-      <Toast config={toastConfig}/>
+      <Toast config={toastConfig} />
     </PaperProvider>
   );
 }
