@@ -1,5 +1,5 @@
 {
-    "imprint": "Imprint",
+    "imprint": "Contact",
     "tos": "Terms of Service",
     "privacy-policy": "Privacy Policy",
     "auth": {
@@ -39,9 +39,9 @@
         },
         "intention": {
             "title": "I want...",
-            "meet": "to meet new people",
-            "date": "a relationship",
-            "sex": "sexual intimacy",
+            "meet": "To meet new people",
+            "date": "A relationship",
+            "sex": "Sexual intimacy",
             "warning": "Can only be changed again after 24 hours"
         },
         "gender": "Looking for...",
@@ -72,7 +72,7 @@
                 "title": "Relationship status",
                 "single": "Single",
                 "taken": "In a relationship",
-                "open" : "Open relationship",
+                "open": "Open relationship",
                 "other": "It's complicated"
             },
             "none": "None"
@@ -100,7 +100,13 @@
             "1": "Online",
             "2": "Active today"
         },
-        "interest": "Interest"
+        "interest": "Interest",
+        "profile-page": {
+            "description": "About me",
+            "interests": "My interests",
+            "basics": "My basics",
+            "additional": "Additional info"
+        }
     },
     "cancel": "Cancel",
     "ok": "OK",

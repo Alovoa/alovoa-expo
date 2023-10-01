@@ -65,7 +65,6 @@ const Profile = ({ route, navigation }) => {
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
 
-  const [refreshing, setRefreshing] = React.useState(false);
   const [compatible, setCompatible] = React.useState(false);
   const [liked, setLiked] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
@@ -98,15 +97,20 @@ const Profile = ({ route, navigation }) => {
   const [previousScreen, setPreviousScreen] = React.useState<String | null>();
   const showMenu = () => { setMenuVisible(true) };
   const hideMenu = () => { setMenuVisible(false) };
+  const maxWidth = width < WIDESCREEN_HORIZONTAL_MAX ? width : WIDESCREEN_HORIZONTAL_MAX;
 
   const style = StyleSheet.create({
     image: {
-      width: width,
-      height: width,
+      width: maxWidth,
+      height: 'auto',
       maxWidth: WIDESCREEN_HORIZONTAL_MAX,
-      maxHeight: WIDESCREEN_HORIZONTAL_MAX,
       aspectRatio: 1,
     },
+    title: {
+      marginBottom: 4,
+      opacity: 0.9,
+      fontSize: 18
+    }
   });
 
   const alertButtons = [
@@ -352,20 +356,23 @@ const Profile = ({ route, navigation }) => {
             autoplayDelay={5}
             paginationActiveColor={colors?.primary}
             paginationDefaultColor={colors?.secondary}
-            paginationStyleItem={{ height: 6, width: 6 }}
+            paginationStyleItem={{ height: 8, width: 8, marginHorizontal: 20 }}
             autoplayLoop={true}
             autoplayLoopKeepAnimation={true}
-            showPagination={true}
+            showPagination={swiperImages ? swiperImages?.length > 1 : false}
+            getItemLayout={(data, index) => (
+              { length: maxWidth, offset: maxWidth * index, index: index }
+            )}
           >
             {
               swiperImages?.map((image, index) => (
-                <Image key={index} source={{ uri: image ? image : undefined }} style={style.image} />
+                <Image key={index} source={{ uri: image ? image : undefined }} style={[style.image]} />
               ))
             }
           </SwiperFlatList>
         </View>
 
-        <View style={[styles.containerProfileItem, { marginTop: 24, flexDirection: 'row', justifyContent: 'space-between' }]}>
+        <View style={[styles.containerProfileItem, { marginTop: 24, paddingBottom: 4, flexDirection: 'row', justifyContent: 'space-between' }]}>
           <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
             {lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
               {lastActiveState == 1 &&
@@ -385,61 +392,66 @@ const Profile = ({ route, navigation }) => {
         </View>
 
         <View style={[styles.containerProfileItem, { marginTop: 0 }]}>
-          <FlatList
-            horizontal={true}
-            data={interests}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <Chip style={{ marginRight: 4, marginBottom: 4 }}><Text>{item.text}</Text></Chip>
-            )}
-          />
+
+          <View style={{ marginTop: 0 }}>
+            <Text style={style.title}>{i18n.t('profile.profile-page.interests')}</Text>
+            <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+              {
+                interests?.map((item, index) => (
+                  <Chip key={index} style={[styles.marginRight4, styles.marginBottom4]}><Text>{item.text}</Text></Chip>
+                ))
+              }
+            </View>
+          </View>
+
           <View style={{ marginTop: 16 }}>
+            <Text style={style.title}>{i18n.t('profile.profile-page.description')}</Text>
             <View>
               <Card style={{ padding: 16 }}><Text style={{ fontSize: 18 }}>{description}</Text></Card>
             </View>
 
-
-            <ScrollView horizontal={true} style={{ marginTop: 84 }}>
-              <Chip icon="gender-male-female" style={styles.marginRight4}>
+            <View style={{ paddingTop: 24 }}></View>
+            <Text style={style.title}>{i18n.t('profile.profile-page.basics')}</Text>
+            <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+              <Chip icon="gender-male-female" style={[styles.marginRight4, styles.marginBottom4]}>
                 <Text>{gender == Gender.MALE ? i18n.t('gender.male') :
                   gender == Gender.FEMALE ? i18n.t('gender.female') : i18n.t('gender.other')}</Text>
               </Chip>
-              <Chip icon="drama-masks" style={styles.marginRight4}>
+              <Chip icon="drama-masks" style={[styles.marginRight4, styles.marginBottom4]}>
                 <Text>{String(minAge) + " - " + String(maxAge)}</Text>
               </Chip>
-              <Chip icon="magnify" style={styles.marginRight4}>
+              <Chip icon="magnify" style={[styles.marginRight4, styles.marginBottom4]}>
                 <Text>{getGendersText()}</Text>
               </Chip>
-              <Chip icon="magnify-plus-outline" style={styles.marginRight4}>
+              <Chip icon="magnify-plus-outline" style={[styles.marginRight4, styles.marginBottom4]}>
                 <Text>{intention == Intention.MEET ? i18n.t('profile.intention.meet') :
                   intention == Intention.DATE ? i18n.t('profile.intention.date') : i18n.t('profile.intention.sex')}</Text>
               </Chip>
-            </ScrollView>
-
-            {(relationshipString || kidsString || drugsString) && <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
               {relationshipString &&
-                <Chip icon="heart-multiple" style={styles.marginRight4}>
+                <Chip icon="heart-multiple" style={[styles.marginRight4, styles.marginBottom4]}>
                   <Text>{relationshipString}</Text>
                 </Chip>}
-              {kidsString && <Chip icon="baby-carriage" style={styles.marginRight4}>
+              {kidsString && <Chip icon="baby-carriage" style={[styles.marginRight4, styles.marginBottom4]}>
                 <Text>{kidsString}</Text>
               </Chip>}
-              {drugsString && <Chip icon="pill" style={styles.marginRight4}>
+              {drugsString && <Chip icon="pill" style={[styles.marginRight4, styles.marginBottom4]}>
                 <Text>{drugsString}</Text>
               </Chip>}
-            </ScrollView>
-            }
-            <ScrollView horizontal={true} style={{ marginTop: 8, paddingBottom: 4 }}>
-              <Chip icon="hand-coin" style={styles.marginRight4}>
+            </View>
+
+            <View style={{ paddingTop: 16 }}></View>
+            <Text style={style.title}>{i18n.t('profile.profile-page.additional')}</Text>
+            <View style={{ paddingBottom: 4, display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+              <Chip icon="hand-coin" style={[styles.marginRight4, styles.marginBottom4]}>
                 <Text>{String(donated) + ' €'}</Text>
               </Chip>
-              <Chip icon="account-cancel" style={styles.marginRight4}>
+              <Chip icon="account-cancel" style={[styles.marginRight4, styles.marginBottom4]}>
                 <Text>{'# ' + blocks}</Text>
               </Chip>
-              <Chip icon="flag" style={styles.marginRight4}>
+              <Chip icon="flag" style={[styles.marginRight4, styles.marginBottom4]}>
                 <Text>{'# ' + reports}</Text>
               </Chip>
-            </ScrollView>
+            </View>
             {
               <View style={{ marginTop: 80 }}></View>
             }

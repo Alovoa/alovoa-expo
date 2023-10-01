@@ -36,6 +36,9 @@ export default StyleSheet.create({
   marginRight4: {
     marginRight: 4
   },
+  marginBottom4: {
+    marginBottom: 4
+  },
   // COMPONENT - CARD ITEM
   containerCardItem: {
     borderRadius: 8,
@@ -57,7 +60,7 @@ export default StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 12,
     flexShrink: 1,
-    opacity: 0.8
+    opacity: 0.8,
   },
   status: {
     paddingBottom: 10,

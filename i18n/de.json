@@ -40,9 +40,9 @@
         },
         "intention": {
             "title": "I möchte...",
-            "meet": "neue Leute kennenlernen",
-            "date": "eine romantische Beziehung",
-            "sex": "sexuelle Intimität",
+            "meet": "Neue Leute kennenlernen",
+            "date": "Eine romantische Beziehung",
+            "sex": "Sexuelle Intimität",
             "warning": "Kann erst nach 24 Stunden wieder geändert werden"
         },
         "gender": "Ich suche nach...",
@@ -101,7 +101,13 @@
             "1": "Online",
             "2": "Heute aktiv"
         },
-        "interest": "Interesse"
+        "interest": "Interesse",
+        "profile-page": {
+            "description": "Über mich",
+            "interests": "Meine Interessen",
+            "basics": "Meine Daten",
+            "additional": "Weitere Infos"
+        }
     },
     "cancel": "Abbrechen",
     "ok": "OK",

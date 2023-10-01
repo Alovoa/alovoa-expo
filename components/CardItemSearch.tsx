@@ -30,7 +30,7 @@ const CardItem = ({
       borderRadius: cardPadding,
       width: calcImageSize(),
       height: 'auto',
-      maxWidth: WIDESCREEN_HORIZONTAL_MAX,
+      maxWidth: WIDESCREEN_HORIZONTAL_MAX - cardPadding * 2,
       marginTop: cardPadding / 2 + 2,
       marginBottom: cardPadding / 2,
       aspectRatio: 1,
@@ -41,7 +41,7 @@ const CardItem = ({
     if (width <= 380) {
       return width - (380 - width);
     }
-    return width + 300 < height ? width - cardPadding * 2 : height / (height < 900 ? 2 : 1.5) - cardPadding;
+    return width + 300 < height ? width - cardPadding * 2 : height / (height < 900 ? 2 : 1.5) - cardPadding * 2;
   }
 
   const nameStyle: StyleProp<TextStyle> = [
@@ -89,7 +89,7 @@ const CardItem = ({
           data={user.commonInterests}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <Chip style={[styles.marginRight4, { transform: [{ scale: 0.8 }] }]}>{item.text}</Chip>
+            <Chip style={styles.marginRight4}>{item.text}</Chip>
           )}
         />
       </View>
