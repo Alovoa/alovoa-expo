@@ -1,16 +1,13 @@
 import React from "react";
 import {
-  ScrollView,
   View,
-  FlatList,
-  RefreshControl,
   StyleSheet,
   TouchableOpacity,
   Pressable,
   Image,
   useWindowDimensions,
 } from "react-native";
-import { useTheme, Text, Button, Chip, Card, Menu, Portal } from "react-native-paper";
+import { useTheme, Text, Chip, Card, Menu } from "react-native-paper";
 import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
@@ -92,7 +89,6 @@ const Profile = ({ route, navigation }) => {
   const [images, setImages] = React.useState(Array<UserImage>);
   const [swiperImages, setSwiperImages] = React.useState<Array<string>>();
   const [alertVisible, setAlertVisible] = React.useState(false);
-  const [removeUser, setRemoveUser] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
   const [previousScreen, setPreviousScreen] = React.useState<String | null>();
   const showMenu = () => { setMenuVisible(true) };
@@ -294,13 +290,17 @@ const Profile = ({ route, navigation }) => {
   async function likeUser() {
     await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
     setLiked(true);
-    setRemoveUser(true);
+    if (Global.SCREEN_SEARCH == previousScreen) {
+      goBack();
+    }
   }
 
   async function hideUser() {
     await Global.Fetch(Global.format(URL.USER_HIDE, user.idEncoded), 'post');
     setHidden(true);
-    setRemoveUser(true);
+    if (Global.SCREEN_SEARCH == previousScreen) {
+      goBack();
+    }
   }
 
   async function goBack() {
@@ -313,12 +313,12 @@ const Profile = ({ route, navigation }) => {
 
   React.useEffect(() => {
     navigation.addListener('beforeRemove', (e: any) => {
-      if (Global.SCREEN_SEARCH == previousScreen && removeUser) {
+      if (Global.SCREEN_SEARCH == previousScreen) {
         e.preventDefault();
         goBack();
       }
     });
-  }, [previousScreen, removeUser]);
+  }, [previousScreen]);
 
   return (
     <View style={{ height: height }}>
