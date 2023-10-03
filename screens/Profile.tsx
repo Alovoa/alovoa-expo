@@ -91,6 +91,8 @@ const Profile = ({ route, navigation }) => {
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
   const [previousScreen, setPreviousScreen] = React.useState<String | null>();
+  const [reportedUser, setReportedUser] = React.useState(false)
+  const [removeUser, setRemoveUser] = React.useState(false);
   const showMenu = () => { setMenuVisible(true) };
   const hideMenu = () => { setMenuVisible(false) };
   const maxWidth = width < WIDESCREEN_HORIZONTAL_MAX ? width : WIDESCREEN_HORIZONTAL_MAX;
@@ -119,6 +121,7 @@ const Profile = ({ route, navigation }) => {
       onPress: async () => {
         await Global.Fetch(Global.format(URL.USER_REPORT, user.idEncoded), 'post', ' ', 'text/plain');
         setReported(true);
+        setReportedUser(true);
         setAlertVisible(false);
       }
     }
@@ -248,6 +251,36 @@ const Profile = ({ route, navigation }) => {
     loadPreviousScreen();
   }, []);
 
+  React.useEffect(() => {
+    if (reportedUser) {
+      blockUser();
+    }
+  }, [reportedUser]);
+
+  React.useEffect(() => {
+    navigation.addListener('beforeRemove', (e: any) => {
+      if (Global.SCREEN_SEARCH == previousScreen) {
+        e.preventDefault();
+        goBack();
+      }
+    });
+  }, [previousScreen]);
+
+
+  React.useEffect(() => {
+    if (removeUser && Global.SCREEN_SEARCH == previousScreen) {
+      goBack();
+    }
+  }, [removeUser]);
+
+  async function goBack() {
+    navigation.navigate({
+      name: 'Search',
+      params: { changed: removeUser },
+      merge: true,
+    });
+  }
+
   async function loadPreviousScreen() {
     setPreviousScreen(await Global.GetStorage(Global.STORAGE_SCREEN));
   }
@@ -274,6 +307,7 @@ const Profile = ({ route, navigation }) => {
     await Global.Fetch(Global.format(URL.USER_BLOCK, user.idEncoded), 'post');
     hideMenu();
     setBlocked(true);
+    setRemoveUser(true);
   }
 
   async function unblockUser() {
@@ -290,6 +324,7 @@ const Profile = ({ route, navigation }) => {
   async function likeUser() {
     await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
     setLiked(true);
+    setRemoveUser(true);
     if (Global.SCREEN_SEARCH == previousScreen) {
       goBack();
     }
@@ -298,27 +333,11 @@ const Profile = ({ route, navigation }) => {
   async function hideUser() {
     await Global.Fetch(Global.format(URL.USER_HIDE, user.idEncoded), 'post');
     setHidden(true);
+    setRemoveUser(true);
     if (Global.SCREEN_SEARCH == previousScreen) {
       goBack();
     }
   }
-
-  async function goBack() {
-    navigation.navigate({
-      name: 'Search',
-      params: { changed: true },
-      merge: true,
-    });
-  }
-
-  React.useEffect(() => {
-    navigation.addListener('beforeRemove', (e: any) => {
-      if (Global.SCREEN_SEARCH == previousScreen) {
-        e.preventDefault();
-        goBack();
-      }
-    });
-  }, [previousScreen]);
 
   return (
     <View style={{ height: height }}>
@@ -329,7 +348,7 @@ const Profile = ({ route, navigation }) => {
             disabled={hidden || liked}>
             <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, hidden || !compatible || liked ? { opacity: 0.5 } : {}, { backgroundColor: colors.primary }]} onPress={() => likeUser()} disabled={!compatible || liked}>
+          <TouchableOpacity style={[styles.button, !compatible || liked ? { opacity: 0.5 } : {}, { backgroundColor: colors.primary }]} onPress={() => likeUser()} disabled={!compatible || liked}>
             <Icon name="heart" color={LIKE_ACTIONS} size={25} />
           </TouchableOpacity>
         </View>
