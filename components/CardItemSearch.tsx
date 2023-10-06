@@ -46,8 +46,6 @@ const CardItem = ({
 
   const nameStyle: StyleProp<TextStyle> = [
     {
-      paddingTop: 4,
-      paddingBottom: 7,
       fontSize: 20,
       textAlign: 'auto',
       textAlignVertical: 'center'
@@ -70,11 +68,12 @@ const CardItem = ({
       </TouchableOpacity>
 
       {/* NAME */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: 20 }}>
-        <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
-          {user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 6, paddingTop: 8 }} />}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingHorizontal: 20, paddingTop: 4, paddingBottom: 7, }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text></View>
+          {user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ paddingLeft: 6 }} />}
         </View>
-        <View style={{ flexDirection: 'row', marginTop: 8 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: colors?.secondary }]} />
           <Text>{user.distanceToUser}</Text>
           <Text>{unitsImperial ? ' mi' : ' km'}</Text>
