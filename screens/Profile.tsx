@@ -391,7 +391,7 @@ const Profile = ({ route, navigation }) => {
           </SwiperFlatList>
         </View>
 
-        <View style={[styles.containerProfileItem, { marginTop: 24, paddingBottom: 4, flexDirection: 'row', justifyContent: 'space-between' }]}>
+        <View style={[styles.containerProfileItem, { marginTop: 24, paddingBottom: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }]}>
           <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
             {lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
               {lastActiveState == 1 &&
@@ -401,9 +401,8 @@ const Profile = ({ route, navigation }) => {
                 <Text style={{ alignSelf: 'center' }}>{i18n.t('profile.active-state.2')}</Text>
               }
             </View>}
-
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
             <Text>{distance}</Text>
             <Text>{you?.units == UnitsEnum.IMPERIAL ? ' mi' : ' km'}</Text>
