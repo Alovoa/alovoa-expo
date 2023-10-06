@@ -1,20 +1,27 @@
 import React from "react";
 import { SelectModalT } from "../types";
 import { Modal, Portal, Text, Button, Checkbox, useTheme, IconButton } from 'react-native-paper';
-import { View } from "react-native";
+import { View, useWindowDimensions } from "react-native";
 import * as I18N from "../i18n";
+import { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 
 const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, data, selected, onValueChanged }: SelectModalT) => {
 
   const i18n = I18N.getI18n();
   const { colors } = useTheme();
+  const { height, width } = useWindowDimensions();
+  
   const [selectedIds, setSelectedIds] = React.useState(selected);
   const [buttonText, setButtonText] = React.useState("");
   const [visible, setVisible] = React.useState(false);
   const [buttonDisabled, setButtonDisabled] = React.useState(disabled);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: 12, borderRadius: 8 };
+  const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
+
+  function calcMarginModal() {
+    return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
+  }
 
   function updateButtonText() {
     let text = data.filter(item => selectedIds.includes(item.id)).map(item => item.title).join(", ");

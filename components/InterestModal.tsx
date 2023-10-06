@@ -1,18 +1,21 @@
 import React from "react";
 import { AlertModel, InterestModalT, UserInterest, UserInterestAutocomplete, UserInterestDto } from "../types";
 import { Modal, Portal, Text, Button, useTheme, IconButton, TextInput, Searchbar } from 'react-native-paper';
-import { Keyboard, View } from "react-native";
+import { Keyboard, View, useWindowDimensions } from "react-native";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
 import { debounce } from "lodash";
 import Alert from "./Alert";
+import { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 
 const InterestModal = ({ data }: InterestModalT) => {
 
   const MAX_INTERESTS = 5;
   const i18n = I18N.getI18n();
   const { colors } = useTheme();
+  const { height, width } = useWindowDimensions();
+
   const [interests, setInterests] = React.useState(data);
   const [buttonText, setButtonText] = React.useState("");
   const [visible, setVisible] = React.useState(false);
@@ -25,7 +28,12 @@ const InterestModal = ({ data }: InterestModalT) => {
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: 12, borderRadius: 8 };
+  const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
+
+  function calcMarginModal() {
+    return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
+  }
+
   const alertButtons = [
     {
       text: i18n.t('cancel'),
@@ -127,46 +135,48 @@ const InterestModal = ({ data }: InterestModalT) => {
 
   return (
     <View>
-      <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >
-        <View>
-          <IconButton
-            style={{ alignSelf: 'flex-end' }}
-            icon="close"
-            size={20}
-            onPress={hideModal}
-          />
-        </View>
-        <View style={{ padding: 12 }}>
-
-          {interests.length < MAX_INTERESTS &&
-            <Searchbar
-              placeholder={i18n.t('profile.interest')}
-              value={interest}
-              onChangeText={(text) => { setInterest(text) }}
-              onSubmitEditing={() => addInterest(interest)}
-              autoCorrect={false}
-              style={{ marginBottom: 18 }}
+      <Portal>
+        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >
+          <View>
+            <IconButton
+              style={{ alignSelf: 'flex-end' }}
+              icon="close"
+              size={20}
+              onPress={hideModal}
             />
-          }
+          </View>
+          <View style={{ padding: 12 }}>
 
-          {
-            suggestionsList.map((item, index) => (
-              <Button key={index} onPress={() => { addInterest(item.id) }} mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
-                <Text>{item.number}</Text>
-              </Button>
-            ))
-          }
+            {interests.length < MAX_INTERESTS &&
+              <Searchbar
+                placeholder={i18n.t('profile.interest')}
+                value={interest}
+                onChangeText={(text) => { setInterest(text) }}
+                onSubmitEditing={() => addInterest(interest)}
+                autoCorrect={false}
+                style={{ marginBottom: 18 }}
+              />
+            }
 
-          {suggestionsList?.length == 0 && <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>}
-          {suggestionsList?.length == 0 &&
-            interests.map((item, index) => (
-              <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
-                <Text>{item.text}</Text>
-              </Button>
-            ))
-          }
-        </View>
-      </Modal>
+            {
+              suggestionsList.map((item, index) => (
+                <Button key={index} onPress={() => { addInterest(item.id) }} mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+                  <Text>{item.number}</Text>
+                </Button>
+              ))
+            }
+
+            {suggestionsList?.length == 0 && <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>}
+            {suggestionsList?.length == 0 &&
+              interests.map((item, index) => (
+                <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+                  <Text>{item.text}</Text>
+                </Button>
+              ))
+            }
+          </View>
+        </Modal>
+      </Portal>
       <Alert visible={alertVisible} setVisible={setAlertVisible} message={Global.format(i18n.t('profile.interest-alert-delete'), interestToBeDeleted?.text)} buttons={alertButtons} />
       <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.onboarding.interests')}</Text>
       <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
