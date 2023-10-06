@@ -413,7 +413,7 @@ const Profile = ({ route, navigation }) => {
         <View style={[styles.containerProfileItem, { marginTop: 0 }]}>
 
           <View style={{ marginTop: 0 }}>
-            <Text style={style.title}>{i18n.t('profile.profile-page.interests')}</Text>
+            {interests.length > 0 && <Text style={style.title}>{i18n.t('profile.profile-page.interests')}</Text>}
             <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
               {
                 interests?.map((item, index) => (
