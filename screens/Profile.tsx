@@ -325,18 +325,12 @@ const Profile = ({ route, navigation }) => {
     await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
     setLiked(true);
     setRemoveUser(true);
-    if (Global.SCREEN_SEARCH == previousScreen) {
-      goBack();
-    }
   }
 
   async function hideUser() {
     await Global.Fetch(Global.format(URL.USER_HIDE, user.idEncoded), 'post');
     setHidden(true);
     setRemoveUser(true);
-    if (Global.SCREEN_SEARCH == previousScreen) {
-      goBack();
-    }
   }
 
   return (

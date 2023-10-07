@@ -79,16 +79,14 @@ const Main = ({ route, navigation }) => {
     if (target) {
       let targetSplitArr = target.split("-");
       let screen = targetSplitArr[0];
-
       switch (screen) {
-        case Global.SCREEN_YOURPROFILE: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_YOURPROFILE);
-        case Global.SCREEN_CHAT: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_CHAT);
-        case Global.SCREEN_SEARCH: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_SEARCH);
-        case Global.SCREEN_LIKES: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_LIKES);
-        case Global.SCREEN_DONATE: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_DONATE);
+        case Global.SCREEN_YOURPROFILE: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_YOURPROFILE); break;
+        case Global.SCREEN_CHAT: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_CHAT); break;
+        case Global.SCREEN_SEARCH: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_SEARCH); break;
+        case Global.SCREEN_LIKES: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_LIKES); break;
+        case Global.SCREEN_DONATE: Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_DONATE); break;
       }
     }
-
   }
 
   return (
