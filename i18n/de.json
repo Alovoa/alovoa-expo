@@ -107,6 +107,12 @@
             "interests": "Meine Interessen",
             "basics": "Meine Daten",
             "additional": "Weitere Infos"
+        },
+        "screen": {
+            "pictures": "Fotos verwalten",
+            "profile": "Profil bearbeiten",
+            "search": "Suchpräferenzen",
+            "settings": "Einstelungen"
         }
     },
     "cancel": "Abbrechen",

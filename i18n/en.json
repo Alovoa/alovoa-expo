@@ -106,6 +106,12 @@
             "interests": "My interests",
             "basics": "My basics",
             "additional": "Additional info"
+        },
+        "screen": {
+            "pictures": "Manage photos",
+            "profile": "Edit profile",
+            "search": "Search preferences",
+            "settings": "Settings"
         }
     },
     "cancel": "Cancel",

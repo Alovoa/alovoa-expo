@@ -26,11 +26,18 @@ export const STORAGE_DONATE = "donate"
 export const STORAGE_LATITUDE = "latitude"
 export const STORAGE_LONGITUDE = "longitude"
 
+export const STORAGE_SETTINGS_UNIT = "settings.unit"
+
 export const SCREEN_YOURPROFILE = "YourProfile"
 export const SCREEN_CHAT = "Chat"
 export const SCREEN_SEARCH = "Search"
 export const SCREEN_LIKES = "Likes"
 export const SCREEN_DONATE = "Donate"
+
+export const SCREEN_PROFILE_PICTURES = "Profile.Pictures"
+export const SCREEN_PROFILE_PROFILESETTINGS = "Profile.ProfileSettings"
+export const SCREEN_PROFILE_SEARCHSETTINGS = "Profile.SearchSettings"
+export const SCREEN_PROFILE_SETTINGS = "Profile.Settings"
 
 export async function Fetch(url: string = "", method: string = "get", data: any = undefined,
   contentType: string = "application/json"): Promise<AxiosResponse<any, any>> {

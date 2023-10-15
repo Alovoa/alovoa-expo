@@ -2,7 +2,6 @@ import React from "react";
 import {
   View,
   TouchableOpacity,
-  FlatList,
   Pressable,
   Image,
   Platform,
@@ -22,7 +21,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Alert from "../../components/Alert";
 import VerticalView from "../../components/VerticalView";
 
-const Photos = ({ route, navigation }) => {
+const Pictures = ({ route, navigation }) => {
 
   var user: UserDto = route.params.user;
 
@@ -52,7 +51,9 @@ const Photos = ({ route, navigation }) => {
       text: i18n.t('ok'),
       onPress: async () => {
         await Global.Fetch(Global.format(URL.USER_DELETE_IMAGE, String(imageIdToBeRemoved)), 'post');
-        load();
+        let imagesCopy = [...images];
+        let newImages = imagesCopy.filter(item => item.id !== imageIdToBeRemoved);
+        setImages(newImages);
         setImageIdToBeRemoved(0);
         setAlertVisible(false);
       }
@@ -65,6 +66,21 @@ const Photos = ({ route, navigation }) => {
     }
   }, [imageIdToBeRemoved]);
 
+  React.useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e: any) => {
+        e.preventDefault();
+        goBack();
+      }),
+    [navigation]
+  );
+
+  React.useEffect(() => {
+    console.log(user)
+    setImages(user.images);
+    setProfilePic(user.profilePicture);
+  }, []);
+
   async function load() {
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
@@ -73,11 +89,7 @@ const Photos = ({ route, navigation }) => {
     setProfilePic(dto.profilePicture);
   }
 
-  React.useEffect(() => {
-    load();
-  }, []);
-
-  async function pickImage() {
+  async function pickImage() : Promise<string | null | undefined> {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -86,26 +98,27 @@ const Photos = ({ route, navigation }) => {
       base64: true,
     });
     if (!result.canceled) {
-      let format = ImageManipulator.SaveFormat.JPEG;
-      if (Platform.OS == 'web') {
-        format = ImageManipulator.SaveFormat.WEBP;
+      if (Platform.OS == 'android') {
+        let format = ImageManipulator.SaveFormat.JPEG;
+        const saveOptions: ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
+        const resizedImageData = await ImageManipulator.manipulateAsync(
+          result.assets[0].uri,
+          [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
+          saveOptions
+        );
+        return resizedImageData.base64;
+      } else {
+        return result.assets[0].base64;
       }
-      const saveOptions: ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
-      const resizedImageData = await ImageManipulator.manipulateAsync(
-        result.assets[0].uri,
-        [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
-        saveOptions
-      );
-      return resizedImageData;
     } else {
       return null;
     }
   };
 
   async function updateProfilePicture() {
-    let imageData: ImageManipulator.ImageResult | null = await pickImage();
-    if (imageData != null) {
-      let b64 = IMAGE_HEADER + imageData.base64;
+    let imageData: string | null | undefined = await pickImage();
+    if (imageData) {
+      let b64 = IMAGE_HEADER + imageData;
       await Global.Fetch(URL.USER_UPDATE_PROFILE_PICTURE, 'post', b64, 'text/plain');
       setProfilePic(b64);
       setChangedProfilePic(true);
@@ -114,11 +127,11 @@ const Photos = ({ route, navigation }) => {
   }
 
   async function addImage() {
-    let imageData: ImageManipulator.ImageResult | null = await pickImage();
+    let imageData: string | null | undefined = await pickImage();
     if (imageData != null) {
-      let b64 = IMAGE_HEADER + imageData.base64;
-      if (Platform.OS == 'ios') {
-        b64 = IMAGE_HEADER_JPEG + imageData.base64;
+      let b64 = IMAGE_HEADER + imageData;
+      if (Platform.OS == 'ios' || Platform.OS == 'android') {
+        b64 = IMAGE_HEADER_JPEG + imageData;
       }
       await Global.Fetch(URL.USER_ADD_IMAGE, 'post', b64, 'text/plain');
       load();
@@ -137,15 +150,6 @@ const Photos = ({ route, navigation }) => {
     });
   }
 
-  React.useEffect(
-    () =>
-      navigation.addListener('beforeRemove', (e: any) => {
-        e.preventDefault();
-        goBack();
-      }),
-    [navigation]
-  );
-
   const style = StyleSheet.create({
     image: {
       width: '100%',
@@ -160,7 +164,7 @@ const Photos = ({ route, navigation }) => {
   });
 
   return (
-    <View style={{ height: height}}>
+    <View style={{ height: height }}>
       <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
         <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
       </View>
@@ -199,4 +203,4 @@ const Photos = ({ route, navigation }) => {
   )
 };
 
-export default Photos;
+export default Pictures;
