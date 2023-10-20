@@ -6,7 +6,8 @@ import {
   Image,
   Platform,
   StyleSheet,
-  useWindowDimensions
+  useWindowDimensions,
+  FlatList
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -20,12 +21,14 @@ import { FAB, Button } from 'react-native-paper';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Alert from "../../components/Alert";
 import VerticalView from "../../components/VerticalView";
+import { useHeaderHeight } from '@react-navigation/elements';
 
 const Pictures = ({ route, navigation }) => {
 
   var user: UserDto = route.params.user;
 
   const { height, width } = useWindowDimensions();
+  const headerHeight = useHeaderHeight();
   const { colors } = useTheme();
   const i18n = I18N.getI18n()
   const MAX_IMAGES = 4;
@@ -89,7 +92,7 @@ const Pictures = ({ route, navigation }) => {
     setProfilePic(dto.profilePicture);
   }
 
-  async function pickImage() : Promise<string | null | undefined> {
+  async function pickImage(): Promise<string | null | undefined> {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -164,41 +167,43 @@ const Pictures = ({ route, navigation }) => {
   });
 
   return (
-    <View style={{ height: height }}>
-      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, padding: 8, paddingTop: STATUS_BAR_HEIGHT }]}>
-        <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
+    <View style={{ height: height - headerHeight }}>
+      <View style={{
+        zIndex: 1, position: 'absolute', marginBottom: 16,
+        marginRight: 16, width: '100%', right: 0, bottom: 0
+      }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          {images.length < MAX_IMAGES &&
+            <FAB
+              icon="image-plus"
+              onPress={() => addImage()}
+            />
+          }
+        </View>
       </View>
-      <VerticalView style={{ padding: 0 }} onRefresh={load}>
+      <VerticalView onRefresh={load}>
         <TouchableOpacity
           onPress={() => { updateProfilePicture() }}>
-          <Image source={{ uri: profilePic ? profilePic : undefined }} style={style.image} />
+          <Image source={{ uri: profilePic ? profilePic : undefined }} style={[style.image, { width: '70%', alignSelf: 'center', borderRadius: 12 }]} />
         </TouchableOpacity>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -54, marginBottom: 24 }}>
           <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => updateProfilePicture()}>{i18n.t('profile.photos.change-profile-pic')}</Button>
         </View>
         <View style={{ flexDirection: 'row', width: '100%' }}>
-          {
-            images.map((item, index) => (
-              <TouchableOpacity key={index} style={[style.image, style.imageSmall, { flex: 1 }]} onPress={() => removeImage(item.id)}>
-                <Image source={{ uri: item.content }} style={[style.image]} />
+          <FlatList
+            style={{ marginBottom: 4 }}
+            numColumns={2}
+            data={images}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity style={[style.image, style.imageSmall, { padding: 12 }]} onPress={() => removeImage(item.id)}>
+                <Image source={{ uri: item.content }} style={[style.image, { borderRadius: 8 }]} />
               </TouchableOpacity>
-            ))
-          }
+            )}
+          />
         </View>
+        <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.photos.delete')} buttons={alertButtons} />
       </VerticalView>
-      <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.photos.delete')} buttons={alertButtons} />
-      {images.length < MAX_IMAGES &&
-        <FAB
-          icon="image-plus"
-          style={{
-            position: 'absolute',
-            margin: 16,
-            right: 0,
-            bottom: 0,
-          }}
-          onPress={() => addImage()}
-        />
-      }
     </View>
   )
 };
