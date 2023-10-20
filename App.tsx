@@ -14,6 +14,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import * as Device from 'expo-device';
 import { ThemeProp } from "react-native-paper/lib/typescript/types";
 import Toast, { BaseToast } from 'react-native-toast-message';
+import * as I18N from "./i18n";
 import {
   useFonts, Montserrat_400Regular, Montserrat_500Medium, Montserrat_500Medium_Italic,
   Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_700Bold_Italic
@@ -31,6 +32,8 @@ const Stack = createStackNavigator();
 //RCTNetworking.clearCookies(() => { });
 
 export default function App() {
+
+  const i18n = I18N.getI18n();
 
   if (Device.deviceType != Device.DeviceType.PHONE) {
     ScreenOrientation.unlockAsync();
@@ -150,6 +153,7 @@ export default function App() {
           <Stack.Screen
             name="Register"
             options={{
+              title: i18n.t('register.title'),
               headerShown: true, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
@@ -200,7 +204,8 @@ export default function App() {
           <Stack.Screen
             name="Profile.Pictures"
             options={{
-              headerShown: false, animationEnabled: true, transitionSpec: {
+              title: i18n.t('profile.screen.pictures'),
+              headerShown: true, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
               },
@@ -210,7 +215,8 @@ export default function App() {
           <Stack.Screen
             name="Profile.ProfileSettings"
             options={{
-              headerShown: false, animationEnabled: true, transitionSpec: {
+              title: i18n.t('profile.screen.profile'),
+              headerShown: true, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
               },
@@ -220,7 +226,8 @@ export default function App() {
           <Stack.Screen
             name="Profile.SearchSettings"
             options={{
-              headerShown: false, animationEnabled: true, transitionSpec: {
+              title: i18n.t('profile.screen.search'),
+              headerShown: true, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
               },
@@ -230,7 +237,8 @@ export default function App() {
           <Stack.Screen
             name="Profile.Settings"
             options={{
-              headerShown: false, animationEnabled: true, transitionSpec: {
+              title: i18n.t('profile.screen.settings'),
+              headerShown: true, animationEnabled: true, transitionSpec: {
                 open: config,
                 close: config,
               },
