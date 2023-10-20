@@ -61,9 +61,6 @@ const Register = ({ route, navigation }) => {
 
   React.useEffect(() => {
     load();
-    navigation.setOptions({
-      title: ''
-    });
   }, []);
 
   const toggleTosSwitch = () => setIsTosEnabled(previousState => !previousState);
@@ -108,8 +105,7 @@ const Register = ({ route, navigation }) => {
   return (
     <AutocompleteDropdownContextProvider>
       <VerticalView ref={scrollRef}>
-        <Text style={{ textAlign: 'center', marginBottom: 4, fontSize: 32, fontWeight: '500' }}>{i18n.t('register.title')}</Text>
-        <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 12 }}>{i18n.t('register.subtitle')}</Text>
+        <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 32 }}>{i18n.t('register.subtitle')}</Text>
 
         {registerEmail && <View>
           <TextInput
