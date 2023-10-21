@@ -27,6 +27,7 @@ const YourProfile = ({ route, navigation }) => {
   const { height, width } = useWindowDimensions();
 
   const [requestingDeletion, setRequestingDeletion] = React.useState(false);
+  const [data, setData] = React.useState<YourProfileResource>();
   const [user, setUser] = React.useState<UserDto>();
   const [profilePic, setProfilePic] = React.useState<string>();
   const [name, setName] = React.useState("");
@@ -46,11 +47,11 @@ const YourProfile = ({ route, navigation }) => {
     setLoading(true);
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
+    setData(data);
     setUser(data.user)
     setIdEnc(data.user.idEncoded);
     setProfilePic(data.user.profilePicture);
     setName(data.user.firstName);
-    setAge(data.user.age);
     setLoading(false);
   }
   React.useEffect(() => {
@@ -119,7 +120,7 @@ const YourProfile = ({ route, navigation }) => {
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_PROFILESETTINGS, false, { user: user })}>{i18n.t('profile.screen.profile')}</Button>
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
-            style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, { user: user })}>{i18n.t('profile.screen.search')}</Button>
+            style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, { data: data })}>{i18n.t('profile.screen.search')}</Button>
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SETTINGS)}>{i18n.t('profile.screen.settings')}</Button>
 

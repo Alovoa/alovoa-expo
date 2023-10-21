@@ -10,12 +10,14 @@ import * as Global from "../../Global";
 import * as URL from "../../URL";
 import SelectModal from "../../components/SelectModal";
 import VerticalView from "../../components/VerticalView";
+import { useHeaderHeight } from '@react-navigation/elements';
 
 const i18n = I18N.getI18n()
 
 const Settings = () => {
 
   const { height, width } = useWindowDimensions();
+  const headerHeight = useHeaderHeight();
 
   const [units, setUnits] = React.useState(UnitsEnum.SI);
 
@@ -38,7 +40,7 @@ const Settings = () => {
   }
 
   return (
-    <View style={{ height: height, width: '100%' }}>
+    <View style={{ height: height - headerHeight }}>
       <VerticalView onRefresh={load} style={{ padding: 0 }}>
         <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
           <View style={{ marginTop: 12 }}>

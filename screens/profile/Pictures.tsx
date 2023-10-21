@@ -2,7 +2,6 @@ import React from "react";
 import {
   View,
   TouchableOpacity,
-  Pressable,
   Image,
   Platform,
   StyleSheet,
@@ -11,14 +10,12 @@ import {
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { useTheme } from "react-native-paper";
-import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
+import { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
 import { UserDto, UserImage, YourProfileResource } from "../../types";
 import { FAB, Button } from 'react-native-paper';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Alert from "../../components/Alert";
 import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -29,7 +26,6 @@ const Pictures = ({ route, navigation }) => {
 
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
-  const { colors } = useTheme();
   const i18n = I18N.getI18n()
   const MAX_IMAGES = 4;
   const IMAGE_HEADER = "data:image/webp;base64,";

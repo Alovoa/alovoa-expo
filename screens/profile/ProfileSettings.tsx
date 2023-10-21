@@ -16,6 +16,7 @@ import { debounce } from "lodash";
 import SelectModal from "../../components/SelectModal";
 import InterestModal from "../../components/InterestModal";
 import VerticalView from "../../components/VerticalView";
+import { useHeaderHeight } from '@react-navigation/elements';
 
 const i18n = I18N.getI18n()
 
@@ -24,8 +25,8 @@ const ProfileSettings = ({ route, navigation }) => {
   var user: UserDto = route.params.user;
 
   const { height, width } = useWindowDimensions();
+  const headerHeight = useHeaderHeight();
 
-  const [profilePic, setProfilePic] = React.useState<string>();
   const [idEnc, setIdEnc] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [interests, setInterests] = React.useState(Array<UserInterest>);
@@ -61,7 +62,6 @@ const ProfileSettings = ({ route, navigation }) => {
 
   async function loadUser(user: UserDto) {
     setIdEnc(user.idEncoded);
-    setProfilePic(user.profilePicture);
     setDescription(user.description);
     setInterests(user.interests);
 
@@ -92,7 +92,7 @@ const ProfileSettings = ({ route, navigation }) => {
   }
 
   return (
-    <View style={{ height: height }}>
+    <View style={{ height: height - headerHeight }}>
       {loading &&
         <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
@@ -100,12 +100,6 @@ const ProfileSettings = ({ route, navigation }) => {
       }
 
       <VerticalView onRefresh={load} style={{ padding: 0 }}>
-        <TouchableOpacity
-          onPress={() => Global.navigate("Profile.Pictures", false, { user: user })}>
-          <ImageBackground source={{ uri: profilePic }} style={style.image}>
-          </ImageBackground>
-        </TouchableOpacity>
-
         <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -54 }}>
           <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Pictures", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
         </View>

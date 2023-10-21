@@ -11,6 +11,7 @@ import * as URL from "../../URL";
 import SelectModal from "../../components/SelectModal";
 import AgeRangeSliderModal from "../../components/AgeRangeSliderModal";
 import VerticalView from "../../components/VerticalView";
+import { useHeaderHeight } from '@react-navigation/elements';
 
 const i18n = I18N.getI18n()
 const MIN_AGE = 18;
@@ -30,9 +31,10 @@ enum IntentionText {
 
 const SearchSettings = ({ route, navigation }) => {
 
-  var user: UserDto = route.params.user;
+  var data: YourProfileResource = route.params.data;
 
   const { height, width } = useWindowDimensions();
+  const headerHeight = useHeaderHeight();
 
   const [intention, setIntention] = React.useState(Intention.MEET);
   const [showIntention, setShowIntention] = React.useState(false);
@@ -46,17 +48,17 @@ const SearchSettings = ({ route, navigation }) => {
     setLoading(true);
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
-    loadUser(data.user);
+    loadUser(data);
   }
 
-  async function loadUser(user: UserDto) {
+  async function loadUser(data: YourProfileResource) {
     setLoading(true);
-    setShowIntention(showIntention);
-    setIsLegal(isLegal);
-    setMinAge(user.preferedMinAge);
-    setMaxAge(user.preferedMaxAge);
+    setShowIntention(data.showIntention);
+    setIsLegal(data.user.age >= MIN_AGE);
+    setMinAge(data.user.preferedMinAge);
+    setMaxAge(data.user.preferedMaxAge);
 
-    let intentionText = user.intention.text;
+    let intentionText = data.user.intention.text;
     switch (intentionText) {
       case IntentionText.MEET:
         setIntention(Intention.MEET);
@@ -69,12 +71,12 @@ const SearchSettings = ({ route, navigation }) => {
         break;
     }
 
-    setPreferredGenders(user.preferedGenders.map(item => item.id));
+    setPreferredGenders(data.user.preferedGenders.map(item => item.id));
     setLoading(false);
   }
   React.useEffect(() => {
-    if (user) {
-      loadUser(user);
+    if (data) {
+      loadUser(data);
     }
   }, []);
 
@@ -100,7 +102,7 @@ const SearchSettings = ({ route, navigation }) => {
   }
 
   return (
-    <View style={{ height: height, width: '100%' }}>
+    <View style={{ height: height - headerHeight }}>
       {loading &&
         <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
