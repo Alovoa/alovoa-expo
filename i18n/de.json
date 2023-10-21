@@ -90,7 +90,8 @@
         "photos": {
             "manage": "Fotos verwalten",
             "delete": "Foto löschen?",
-            "change-profile-pic": "Profilbild ändern"
+            "change-profile-pic": "Profilbild ändern",
+            "add": "Foto hinzufügen"
         },
         "logout": "Ausloggen",
         "report": {

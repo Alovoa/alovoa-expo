@@ -89,7 +89,8 @@
         "photos": {
             "manage": "Manage photos",
             "delete": "Delete photo?",
-            "change-profile-pic": "Change profile picture"
+            "change-profile-pic": "Change profile picture",
+            "add": "Add photo"
         },
         "logout": "Logout",
         "report": {

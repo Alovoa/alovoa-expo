@@ -170,10 +170,9 @@ const Pictures = ({ route, navigation }) => {
       }}>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           {images.length < MAX_IMAGES &&
-            <FAB
-              icon="image-plus"
-              onPress={() => addImage()}
-            />
+            <Button icon="image-plus" mode="elevated" onPress={() => addImage()}>
+              {i18n.t('profile.photos.add')}
+            </Button>
           }
         </View>
       </View>
