@@ -16,10 +16,8 @@ import VerticalView from "../components/VerticalView";
 const Messages = ({ navigation }) => {
 
   const i18n = I18N.getI18n()
-  const { colors } = useTheme();
 
   const [loaded, setLoaded] = React.useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
   const [results, setResults] = React.useState(Array<ConversationDto>);
   const { height, width } = useWindowDimensions();
 
@@ -51,7 +49,7 @@ const Messages = ({ navigation }) => {
         ))
       }
       {results && results.length == 0 && loaded &&
-        <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
           <ConvoEmpty height={svgHeight} width={svgWidth}></ConvoEmpty>
           <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('convo-empty.title')}</Text>
           <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48 }}>{i18n.t('convo-empty.subtitle')}</Text>

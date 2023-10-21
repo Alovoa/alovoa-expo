@@ -134,7 +134,7 @@ const Likes = ({ navigation }) => {
           )}
         />
         {results && results.length == 0 && loaded && filter == FILTER.RECEIVED_LIKES &&
-          <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
             <LikesEmpty height={svgHeight} width={svgWidth}></LikesEmpty>
             <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('likes-empty.title')}</Text>
             <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48 }}>{i18n.t('likes-empty.subtitle')}</Text>
