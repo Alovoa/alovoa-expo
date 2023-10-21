@@ -90,7 +90,7 @@ const Main = ({ route, navigation }) => {
   }
 
   return (
-    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH} barStyle={{height: NAVIGATION_BAR_HEIGHT}} style={{maxHeight: height}}>
+    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH} barStyle={{height: NAVIGATION_BAR_HEIGHT}} style={{height: height}}>
       <Tab.Screen
         name={Global.SCREEN_YOURPROFILE}
         component={YourProfile}
