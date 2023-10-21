@@ -134,12 +134,12 @@ export function isEmailValid(text: string) {
   return reg.test(text);
 }
 
-export function isPasswordSecure(password: string) {
+export function isPasswordSecure(password: string): boolean {
   const minPasswordLength = 7;
   if (password.length < minPasswordLength) {
     return false;
   } 
-  return password.match(/[a-z]/i) && password.match(/[0-9]+/);
+  return password.match(/[a-z]/i) != null && password.match(/[0-9]+/) != null;
 }
 
 export const format = (str: string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);
