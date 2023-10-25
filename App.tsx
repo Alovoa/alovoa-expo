@@ -35,6 +35,24 @@ export default function App() {
 
   const i18n = I18N.getI18n();
 
+  const [colorPrimary, setColorPrimary] = React.useState(Global.DEFAULT_COLOR_PRIMARY);
+  const [colorSecondary, setColorSecondary] = React.useState(Global.DEFAULT_COLOR_SECONDARY);
+
+  React.useEffect(() => {
+    load();
+  }, []);
+
+  async function load() {
+    let primary: string | null = await Global.GetStorage(Global.STORAGE_SETTINGS_COLOR_PRIMARY);
+    let secondary: string | null = await Global.GetStorage(Global.STORAGE_SETTINGS_COLOR_SECONDARY);
+    if (primary) {
+      setColorPrimary(primary);
+    }
+    if (secondary) {
+      setColorSecondary(secondary);
+    }
+  }
+
   if (Device.deviceType != Device.DeviceType.PHONE) {
     ScreenOrientation.unlockAsync();
   }
@@ -97,8 +115,8 @@ export default function App() {
     version: 3,
     colors: {
       ...isDarkTheme ? MD3DarkTheme.colors : MD3LightTheme.colors,
-      primary: '#EC407A',
-      secondary: '#28C4ED',
+      primary: colorPrimary,
+      secondary: colorSecondary,
       tertiary: '#F2D3DD', /*not used*/
       background: isDarkTheme ? '#000000' : "#FFFFFF"
     },
