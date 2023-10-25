@@ -113,6 +113,13 @@
             "profile": "Edit profile",
             "search": "Search preferences",
             "settings": "Settings"
+        },
+        "settings": {
+            "colors": {
+                "title": "Colors",
+                "primary": "Primary",
+                "secondary": "Secondary"
+            }
         }
     },
     "cancel": "Cancel",
@@ -169,5 +176,6 @@
         "given-likes": "Given Likes",
         "hidden": "Hidden users",
         "blocked": "Blocked users"
-    }
+    },
+    "restart-apply-changes": "Restart the app to apply changes"
 }

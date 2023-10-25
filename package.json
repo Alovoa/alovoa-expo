@@ -7,6 +7,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@babel/plugin-transform-export-namespace-from": "^7.22.11",
     "@babel/preset-env": "^7.19.1",
     "@backpackapp-io/react-native-toast": "^0.10.0",
     "@expo-google-fonts/montserrat": "^0.2.3",
@@ -54,6 +55,7 @@
     "react-native-pager-view": "6.2.0",
     "react-native-paper": "5.10.6",
     "react-native-paper-dates": "^0.18.12",
+    "react-native-reanimated": "~3.3.0",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
     "react-native-svg": "13.9.0",
@@ -63,6 +65,7 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "^0.19.7",
     "react-navigation": "^4.4.4",
+    "reanimated-color-picker": "2.2.0",
     "semver": "^7.5.2",
     "xml2js": "^0.5.0"
   },

@@ -27,6 +27,8 @@ export const STORAGE_LATITUDE = "latitude"
 export const STORAGE_LONGITUDE = "longitude"
 
 export const STORAGE_SETTINGS_UNIT = "settings.unit"
+export const STORAGE_SETTINGS_COLOR_PRIMARY = "settings.color.primary"
+export const STORAGE_SETTINGS_COLOR_SECONDARY = "settings.color.secondary"
 
 export const SCREEN_YOURPROFILE = "YourProfile"
 export const SCREEN_CHAT = "Chat"
@@ -38,6 +40,9 @@ export const SCREEN_PROFILE_PICTURES = "Profile.Pictures"
 export const SCREEN_PROFILE_PROFILESETTINGS = "Profile.ProfileSettings"
 export const SCREEN_PROFILE_SEARCHSETTINGS = "Profile.SearchSettings"
 export const SCREEN_PROFILE_SETTINGS = "Profile.Settings"
+
+export const DEFAULT_COLOR_PRIMARY = '#EC407A';
+export const DEFAULT_COLOR_SECONDARY = '#28C4ED';
 
 export async function Fetch(url: string = "", method: string = "get", data: any = undefined,
   contentType: string = "application/json"): Promise<AxiosResponse<any, any>> {
@@ -138,7 +143,7 @@ export function isPasswordSecure(password: string): boolean {
   const minPasswordLength = 7;
   if (password.length < minPasswordLength) {
     return false;
-  } 
+  }
   return password.match(/[a-z]/i) != null && password.match(/[0-9]+/) != null;
 }
 

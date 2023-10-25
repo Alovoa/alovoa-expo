@@ -91,7 +91,6 @@ const Onboarding = () => {
       paddingHorizontal: 32,
       borderRadius: 4,
       elevation: 3,
-      backgroundColor: '#ec407a',
       margin: 4,
       flexDirection: 'row',
     },

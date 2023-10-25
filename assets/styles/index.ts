@@ -36,8 +36,20 @@ export default StyleSheet.create({
   marginRight4: {
     marginRight: 4
   },
+  marginRight8: {
+    marginRight: 8
+  },
   marginBottom4: {
     marginBottom: 4
+  },
+  marginBottom8: {
+    marginBottom: 18
+  },
+  marginBottom12: {
+    marginBottom: 12
+  },
+  padding12: {
+    padding: 12
   },
   // COMPONENT - CARD ITEM
   containerCardItem: {

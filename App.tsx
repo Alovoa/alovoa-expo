@@ -99,7 +99,7 @@ export default function App() {
       ...isDarkTheme ? MD3DarkTheme.colors : MD3LightTheme.colors,
       primary: '#EC407A',
       secondary: '#28C4ED',
-      tertiary: '#F2D3DD',
+      tertiary: '#F2D3DD', /*not used*/
       background: isDarkTheme ? '#000000' : "#FFFFFF"
     },
   };

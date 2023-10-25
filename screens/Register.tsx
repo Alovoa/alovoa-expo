@@ -145,7 +145,7 @@ const Register = ({ route, navigation }) => {
             </HelperText>
           </View>}
 
-          <View style={[styles.container]}>
+          <View style={[style.container]}>
             <TextInput
               mode="outlined"
               label={i18n.t('first-name') + " *"}
@@ -157,7 +157,7 @@ const Register = ({ route, navigation }) => {
           </View>
 
           <SafeAreaProvider>
-            <View style={[styles.container]}>
+            <View style={[style.container]}>
               <DatePickerInput
                 mode="outlined"
                 style={{ backgroundColor: colors.background }}
@@ -171,7 +171,7 @@ const Register = ({ route, navigation }) => {
             </View>
           </SafeAreaProvider>
 
-          <View style={[styles.container]}>
+          <View style={[style.container]}>
             <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
               <Text>{i18n.t('gender.title')}</Text>
               <Text>{" *"}</Text>
@@ -195,7 +195,7 @@ const Register = ({ route, navigation }) => {
             </RadioButton.Group>
           </View>
 
-          <View style={[styles.container]}>
+          <View style={[style.container]}>
             <TextInput
               value={referrerCode}
               label={i18n.t('register.referral-code') + " (" + i18n.t('optional') + ")"}
@@ -210,7 +210,7 @@ const Register = ({ route, navigation }) => {
           <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 4, marginTop: 8 }]}>
             <Switch onValueChange={toggleTosSwitch} style={{ marginRight: 4 }}
               value={isTosEnabled} />
-            <Text style={[{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }, styles.link]} onPress={() => {
+            <Text style={[{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }, style.link]} onPress={() => {
               WebBrowser.openBrowserAsync(URL.TOS);
             }}>{i18n.t('register.tos-agree')}</Text>
           </View>
@@ -218,12 +218,12 @@ const Register = ({ route, navigation }) => {
           <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }]}>
             <Switch onValueChange={togglePrivacySwitch} style={{ marginRight: 4 }}
               value={isPrivacyEnabled} />
-            <Text style={[{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }, styles.link]} onPress={() => {
+            <Text style={[{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }, style.link]} onPress={() => {
               WebBrowser.openBrowserAsync(URL.PRIVACY);
             }}>{i18n.t('register.privacy-agree')}</Text>
           </View>
 
-          <View style={styles.container}>
+          <View style={style.container}>
             <Text style={{ fontSize: 10, color: "orange" }}>{i18n.t('register.asterisk-warning')}</Text>
           </View>
           <Button mode="contained" onPress={submit} style={{ marginBottom: 48 }}>
@@ -238,7 +238,7 @@ const Register = ({ route, navigation }) => {
 
 export default Register;
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   link: {
     color: "#ec407a",
     flex: 1,
@@ -250,7 +250,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: '#ec407a',
     margin: 4,
     flexDirection: 'row',
   },

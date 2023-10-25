@@ -9,6 +9,7 @@ import * as URL from "../URL";
 import * as I18N from "../i18n";
 import { Captcha } from "../types";
 import VerticalView from "../components/VerticalView";
+import styles from "../assets/styles";
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
@@ -118,6 +119,32 @@ const Login = () => {
     }
   }
 
+  const style = StyleSheet.create({
+    button: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 4,
+      elevation: 3,
+      backgroundColor: 'blue',
+      margin: 4,
+      flexDirection: 'row'
+    },
+    buttonGoogle: {
+      backgroundColor: '#4285f4',
+    },
+    buttonFacebook: {
+      backgroundColor: '#4267b2',
+    },
+    buttonText: {
+      color: 'white'
+    },
+    icon: {
+      marginRight: 8
+    }
+  });  
+
   return (
     <VerticalView>
       <View >
@@ -147,20 +174,20 @@ const Login = () => {
           />
 
           <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { emailSignInPress() }}
-          ><Text style={styles.buttonText}>{i18n.t('auth.email')}</Text></Button>
+          ><Text style={style.buttonText}>{i18n.t('auth.email')}</Text></Button>
 
           <View style={{ paddingBottom: 38 }}></View>
 
-          <Button icon="google" mode="contained" style={[styles.buttonGoogle]}
+          <Button icon="google" mode="contained" style={[style.buttonGoogle]}
             onPress={() => {
               loginGoogle();
             }}
-          ><Text style={styles.buttonText}>{i18n.t('auth.google')}</Text></Button>
-          <Button icon="facebook" mode="contained" style={[styles.buttonFacebook, { marginTop: 8 }]}
+          ><Text style={style.buttonText}>{i18n.t('auth.google')}</Text></Button>
+          <Button icon="facebook" mode="contained" style={[style.buttonFacebook, { marginTop: 8 }]}
             onPress={() => {
               loginFacebook();
             }}
-          ><Text style={styles.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+          ><Text style={style.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
         </View>
 
         <View style={{ marginTop: 64 }}>
@@ -217,32 +244,3 @@ const Login = () => {
 };
 
 export default Login;
-
-const styles = StyleSheet.create({
-  link: {
-    color: "#ec407a"
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: 'blue',
-    margin: 4,
-    flexDirection: 'row'
-  },
-  buttonGoogle: {
-    backgroundColor: '#4285f4',
-  },
-  buttonFacebook: {
-    backgroundColor: '#4267b2',
-  },
-  buttonText: {
-    color: 'white'
-  },
-  icon: {
-    marginRight: 8
-  }
-});

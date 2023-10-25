@@ -10,15 +10,14 @@ import * as Global from "../../Global";
 import * as URL from "../../URL";
 import SelectModal from "../../components/SelectModal";
 import VerticalView from "../../components/VerticalView";
-import { useHeaderHeight } from '@react-navigation/elements';
+import ColorModal from "../../components/ColorModal";
+
 
 const i18n = I18N.getI18n()
 
 const Settings = () => {
 
   const { height, width } = useWindowDimensions();
-  const headerHeight = useHeaderHeight();
-
   const [units, setUnits] = React.useState(UnitsEnum.SI);
 
   async function load() {
@@ -40,7 +39,7 @@ const Settings = () => {
   }
 
   return (
-    <View style={{ height: height - headerHeight }}>
+    <View style={{ height: height, width: '100%' }}>
       <VerticalView onRefresh={load} style={{ padding: 0 }}>
         <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
           <View style={{ marginTop: 12 }}>
@@ -52,6 +51,11 @@ const Settings = () => {
                   updateUnits(id);
                 }
               }}></SelectModal>
+          </View>
+          <View style={{ marginTop: 12 }}>
+            <ColorModal
+              title={i18n.t('profile.settings.colors.title')}>
+            </ColorModal>
           </View>
         </View>
       </VerticalView>

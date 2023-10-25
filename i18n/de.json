@@ -114,6 +114,13 @@
             "profile": "Profil bearbeiten",
             "search": "Suchpräferenzen",
             "settings": "Einstelungen"
+        },
+        "settings": {
+            "colors": {
+                "title": "Farben",
+                "primary": "Primär",
+                "secondary": "Sekundär"
+            }
         }
     },
     "cancel": "Abbrechen",
@@ -170,5 +177,6 @@
         "given-likes": "Vergebene Likes",
         "hidden": "Versteckte Nutzer",
         "blocked": "Geblockte Nutzer"
-    }
+    },
+    "restart-apply-changes": "Starte die App neu um die Änderungen zu übernehmen"
 }

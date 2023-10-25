@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, RefreshControl, ScrollView, Alert, Dimensions, useWindowDimensions } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
-import { CardItem } from "../components";
 import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
@@ -39,7 +38,7 @@ const Search = ({ route, navigation }) => {
 
   const { height, width } = useWindowDimensions();
 
-  const LOCATION_TIMEOUT_SHORT = 2000;
+  const LOCATION_TIMEOUT_SHORT = 2500;
   const LOCATION_TIMEOUT_LONG = 5000;
 
   const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
