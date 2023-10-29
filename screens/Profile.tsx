@@ -335,7 +335,6 @@ const Profile = ({ route, navigation }) => {
 
   return (
     <View style={{ height: height }}>
-      <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <View style={{ zIndex: 1, marginBottom: 16, position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
@@ -347,7 +346,7 @@ const Profile = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0 }]}>
+      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 4 }]}>
         <Pressable onPress={navigation.goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View>
