@@ -419,7 +419,7 @@ const Profile = ({ route, navigation }) => {
           <View style={{ marginTop: 16 }}>
             <Text style={style.title}>{i18n.t('profile.profile-page.description')}</Text>
             <View>
-              <Card style={{ padding: 16 }}><Text style={{ fontSize: 18 }}>{description}</Text></Card>
+              <Card style={{ padding: 16 }}><Text style={[styles.textInputAlign, { fontSize: 18 }]}>{description}</Text></Card>
             </View>
 
             <View style={{ paddingTop: 24 }}></View>

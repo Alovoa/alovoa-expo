@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar } from "react-native";
+import { StyleSheet, StatusBar, I18nManager } from "react-native";
 
 export const WHITE = "#FFFFFF";
 export const GRAY = "#757E90";
@@ -12,11 +12,14 @@ export const OFFLINE_STATUS = "#D04949";
 export const LIKE_ACTIONS = WHITE;
 export const DISLIKE_ACTIONS = WHITE;
 
-export const STATUS_BAR_HEIGHT : number = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
+export const STATUS_BAR_HEIGHT: number = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
 export const NAVIGATION_BAR_HEIGHT = 80;
 export const WIDESCREEN_HORIZONTAL_MAX = 600;
 
 export default StyleSheet.create({
+  textInputAlign: {
+    textAlign: I18nManager.isRTL ? "right" : "left",
+  },
   link: {
     color: LINK,
     flex: 1,
@@ -68,7 +71,7 @@ export default StyleSheet.create({
     color: WHITE,
   },
   descriptionCardItem: {
-    textAlign: "center",
+    textAlign: I18nManager.isRTL ? "right" : "left",
     paddingLeft: 12,
     paddingRight: 12,
     flexShrink: 1,
