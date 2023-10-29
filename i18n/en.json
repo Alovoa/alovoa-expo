@@ -102,6 +102,7 @@
             "2": "Active today"
         },
         "interest": "Interest",
+        "interests-common": "Gemeinsame Interessen",
         "profile-page": {
             "description": "About me",
             "interests": "My interests",

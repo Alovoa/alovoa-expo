@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, RefreshControl, ScrollView, Alert, Dimensions, useWindowDimensions } from "react-native";
+import { View, RefreshControl, ScrollView, useWindowDimensions } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
 import * as I18N from "../i18n";
