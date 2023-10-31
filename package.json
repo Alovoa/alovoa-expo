@@ -48,6 +48,7 @@
     "react-dom": "^18.2.0",
     "react-native": "0.72.6",
     "react-native-autocomplete-dropdown": "3.0.2",
+    "react-native-autolink": "^4.2.0",
     "react-native-card-stack-swiper": "^1.2.5",
     "react-native-file-access": "^2.5.2",
     "react-native-gesture-handler": "^2.12.1",
