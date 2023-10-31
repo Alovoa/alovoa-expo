@@ -4,7 +4,6 @@ import {
   RefreshControl,
   KeyboardAvoidingView,
   Keyboard,
-  Dimensions,
   Image,
   ScrollView,
   useWindowDimensions
@@ -12,10 +11,11 @@ import {
 import {
   TextInput, Card
 } from "react-native-paper";
+import { useHeaderHeight } from '@react-navigation/elements';
 
 import { useTheme, Text } from "react-native-paper";
 import { MessageDtoListModel, MessageDto } from "../types";
-import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
+import styles from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as WebBrowser from 'expo-web-browser';
@@ -28,6 +28,7 @@ const POLL_MESSAGE = 5 * SECOND_MS;
 const MessageDetail = ({ route, navigation }) => {
 
   const { conversation } = route.params;
+  const headerHeight = useHeaderHeight();
 
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -105,9 +106,9 @@ const MessageDetail = ({ route, navigation }) => {
   }
 
   return (
-    <View style={[styles.containerMessages, { paddingHorizontal: 0 }]}>
+    <View style={[styles.containerMessages, { paddingHorizontal: 0, display: 'flex', maxHeight: height - headerHeight }]}>
       <ScrollView
-        style={{ margin: 8 }}
+        style={{ padding: 8, flexGrow: 1 }}
         ref={scrollViewRef}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
         {
@@ -123,10 +124,10 @@ const MessageDetail = ({ route, navigation }) => {
           ))
         }
       </ScrollView>
-      <KeyboardAvoidingView style={{ marginTop: 8 }}>
+      <KeyboardAvoidingView>
         <TextInput
           onPressIn={scrollToEnd}
-          style={{ backgroundColor: colors.surface }}
+          style={{ backgroundColor: colors.surface, height: 52 }}
           value={text}
           dense={true}
           onChangeText={text => setText(text)}
