@@ -8,6 +8,7 @@ import * as URL from "../URL";
 import * as Location from 'expo-location';
 import { ActivityIndicator } from "react-native-paper";
 import CardItemSearch from "../components/CardItemSearch";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 const i18n = I18N.getI18n()
@@ -58,6 +59,17 @@ const Search = ({ route, navigation }) => {
   React.useEffect(() => {
     load();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      Global.GetStorage(Global.STORAGE_RELOAD_SEARCH).then(value => {
+        if (value) {
+          load();
+          Global.SetStorage(Global.STORAGE_RELOAD_SEARCH, "");
+        }
+      });
+    }, [route, navigation])
+  );
 
   React.useEffect(() => {
     if (route.params?.changed) {

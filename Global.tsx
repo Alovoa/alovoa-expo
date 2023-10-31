@@ -25,6 +25,7 @@ export const STORAGE_LIKES = "likes"
 export const STORAGE_DONATE = "donate"
 export const STORAGE_LATITUDE = "latitude"
 export const STORAGE_LONGITUDE = "longitude"
+export const STORAGE_RELOAD_SEARCH = "reloadSearch";
 
 export const STORAGE_SETTINGS_UNIT = "settings.unit"
 export const STORAGE_SETTINGS_COLOR_PRIMARY = "settings.color.primary"

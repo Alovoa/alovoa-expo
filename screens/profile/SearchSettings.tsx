@@ -37,6 +37,7 @@ const SearchSettings = ({ route, navigation }) => {
   const [maxAge, setMaxAge] = React.useState(MAX_AGE)
   const [preferredGenders, setPreferredGenders] = React.useState(Array<number>);
   const [loading, setLoading] = React.useState(false);
+  const [changed, setChanged] = React.useState(false);
 
   async function load() {
     setLoading(true);
@@ -62,6 +63,12 @@ const SearchSettings = ({ route, navigation }) => {
     }
   }, []);
 
+  React.useEffect(() => {
+    if(changed) {
+      Global.SetStorage(Global.STORAGE_RELOAD_SEARCH, "true");
+    }
+  }, [changed]);
+
   async function updateIntention(num: number) {
     await Global.Fetch(Global.format(URL.USER_UPDATE_INTENTION, String(num)), 'post');
     Global.ShowToast(i18n.t('profile.intention-toast'));
@@ -70,6 +77,7 @@ const SearchSettings = ({ route, navigation }) => {
 
     let intention: UserIntention = { id: num, text: "" };
     data.user.intention = intention;
+    setChanged(true);
   }
 
   async function updateGenders(genderId: number, state: boolean) {
@@ -85,18 +93,21 @@ const SearchSettings = ({ route, navigation }) => {
         if (item.id == genderId) data.user.preferedGenders.splice(index, 1);
       });
     }
+    setChanged(true);
   }
 
   async function updateMinAge(num: number) {
     await Global.Fetch(Global.format(URL.USER_UPDATE_MIN_AGE, String(num)), 'post');
     setMinAge(num);
     data.user.preferedMinAge = num;
+    setChanged(true);
   }
 
   async function updateMaxAge(num: number) {
     await Global.Fetch(Global.format(URL.USER_UPDATE_MAX_AGE, String(num)), 'post');
     setMaxAge(num);
     data.user.preferedMaxAge = num;
+    setChanged(true);
   }
 
   return (
