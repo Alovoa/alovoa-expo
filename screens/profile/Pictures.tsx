@@ -55,6 +55,7 @@ const Pictures = ({ route, navigation }) => {
         setImages(newImages);
         setImageIdToBeRemoved(0);
         setAlertVisible(false);
+        user.images = newImages;
       }
     }
   ]
@@ -75,7 +76,6 @@ const Pictures = ({ route, navigation }) => {
   );
 
   React.useEffect(() => {
-    console.log(user)
     setImages(user.images);
     setProfilePic(user.profilePicture);
   }, []);
@@ -122,6 +122,7 @@ const Pictures = ({ route, navigation }) => {
       setProfilePic(b64);
       setChangedProfilePic(true);
       user.profilePicture = b64;
+      route.params.changed = true;
     }
   }
 
@@ -132,8 +133,10 @@ const Pictures = ({ route, navigation }) => {
       if (Platform.OS == 'ios' || Platform.OS == 'android') {
         b64 = IMAGE_HEADER_JPEG + imageData;
       }
-      await Global.Fetch(URL.USER_ADD_IMAGE, 'post', b64, 'text/plain');
-      load();
+      const response = await Global.Fetch(URL.USER_ADD_IMAGE, 'post', b64, 'text/plain');
+      const responseImages: Array<UserImage> = response.data;
+      setImages(responseImages);
+      user.images = responseImages;
     }
   }
 

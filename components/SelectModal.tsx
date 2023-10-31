@@ -4,6 +4,7 @@ import { Modal, Portal, Text, Button, Checkbox, useTheme, IconButton } from 'rea
 import { View, useWindowDimensions } from "react-native";
 import * as I18N from "../i18n";
 import { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
+import * as Global from "../Global";
 
 const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, data, selected, onValueChanged }: SelectModalT) => {
 
@@ -26,7 +27,7 @@ const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, dat
   function updateButtonText() {
     let text = data.filter(item => selectedIds.includes(item.id)).map(item => item.title).join(", ");
     if(!text) {
-      text = i18n.t('profile.misc-info.none');
+      text = Global.EMPTY_STRING;
     }
     setButtonText(text);
   }

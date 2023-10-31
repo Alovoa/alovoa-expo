@@ -9,7 +9,7 @@ import { debounce } from "lodash";
 import Alert from "./Alert";
 import { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 
-const InterestModal = ({ data }: InterestModalT) => {
+const InterestModal = ({ user, data }: InterestModalT) => {
 
   const MAX_INTERESTS = 5;
   const i18n = I18N.getI18n();
@@ -51,6 +51,7 @@ const InterestModal = ({ data }: InterestModalT) => {
           setInterests(interestsCopy);
           setInterestToBeDeleted(null);
           setAlertVisible(false);
+          user.interests = interestsCopy;
         }
       }
     }
@@ -85,6 +86,9 @@ const InterestModal = ({ data }: InterestModalT) => {
 
   function updateButtonText() {
     let text = interests.map(item => item.text).join(", ");
+    if(!text) {
+      text = Global.EMPTY_STRING;
+    }
     setButtonText(text);
   }
 
@@ -116,6 +120,7 @@ const InterestModal = ({ data }: InterestModalT) => {
       setInterests(copy);
       setInterest("");
       Keyboard.dismiss();
+      user.interests = copy;
     }
   }
 

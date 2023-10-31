@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { TextInput, Button, HelperText, ActivityIndicator } from "react-native-paper";
 import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
-import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto } from "../../types";
+import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -27,7 +27,6 @@ const ProfileSettings = ({ route, navigation }) => {
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
 
-  const [idEnc, setIdEnc] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [interests, setInterests] = React.useState(Array<UserInterest>);
   const [miscInfoKids, setMiscInfoKids] = React.useState(Array<number>);
@@ -39,29 +38,12 @@ const ProfileSettings = ({ route, navigation }) => {
   const descriptionRef = React.useRef(description);
   const debounceDescriptionHandler = React.useCallback(debounce(updateDescription, 1500), []);
 
-  const style = StyleSheet.create({
-    image: {
-      width: '100%',
-      height: 'auto',
-      maxWidth: WIDESCREEN_HORIZONTAL_MAX,
-      aspectRatio: 1,
-    },
-  });
-
   React.useEffect(() => {
     descriptionRef.current = description;
     debounceDescriptionHandler();
   }, [description]);
 
-  async function load() {
-    setLoading(true);
-    let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
-    let data: YourProfileResource = response.data;
-    loadUser(data.user);
-  }
-
   async function loadUser(user: UserDto) {
-    setIdEnc(user.idEncoded);
     setDescription(user.description);
     setInterests(user.interests);
 
@@ -75,7 +57,6 @@ const ProfileSettings = ({ route, navigation }) => {
   }
 
   React.useEffect(() => {
-    console.log(user)
     if (user) {
       loadUser(user);
     }
@@ -84,11 +65,14 @@ const ProfileSettings = ({ route, navigation }) => {
   async function updateDescription() {
     if (descriptionRef.current) {
       Global.Fetch(URL.USER_UPDATE_DESCRIPTION, 'post', descriptionRef.current, 'text/plain');
+      user.description = descriptionRef.current;
     }
   }
 
-  async function updateMiscInfo(num: UserMiscInfoEnum, activated: boolean) {
-    await Global.Fetch(Global.format(URL.USER_UPDATE_MISC_INFO, String(num), activated ? "1" : "0"), 'post');
+  async function updateMiscInfo(num: UserMiscInfoEnum, activated: boolean, multi: boolean) {
+    const response = await Global.Fetch(Global.format(URL.USER_UPDATE_MISC_INFO, String(num), activated ? "1" : "0"), 'post');
+    const miscInfoArray: Array<UserMiscInfo> = response.data
+    user.miscInfos = miscInfoArray;
   }
 
   return (
@@ -99,7 +83,7 @@ const ProfileSettings = ({ route, navigation }) => {
         </View>
       }
 
-      <VerticalView onRefresh={load} style={{ padding: 0 }}>
+      <VerticalView style={{ padding: 0 }}>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -54 }}>
           <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Pictures", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
         </View>
@@ -126,7 +110,7 @@ const ProfileSettings = ({ route, navigation }) => {
           </View>
 
           <View style={{ marginTop: 12 }}>
-            <InterestModal data={interests} />
+            <InterestModal user={user} data={interests} />
           </View>
 
           <View style={{ marginTop: 12 }}>
@@ -136,7 +120,7 @@ const ProfileSettings = ({ route, navigation }) => {
               { id: UserMiscInfoEnum.RELATIONSHIP_OPEN, title: i18n.t('profile.misc-info.relationship.open') },
               { id: UserMiscInfoEnum.RELATIONSHIP_OTHER, title: i18n.t('profile.misc-info.relationship.other') }]}
               selected={miscInfoRelationship} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked);
+                updateMiscInfo(id, checked, false);
               }}></SelectModal>
           </View>
 
@@ -145,7 +129,7 @@ const ProfileSettings = ({ route, navigation }) => {
               data={[{ id: UserMiscInfoEnum.KIDS_NO, title: i18n.t('profile.misc-info.kids.no') },
               { id: UserMiscInfoEnum.KIDS_YES, title: i18n.t('profile.misc-info.kids.yes') }]}
               selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked);
+                updateMiscInfo(id, checked, false);
               }}></SelectModal>
           </View>
 
@@ -156,7 +140,7 @@ const ProfileSettings = ({ route, navigation }) => {
               { id: UserMiscInfoEnum.DRUGS_CANNABIS, title: i18n.t('profile.misc-info.drugs.cannabis') },
               { id: UserMiscInfoEnum.DRUGS_OTHER, title: i18n.t('profile.misc-info.drugs.other') }]}
               selected={miscInfoDrugs} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked);
+                updateMiscInfo(id, checked, true);
               }}></SelectModal>
           </View>
         </View>

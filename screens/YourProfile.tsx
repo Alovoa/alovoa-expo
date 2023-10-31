@@ -34,14 +34,13 @@ const YourProfile = ({ route, navigation }) => {
   const [age, setAge] = React.useState(0);
   const [idEnc, setIdEnc] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  const topBarHeight = 62;
 
   React.useEffect(() => {
-    if (route.params?.changed) {
-      load();
+    if (route.params) {
+      setProfilePic(user?.profilePicture);
       route.params.changed = false;
     }
-  }, [route.params?.changed]);
+  }, [navigation, route]);
 
   async function load() {
     setLoading(true);
@@ -126,7 +125,7 @@ const YourProfile = ({ route, navigation }) => {
 
         </View>
         <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
-          <View style={{ marginTop: 128, paddingBottom: topBarHeight + 24 }}>
+          <View style={{ marginTop: 128, paddingBottom: STATUS_BAR_HEIGHT + 24 }}>
             <Button mode='contained' onPress={() => logout()}>
               <Text>{i18n.t('profile.logout')}</Text>
             </Button>

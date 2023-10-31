@@ -4,7 +4,7 @@ import {
   useWindowDimensions
 } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { YourProfileResource, UserDto, GenderEnum, } from "../../types";
+import { YourProfileResource, UserDto, GenderEnum, UserIntention, Gender, } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -23,12 +23,6 @@ enum Intention {
   SEX = 3
 }
 
-enum IntentionText {
-  MEET = "meet",
-  DATE = "date",
-  SEX = "sex"
-}
-
 const SearchSettings = ({ route, navigation }) => {
 
   var data: YourProfileResource = route.params.data;
@@ -36,11 +30,11 @@ const SearchSettings = ({ route, navigation }) => {
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
 
+  const [isLegal, setIsLegal] = React.useState(false);
   const [intention, setIntention] = React.useState(Intention.MEET);
   const [showIntention, setShowIntention] = React.useState(false);
   const [minAge, setMinAge] = React.useState(MIN_AGE)
   const [maxAge, setMaxAge] = React.useState(MAX_AGE)
-  const [isLegal, setIsLegal] = React.useState(false);
   const [preferredGenders, setPreferredGenders] = React.useState(Array<number>);
   const [loading, setLoading] = React.useState(false);
 
@@ -57,23 +51,11 @@ const SearchSettings = ({ route, navigation }) => {
     setIsLegal(data.user.age >= MIN_AGE);
     setMinAge(data.user.preferedMinAge);
     setMaxAge(data.user.preferedMaxAge);
-
-    let intentionText = data.user.intention.text;
-    switch (intentionText) {
-      case IntentionText.MEET:
-        setIntention(Intention.MEET);
-        break;
-      case IntentionText.DATE:
-        setIntention(Intention.DATE);
-        break;
-      case IntentionText.SEX:
-        setIntention(Intention.SEX);
-        break;
-    }
-
+    setIntention(data.user.intention.id);
     setPreferredGenders(data.user.preferedGenders.map(item => item.id));
     setLoading(false);
   }
+
   React.useEffect(() => {
     if (data) {
       loadUser(data);
@@ -85,26 +67,42 @@ const SearchSettings = ({ route, navigation }) => {
     Global.ShowToast(i18n.t('profile.intention-toast'));
     setIntention(num);
     setShowIntention(false);
+
+    let intention: UserIntention = { id: num, text: "" };
+    data.user.intention = intention;
   }
 
   async function updateGenders(genderId: number, state: boolean) {
     await Global.Fetch(Global.format(URL.USER_UPDATE_PREFERED_GENDER, genderId, state ? "1" : "0"), 'post');
+    if (state) {
+      let gender: Gender = {
+        id: genderId,
+        text: ""
+      };
+      data.user.preferedGenders.push(gender);
+    } else {
+      data.user.preferedGenders.forEach((item, index) => {
+        if (item.id == genderId) data.user.preferedGenders.splice(index, 1);
+      });
+    }
   }
 
   async function updateMinAge(num: number) {
     await Global.Fetch(Global.format(URL.USER_UPDATE_MIN_AGE, String(num)), 'post');
     setMinAge(num);
+    data.user.preferedMinAge = num;
   }
 
   async function updateMaxAge(num: number) {
     await Global.Fetch(Global.format(URL.USER_UPDATE_MAX_AGE, String(num)), 'post');
     setMaxAge(num);
+    data.user.preferedMaxAge = num;
   }
 
   return (
     <View style={{ height: height - headerHeight }}>
       {loading &&
-        <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
+        <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }}>
           <ActivityIndicator animating={loading} size="large" />
         </View>
       }

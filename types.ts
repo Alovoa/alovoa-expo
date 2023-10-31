@@ -44,6 +44,7 @@ export type RangeSliderModalT = {
 
 export type InterestModalT = {
   data: Array<UserInterest>;
+  user: UserDto;
 };
 
 export type SelectModalDataT = {

@@ -72,8 +72,6 @@ export default StyleSheet.create({
   },
   descriptionCardItem: {
     textAlign: I18nManager.isRTL ? "right" : "left",
-    paddingLeft: 12,
-    paddingRight: 12,
     flexShrink: 1,
     opacity: 0.8,
   },
