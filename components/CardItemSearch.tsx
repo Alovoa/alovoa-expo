@@ -100,7 +100,7 @@ const CardItem = ({
 
       {/* DESCRIPTION */}
       {user.description && (
-        <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1 }}>
+        <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1, width: '100%' }}>
           <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)}>
             <Text style={styles.descriptionCardItem}>{user.description}</Text>
           </TouchableWithoutFeedback>
