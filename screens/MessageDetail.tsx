@@ -13,12 +13,11 @@ import {
 } from "react-native-paper";
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useTheme, Text } from "react-native-paper";
-import Autolink, { CustomMatcher, IntlPhoneMatcher } from 'react-native-autolink';
+import Autolink, { CustomMatcher } from 'react-native-autolink';
 import { MessageDtoListModel, MessageDto } from "../types";
 import styles from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import * as WebBrowser from 'expo-web-browser';
 import * as I18N from "../i18n";
 
 const i18n = I18N.getI18n()
@@ -39,7 +38,7 @@ const MessageDetail = ({ route, navigation }) => {
 
   const PhoneMatcher: CustomMatcher = {
     pattern:
-      /(\s|^)[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{0,6}$(?=\s|$)/g,
+      /(?<=^|\s|\.)[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{0,6}(?=$|\s|\.)/gm,
     type: 'phone-intl',
     getLinkUrl: ([number]) => `tel:${number}`,
   };
@@ -112,16 +111,17 @@ const MessageDetail = ({ route, navigation }) => {
   }
 
   return (
-    <View style={[styles.containerMessages, { paddingHorizontal: 0, display: 'flex', maxHeight: height - headerHeight }]}>
+    <View style={[styles.containerMessages, { paddingHorizontal: 0, display: 'flex', maxHeight: height }]}>
       <ScrollView
         style={{ padding: 8, flexGrow: 1 }}
         ref={scrollViewRef}
+        contentContainerStyle={{paddingBottom: 8}}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
         {
           results.map((item, index) => (
             <View key={index} style={[{ flex: 1 }, item.from ? { alignItems: 'flex-start' } : { alignItems: 'flex-end' }]}>
               <Card style={[styleChat, item.from ? {} : styleYourChat]} >
-                {<Autolink style={[item.from ? {} : styleYourChat]} text={item.content} email={false} phone={true} matchers={[PhoneMatcher]} component={Text}></Autolink>}
+                {<Autolink style={[item.from ? {} : styleYourChat]} text={item.content} linkStyle={{textDecorationLine: 'underline'}} email={false} phone={true} matchers={[PhoneMatcher]} component={Text}></Autolink>}
               </Card>
             </View>
           ))
@@ -129,7 +129,6 @@ const MessageDetail = ({ route, navigation }) => {
       </ScrollView>
       <KeyboardAvoidingView>
         <TextInput
-          onPressIn={scrollToEnd}
           style={{ backgroundColor: colors.surface, height: 52 }}
           value={text}
           dense={true}
