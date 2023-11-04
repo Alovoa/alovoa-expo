@@ -1,0 +1,3 @@
+New and improved profile layout
+You can now customize the colors within the app
+More bug fixes and improvements
