@@ -25,10 +25,26 @@ const ColorModal = ({ title }: any) => {
   }
 
   React.useEffect(() => {
+    loadStoredColors();
+  }, []);
+
+  React.useEffect(() => {
     if (changed) {
       Global.ShowToast(i18n.t('restart-apply-changes'));
     }
   }, [changed]);
+
+  async function loadStoredColors() {
+    let pColor = await Global.GetStorage(Global.STORAGE_SETTINGS_COLOR_PRIMARY);
+    if(pColor) {
+      changePrimaryColor(pColor);
+    }
+
+    let sColor = await Global.GetStorage(Global.STORAGE_SETTINGS_COLOR_SECONDARY);
+    if(sColor) {
+      changeSecondaryColor(sColor);
+    }
+  }
 
   function primaryColorChanged(color: returnedResults) {
     changePrimaryColor(color.hex)
