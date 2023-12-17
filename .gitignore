@@ -13,6 +13,7 @@ web-build/
 android/*
 ios/*
 /dist*
+ssl-key
 
 # macOS
 .DS_Store
