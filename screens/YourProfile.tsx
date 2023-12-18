@@ -124,7 +124,7 @@ const YourProfile = ({ route, navigation }) => {
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SETTINGS)}>{i18n.t('profile.screen.settings')}</Button>
 
         </View>
-        <View style={[styles.containerProfileItem, { marginTop: 32, marginBottom: 24 }]}>
+        <View style={[styles.containerProfileItem, { marginTop: 32, marginBottom: 48 }]}>
           <View style={{ marginTop: 128, paddingBottom: STATUS_BAR_HEIGHT + 24 }}>
             <Button mode='contained' onPress={() => logout()}>
               <Text>{i18n.t('profile.logout')}</Text>
