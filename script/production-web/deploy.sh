@@ -1,7 +1,9 @@
  #!/bin/bash
 
 CERT_PATH="/opt/alovoa/alovoa.pfx"
+PORT=10080
 
 cd ../..
-nohup npx serve dist --single -l 10080 --ssl-cert $CERT_PATH --ssl-pass "ssl-key" &
+fuser -k $PORT/tcp
+nohup npx serve dist --single -l $PORT --ssl-cert $CERT_PATH --ssl-pass "ssl-key" &
 
