@@ -88,15 +88,24 @@ const Login = () => {
   const loginEmail = async () => {
     if (captchaId && captchaText) {
       hideDialog();
+      let redirectUrl = APP_URL ? APP_URL : await Linking.getInitialURL();
+      if (!redirectUrl) {
+        Global.ShowToast(i18n.t('error.generic'));
+        return;
+      }
       let url = URL.AUTH_LOGIN + "?username=" + encodeURIComponent(email) +
         "&password=" + encodeURIComponent(password) +
         "&remember-me=on" +
-        "&redirect-url=" + Buffer.from(APP_URL).toString('base64') +
+        "&redirect-url=" + Buffer.from(redirectUrl).toString('base64') +
         "&captchaId=" + captchaId +
         "&captchaText=" + captchaText;
       try {
         let res = await Global.Fetch(url, 'post', {}, "application/x-www-form-urlencoded");
+        console.log(await JSON.stringify(res))
         let redirectHeader = res.headers['redirect-url'];
+        if(!redirectHeader) {
+          redirectHeader = res.data;
+        }
         if (res.request?.responseURL && res.request?.responseURL != URL.AUTH_LOGIN_ERROR && redirectHeader) {
           _handleRedirect({ url: redirectHeader });
         } else {
@@ -143,7 +152,7 @@ const Login = () => {
     icon: {
       marginRight: 8
     }
-  });  
+  });
 
   return (
     <VerticalView>
