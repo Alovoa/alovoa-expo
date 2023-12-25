@@ -59,8 +59,6 @@ const Login = () => {
       await Global.SetStorage(Global.STORAGE_FIRSTNAME, firstName);
       await Global.SetStorage(Global.STORAGE_PAGE, page);
       await Global.SetStorage("loginDate", new Date().toISOString());
-      //wait a while for the cookie to be saved?
-      await new Promise(r => setTimeout(r, 300));
       Global.loadPage(page);
     }
   };
