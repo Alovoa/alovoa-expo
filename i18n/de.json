@@ -179,5 +179,8 @@
         "hidden": "Versteckte Nutzer",
         "blocked": "Geblockte Nutzer"
     },
-    "restart-apply-changes": "Starte die App neu um die Änderungen zu übernehmen"
+    "restart-apply-changes": "Starte die App neu um die Änderungen zu übernehmen",
+    "compliment": {
+        "title": "Ein Kompliment senden" 
+    }
 }

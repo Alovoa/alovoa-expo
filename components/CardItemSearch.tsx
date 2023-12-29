@@ -18,6 +18,7 @@ const CardItem = ({
   user,
   unitsImperial,
   swiper,
+  onLikePressed
 }: CardItemT) => {
 
   const { colors } = useTheme();
@@ -53,11 +54,11 @@ const CardItem = ({
     },
   ];
 
-  function onLikeUser() {
-    swiper.current?.swipeRight();
+  function onLikeUser(index: number) {
+    onLikePressed(index);
   }
 
-  function onhideUser() {
+  function onHideUser() {
     swiper.current?.swipeLeft();
   }
 
@@ -109,7 +110,7 @@ const CardItem = ({
 
       {/* ACTIONS */}
       <View style={styles.actionsCardItem}>
-        <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onhideUser()}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onHideUser()}>
           <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={() => onLikeUser()}>

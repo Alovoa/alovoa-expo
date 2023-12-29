@@ -178,5 +178,8 @@
         "hidden": "Hidden users",
         "blocked": "Blocked users"
     },
-    "restart-apply-changes": "Restart the app to apply changes"
+    "restart-apply-changes": "Restart the app to apply changes",
+    "compliment": {
+        "title": "Send a compliment" 
+    }
 }

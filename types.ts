@@ -3,6 +3,7 @@ export type CardItemT = {
   donation?: number;
   unitsImperial?: boolean;
   swiper?: any;
+  onLikePressed: (index: number) => void;
 };
 
 export type IconT = {
@@ -30,6 +31,16 @@ export type SelectModalT = {
   data: Array<SelectModalDataT>;
   selected: Array<number>;
   onValueChanged: (id: number, checked: boolean) => void
+};
+
+export type ComplimentModalT = {
+  visible: boolean,
+  setVisible: (state: boolean) => void,
+  name: string,
+  age: number,
+  profilePicture: string,
+  onSend: (message: string, pop?: boolean) => void,
+  onDismiss?: () => void;
 };
 
 export type RangeSliderModalT = {

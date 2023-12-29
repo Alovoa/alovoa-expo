@@ -58,7 +58,8 @@ export const USER_UPDATE_UNITS = DOMAIN + "/user/units/update/%s"
 export const USER_USERDATA = DOMAIN + "/user/userdata/%s";
 export const USER_DELETE_ACCOUNT = DOMAIN + "/user/delete-account";
 
-export const USER_LIKE = DOMAIN + "/user/like/%s"
+export const USER_LIKE = DOMAIN + "/user/like/%s/%s"
+export const USER_LIKE_MESSAGE = DOMAIN + "/user/like/%s/%s"
 export const USER_HIDE = DOMAIN + "/user/hide/%s"
 export const USER_BLOCK = DOMAIN + "/user/block/%s"
 export const USER_UNBLOCK = DOMAIN + "/user/unblock/%s"

@@ -24,6 +24,7 @@ import Icon from "../components/Icon";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import Alert from "../components/Alert";
 import VerticalView from "../components/VerticalView";
+import ComplimentModal from "../components/ComplimentModal";
 
 
 const i18n = I18N.getI18n()
@@ -66,10 +67,10 @@ const Profile = ({ route, navigation }) => {
   const [liked, setLiked] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   const [you, setYou] = React.useState<UserDto>();
-  const [profilePic, setProfilePic] = React.useState("");
   const [name, setName] = React.useState("");
   const [distance, setDistance] = React.useState(0);
   const [age, setAge] = React.useState(0);
+  const [profilePicture, setProfilePicture] = React.useState("");
   const [donated, setDonated] = React.useState(0);
   const [blocks, setBlocks] = React.useState(0);
   const [reports, setReports] = React.useState(0);
@@ -86,7 +87,6 @@ const Profile = ({ route, navigation }) => {
   const [relationshipString, setRelationshipString] = React.useState<String>();
   const [kidsString, setKidsString] = React.useState<String>();
   const [drugsString, setDrugsString] = React.useState<String>();
-  const [images, setImages] = React.useState(Array<UserImage>);
   const [swiperImages, setSwiperImages] = React.useState<Array<string>>();
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
@@ -96,6 +96,7 @@ const Profile = ({ route, navigation }) => {
   const showMenu = () => { setMenuVisible(true) };
   const hideMenu = () => { setMenuVisible(false) };
   const maxWidth = width < WIDESCREEN_HORIZONTAL_MAX ? width : WIDESCREEN_HORIZONTAL_MAX;
+  const [complimentModalVisible, setComplimentModalVisible] = React.useState(false);
 
   const style = StyleSheet.create({
     image: {
@@ -149,11 +150,11 @@ const Profile = ({ route, navigation }) => {
     setLiked(user.likedByCurrentUser);
     setHidden(user.hiddenByCurrentUser);
     setCompatible(user.compatible);
-    setProfilePic(user.profilePicture);
     setDistance(user.distanceToUser);
     setName(user.firstName);
     setDonated(user.totalDonations);
     setAge(user.age);
+    setProfilePicture(user.profilePicture);
     setBlocked(user.blockedByCurrentUser);
     setReported(user.reportedByCurrentUser);
     setBlocks(user.numBlockedByUsers);
@@ -162,7 +163,6 @@ const Profile = ({ route, navigation }) => {
     setMaxAge(user.preferedMaxAge);
     setDescription(user.description);
     setGender(convertGenderText(user.gender.text));
-    setImages(user.images);
     if (user.lastActiveState) {
       setLastActiveState(user.lastActiveState);
     }
@@ -321,8 +321,12 @@ const Profile = ({ route, navigation }) => {
     setAlertVisible(true);
   }
 
-  async function likeUser() {
-    await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
+  async function likeUser(message?: string) {
+    if(!message) {
+      await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
+    } else {
+      await Global.Fetch(Global.format(URL.USER_LIKE_MESSAGE, user.idEncoded, message), 'post');
+    }
     setLiked(true);
     setRemoveUser(true);
   }
@@ -341,7 +345,7 @@ const Profile = ({ route, navigation }) => {
             disabled={hidden || liked}>
             <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, !compatible || liked ? { opacity: 0.5 } : {}, { backgroundColor: colors.primary }]} onPress={() => likeUser()} disabled={!compatible || liked}>
+          <TouchableOpacity style={[styles.button, !compatible || liked ? { opacity: 0.5 } : {}, { backgroundColor: colors.primary }]} onPress={() => setComplimentModalVisible(true)} disabled={!compatible || liked}>
             <Icon name="heart" color={LIKE_ACTIONS} size={25} />
           </TouchableOpacity>
         </View>
@@ -469,6 +473,7 @@ const Profile = ({ route, navigation }) => {
           </View>
         </View>
         <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.report.subtitle')} buttons={alertButtons} />
+        <ComplimentModal profilePicture={profilePicture} name={name} age={age} onSend={likeUser} visible={complimentModalVisible} setVisible={setComplimentModalVisible}></ComplimentModal>
       </VerticalView>
     </View>
   );
