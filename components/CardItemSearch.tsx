@@ -55,7 +55,7 @@ const CardItem = ({
   ];
 
   function onLikeUser(index: number) {
-    onLikePressed(index);
+    onLikePressed();
   }
 
   function onHideUser() {

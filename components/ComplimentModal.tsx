@@ -21,6 +21,10 @@ const ComplimentModal = ({ visible = false, setVisible, name, age, profilePictur
   const hideModal = () => { setVisible(false); if (onDismiss) { onDismiss() } };
   const maxLength = 120;
 
+  React.useEffect(() => {
+    setText("");
+  }, [profilePicture]);
+
   return (
     <Portal>
       <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >

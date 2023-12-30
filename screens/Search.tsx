@@ -34,7 +34,8 @@ const Search = ({ route, navigation }) => {
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
-  const [index, setIndex] = React.useState(9999);
+  const [index, setIndex] = React.useState(0);
+  const [currentUser, setCurrentUser] = React.useState<UserDto>();
   const [complimentModalVisible, setComplimentModalVisible] = React.useState(false);
   const [ignoreRightSwipe, setIgnoreRightSwipe] = React.useState(false);
 
@@ -63,6 +64,12 @@ const Search = ({ route, navigation }) => {
   React.useEffect(() => {
     load();
   }, []);
+
+  React.useEffect(() => {
+    if (results[index]) {
+      setCurrentUser(results[index]);
+    }
+  }, [index, results]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -109,6 +116,7 @@ const Search = ({ route, navigation }) => {
       }
     );
     setLoading(false);
+    setIndex(0);
   }
 
   async function updateLocationLocal(lat: number, lon: number) {
@@ -163,15 +171,16 @@ const Search = ({ route, navigation }) => {
   async function likeUser(message?: string, pop?: boolean) {
     if (index < results.length) {
       let id = results[index].idEncoded;
-      // if (!message) {
-      //   await Global.Fetch(Global.format(URL.USER_LIKE, id), 'post');
-      // } else {
-      //   await Global.Fetch(Global.format(URL.USER_LIKE_MESSAGE, id, message), 'post');
-      // }
-      loadResultsOnEmpty(index);
-      if(pop) {
+      if (!message) {
+        await Global.Fetch(Global.format(URL.USER_LIKE, id), 'post');
+      } else {
+        await Global.Fetch(Global.format(URL.USER_LIKE_MESSAGE, id, message), 'post');
+      }
+      if (pop) {
         swiper.current?.swipeRight();
       }
+      loadResultsOnEmpty(index);
+      setComplimentModalVisible(false);
     }
   }
 
@@ -181,6 +190,7 @@ const Search = ({ route, navigation }) => {
       await Global.Fetch(Global.format(URL.USER_HIDE, id), 'post');
       loadResultsOnEmpty(index);
     }
+    setIndex(index + 1);
   }
 
   async function loadResultsOnEmpty(index: number) {
@@ -190,15 +200,15 @@ const Search = ({ route, navigation }) => {
   }
 
   async function onSwipeRight(index: number) {
-    if(!ignoreRightSwipe) {
+    if (!ignoreRightSwipe) {
       likeUser(undefined, false);
     }
+    setIndex(index + 1);
   }
 
-  async function onLikePressed(index: number) {
+  async function onLikePressed() {
     setComplimentModalVisible(true);
     setIgnoreRightSwipe(true);
-    setIndex(index);
   }
 
   function onComplimentModalDismiss() {
@@ -241,8 +251,8 @@ const Search = ({ route, navigation }) => {
           </CardStack>
         </View>
       </View>
-      <ComplimentModal profilePicture={results[index] ? results[index].profilePicture : ''} name={results[index] ? results[index].firstName : ''}
-        age={results[index] ? results[index].age : 0} onSend={likeUser} visible={complimentModalVisible} setVisible={setComplimentModalVisible}
+      <ComplimentModal profilePicture={currentUser ? currentUser.profilePicture : ''} name={currentUser ? currentUser.firstName : ''}
+        age={currentUser ? currentUser.age : 0} onSend={likeUser} visible={complimentModalVisible} setVisible={setComplimentModalVisible}
         onDismiss={onComplimentModalDismiss}></ComplimentModal>
     </ScrollView>
   );

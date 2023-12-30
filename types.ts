@@ -3,7 +3,7 @@ export type CardItemT = {
   donation?: number;
   unitsImperial?: boolean;
   swiper?: any;
-  onLikePressed: (index: number) => void;
+  onLikePressed: () => void;
 };
 
 export type IconT = {
