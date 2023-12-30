@@ -95,7 +95,7 @@ const Login = () => {
       }
       let url = URL.AUTH_LOGIN + "?username=" + encodeURIComponent(email) +
         "&password=" + encodeURIComponent(password) +
-        "&remember-me=on" +
+        "&remember-me=" +
         "&redirect-url=" + Buffer.from(redirectUrl).toString('base64') +
         "&captchaId=" + captchaId +
         "&captchaText=" + captchaText;
