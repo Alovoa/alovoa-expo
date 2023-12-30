@@ -51,6 +51,7 @@ const YourProfile = ({ route, navigation }) => {
     setIdEnc(data.user.idEncoded);
     setProfilePic(data.user.profilePicture);
     setName(data.user.firstName);
+    setAge(data.user.age);
     setLoading(false);
   }
   React.useEffect(() => {
