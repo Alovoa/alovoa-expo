@@ -115,11 +115,11 @@ const Search = ({ route, navigation }) => {
   }
 
   async function loadResults() {
-
+    
     let lat = latitude;
     let lon = longitude;
     let hasLocation = lat != undefined && lon != undefined;
-    if (firstSearch && hasLocation) {
+    if (firstSearch) {
       try {
         let location: Location.LocationObject | undefined;
         let hasLocationPermission = false;
