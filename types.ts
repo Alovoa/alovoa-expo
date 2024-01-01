@@ -3,7 +3,9 @@ export type CardItemT = {
   donation?: number;
   unitsImperial?: boolean;
   swiper?: any;
-  onLikePressed: () => void;
+  message?: string;
+  onLikePressed?: () => void;
+  onMessagePressed?: (result: LikeResultT) => void;
 };
 
 export type IconT = {
@@ -192,6 +194,7 @@ export type ConversationDto = {
 export type NotificationDto = {
   id: number;
   date: Date;
+  message: string;
   userFromDto: UserDto;
 }
 
@@ -339,6 +342,11 @@ export type PasswordResetDto = {
   captchaId: number;
 	captchaText: string;
 	email: string;
+}
+
+export type LikeResultT = {
+  user: UserDto;
+  message?: string;
 }
 
 export const GenderMap = new Map<number, string>([

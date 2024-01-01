@@ -5,16 +5,17 @@ import {
   FlatList,
   RefreshControl,
   Pressable,
-  useWindowDimensions
+  useWindowDimensions,
+  Image
 } from "react-native";
 
-import { ActivityIndicator, Button, Menu, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Button, IconButton, Menu, Modal, Portal, Text, useTheme } from "react-native-paper";
 import { CardItemLikes } from "../components";
-import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
+import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { AlertsResource, UserDto, UnitsEnum, UserUsersResource } from "../types";
+import { AlertsResource, UserDto, UnitsEnum, UserUsersResource, LikeResultT } from "../types";
 import LikesEmpty from "../assets/images/likes-empty.svg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import VerticalView from "../components/VerticalView";
@@ -34,15 +35,25 @@ const Likes = ({ navigation }) => {
   const [loaded, setLoaded] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [user, setUser] = React.useState<UserDto>();
-  const [results, setResults] = React.useState(Array<UserDto>);
+  const [results, setResults] = React.useState(Array<LikeResultT>);
   const [menuFilterVisible, setMenuFilterVisible] = React.useState(false);
   const [filter, setFilter] = React.useState(FILTER.RECEIVED_LIKES);
   const [loading, setLoading] = React.useState(false);
+  const [visible, setVisible] = React.useState(false);
+  const [likeResult, setLikeResult] = React.useState<LikeResultT>();
   const { height, width } = useWindowDimensions();
 
   const svgHeight = 150;
   const svgWidth = 200;
   const topBarHeight = 62;
+
+  const containerStyle = { backgroundColor: colors.surface, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
+
+  function calcMarginModal() {
+    return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
+  }
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
 
   async function load() {
     setLoading(true);
@@ -61,14 +72,22 @@ const Likes = ({ navigation }) => {
           if (filter == FILTER.RECEIVED_LIKES) {
             let data: AlertsResource = response.data;
             setUser(data.user);
-            let users = data.notifications.map(item => {
-              return item.userFromDto;
+            let res = data.notifications.map(item => {
+              let t = {} as LikeResultT;
+              t.message = item.message;
+              t.user = item.userFromDto;
+              return t;
             });
-            setResults(users);
+            setResults(res);
           } else {
             let data: UserUsersResource = response.data;
             setUser(data.user);
-            setResults(data.users);
+            let res = data.users.map(item => {
+              let t = {} as LikeResultT;
+              t.user = item;
+              return t;
+            });
+            setResults(res);
           }
         }
       );
@@ -89,8 +108,14 @@ const Likes = ({ navigation }) => {
   }, [navigation]);
 
   React.useEffect(() => {
+    setVisible(false);
     load();
   }, [filter]);
+
+  function onMessagePressed(result: LikeResultT) {
+    setLikeResult(result);
+    showModal();
+  }
 
   return (
     <View style={{ height: height }}>
@@ -127,8 +152,10 @@ const Likes = ({ navigation }) => {
           renderItem={({ item }) => (
             <TouchableOpacity>
               <CardItemLikes
-                user={item}
+                user={item.user}
                 unitsImperial={user?.units == UnitsEnum.IMPERIAL}
+                message={item.message}
+                onMessagePressed={onMessagePressed}
               />
             </TouchableOpacity>
           )}
@@ -141,6 +168,25 @@ const Likes = ({ navigation }) => {
           </View>
         }
       </VerticalView>
+      <Portal>
+        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >
+          <View>
+            <IconButton
+              style={{ alignSelf: 'flex-end' }}
+              icon="close"
+              size={20}
+              onPress={hideModal}
+            />
+          </View>
+          <View style={{ padding: 12, alignItems: 'center', marginBottom: 24 }}>
+            <Image style={{ height: 80, width: 80, borderRadius: 500, marginBottom: 12 }} source={{ uri: likeResult?.user.profilePicture }}></Image>
+            <Text>{likeResult?.user.firstName + ", " + likeResult?.user.age}</Text>
+          </View>
+          <View>
+            <Text style={{ textAlign: "center" }}>{likeResult?.message}</Text>
+          </View>
+        </Modal>
+      </Portal>
     </View>
   )
 };

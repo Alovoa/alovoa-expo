@@ -1,14 +1,14 @@
 import React from "react";
 import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle, useWindowDimensions } from "react-native";
-import { useTheme, Text } from "react-native-paper";
-import { CardItemT } from "../types";
+import { useTheme, Text, Button, IconButton } from "react-native-paper";
+import { CardItemT, LikeResultT } from "../types";
 import * as Global from "../Global";
 import styles, {
   WIDESCREEN_HORIZONTAL_MAX
 } from "../assets/styles";
 
 const CardItem = ({
-  user
+  user, message, onMessagePressed
 }: CardItemT) => {
 
   const { colors } = useTheme();
@@ -49,6 +49,24 @@ const CardItem = ({
         <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text>
         </View>
       </View>
+
+      {message &&
+        <View style={{ position: "absolute", top: 0, left: 0 }}>
+          <IconButton
+            icon="text"
+            size={32}
+            mode="contained"
+            onPress={() => {
+              if (onMessagePressed) {
+                let t = {} as LikeResultT;
+                t.message = message;
+                t.user = user;
+                onMessagePressed(t);
+              }
+            }}
+          />
+        </View>
+      }
     </View>
   );
 };
