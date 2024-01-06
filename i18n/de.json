@@ -181,6 +181,7 @@
     },
     "restart-apply-changes": "Starte die App neu um die Änderungen zu übernehmen",
     "compliment": {
-        "title": "Ein Kompliment senden" 
+        "title": "Kompliment senden",
+        "tooltip": "Hier tippen, um ein Kompliment zu senden!" 
     }
 }

@@ -4,6 +4,7 @@ export type CardItemT = {
   unitsImperial?: boolean;
   swiper?: any;
   message?: string;
+  index?: number;
   onLikePressed?: () => void;
   onMessagePressed?: (result: LikeResultT) => void;
 };

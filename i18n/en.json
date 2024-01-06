@@ -180,6 +180,7 @@
     },
     "restart-apply-changes": "Restart the app to apply changes",
     "compliment": {
-        "title": "Send a compliment" 
+        "title": "Send a compliment",
+        "tooltip": "Tap here to send a compliment!" 
     }
 }

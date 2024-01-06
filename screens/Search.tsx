@@ -11,7 +11,6 @@ import CardItemSearch from "../components/CardItemSearch";
 import { useFocusEffect } from "@react-navigation/native";
 import ComplimentModal from "../components/ComplimentModal";
 
-
 const i18n = I18N.getI18n()
 
 enum SORT {
@@ -244,6 +243,7 @@ const Search = ({ route, navigation }) => {
                     unitsImperial={user?.units == UnitsEnum.IMPERIAL}
                     swiper={swiper}
                     onLikePressed={onLikePressed}
+                    index={index}
                   />
                 </Card>
               ))

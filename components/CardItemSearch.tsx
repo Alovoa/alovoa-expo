@@ -12,13 +12,15 @@ import styles, {
   WIDESCREEN_HORIZONTAL_MAX
 } from "../assets/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Tooltip from 'react-native-walkthrough-tooltip';
 import * as I18N from "../i18n";
 
 const CardItem = ({
   user,
   unitsImperial,
   swiper,
-  onLikePressed
+  onLikePressed,
+  index
 }: CardItemT) => {
 
   const { colors } = useTheme();
@@ -26,6 +28,8 @@ const CardItem = ({
 
   const { height, width } = useWindowDimensions();
   const cardPadding = 8;
+
+  const [showLikeTooltip, setShowLikeTooltip] = React.useState(false);
 
   const style = StyleSheet.create({
     image: {
@@ -54,8 +58,25 @@ const CardItem = ({
     },
   ];
 
-  function onLikeUser(index: number) {
-    onLikePressed();
+  React.useEffect(() => {
+    showToolTip();
+  }, []);
+
+  async function showToolTip() {
+    if(index == 0) {
+      let toolTip = await Global.GetStorage(Global.STORAGE_SEARCH_LIKE_TOOLTIP);
+      if(!toolTip) {
+        setShowLikeTooltip(true);
+        Global.SetStorage(Global.STORAGE_SEARCH_LIKE_TOOLTIP, "1");
+      }
+    }
+  }
+
+  function onLikeUser() {
+    if(onLikePressed) {
+      onLikePressed();
+    }
+    setShowLikeTooltip(false);
   }
 
   function onHideUser() {
@@ -71,7 +92,7 @@ const CardItem = ({
 
       {/* NAME */}
       <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingTop: 4, paddingBottom: 7, }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingTop: 4, paddingBottom: 10, }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text></View>
             {user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ paddingLeft: 6 }} />}
@@ -84,20 +105,20 @@ const CardItem = ({
         </View>
       </TouchableWithoutFeedback>
 
-      {/* COMMON INTERESTS */}{ user.commonInterests.length > 0 &&
-      <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)} style={styles.marginBottom4}>
-        <View>
-          <Text>{i18n.t('profile.interests-common')}</Text>
-          <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-            {
-              user.commonInterests?.map((item, index) => (
-                <Chip key={index} style={[styles.marginRight4, styles.marginBottom4]}><Text>{item.text}</Text></Chip>
-              ))
-            }
+      {/* COMMON INTERESTS */}{user.commonInterests.length > 0 &&
+        <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)} style={styles.marginBottom4}>
+          <View style={{ alignSelf: 'stretch', paddingBottom: 8,}}>
+            <Text style={styles.marginBottom4}>{i18n.t('profile.interests-common')}</Text>
+            <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+              {
+                user.commonInterests?.map((item, index) => (
+                  <Chip key={index} style={[styles.marginRight4, styles.marginBottom4]}><Text>{item.text}</Text></Chip>
+                ))
+              }
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
-}
+        </TouchableWithoutFeedback>
+      }
 
       {/* DESCRIPTION */}
       {user.description && (
@@ -113,9 +134,20 @@ const CardItem = ({
         <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onHideUser()}>
           <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={() => onLikeUser()}>
-          <Icon name="heart" color={LIKE_ACTIONS} size={25} />
-        </TouchableOpacity>
+        <Tooltip
+          contentStyle={{
+            backgroundColor: colors.surface
+          }}
+          isVisible={showLikeTooltip}
+          content={<Text>{i18n.t('compliment.tooltip')}</Text>}
+          placement="top"
+          disableShadow={true}
+          onClose={() => setShowLikeTooltip(false)}
+        >
+          <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={() => onLikeUser()}>
+            <Icon name="heart" color={LIKE_ACTIONS} size={25} />
+          </TouchableOpacity>
+        </Tooltip>
       </View>
     </View>
   );

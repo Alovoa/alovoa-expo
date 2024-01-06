@@ -63,6 +63,7 @@
     "react-native-tab-view": "^3.3.0",
     "react-native-toast-message": "^2.1.6",
     "react-native-vector-icons": "^9.2.0",
+    "react-native-walkthrough-tooltip": "^1.5.0",
     "react-native-web": "^0.19.7",
     "react-navigation": "^4.4.4",
     "reanimated-color-picker": "2.2.0",
