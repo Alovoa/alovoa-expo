@@ -11,7 +11,7 @@ import {
 
 import { ActivityIndicator, Button, IconButton, Menu, Modal, Portal, Text, useTheme } from "react-native-paper";
 import { CardItemLikes } from "../components";
-import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
+import styles, { NAVIGATION_BAR_HEIGHT, STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -118,7 +118,7 @@ const Likes = ({ navigation }) => {
   }
 
   return (
-    <View style={{ height: height }}>
+    <View style={{ height: height - NAVIGATION_BAR_HEIGHT }}>
       {loading &&
         <View style={{ zIndex: 1, height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
@@ -161,10 +161,10 @@ const Likes = ({ navigation }) => {
           )}
         />
         {results && results.length == 0 && loaded && filter == FILTER.RECEIVED_LIKES &&
-          <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ height: height - NAVIGATION_BAR_HEIGHT - topBarHeight, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
             <LikesEmpty height={svgHeight} width={svgWidth}></LikesEmpty>
             <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('likes-empty.title')}</Text>
-            <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48 }}>{i18n.t('likes-empty.subtitle')}</Text>
+            <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48, textAlign: 'center' }}>{i18n.t('likes-empty.subtitle')}</Text>
           </View>
         }
       </VerticalView>

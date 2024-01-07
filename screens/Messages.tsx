@@ -52,7 +52,7 @@ const Messages = ({ navigation }) => {
         <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
           <ConvoEmpty height={svgHeight} width={svgWidth}></ConvoEmpty>
           <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('convo-empty.title')}</Text>
-          <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48 }}>{i18n.t('convo-empty.subtitle')}</Text>
+          <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48, textAlign: 'center' }}>{i18n.t('convo-empty.subtitle')}</Text>
         </View>
       }
     </VerticalView>
