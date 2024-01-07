@@ -168,6 +168,11 @@
         "title": "Starte Chats mit Matches",
         "subtitle": "Erhalte mehr Matches indem du attraktive Bilder hochlädst und dein Profil ausfüllst"
     },
+    "search-empty": {
+        "title": "Hoppla, das Ketchup ist alle",
+        "subtitle": "Du hast jeden gesehen, der zu dir passt, aber jeden Tag kommen neue Leute hinzu.",
+        "button": "Präferenzen ändern"
+    },
     "location": {
         "no-permission": "Standortberechtigung nicht gesetzt",
         "no-signal": "Kein GPS Signal gefunden"

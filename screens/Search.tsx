@@ -6,10 +6,12 @@ import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
-import { ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator, Text, Button } from "react-native-paper";
 import CardItemSearch from "../components/CardItemSearch";
 import { useFocusEffect } from "@react-navigation/native";
 import ComplimentModal from "../components/ComplimentModal";
+import SearchEmpty from "../assets/images/search-empty.svg";
+import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 
 const i18n = I18N.getI18n()
 
@@ -37,9 +39,13 @@ const Search = ({ route, navigation }) => {
   const [currentUser, setCurrentUser] = React.useState<UserDto>();
   const [complimentModalVisible, setComplimentModalVisible] = React.useState(false);
   const [ignoreRightSwipe, setIgnoreRightSwipe] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(false);
 
   let latitude: number | undefined;
   let longitude: number | undefined;
+
+  const svgHeight = 150;
+  const svgWidth = 200;
 
   const { height, width } = useWindowDimensions();
 
@@ -95,6 +101,7 @@ const Search = ({ route, navigation }) => {
   }, [route.params?.changed]);
 
   async function load() {
+    setLoaded(false);
     let l1 = await Global.GetStorage(Global.STORAGE_LATITUDE);
     latitude = l1 ? Number(l1) : undefined;
     let l2 = await Global.GetStorage(Global.STORAGE_LONGITUDE);
@@ -116,6 +123,7 @@ const Search = ({ route, navigation }) => {
     );
     setLoading(false);
     setIndex(0);
+    setLoaded(true);
   }
 
   async function updateLocationLocal(lat: number, lon: number) {
@@ -126,7 +134,7 @@ const Search = ({ route, navigation }) => {
   }
 
   async function loadResults() {
-    
+
     let lat = latitude;
     let lon = longitude;
     let hasLocation = lat != undefined && lon != undefined;
@@ -251,6 +259,16 @@ const Search = ({ route, navigation }) => {
           </CardStack>
         </View>
       </View>
+      {results && results.length == 0 && loaded &&
+        <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={[styles.center, { maxWidth: WIDESCREEN_HORIZONTAL_MAX }]}>
+            <SearchEmpty height={svgHeight} width={svgWidth}></SearchEmpty>
+            <Text style={{ fontSize: 20, paddingHorizontal: 48, marginTop: 8 }}>{i18n.t('search-empty.title')}</Text>
+            <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48, textAlign: 'center' }}>{i18n.t('search-empty.subtitle')}</Text>
+            <Button onPress={() => Global.navigate("YourProfile")}>{i18n.t('search-empty.button')}</Button>
+          </View>
+        </View>
+      }
       <ComplimentModal profilePicture={currentUser ? currentUser.profilePicture : ''} name={currentUser ? currentUser.firstName : ''}
         age={currentUser ? currentUser.age : 0} onSend={likeUser} visible={complimentModalVisible} setVisible={setComplimentModalVisible}
         onDismiss={onComplimentModalDismiss}></ComplimentModal>
