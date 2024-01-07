@@ -1,6 +1,6 @@
 //export const DOMAIN : string = "http://localhost:8080"
-export const DOMAIN : string = "https://beta.alovoa.com"
-//export const DOMAIN : string = "https://alovoa.com"
+//export const DOMAIN : string = "https://beta.alovoa.com"
+export const DOMAIN : string = "https://alovoa.com"
 
 export const IMPRINT = DOMAIN + "/imprint"
 export const PRIVACY = DOMAIN + "/privacy"
