@@ -58,7 +58,7 @@ const Login = () => {
       await Global.Fetch(Global.format(URL.AUTH_COOKIE, rememberMe, sessionId));
       await Global.SetStorage(Global.STORAGE_FIRSTNAME, firstName);
       await Global.SetStorage(Global.STORAGE_PAGE, page);
-      await Global.SetStorage("loginDate", new Date().toISOString());
+      await Global.SetStorage(Global.STORAGE_LOGIN_DATE, new Date().toISOString());
       Global.loadPage(page);
     }
   };

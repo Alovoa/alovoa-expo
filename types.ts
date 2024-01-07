@@ -3,6 +3,10 @@ export type CardItemT = {
   donation?: number;
   unitsImperial?: boolean;
   swiper?: any;
+  message?: string;
+  index?: number;
+  onLikePressed?: () => void;
+  onMessagePressed?: (result: LikeResultT) => void;
 };
 
 export type IconT = {
@@ -30,6 +34,16 @@ export type SelectModalT = {
   data: Array<SelectModalDataT>;
   selected: Array<number>;
   onValueChanged: (id: number, checked: boolean) => void
+};
+
+export type ComplimentModalT = {
+  visible: boolean,
+  setVisible: (state: boolean) => void,
+  name: string,
+  age: number,
+  profilePicture: string,
+  onSend: (message: string, pop?: boolean) => void,
+  onDismiss?: () => void;
 };
 
 export type RangeSliderModalT = {
@@ -181,6 +195,7 @@ export type ConversationDto = {
 export type NotificationDto = {
   id: number;
   date: Date;
+  message: string;
   userFromDto: UserDto;
 }
 
@@ -328,6 +343,11 @@ export type PasswordResetDto = {
   captchaId: number;
 	captchaText: string;
 	email: string;
+}
+
+export type LikeResultT = {
+  user: UserDto;
+  message?: string;
 }
 
 export const GenderMap = new Map<number, string>([

@@ -6,10 +6,12 @@ import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
-import { ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator, Text, Button } from "react-native-paper";
 import CardItemSearch from "../components/CardItemSearch";
 import { useFocusEffect } from "@react-navigation/native";
-
+import ComplimentModal from "../components/ComplimentModal";
+import SearchEmpty from "../assets/images/search-empty.svg";
+import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 
 const i18n = I18N.getI18n()
 
@@ -33,14 +35,22 @@ const Search = ({ route, navigation }) => {
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
+  const [index, setIndex] = React.useState(0);
+  const [currentUser, setCurrentUser] = React.useState<UserDto>();
+  const [complimentModalVisible, setComplimentModalVisible] = React.useState(false);
+  const [ignoreRightSwipe, setIgnoreRightSwipe] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(false);
 
   let latitude: number | undefined;
   let longitude: number | undefined;
 
+  const svgHeight = 150;
+  const svgWidth = 200;
+
   const { height, width } = useWindowDimensions();
 
-  const LOCATION_TIMEOUT_SHORT = 2500;
-  const LOCATION_TIMEOUT_LONG = 5000;
+  const LOCATION_TIMEOUT_SHORT = 5000;
+  const LOCATION_TIMEOUT_LONG = 10000;
 
   const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
     return Promise.race([
@@ -59,6 +69,12 @@ const Search = ({ route, navigation }) => {
   React.useEffect(() => {
     load();
   }, []);
+
+  React.useEffect(() => {
+    if (results[index]) {
+      setCurrentUser(results[index]);
+    }
+  }, [index, results]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -85,6 +101,7 @@ const Search = ({ route, navigation }) => {
   }, [route.params?.changed]);
 
   async function load() {
+    setLoaded(false);
     let l1 = await Global.GetStorage(Global.STORAGE_LATITUDE);
     latitude = l1 ? Number(l1) : undefined;
     let l2 = await Global.GetStorage(Global.STORAGE_LONGITUDE);
@@ -105,6 +122,8 @@ const Search = ({ route, navigation }) => {
       }
     );
     setLoading(false);
+    setIndex(0);
+    setLoaded(true);
   }
 
   async function updateLocationLocal(lat: number, lon: number) {
@@ -156,26 +175,51 @@ const Search = ({ route, navigation }) => {
     }
   }
 
-  async function likeUser(index: number, swipe?: boolean) {
+  async function likeUser(message?: string, pop?: boolean) {
     if (index < results.length) {
       let id = results[index].idEncoded;
-      await Global.Fetch(Global.format(URL.USER_LIKE, id), 'post');
+      if (!message) {
+        await Global.Fetch(Global.format(URL.USER_LIKE, id), 'post');
+      } else {
+        await Global.Fetch(Global.format(URL.USER_LIKE_MESSAGE, id, message), 'post');
+      }
+      if (pop) {
+        swiper.current?.swipeRight();
+      }
       loadResultsOnEmpty(index);
+      setComplimentModalVisible(false);
     }
   }
 
-  async function hideUser(index: number, swipe?: boolean) {
+  async function hideUser(index: number) {
     if (index < results.length) {
       let id = results[index].idEncoded;
       await Global.Fetch(Global.format(URL.USER_HIDE, id), 'post');
       loadResultsOnEmpty(index);
     }
+    setIndex(index + 1);
   }
 
   async function loadResultsOnEmpty(index: number) {
     if (index == results.length - 1) {
       load();
     }
+  }
+
+  async function onSwipeRight(index: number) {
+    if (!ignoreRightSwipe) {
+      likeUser(undefined, false);
+    }
+    setIndex(index + 1);
+  }
+
+  async function onLikePressed() {
+    setComplimentModalVisible(true);
+    setIgnoreRightSwipe(true);
+  }
+
+  function onComplimentModalDismiss() {
+    setIgnoreRightSwipe(false);
   }
 
   return (
@@ -197,8 +241,8 @@ const Search = ({ route, navigation }) => {
             verticalSwipe={false}
             renderNoMoreCards={() => null}
             key={stackKey}
-            onSwipedLeft={(index: number) => { hideUser(index) }}
-            onSwipedRight={(index: number) => { likeUser(index) }}>
+            onSwipedLeft={hideUser}
+            onSwipedRight={onSwipeRight}>
             {
               results.map((card, index) => (
                 <Card key={card.idEncoded}>
@@ -206,6 +250,8 @@ const Search = ({ route, navigation }) => {
                     user={card}
                     unitsImperial={user?.units == UnitsEnum.IMPERIAL}
                     swiper={swiper}
+                    onLikePressed={onLikePressed}
+                    index={index}
                   />
                 </Card>
               ))
@@ -213,6 +259,19 @@ const Search = ({ route, navigation }) => {
           </CardStack>
         </View>
       </View>
+      {results && results.length == 0 && loaded &&
+        <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={[styles.center, { maxWidth: WIDESCREEN_HORIZONTAL_MAX }]}>
+            <SearchEmpty height={svgHeight} width={svgWidth}></SearchEmpty>
+            <Text style={{ fontSize: 20, paddingHorizontal: 48, marginTop: 8 }}>{i18n.t('search-empty.title')}</Text>
+            <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48, textAlign: 'center' }}>{i18n.t('search-empty.subtitle')}</Text>
+            <Button onPress={() => Global.navigate("YourProfile")}>{i18n.t('search-empty.button')}</Button>
+          </View>
+        </View>
+      }
+      <ComplimentModal profilePicture={currentUser ? currentUser.profilePicture : ''} name={currentUser ? currentUser.firstName : ''}
+        age={currentUser ? currentUser.age : 0} onSend={likeUser} visible={complimentModalVisible} setVisible={setComplimentModalVisible}
+        onDismiss={onComplimentModalDismiss}></ComplimentModal>
     </ScrollView>
   );
 };

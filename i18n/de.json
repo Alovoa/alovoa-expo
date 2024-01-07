@@ -168,6 +168,11 @@
         "title": "Starte Chats mit Matches",
         "subtitle": "Erhalte mehr Matches indem du attraktive Bilder hochlädst und dein Profil ausfüllst"
     },
+    "search-empty": {
+        "title": "Hoppla, das Ketchup ist alle",
+        "subtitle": "Du hast jeden gesehen, der zu dir passt, aber jeden Tag kommen neue Leute hinzu.",
+        "button": "Präferenzen ändern"
+    },
     "location": {
         "no-permission": "Standortberechtigung nicht gesetzt",
         "no-signal": "Kein GPS Signal gefunden"
@@ -179,5 +184,9 @@
         "hidden": "Versteckte Nutzer",
         "blocked": "Geblockte Nutzer"
     },
-    "restart-apply-changes": "Starte die App neu um die Änderungen zu übernehmen"
+    "restart-apply-changes": "Starte die App neu um die Änderungen zu übernehmen",
+    "compliment": {
+        "title": "Kompliment senden",
+        "tooltip": "Hier tippen, um ein Kompliment zu senden!" 
+    }
 }

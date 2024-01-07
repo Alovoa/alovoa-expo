@@ -167,6 +167,11 @@
         "title": "Start chatting by getting matches",
         "subtitle": "Get more matches by uploading attractive pictures and filling out your profile"
     },
+    "search-empty": {
+        "title": "Oops, we ran out of ketchup",
+        "subtitle": "You have seen everyone who suits your preferences, but new people join every day.",
+        "button": "Change preferences"
+    },
     "location": {
         "no-permission": "Location permission not set",
         "no-signal": "No GPS signal found"
@@ -178,5 +183,9 @@
         "hidden": "Hidden users",
         "blocked": "Blocked users"
     },
-    "restart-apply-changes": "Restart the app to apply changes"
+    "restart-apply-changes": "Restart the app to apply changes",
+    "compliment": {
+        "title": "Send a compliment",
+        "tooltip": "Tap here to send a compliment!" 
+    }
 }
