@@ -1,6 +1,9 @@
  #!/bin/bash
 
 cd ../..
+git fetch
+git pull
+yarn
 oldpath=$(readlink dist)
 newpath="dist-$(uuidgen)"
 echo "$newpath"
