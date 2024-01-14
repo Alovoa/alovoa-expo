@@ -1,7 +1,7 @@
  #!/bin/bash
 
 CERT_PATH="/opt/alovoa/alovoa.pfx"
-PORT=10081
+PORT=10082
 
 cd ../..
 fuser -k $PORT/tcp
