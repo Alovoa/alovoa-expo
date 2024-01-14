@@ -134,7 +134,7 @@ const Search = ({ route, navigation }) => {
   }
 
   async function loadResults() {
-
+    
     let lat = latitude;
     let lon = longitude;
     let hasLocation = lat != undefined && lon != undefined;
