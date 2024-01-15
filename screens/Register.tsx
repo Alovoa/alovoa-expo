@@ -85,6 +85,7 @@ const Register = ({ route, navigation }) => {
         try {
           await Global.Fetch(URL.REGISTER, 'post', data);
           setAlertVisible(true);
+          await new Promise(resolve => setTimeout(resolve, 5000));
           Global.navigate("Login");
         } catch (e) { }
       } else {
