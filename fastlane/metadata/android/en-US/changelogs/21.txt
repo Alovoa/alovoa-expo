@@ -1,0 +1,2 @@
+Fix duplicate characters when complimenting
+General UI fixes
