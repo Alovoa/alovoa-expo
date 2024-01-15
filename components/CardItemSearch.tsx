@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView, StyleSheet, useWindowDimensions, TouchableWithoutFeedback } from "react-native";
+import { View, Image, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView, StyleSheet, useWindowDimensions, TouchableWithoutFeedback, Platform } from "react-native";
 import { useTheme, Text, Chip } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT } from "../types";
@@ -9,7 +9,8 @@ import styles, {
   LIKE_ACTIONS,
   GRAY,
   NAVIGATION_BAR_HEIGHT,
-  WIDESCREEN_HORIZONTAL_MAX
+  WIDESCREEN_HORIZONTAL_MAX,
+  STATUS_BAR_HEIGHT
 } from "../assets/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Tooltip from 'react-native-walkthrough-tooltip';
@@ -138,6 +139,7 @@ const CardItem = ({
           contentStyle={{
             backgroundColor: colors.surface
           }}
+          topAdjustment={Platform.OS === 'android' ? -STATUS_BAR_HEIGHT - 12 : 0}
           isVisible={showLikeTooltip}
           content={<Text>{i18n.t('compliment.tooltip')}</Text>}
           placement="top"
