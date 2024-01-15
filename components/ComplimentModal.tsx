@@ -50,6 +50,7 @@ const ComplimentModal = ({ visible = false, setVisible, name, age, profilePictur
               onSubmitEditing={() => onSend(text, true)}
               placeholder={i18n.t('compliment.title')}
               maxLength={maxLength}
+              autoCorrect={false}
               right={<TextInput.Icon iconColor={colors.secondary} onPress={() => onSend(text, true)} icon="send" />}></TextInput>
           </KeyboardAvoidingView>
         </View>
