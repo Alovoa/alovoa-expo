@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
-import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText, FAB } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as ImagePicker from 'expo-image-picker';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
@@ -234,6 +234,10 @@ const Onboarding = () => {
     }
   }, [])
 
+  function moveFlatlistNext() {
+    scrollRef?.current?.scrollToIndex({index: scrollRef?.current?.getCurrentIndex() +1, animated: true});    
+  }
+
   const onClearPress = React.useCallback(() => { setSuggestionsList([]) }, [])
   const onClearPress2 = React.useCallback(() => { setSuggestionsList2([]) }, [])
   const onClearPress3 = React.useCallback(() => { setSuggestionsList3([]) }, [])
@@ -310,7 +314,7 @@ const Onboarding = () => {
           style={[styles.view]}>
           <SvgDescription style={styles.svg} height={svgHeight} width={svgWidth} />
           <Text style={styles.title}>{i18n.t('profile.onboarding.description')}</Text>
-          <View style={{ height: 120, width: 300 }}>
+          <View style={{ height: 120 }}>
             <TextInput
               multiline
               mode="outlined"
@@ -319,6 +323,7 @@ const Onboarding = () => {
               maxLength={maxDescriptionLength}
               value={description}
               autoCorrect={false}
+              style={{maxWidth: width, width: 320}}
             />
             <View>
               <HelperText type="info" style={{ textAlign: 'right' }} visible>
@@ -516,6 +521,19 @@ const Onboarding = () => {
           <Text style={styles.warning}>{i18n.t('profile.onboarding.match.subtitle')}</Text>
         </View>
       </SwiperFlatList>
+      <FAB
+        icon="chevron-right"
+        style={{
+          position: 'absolute',
+          margin: 16,
+          right: 0,
+          bottom: 0,
+          borderRadius: 100,
+          backgroundColor: colors.primary,
+        }}
+        onPress={moveFlatlistNext}
+        visible={height >= 530}
+      />
     </View>
   )
 }
