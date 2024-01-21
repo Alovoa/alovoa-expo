@@ -17,13 +17,12 @@ import SvgGenders from "../assets/onboarding/genders.svg";
 import SvgIntention from "../assets/onboarding/intention.svg";
 import SvgInterests from "../assets/onboarding/interests.svg";
 import SvgMatch from "../assets/onboarding/match.svg";
-import { FontAwesome } from '@expo/vector-icons';
 import * as I18N from "../i18n";
-import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import * as URL from "../URL";
 import * as Global from "../Global";
-import { IntentionEnum, UserInterestAutocomplete, UserOnboarding, UserOnboardingResource } from "../types";
+import { IntentionEnum, UserInterest, UserInterestAutocomplete, UserOnboarding, UserOnboardingResource } from "../types";
 import * as ImageManipulator from 'expo-image-manipulator';
+import InterestView from "../components/InterestView";
 
 const IMAGE_HEADER = "data:image/png;base64,";
 
@@ -41,9 +40,9 @@ const Onboarding = () => {
   const GENDER_FEMALE = 2;
   const GENDER_OTHER = 3;
 
-  const PAGE_PROFILE_PIC = 1;
-  const PAGE_DESCRIPTION = 2;
-  const PAGE_PREF_GENDER = 3;
+  const PAGE_PROFILE_PIC = 0;
+  const PAGE_DESCRIPTION = 1;
+  const PAGE_PREF_GENDER = 2;
 
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -56,18 +55,7 @@ const Onboarding = () => {
   const [isGenderFemaleEnabled, setIsGenderFemaleEnabled] = React.useState(false);
   const [isGenderOtherEnabled, setIsGenderOtherEnabled] = React.useState(false);
   const [intention, setIntention] = React.useState("1");
-  const [interest1, setInterest1] = React.useState("");
-  const [interest2, setInterest2] = React.useState("");
-  const [interest3, setInterest3] = React.useState("");
-  const [loading, setLoading] = React.useState(false)
-  const [loading2, setLoading2] = React.useState(false)
-  const [loading3, setLoading3] = React.useState(false)
-  const [suggestionsList, setSuggestionsList] = React.useState(Array<any>)
-  const [suggestionsList2, setSuggestionsList2] = React.useState(Array<any>)
-  const [suggestionsList3, setSuggestionsList3] = React.useState(Array<any>)
-  const dropdownController = React.useRef({})
-  const dropdownController2 = React.useRef({})
-  const dropdownController3 = React.useRef({})
+  const [interests, setInterests] = React.useState(Array<UserInterest>);
   const scrollRef = React.useRef<SwiperFlatList>(null);
   const svgHeight = 150;
   const svgWidth = 200;
@@ -161,86 +149,9 @@ const Onboarding = () => {
   const toggleGenderFemaleSwitch = () => setIsGenderFemaleEnabled(previousState => !previousState);
   const toggleGenderOtherSwitch = () => setIsGenderOtherEnabled(previousState => !previousState);
 
-  function cleanInterest(txt: string) {
-    let txtCopy = txt
-    txtCopy = txtCopy.replace(/ /g, "-");
-    let text = txtCopy.replace(/[^a-zA-Z0-9-]/g, '').toLowerCase();
-    return text;
-  }
-
-  const getSuggestions = React.useCallback(async (i: Interest, q: string) => {
-    const filterToken = cleanInterest(q)
-
-    switch (i) {
-      case Interest.One:
-        dropdownController.current.setInputText(filterToken);
-        setInterest1(filterToken);
-        break;
-      case Interest.Two:
-        dropdownController2.current.setInputText(filterToken);
-        setInterest2(filterToken);
-        break;
-      case Interest.Three:
-        dropdownController3.current.setInputText(filterToken);
-        setInterest3(filterToken);
-        break;
-    }
-
-    if (typeof q !== 'string' || q.length < 2) {
-      switch (i) {
-        case Interest.One:
-          setSuggestionsList([])
-          break;
-        case Interest.Two:
-          setSuggestionsList2([])
-          break;
-        case Interest.Three:
-          setSuggestionsList3([])
-          break;
-      }
-      return
-    }
-    switch (i) {
-      case Interest.One:
-        setLoading(true)
-        break;
-      case Interest.Two:
-        setLoading2(true)
-        break;
-      case Interest.Three:
-        setLoading3(true)
-        break;
-    }
-    const response = await Global.Fetch(Global.format(URL.USER_INTEREST_AUTOCOMPLETE, encodeURI(filterToken)));
-    const items: Array<UserInterestAutocomplete> = response.data
-    const suggestions = items
-      .map((item: any) => ({
-        id: item.name,
-        title: item.name + " (" + item.countString + ")",
-      }))
-    switch (i) {
-      case Interest.One:
-        setSuggestionsList(suggestions)
-        setLoading(false)
-        break;
-      case Interest.Two:
-        setSuggestionsList2(suggestions)
-        setLoading2(false)
-        break;
-      case Interest.Three:
-        setSuggestionsList3(suggestions)
-        setLoading3(false)
-        break;
-    }
-  }, [])
-
   function moveFlatlistNext() {
     scrollRef?.current?.scrollToIndex({index: scrollRef?.current?.getCurrentIndex() +1, animated: true});    
   }
-
-  const onClearPress = React.useCallback(() => { setSuggestionsList([]) }, [])
-  const onClearPress2 = React.useCallback(() => { setSuggestionsList2([]) }, [])
-  const onClearPress3 = React.useCallback(() => { setSuggestionsList3([]) }, [])
 
   async function submit() {
     if (!imageB64) {
@@ -255,39 +166,28 @@ const Onboarding = () => {
     }
 
     let dto = {} as UserOnboarding;
-    dto.profilePicture = imageB64
+    dto.profilePicture = imageB64;
     let genders = []
     if (isGenderMaleEnabled) {
-      genders.push(GENDER_MALE)
+      genders.push(GENDER_MALE);
     }
     if (isGenderFemaleEnabled) {
-      genders.push(GENDER_FEMALE)
+      genders.push(GENDER_FEMALE);
     }
     if (isGenderOtherEnabled) {
-      genders.push(GENDER_OTHER)
+      genders.push(GENDER_OTHER);
     }
-    dto.preferredGenders = genders
-    dto.description = description
+    dto.preferredGenders = genders;
+    dto.description = description;
+    dto.interests = interests.map(i => i.text);
+    dto.intention = Number(intention);
 
-    let interests = []
-    if (interest1) {
-      interests.push(interest1)
-    }
-    if (interest2) {
-      interests.push(interest2)
-    }
-    if (interest3) {
-      interests.push(interest3)
-    }
-    dto.interests = interests
-    dto.intention = Number(intention)
+    // try {
+    //   await Global.Fetch(URL.USER_ONBOARDING, 'post', dto);
+    //   await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_MAIN);
+    //   Global.loadPage(Global.INDEX_MAIN);
 
-    try {
-      await Global.Fetch(URL.USER_ONBOARDING, 'post', dto);
-      await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_MAIN);
-      Global.loadPage(Global.INDEX_MAIN);
-
-    } catch (e) { }
+    // } catch (e) { }
   }
 
   return (
@@ -363,155 +263,11 @@ const Onboarding = () => {
 
           <Text style={styles.warning}>{i18n.t('profile.intention.warning')}</Text>
         </View>
-
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
-          style={[styles.view]}>
+        <View style={[styles.view]}>
           <SvgInterests style={styles.svg} height={svgHeight} width={svgWidth} />
-          <Text style={styles.title}>{i18n.t('profile.onboarding.interests')}</Text>
-          <View style={{ height: 180 }}>
-            <AutocompleteDropdown
-              EmptyResultComponent={<></>}
-              controller={controller => {
-                dropdownController.current = controller
-              }}
-              direction={Platform.select({ ios: 'down' })}
-              dataSet={suggestionsList}
-              onChangeText={text => getSuggestions(Interest.One, text)}
-              onSelectItem={item => {
-                item && setInterest1(item.id)
-              }}
-              debounce={500}
-              suggestionsListMaxHeight={200}
-              onClear={onClearPress}
-              loading={loading}
-              useFilter={false}
-              textInputProps={{
-                backgroundColor: '#FDE7F4',
-                placeholder: 'starwars',
-                autoCorrect: false,
-                autoCapitalize: 'none',
-                style: {
-                  borderRadius: 25,
-                  paddingLeft: 18,
-                },
-              }}
-              rightButtonsContainerStyle={{
-                right: 8,
-                height: 30,
-                backgroundColor: '#FDE7F4',
-                alignSelf: 'center',
-              }}
-              inputContainerStyle={{
-                backgroundColor: '#FDE7F4',
-                borderRadius: 25,
-              }}
-              suggestionsListContainerStyle={{
-              }}
-              containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
-              ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
-              ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
-              inputHeight={50}
-              showChevron={false}
-              closeOnBlur={false}
-            />
-            <AutocompleteDropdown
-              EmptyResultComponent={<></>}
-              controller={controller => {
-                dropdownController2.current = controller
-              }}
-              direction={Platform.select({ ios: 'down' })}
-              dataSet={suggestionsList2}
-              onChangeText={text => getSuggestions(Interest.Two, text)}
-              onSelectItem={item => {
-                item && setInterest2(item.id)
-              }}
-              debounce={500}
-              suggestionsListMaxHeight={200}
-              onClear={onClearPress2}
-              loading={loading2}
-              useFilter={false}
-              textInputProps={{
-                backgroundColor: '#FDE7F4',
-                placeholder: 'taichi',
-                autoCorrect: false,
-                autoCapitalize: 'none',
-                style: {
-                  borderRadius: 25,
-                  paddingLeft: 18,
-                },
-              }}
-              rightButtonsContainerStyle={{
-                right: 8,
-                height: 30,
-                backgroundColor: '#FDE7F4',
-                alignSelf: 'center',
-              }}
-              inputContainerStyle={{
-                backgroundColor: '#FDE7F4',
-                borderRadius: 25,
-              }}
-              suggestionsListContainerStyle={{
-              }}
-              containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
-              ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
-              ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
-              inputHeight={50}
-              showChevron={false}
-              closeOnBlur={false}
-            />
-            <AutocompleteDropdown
-              EmptyResultComponent={<></>}
-              controller={controller => {
-                dropdownController3.current = controller
-              }}
-              // initialValue={'1'}
-              direction={Platform.select({ ios: 'down' })}
-              dataSet={suggestionsList3}
-              onChangeText={text => getSuggestions(Interest.Three, text)}
-              onSelectItem={item => {
-                item && setInterest3(item.id)
-              }}
-              debounce={500}
-              suggestionsListMaxHeight={200}
-              onClear={onClearPress3}
-              loading={loading3}
-              useFilter={false}
-              textInputProps={{
-                backgroundColor: '#FDE7F4',
-                placeholder: 'anime',
-                autoCorrect: false,
-                autoCapitalize: 'none',
-                style: {
-                  borderRadius: 25,
-                  paddingLeft: 18,
-                },
-              }}
-              rightButtonsContainerStyle={{
-                right: 8,
-                height: 30,
-                backgroundColor: '#FDE7F4',
-                alignSelf: 'center',
-              }}
-              inputContainerStyle={{
-                borderRadius: 25,
-                backgroundColor: '#FDE7F4',
-              }}
-              suggestionsListContainerStyle={{
-              }}
-              containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-              renderItem={(item, text) => <Text style={{ padding: 15, backgroundColor: colors.background }}>{item.title}</Text>}
-              ChevronIconComponent={<FontAwesome name="chevron-down" size={20} />}
-              ClearIconComponent={<FontAwesome name="times-circle" size={18} />}
-              inputHeight={50}
-              showChevron={false}
-              closeOnBlur={false}
-            />
-          </View>
+          <InterestView data={interests} setInterestsExternal={setInterests}></InterestView>
           <Text style={styles.warning}>{i18n.t('optional')}</Text>
-        </KeyboardAvoidingView>
+        </View>
         <View style={[styles.view]}>
           <SvgMatch style={styles.svg} height={svgHeight} width={svgWidth} />
           <Text style={styles.title}>{i18n.t('profile.onboarding.match.title')}</Text>
@@ -525,7 +281,7 @@ const Onboarding = () => {
         icon="chevron-right"
         style={{
           position: 'absolute',
-          margin: 16,
+          margin: 32,
           right: 0,
           bottom: 0,
           borderRadius: 100,

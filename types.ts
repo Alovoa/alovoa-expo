@@ -58,7 +58,9 @@ export type RangeSliderModalT = {
 
 export type InterestModalT = {
   data: Array<UserInterest>;
-  user: UserDto;
+  user?: UserDto;
+  updateButtonText?: (interests: UserInterest[]) => void;
+  setInterestsExternal?: (interests: UserInterest[]) => void;
 };
 
 export type SelectModalDataT = {

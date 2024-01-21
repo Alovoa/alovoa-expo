@@ -108,7 +108,6 @@ const Register = ({ route, navigation }) => {
   }
 
   return (
-    <AutocompleteDropdownContextProvider>
       <View style={{ height: height - headerHeight }}>
         <VerticalView ref={scrollRef}>
           <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 32 }}>{i18n.t('register.subtitle')}</Text>
@@ -233,7 +232,6 @@ const Register = ({ route, navigation }) => {
         </VerticalView>
         <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('register-email-success')} buttons={alertButtons} />
       </View>
-    </AutocompleteDropdownContextProvider>
   )
 };
 

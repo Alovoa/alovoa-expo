@@ -101,7 +101,6 @@ const Login = () => {
         "&captchaText=" + captchaText;
       try {
         let res = await Global.Fetch(url, 'post', {}, "application/x-www-form-urlencoded");
-        console.log(await JSON.stringify(res))
         let redirectHeader = res.headers['redirect-url'];
         if(!redirectHeader) {
           redirectHeader = res.data;
