@@ -13,8 +13,7 @@
     "register": {
         "title": "Registrieren",
         "subtitle": "Neues Konto erstellen",
-        "tos-agree": "Ich stimme den Nutzungsbedingungen zu",
-        "privacy-agree": "Ich stimme der Datenschutzerklärung zu",
+        "agree": "Mit meiner Registrierung stimme ich Nutzungsbedingungen und der Datenschutzerklärung zu.",
         "referral-code": "Empfehlungscode",
         "asterisk-warning": "Felder mit einem Sternchen (*) können in Zukunft nicht mehr geändert werden"
     },

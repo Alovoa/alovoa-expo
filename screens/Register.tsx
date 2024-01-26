@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, Text, Button, TextInput, Switch, RadioButton, HelperText } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, RadioButton, HelperText } from "react-native-paper";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
@@ -7,7 +7,6 @@ import * as URL from "../URL";
 import * as I18N from "../i18n";
 import * as Localization from 'expo-localization';
 import { RegisterBody } from "../types";
-import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DatePickerInput } from "react-native-paper-dates";
 import { ValidRangeType } from "react-native-paper-dates/lib/typescript/Date/Calendar";
@@ -31,7 +30,7 @@ const Register = ({ route, navigation }) => {
 
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
-  
+
   const registerEmail = route.params?.registerEmail;
   const validDobRange: ValidRangeType = {
     startDate: subtractYears(MAX_AGE),
@@ -40,15 +39,13 @@ const Register = ({ route, navigation }) => {
   const { colors } = useTheme();
   const scrollRef = React.useRef(null);
   const [alertVisible, setAlertVisible] = React.useState(false);
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = React.useState<string>();
   const [emailValid, setEmailValid] = React.useState(false);
   const [password, setPassword] = React.useState("");
   const [passwordSecure, setPasswordSecure] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [dob, setDob] = React.useState(subtractYears(DEFAULT_AGE));
   const [gender, setGender] = React.useState("1");
-  const [isTosEnabled, setIsTosEnabled] = React.useState(false);
-  const [isPrivacyEnabled, setIsPrivacyEnabled] = React.useState(false);
   const [referrerCode, setReferrerCode] = React.useState("");
 
   const alertButtons = [
@@ -67,17 +64,14 @@ const Register = ({ route, navigation }) => {
     load();
   }, []);
 
-  const toggleTosSwitch = () => setIsTosEnabled(previousState => !previousState);
-  const togglePrivacySwitch = () => setIsPrivacyEnabled(previousState => !previousState);
-
   async function submit() {
-    if (isPrivacyEnabled && isTosEnabled && firstName && (!registerEmail || registerEmail && emailValid && passwordSecure)) {
+    if (firstName && (!registerEmail || registerEmail && emailValid && passwordSecure)) {
       let data = {} as RegisterBody;
       data.dateOfBirth = dob;
       data.firstName = firstName;
       data.gender = Number(gender);
-      data.privacy = isPrivacyEnabled;
-      data.termsConditions = isTosEnabled;
+      data.privacy = true;
+      data.termsConditions = true;
       data.referrerCode = referrerCode
       if (registerEmail) {
         data.email = email;
@@ -95,8 +89,6 @@ const Register = ({ route, navigation }) => {
           Global.loadPage(Global.INDEX_ONBOARDING);
         } catch (e) { }
       }
-
-
     } else {
       scrollRef?.current?.scrollTo({ x: 0, y: 0, animated: true });
     }
@@ -108,130 +100,137 @@ const Register = ({ route, navigation }) => {
   }
 
   return (
-      <View style={{ height: height - headerHeight }}>
-        <VerticalView ref={scrollRef}>
-          <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 32 }}>{i18n.t('register.subtitle')}</Text>
+    <View style={{ height: height - headerHeight }}>
+      <VerticalView ref={scrollRef}>
+        <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 32 }}>{i18n.t('register.subtitle')}</Text>
 
-          {registerEmail && <View>
-            <TextInput
-              mode="outlined"
-              label={i18n.t('email') + " *"}
-              value={email}
-              onChangeText={text => {
-                setEmail(text);
-                setEmailValid(Global.isEmailValid(text));
-              }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-            <HelperText type="error" visible={!emailValid}>
+        {registerEmail && <View style={[style.container]}>
+          <TextInput
+            mode="outlined"
+            label={i18n.t('email') + " *"}
+            value={email}
+            onChangeText={text => {
+              setEmail(text);
+              setEmailValid(Global.isEmailValid(text));
+            }}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          {!emailValid && email &&
+            <HelperText type="error" >
               {i18n.t('email-invalid')}
-            </HelperText>
-          </View>
-          }
+            </HelperText>}
+        </View>
+        }
 
-          {registerEmail && <View>
-            <TextInput
-              mode="outlined"
-              label={i18n.t('password') + " *"}
-              value={password}
-              autoCapitalize={"none"}
-              onChangeText={text => updatePassword(text)}
-              autoCorrect={false}
-              secureTextEntry={true}
-            />
-            <HelperText type="error" visible={!passwordSecure}>
+        {registerEmail && <View style={[style.container]}>
+          <TextInput
+            mode="outlined"
+            label={i18n.t('password')}
+            value={password}
+            autoCapitalize={"none"}
+            onChangeText={text => updatePassword(text)}
+            autoCorrect={false}
+            secureTextEntry={true}
+          />
+          {!passwordSecure && password &&
+            <HelperText type="error">
               {i18n.t('register-password-warning')}
             </HelperText>
-          </View>}
+          }
+        </View>}
 
+        <View style={[style.container]}>
+          <TextInput
+            mode="outlined"
+            label={i18n.t('first-name') + " *"}
+            value={firstName}
+            onChangeText={text => setFirstName(text)}
+            maxLength={10}
+            autoCorrect={false}
+          />
+        </View>
+
+        <SafeAreaProvider>
           <View style={[style.container]}>
-            <TextInput
+            <DatePickerInput
               mode="outlined"
-              label={i18n.t('first-name') + " *"}
-              value={firstName}
-              onChangeText={text => setFirstName(text)}
-              maxLength={10}
-              autoCorrect={false}
-            />
-          </View>
-
-          <SafeAreaProvider>
-            <View style={[style.container]}>
-              <DatePickerInput
-                mode="outlined"
-                style={{ backgroundColor: colors.background }}
-                locale={Localization.locale.startsWith("en") || Localization.locale.startsWith("de") ? Localization.locale : "en-GB"}
-                label={i18n.t('dob') + " *"}
-                value={dob}
-                onChange={(d) => { if (d) { setDob(d) } }}
-                inputMode="start"
-                validRange={validDobRange}
-              />
-            </View>
-          </SafeAreaProvider>
-
-          <View style={[style.container]}>
-            <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-              <Text>{i18n.t('gender.title')}</Text>
-              <Text>{" *"}</Text>
-            </View>
-            <RadioButton.Group onValueChange={(itemValue) => { setGender(itemValue) }} value={gender}>
-              <RadioButton.Item
-                label={i18n.t('gender.male')}
-                value="1"
-                style={{ flexDirection: 'row-reverse' }}
-              />
-              <RadioButton.Item
-                label={i18n.t('gender.female')}
-                value="2"
-                style={{ flexDirection: 'row-reverse' }}
-              />
-              <RadioButton.Item
-                label={i18n.t('gender.other')}
-                value="3"
-                style={{ flexDirection: 'row-reverse' }}
-              />
-            </RadioButton.Group>
-          </View>
-
-          <View style={[style.container]}>
-            <TextInput
-              value={referrerCode}
-              label={i18n.t('register.referral-code') + " (" + i18n.t('optional') + ")"}
-              onChangeText={text => setReferrerCode(text)}
               style={{ backgroundColor: colors.background }}
-              autoCapitalize={"none"}
-              autoCorrect={false}
-              placeholder={"c2f2-29be-4933-b9b9-3efa"}
+              locale={Localization.locale.startsWith("en") || Localization.locale.startsWith("de") ? Localization.locale : "en-GB"}
+              label={i18n.t('dob') + " *"}
+              value={dob}
+              onChange={(d) => { if (d) { setDob(d) } }}
+              inputMode="start"
+              validRange={validDobRange}
             />
           </View>
+        </SafeAreaProvider>
 
-          <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 4, marginTop: 8 }]}>
-            <Switch onValueChange={toggleTosSwitch} style={{ marginRight: 4 }}
-              value={isTosEnabled} />
-            <Text style={[{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }, style.link]} onPress={() => {
-              WebBrowser.openBrowserAsync(URL.TOS);
-            }}>{i18n.t('register.tos-agree')}</Text>
+        <View style={[style.container]}>
+          <TextInput
+            mode="outlined"
+            value={referrerCode}
+            label={i18n.t('register.referral-code') + " (" + i18n.t('optional') + ")"}
+            onChangeText={text => setReferrerCode(text)}
+            style={{ backgroundColor: colors.background }}
+            autoCapitalize={"none"}
+            autoCorrect={false}
+          />
+        </View>
+
+        <View style={{ marginBottom: 12 }}></View>
+
+        <View style={[style.container]}>
+          <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
+            <Text>{i18n.t('gender.title')}</Text>
+            <Text>{" *"}</Text>
           </View>
+          <RadioButton.Group onValueChange={(itemValue) => { setGender(itemValue) }} value={gender}>
+            <RadioButton.Item
+              label={i18n.t('gender.male')}
+              value="1"
+              style={{ flexDirection: 'row-reverse' }}
+            />
+            <RadioButton.Item
+              label={i18n.t('gender.female')}
+              value="2"
+              style={{ flexDirection: 'row-reverse' }}
+            />
+            <RadioButton.Item
+              label={i18n.t('gender.other')}
+              value="3"
+              style={{ flexDirection: 'row-reverse' }}
+            />
+          </RadioButton.Group>
+        </View>
+        <View style={{marginBottom: 24}}></View>
 
+        <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 4, marginTop: 8 }]}>
+          <Text style={[{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }]} onPress={() => {
+            WebBrowser.openBrowserAsync(URL.TOS);
+          }}>{i18n.t('register.agree')}</Text>
+        </View>
+
+        <View>
           <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }]}>
-            <Switch onValueChange={togglePrivacySwitch} style={{ marginRight: 4 }}
-              value={isPrivacyEnabled} />
-            <Text style={[{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }, style.link]} onPress={() => {
+            <Text style={[{ flex: 1, flexWrap: 'wrap' }, style.link]} onPress={() => {
+              WebBrowser.openBrowserAsync(URL.TOS);
+            }}>{i18n.t('tos')}</Text>
+            <Text style={[{ flex: 1, flexWrap: 'wrap' }, style.link]} onPress={() => {
               WebBrowser.openBrowserAsync(URL.PRIVACY);
-            }}>{i18n.t('register.privacy-agree')}</Text>
+            }}>{i18n.t('privacy-policy')}</Text>
           </View>
-
-          <View style={style.container}>
-            <Text style={{ fontSize: 10, color: "orange" }}>{i18n.t('register.asterisk-warning')}</Text>
-          </View>
-          <Button mode="contained" onPress={submit} style={{ marginBottom: 48 }}>
-            <Text style={{ color: "white" }}>{i18n.t('register.title')}</Text>
-          </Button>
-        </VerticalView>
-        <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('register-email-success')} buttons={alertButtons} />
-      </View>
+        </View>
+        <View style={{ marginBottom: 12 }}></View>
+        <View style={[style.container]}>
+          <Text style={{ fontSize: 12, color: "orange" }}>{i18n.t('register.asterisk-warning')}</Text>
+        </View>
+        <Button mode="contained" onPress={submit} style={{ marginBottom: 48 }}>
+          <Text style={{ color: "white" }}>{i18n.t('register.title')}</Text>
+        </Button>
+      </VerticalView>
+      <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('register-email-success')} buttons={alertButtons} />
+    </View>
   )
 };
 
@@ -261,6 +260,6 @@ const style = StyleSheet.create({
   title: {
   },
   container: {
-    marginBottom: 24
+    marginBottom: 4
   }
 });
