@@ -51,9 +51,19 @@ const Register = ({ route, navigation }) => {
   const alertButtons = [
     {
       text: i18n.t('ok'),
-      onPress: () => { setAlertVisible(false); },
+      onPress: () => { setAlertVisible(false); Global.navigate("Login"); },
     }
   ]
+
+  const style = StyleSheet.create({
+    link: {
+      color: colors.primary,
+      flex: 1,
+    },
+    container: {
+      marginBottom: 4
+    }
+  });
 
   async function load() {
     let name = await Global.GetStorage(Global.STORAGE_FIRSTNAME);
@@ -79,8 +89,6 @@ const Register = ({ route, navigation }) => {
         try {
           await Global.Fetch(URL.REGISTER, 'post', data);
           setAlertVisible(true);
-          await new Promise(resolve => setTimeout(resolve, 5000));
-          Global.navigate("Login");
         } catch (e) { }
       } else {
         try {
@@ -182,7 +190,7 @@ const Register = ({ route, navigation }) => {
 
         <View style={[style.container]}>
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-            <Text>{i18n.t('gender.title')}</Text>
+            <Text>{i18n.t('register.gender')}</Text>
             <Text>{" *"}</Text>
           </View>
           <RadioButton.Group onValueChange={(itemValue) => { setGender(itemValue) }} value={gender}>
@@ -203,9 +211,9 @@ const Register = ({ route, navigation }) => {
             />
           </RadioButton.Group>
         </View>
-        <View style={{marginBottom: 24}}></View>
+        <View style={{ marginBottom: 24 }}></View>
 
-        <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 4, marginTop: 8 }]}>
+        <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }]}>
           <Text style={[{ flex: 1, flexWrap: 'wrap', flexGrow: 3 }]} onPress={() => {
             WebBrowser.openBrowserAsync(URL.TOS);
           }}>{i18n.t('register.agree')}</Text>
@@ -235,31 +243,3 @@ const Register = ({ route, navigation }) => {
 };
 
 export default Register;
-
-const style = StyleSheet.create({
-  link: {
-    color: "#ec407a",
-    flex: 1,
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    margin: 4,
-    flexDirection: 'row',
-  },
-  buttonText: {
-    color: 'white'
-  },
-  icon: {
-    marginRight: 8
-  },
-  title: {
-  },
-  container: {
-    marginBottom: 4
-  }
-});

@@ -128,6 +128,11 @@ const Login = () => {
   }
 
   const style = StyleSheet.create({
+    link: {
+      color: colors.primary,
+      flex: 1,
+      marginBottom: 4
+    },
     button: {
       alignItems: 'center',
       justifyContent: 'center',
@@ -199,22 +204,22 @@ const Login = () => {
         </View>
 
         <View style={{ marginTop: 64 }}>
-          <Text style={styles.link} onPress={() => {
+          <Text style={style.link} onPress={() => {
             Global.navigate("Register", false, { registerEmail: true });
           }}>{i18n.t('register-email')}</Text>
-          <Text style={styles.link} onPress={() => {
+          <Text style={style.link} onPress={() => {
             Global.navigate("PasswordReset", false, {});
           }}>{i18n.t('password-forget')}</Text>
         </View>
 
         <View style={{ marginTop: 24 }}>
-          <Text style={styles.link} onPress={() => {
+          <Text style={style.link} onPress={() => {
             WebBrowser.openBrowserAsync(URL.PRIVACY);
           }}>{i18n.t('privacy-policy')}</Text>
-          <Text style={styles.link} onPress={() => {
+          <Text style={style.link} onPress={() => {
             WebBrowser.openBrowserAsync(URL.TOS);
           }}>{i18n.t('tos')}</Text>
-          <Text style={styles.link} onPress={() => {
+          <Text style={style.link} onPress={() => {
             WebBrowser.openBrowserAsync(URL.IMPRINT);
           }}>{i18n.t('imprint')}</Text>
         </View>

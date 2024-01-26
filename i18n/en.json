@@ -15,10 +15,10 @@
         "subtitle": "Create a new account",
         "agree": "By registering, I agree to the Terms of Service and the Privacy Policy.",
         "referral-code": "Referral code",
-        "asterisk-warning": "Fields with an asterisk (*) cannot be changed in the future"
+        "asterisk-warning": "Fields with an asterisk (*) cannot be changed in the future",
+        "gender": "Your gender"
     },
     "gender": {
-        "title": "Gender",
         "male": "Male",
         "female": "Female",
         "other": "Other"

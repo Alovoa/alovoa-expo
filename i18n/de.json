@@ -15,10 +15,10 @@
         "subtitle": "Neues Konto erstellen",
         "agree": "Mit meiner Registrierung stimme ich Nutzungsbedingungen und der Datenschutzerklärung zu.",
         "referral-code": "Empfehlungscode",
-        "asterisk-warning": "Felder mit einem Sternchen (*) können in Zukunft nicht mehr geändert werden"
+        "asterisk-warning": "Felder mit einem Sternchen (*) können in Zukunft nicht mehr geändert werden",
+        "gender": "Dein Geschlecht"
     },
     "gender": {
-        "title": "Geschlecht",
         "male": "Mann",
         "female": "Frau",
         "other": "Divers"
