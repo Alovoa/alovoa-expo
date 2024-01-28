@@ -20,12 +20,16 @@ import {
   Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_700Bold_Italic
 } from '@expo-google-fonts/montserrat';
 import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types";
+import { enGB, en, de, registerTranslation } from 'react-native-paper-dates'
 
 LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 1000)
 WebBrowser.maybeCompleteAuthSession();
 const Stack = createStackNavigator();
+registerTranslation('en-GB', enGB);
+registerTranslation('en', en);
+registerTranslation('de', de);
 
 //TEST
 //const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking');
