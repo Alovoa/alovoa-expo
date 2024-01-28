@@ -1,0 +1,3 @@
+Improve registering and onboarding process
+Added referral codes that you can share to your friends
+General UI and bug fixes
