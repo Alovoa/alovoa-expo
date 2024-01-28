@@ -187,5 +187,10 @@
     "compliment": {
         "title": "Kompliment senden",
         "tooltip": "Hier tippen, um ein Kompliment zu senden!" 
+    },
+    "referral": {
+        "title": "Einem Freund weiterempfehlen",
+        "copy": "Empfehlungscode in die Zwischenablage kopiert!",
+        "hint": "Wenn ein neuer Nutzer ein Konto mit deinem Empfehlungscode erstellt, erhaltet ihr beide einen kleinen, aber permanenten Boost für eure Accounts."
     }
 }
