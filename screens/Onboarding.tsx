@@ -150,7 +150,7 @@ const Onboarding = () => {
   const toggleGenderOtherSwitch = () => setIsGenderOtherEnabled(previousState => !previousState);
 
   function moveFlatlistNext() {
-    scrollRef?.current?.scrollToIndex({index: scrollRef?.current?.getCurrentIndex() +1, animated: true});    
+    scrollRef?.current?.scrollToIndex({ index: scrollRef?.current?.getCurrentIndex() + 1, animated: true });
   }
 
   async function submit() {
@@ -182,12 +182,14 @@ const Onboarding = () => {
     dto.interests = interests.map(i => i.text);
     dto.intention = Number(intention);
 
-    // try {
-    //   await Global.Fetch(URL.USER_ONBOARDING, 'post', dto);
-    //   await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_MAIN);
-    //   Global.loadPage(Global.INDEX_MAIN);
+    try {
+      await Global.Fetch(URL.USER_ONBOARDING, 'post', dto);
+      await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_MAIN);
+      Global.loadPage(Global.INDEX_MAIN);
 
-    // } catch (e) { }
+    } catch (e) {
+      Global.ShowToast(i18n.t('error.generic'));
+    }
   }
 
   return (
@@ -223,7 +225,7 @@ const Onboarding = () => {
               maxLength={maxDescriptionLength}
               value={description}
               autoCorrect={false}
-              style={{maxWidth: width, width: 320}}
+              style={{ maxWidth: width, width: 320 }}
             />
             <View>
               <HelperText type="info" style={{ textAlign: 'right' }} visible>
