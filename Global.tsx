@@ -133,7 +133,7 @@ export function ShowToast(text: string) {
   } else {
     Toast.show({
       text1: text,
-      visibilityTime: 2000,
+      visibilityTime: 3000,
       position: 'top'
     });
   }

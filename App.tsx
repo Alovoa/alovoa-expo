@@ -131,7 +131,7 @@ export default function App() {
           fontFamily: 'Montserrat_400Regular',
           color: theme.colors?.onSurface
         }}
-        text1NumberOfLines={2}
+        text1NumberOfLines={4}
       />
     ),
   };
