@@ -5,7 +5,7 @@ import {
   useWindowDimensions,
   Image
 } from "react-native";
-import { Text, Button, Card, ActivityIndicator } from "react-native-paper";
+import { Text, Button, Card, ActivityIndicator, IconButton, useTheme } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import { YourProfileResource, UserDto } from "../types";
 import * as I18N from "../i18n";
@@ -16,6 +16,8 @@ import * as FileSystem from 'expo-file-system';
 import { StorageAccessFramework } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import VerticalView from "../components/VerticalView";
+import * as Clipboard from 'expo-clipboard';
+import Alert from "../components/Alert";
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
@@ -25,15 +27,28 @@ const i18n = I18N.getI18n()
 const YourProfile = ({ route, navigation }) => {
 
   const { height, width } = useWindowDimensions();
+  const { colors } = useTheme();
+  const MAX_REFERRALS = 10;
 
   const [requestingDeletion, setRequestingDeletion] = React.useState(false);
+  const [alertVisible, setAlertVisible] = React.useState(false);
   const [data, setData] = React.useState<YourProfileResource>();
   const [user, setUser] = React.useState<UserDto>();
   const [profilePic, setProfilePic] = React.useState<string>();
   const [name, setName] = React.useState("");
   const [age, setAge] = React.useState(0);
+  const [numReferred, setNumReferred] = React.useState(MAX_REFERRALS);
   const [idEnc, setIdEnc] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+
+  const alertButtons = [
+    {
+      text: i18n.t('ok'),
+      onPress: async () => {
+        setAlertVisible(false);
+      }
+    }
+  ]
 
   React.useEffect(() => {
     if (route.params) {
@@ -52,11 +67,17 @@ const YourProfile = ({ route, navigation }) => {
     setProfilePic(data.user.profilePicture);
     setName(data.user.firstName);
     setAge(data.user.age);
+    setNumReferred(data.user.numberReferred);
     setLoading(false);
   }
   React.useEffect(() => {
     load();
   }, []);
+
+  async function copyReferralCodeToClipboard() {
+    await Clipboard.setStringAsync(idEnc);
+    Global.ShowToast(i18n.t('referral.copy'));
+  };
 
   async function logout() {
     Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_LOGIN);
@@ -124,6 +145,20 @@ const YourProfile = ({ route, navigation }) => {
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SETTINGS)}>{i18n.t('profile.screen.settings')}</Button>
 
+          {numReferred < MAX_REFERRALS && <Button icon="content-copy" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between', flexGrow: 1 }}
+            style={{ marginBottom: 8 }} onPress={copyReferralCodeToClipboard}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+              <Text style={{ color: colors.primary, alignSelf: "center" }}>{i18n.t('referral.title')}</Text>
+              <IconButton
+                icon="help"
+                mode="contained"
+                size={10}
+                style={{ margin: 0, marginLeft: 4 }}
+                onPress={() => setAlertVisible(true)}
+              />
+            </View>
+          </Button>
+          }
         </View>
         <View style={[styles.containerProfileItem, { marginTop: 32, marginBottom: 48 }]}>
           <View style={{ marginTop: 128, paddingBottom: STATUS_BAR_HEIGHT + 24 }}>
@@ -151,6 +186,7 @@ const YourProfile = ({ route, navigation }) => {
 
         </View>
       </VerticalView>
+      <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('referral.hint')} buttons={alertButtons} />
     </View>
   );
 };

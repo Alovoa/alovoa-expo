@@ -186,5 +186,10 @@
     "compliment": {
         "title": "Send a compliment",
         "tooltip": "Tap here to send a compliment!" 
+    },
+    "referral": {
+        "title": "Recommend to a friend",
+        "copy": "Referral code copied to clipboard!",
+        "hint": "If a new user creates an account with your referral code, both of you gain a small but permanent boost to your profile."
     }
 }
