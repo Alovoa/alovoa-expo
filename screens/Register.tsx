@@ -44,7 +44,7 @@ const Register = ({ route, navigation }) => {
   const [password, setPassword] = React.useState("");
   const [passwordSecure, setPasswordSecure] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
-  const [dob, setDob] = React.useState(subtractYears(DEFAULT_AGE));
+  const [dob, setDob] = React.useState<Date>();
   const [gender, setGender] = React.useState("1");
   const [referrerCode, setReferrerCode] = React.useState("");
 
@@ -75,7 +75,7 @@ const Register = ({ route, navigation }) => {
   }, []);
 
   async function submit() {
-    if (firstName && (!registerEmail || registerEmail && emailValid && passwordSecure)) {
+    if (firstName && dob && (!registerEmail || registerEmail && emailValid && passwordSecure)) {
       let data = {} as RegisterBody;
       data.dateOfBirth = dob;
       data.firstName = firstName;
@@ -89,13 +89,17 @@ const Register = ({ route, navigation }) => {
         try {
           await Global.Fetch(URL.REGISTER, 'post', data);
           setAlertVisible(true);
-        } catch (e) { }
+        } catch (e) {
+          Global.ShowToast(i18n.t('error.generic'));
+        }
       } else {
         try {
           await Global.Fetch(URL.REGISTER_OAUTH, 'post', data);
           await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_ONBOARDING);
           Global.loadPage(Global.INDEX_ONBOARDING);
-        } catch (e) { }
+        } catch (e) {
+          Global.ShowToast(i18n.t('error.generic'));
+        }
       }
     } else {
       scrollRef?.current?.scrollTo({ x: 0, y: 0, animated: true });
