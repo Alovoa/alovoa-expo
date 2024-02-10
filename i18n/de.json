@@ -120,6 +120,11 @@
                 "title": "Farben",
                 "primary": "Primär",
                 "secondary": "Sekundär"
+            },
+            "notification": "Benachrichtigungen",
+            "email": {
+                "like": "Erhalte E-mails bei Likes und Matches",
+                "chat": "Erhalte E-mails bei Chats"
             }
         }
     },

@@ -162,6 +162,12 @@ export type UserDto = {
   locationLatitude: number;
   locationLongitude: number;
   lastActiveState: number;
+  userSettings: UserSettings;
+}
+
+export type UserSettings = {
+  emailLike: boolean;
+  emailChat: boolean;
 }
 
 export type UserInterestDto = {
@@ -206,6 +212,10 @@ export enum UnitsEnum {
   IMPERIAL = 1
 }
 
+export enum SettingsEmailEnum {
+  LIKE = 1,
+  CHAT = 2
+}
 
 export enum SearchStageEnum {
   NORMAL,

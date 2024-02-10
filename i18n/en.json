@@ -119,6 +119,11 @@
                 "title": "Colors",
                 "primary": "Primary",
                 "secondary": "Secondary"
+            },
+            "notification": "Notifications",
+            "email": {
+                "like": "Receive e-mails on likes and matches",
+                "chat": "Receive e-mails on chats"
             }
         }
     },

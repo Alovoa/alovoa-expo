@@ -67,4 +67,7 @@ export const USER_REPORT = DOMAIN + "/user/report/%s"
 export const USER_ADD_IMAGE = DOMAIN + "/user/image/add"
 export const USER_DELETE_IMAGE = DOMAIN + "/user/image/delete/%s"
 
+export const USER_SETTING_EMAIL_LIKE = DOMAIN + "/user/settings/emailLike/%s"
+export const USER_SETTING_EMAIL_CHAT = DOMAIN + "/user/settings/emailChat/%s"
+
 export const MESSAGE_SEND = DOMAIN + "/message/send/%s";
