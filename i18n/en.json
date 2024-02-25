@@ -112,7 +112,8 @@
             "pictures": "Manage photos",
             "profile": "Edit profile",
             "search": "Search preferences",
-            "settings": "Settings"
+            "settings": "Settings",
+            "prompts": "Prompts"
         },
         "settings": {
             "colors": {
@@ -125,6 +126,32 @@
                 "like": "Receive e-mails on likes and matches",
                 "chat": "Receive e-mails on chats"
             }
+        },
+        "prompts": {
+            "title": "Your profile prompts",
+            "subtitle": "Manage your prompts",
+            "delete": "Delete prompt?",
+            "add": "Add new prompt",
+            "1": "I go crazy for",
+            "2": "Unusual skills",
+            "3": "I won't shut up about",
+            "4": "What if I told you that",
+            "5": "My most controversial opinion",
+            "6": "The key to my heart",
+            "7": "I want someone who",
+            "8": "I'm weirdly attracted to",
+            "9": "Green flags I look for",
+            "10": "Teach me something about",
+            "11": "Change my mind about",
+            "12": "My biggest date fail",
+            "13": "Worst idea I've ever had",
+            "14": "Never have I ever",
+            "15": "Together, we could",
+            "16": "The perfect date in 3 words",
+            "17": "What I like about me",
+            "18": "My useless talent",
+            "19": "Me, but in emojis",
+            "20": "Swipe right if"
         }
     },
     "cancel": "Cancel",

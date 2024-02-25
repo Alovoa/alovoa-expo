@@ -2,6 +2,9 @@
 export const DOMAIN : string = "https://beta.alovoa.com"
 //export const DOMAIN : string = "https://alovoa.com"
 
+export const PATH_BOOLEAN_TRUE = "true"
+export const PATH_BOOLEAN_FALSE = "false"
+
 export const IMPRINT = DOMAIN + "/imprint"
 export const PRIVACY = DOMAIN + "/privacy"
 export const TOS = DOMAIN + "/tos"
@@ -67,7 +70,11 @@ export const USER_REPORT = DOMAIN + "/user/report/%s"
 export const USER_ADD_IMAGE = DOMAIN + "/user/image/add"
 export const USER_DELETE_IMAGE = DOMAIN + "/user/image/delete/%s"
 
-export const USER_SETTING_EMAIL_LIKE = DOMAIN + "/user/settings/emailLike/%s"
-export const USER_SETTING_EMAIL_CHAT = DOMAIN + "/user/settings/emailChat/%s"
+export const USER_PROMPT_DELETE = DOMAIN + "/user/prompt/delete/%s"
+export const USER_PROMPT_ADD = DOMAIN + "/user/prompt/add"
+export const USER_PROMPT_UPDATE = DOMAIN + "/user/prompt/update"
+
+export const USER_SETTING_EMAIL_LIKE = DOMAIN + "/user/settings/emailLike/update/%s"
+export const USER_SETTING_EMAIL_CHAT = DOMAIN + "/user/settings/emailChat/update/%s"
 
 export const MESSAGE_SEND = DOMAIN + "/message/send/%s";

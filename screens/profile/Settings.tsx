@@ -15,7 +15,9 @@ import ColorModal from "../../components/ColorModal";
 
 const i18n = I18N.getI18n();
 
-const Settings = (data: YourProfileResource) => {
+const Settings = ({ route, navigation }) => {
+
+  var data: YourProfileResource = route.params.data;
 
   const { height, width } = useWindowDimensions();
   const [units, setUnits] = React.useState(UnitsEnum.SI);
@@ -45,7 +47,7 @@ const Settings = (data: YourProfileResource) => {
   async function updateEmailSettings(id: number, checked: boolean) {
     emailSettings.set(id, checked);
     setEmailSettings(emailSettings);
-    let value = checked ? "1" : "0";
+    let value = checked ? URL.PATH_BOOLEAN_TRUE : URL.PATH_BOOLEAN_FALSE;
     if (id == SettingsEmailEnum.LIKE) {
       Global.Fetch(Global.format(URL.USER_SETTING_EMAIL_LIKE, value), 'post');
       data.user.userSettings.emailLike = checked;
@@ -75,7 +77,7 @@ const Settings = (data: YourProfileResource) => {
               }}></SelectModal>
           </View>
           <View style={{ marginTop: 12 }}>
-            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.settings.notification')}
+            <SelectModal disabled={false} multi={true} minItems={0} title={i18n.t('profile.settings.notification')}
               data={[{ id: SettingsEmailEnum.LIKE, title: i18n.t('profile.settings.email.like') },
               { id: SettingsEmailEnum.CHAT, title: i18n.t('profile.settings.email.chat') }]}
               selected={[...emailSettings.entries()].filter((item) => item[1]).map((item) => item[0])}
