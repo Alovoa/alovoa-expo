@@ -60,12 +60,14 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
         'Content-Type': contentType
       },
       data: data,
-
     })
     if (res.request.responseURL == URL.AUTH_LOGIN) {
-      SetStorage(STORAGE_PAGE, INDEX_LOGIN);
-      navigate("Login");
-      throw new Error("Not authenticated")
+      let page = await GetStorage(STORAGE_PAGE);
+      if(page != INDEX_LOGIN) {
+        SetStorage(STORAGE_PAGE, INDEX_LOGIN);
+        navigate("Login");
+        throw new Error("Not authenticated")
+      }
     }
     return res;
   } catch (e) {
