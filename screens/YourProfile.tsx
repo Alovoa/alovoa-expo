@@ -3,7 +3,8 @@ import {
   View,
   Platform,
   useWindowDimensions,
-  Image
+  Image,
+  Linking
 } from "react-native";
 import { Text, Button, Card, ActivityIndicator, IconButton, useTheme } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
@@ -85,10 +86,9 @@ const YourProfile = ({ route, navigation }) => {
   }
 
   async function downloadUserData() {
-    const response = await Global.Fetch(Global.format(URL.USER_USERDATA, idEnc));
-    const userData = JSON.stringify(response.data);
-
     if (Platform.OS == 'android') {
+      const response = await Global.Fetch(Global.format(URL.USER_USERDATA, idEnc));
+      const userData = JSON.stringify(response.data);
       const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
       if (permissions.granted) {
         const uri = permissions.directoryUri;
@@ -96,13 +96,17 @@ const YourProfile = ({ route, navigation }) => {
         await StorageAccessFramework.writeAsStringAsync(newFile, userData);
         Global.ShowToast(i18n.t('profile.download-userdata-success'));
       }
-    } else {
+    } else if (Platform.OS == 'ios') {
+      const response = await Global.Fetch(Global.format(URL.USER_USERDATA, idEnc));
+      const userData = JSON.stringify(response.data);
       let fileName = FileSystem.documentDirectory + '/alovoa.json';
       await FileSystem.writeAsStringAsync(fileName, userData, { encoding: FileSystem.EncodingType.UTF8 });
       Global.ShowToast(i18n.t('profile.download-userdata-success'));
       if (await Sharing.isAvailableAsync()) {
         Sharing.shareAsync(fileName);
       }
+    } else {
+      Linking.openURL(Global.format(URL.USER_USERDATA, idEnc));
     }
   }
 
