@@ -1,17 +1,18 @@
 import React from "react";
 import { AlertModel, InterestModalT, UserInterest, UserInterestAutocomplete, UserInterestDto } from "../types";
 import { Text, Button, IconButton, Searchbar } from 'react-native-paper';
-import { Keyboard, View } from "react-native";
+import { Keyboard, View, useWindowDimensions } from "react-native";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
 import { debounce } from "lodash";
 import Alert from "./Alert";
+import { ScrollView } from "react-native-gesture-handler";
 
 const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: InterestModalT) => {
 
-  const MAX_INTERESTS = 5;
   const i18n = I18N.getI18n();
+  const { height, width } = useWindowDimensions();
 
   const [interests, setInterests] = React.useState(data);
   const [alertVisible, setAlertVisible] = React.useState(false);
@@ -30,16 +31,16 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
       text: i18n.t('ok'),
       onPress: async () => {
         if (interestToBeDeleted) {
-          if(user) await Global.Fetch(Global.format(URL.USER_REMOVE_INTEREST, interestToBeDeleted.text), 'post');
+          if (user) await Global.Fetch(Global.format(URL.USER_REMOVE_INTEREST, interestToBeDeleted.text), 'post');
           let interestsCopy = [...interests];
           interestsCopy.forEach((item, index) => {
             if (item === interestToBeDeleted) interestsCopy.splice(index, 1);
           });
           setInterests(interestsCopy);
-          if(setInterestsExternal) setInterestsExternal(interestsCopy);
+          if (setInterestsExternal) setInterestsExternal(interestsCopy);
           setInterestToBeDeleted(null);
           setAlertVisible(false);
-          if(user) user.interests = interestsCopy;
+          if (user) user.interests = interestsCopy;
         }
       }
     }
@@ -59,7 +60,7 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
 
   React.useEffect(() => {
     setInterests(data);
-    if(setInterestsExternal) setInterestsExternal(data);
+    if (setInterestsExternal) setInterestsExternal(data);
     if (updateButtonText) {
       updateButtonText(data);
     }
@@ -98,15 +99,15 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
   async function addInterest(interest: string) {
     if (interest) {
       interest = cleanInterest(interest);
-      if(user) await Global.Fetch(Global.format(URL.USER_ADD_INTEREST, interest), 'post');
+      if (user) await Global.Fetch(Global.format(URL.USER_ADD_INTEREST, interest), 'post');
       let newInterest: UserInterest = { text: interest };
       const copy = [...interests];
       copy.push(newInterest);
       setInterests(copy);
-      if(setInterestsExternal) setInterestsExternal(copy);
+      if (setInterestsExternal) setInterestsExternal(copy);
       setInterest("");
       Keyboard.dismiss();
-      if(user) user.interests = copy;
+      if (user) user.interests = copy;
     }
   }
 
@@ -127,7 +128,7 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
   return (
     <View>
       <View style={{ padding: 12 }}>
-        {interests.length < MAX_INTERESTS &&
+        {interests.length < Global.MAX_INTERESTS &&
           <Searchbar
             placeholder={i18n.t('profile.interest')}
             value={interest}
@@ -145,13 +146,15 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
           ))
         }
         {suggestionsList?.length == 0 && <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>}
-        {suggestionsList?.length == 0 &&
-          interests.map((item, index) => (
-            <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
-              <Text>{item.text}</Text>
-            </Button>
-          ))
-        }
+        <ScrollView style={{height: height > 500 ? 300 : 80}}>
+          {suggestionsList?.length == 0 &&
+            interests.map((item, index) => (
+              <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+                <Text>{item.text}</Text>
+              </Button>
+            ))
+          }
+        </ScrollView>
       </View>
       <Alert visible={alertVisible} setVisible={setAlertVisible} message={Global.format(i18n.t('profile.interest-alert-delete'), interestToBeDeleted?.text)} buttons={alertButtons} />
     </View>
