@@ -21,7 +21,7 @@
     "axios": "^0.27.2",
     "expo": "49.0.23",
     "expo-build-properties": "~0.8.3",
-    "expo-clipboard": "4.3.1",
+    "expo-clipboard": "^5.0.1",
     "expo-device": "5.4.0",
     "expo-file-system": "15.4.5",
     "expo-font": "~11.4.0",

@@ -113,14 +113,46 @@
             "pictures": "Fotos verwalten",
             "profile": "Profil bearbeiten",
             "search": "Suchpräferenzen",
-            "settings": "Einstelungen"
+            "settings": "Einstelungen",
+            "prompts": "Eisbrecher"
         },
         "settings": {
             "colors": {
                 "title": "Farben",
                 "primary": "Primär",
                 "secondary": "Sekundär"
+            },
+            "notification": "Benachrichtigungen",
+            "email": {
+                "like": "Erhalte E-mails bei Likes und Matches",
+                "chat": "Erhalte E-mails bei Chats"
             }
+        },
+        "prompts": {
+            "title": "Deine Eisbrecher",
+            "subtitle": "Eisbrecher verwalten",
+            "delete": "Eisbrecher löschen?",
+            "add": "Eisbrecher hinzufügen",
+            "1": "Ich bin verrückt nach",
+            "2": "Ungewöhnliche Fähigkeiten",
+            "3": "Ich kann nicht aufhören, darüber zu reden",
+            "4": "Was wäre, wenn ich dir das sagen würde",
+            "5": "Meine umstrittenste Meinung",
+            "6": "Der Schlüssel zu meinem Herzen",
+            "7": "Ich möchte jemanden, der/die",
+            "8": "Ich fühle mich seltsamerweise hingezogen von",
+            "9": "Green flags, nach denen ich suche",
+            "10": "Bring mir hierzu etwas bei",
+            "11": "Ändere meine Meinung über",
+            "12": "Mein größter Date-Fail",
+            "13": "Die schlechteste Idee, die ich je hatte",
+            "14": "Noch nie habe ich",
+            "15": "Zusammen könnten wir",
+            "16": "Das perfekte Date in 3 Worten",
+            "17": "Was ich an mir mag",
+            "18": "Mein nutzloses Talent",
+            "19": "Ich, aber in Emojis",
+            "20": "Swipe nach rechts, wenn"
         }
     },
     "cancel": "Abbrechen",

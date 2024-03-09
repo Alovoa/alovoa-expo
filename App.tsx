@@ -9,7 +9,7 @@ import { LogBox, useColorScheme } from 'react-native';
 import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider, configureFonts } from 'react-native-paper';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { Pictures, ProfileSettings, SearchSettings, Settings } from "./screens/profile";
+import { Pictures, ProfileSettings, SearchSettings, Settings, Prompts } from "./screens/profile";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as Device from 'expo-device';
 import { ThemeProp } from "react-native-paper/lib/typescript/types";
@@ -277,6 +277,17 @@ export default function App() {
               },
             }}
             component={PasswordReset}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Profile.Prompts"
+            options={{
+              title: i18n.t('profile.screen.prompts'),
+              headerShown: true, animationEnabled: true, transitionSpec: {
+                open: config,
+                close: config,
+              },
+            }}
+            component={Prompts}
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>

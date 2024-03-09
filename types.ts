@@ -130,10 +130,7 @@ export type UserDto = {
   gender: Gender;
   hasAudio: boolean;
   audio: string;
-  accentColor: string;
-  uiDesign: string;
   zodiac: string;
-  showZodiac: boolean;
   units: number;
   preferedMinAge: number;
   preferedMaxAge: number;
@@ -162,11 +159,23 @@ export type UserDto = {
   locationLatitude: number;
   locationLongitude: number;
   lastActiveState: number;
+  userSettings: UserSettings;
+  prompts: Array<UserPrompt>;
+}
+
+export type UserSettings = {
+  emailLike: boolean;
+  emailChat: boolean;
 }
 
 export type UserInterestDto = {
   id: string,
   number: string
+}
+
+export type UserPrompt = {
+  promptId: number,
+  text: string
 }
 
 export type DonationDto = {
@@ -206,6 +215,10 @@ export enum UnitsEnum {
   IMPERIAL = 1
 }
 
+export enum SettingsEmailEnum {
+  LIKE = 1,
+  CHAT = 2
+}
 
 export enum SearchStageEnum {
   NORMAL,
@@ -326,7 +339,7 @@ export type UserUsersResource = {
 
 export type AlertModel = {
   visible: boolean;
-  message: string; 
+  message: string;
   buttons: Array<AlertButtonModel>;
   setVisible: (bool: boolean) => void;
 }
@@ -343,8 +356,8 @@ export type Captcha = {
 
 export type PasswordResetDto = {
   captchaId: number;
-	captchaText: string;
-	email: string;
+  captchaText: string;
+  email: string;
 }
 
 export type LikeResultT = {

@@ -1,6 +1,7 @@
 import React from "react";
 import {
   View,
+  Text,
   ImageBackground,
   TouchableOpacity,
   StyleSheet,
@@ -75,6 +76,10 @@ const ProfileSettings = ({ route, navigation }) => {
     user.miscInfos = miscInfoArray;
   }
 
+  async function navigatePrompts() {
+    Global.navigate("Profile.Prompts", false, { user: user });
+  }
+
   return (
     <View style={{ height: height - headerHeight }}>
       {loading &&
@@ -143,6 +148,12 @@ const ProfileSettings = ({ route, navigation }) => {
                 updateMiscInfo(id, checked, true);
               }}></SelectModal>
           </View>
+          <View style={{ marginTop: 12 }}>
+            <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.prompts.title')}</Text>
+            <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
+              style={{ alignSelf: 'stretch' }} onPress={navigatePrompts}>{i18n.t('profile.prompts.subtitle')}</Button>
+          </View>
+
         </View>
       </VerticalView>
     </View>

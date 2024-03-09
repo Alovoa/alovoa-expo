@@ -6,9 +6,10 @@ import {
   Pressable,
   Image,
   useWindowDimensions,
+  ScrollView,
 } from "react-native";
-import { useTheme, Text, Chip, Card, Menu } from "react-native-paper";
-import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage } from "../types";
+import { useTheme, Text, Chip, Card, Menu, Surface } from "react-native-paper";
+import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage, UserPrompt } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -79,6 +80,7 @@ const Profile = ({ route, navigation }) => {
   const [description, setDescription] = React.useState("");
   const [intention, setIntention] = React.useState(Intention.MEET);
   const [interests, setInterests] = React.useState(Array<UserInterest>);
+  const [prompts, setPrompts] = React.useState(Array<UserPrompt>);
   const [lastActiveState, setLastActiveState] = React.useState(Number.MAX_SAFE_INTEGER);
   const [blocked, setBlocked] = React.useState(false)
   const [reported, setReported] = React.useState(false)
@@ -172,6 +174,7 @@ const Profile = ({ route, navigation }) => {
     }
     setPreferredGenders(prefGenders);
     setInterests(user.interests);
+    setPrompts(user.prompts);
     var swiperImageData: Array<string> = [];
     swiperImageData.push(user.profilePicture);
     if (user.images) {
@@ -322,7 +325,7 @@ const Profile = ({ route, navigation }) => {
   }
 
   async function likeUser(message?: string) {
-    if(!message) {
+    if (!message) {
       await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
     } else {
       await Global.Fetch(Global.format(URL.USER_LIKE_MESSAGE, user.idEncoded, message), 'post');
@@ -408,7 +411,7 @@ const Profile = ({ route, navigation }) => {
 
         <View style={[styles.containerProfileItem, { marginTop: 0 }]}>
 
-          <View style={{ marginTop: 0 }}>
+          <View>
             {interests.length > 0 && <Text style={style.title}>{i18n.t('profile.profile-page.interests')}</Text>}
             <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
               {
@@ -424,8 +427,28 @@ const Profile = ({ route, navigation }) => {
             <View>
               <Card style={{ padding: 16 }}><Text style={[styles.textInputAlign, { fontSize: 18 }]}>{description}</Text></Card>
             </View>
+          </View>
 
-            <View style={{ paddingTop: 24 }}></View>
+          {prompts?.length > 0 &&
+            <View style={{ marginTop: 20 }}>
+              <ScrollView
+                horizontal
+                style={{ paddingBottom: 8 }}
+                showsHorizontalScrollIndicator={true}
+              >
+                {
+                  prompts?.map((item, index) => (
+                    <Surface key={index} style={{ padding: 12, width: 290, borderRadius: 12, marginRight: 8 }}>
+                      <Text style={{ fontSize: 16, marginBottom: 4 }}>{i18n.t('profile.prompts.' + (item.promptId))}</Text>
+                      <Text style={{ fontSize: 24 }}>{item.text}</Text>
+                    </Surface>
+                  ))
+                }
+              </ScrollView>
+            </View>
+          }
+
+          <View style={{ marginTop: 24 }}>
             <Text style={style.title}>{i18n.t('profile.profile-page.basics')}</Text>
             <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
               <Chip icon="gender-male-female" style={[styles.marginRight4, styles.marginBottom4]}>
@@ -453,8 +476,9 @@ const Profile = ({ route, navigation }) => {
                 <Text>{drugsString}</Text>
               </Chip>}
             </View>
+          </View>
 
-            <View style={{ paddingTop: 16 }}></View>
+          <View style={{ marginTop: 16 }}>
             <Text style={style.title}>{i18n.t('profile.profile-page.additional')}</Text>
             <View style={{ paddingBottom: 4, display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
               <Chip icon="hand-coin" style={[styles.marginRight4, styles.marginBottom4]}>
@@ -467,9 +491,7 @@ const Profile = ({ route, navigation }) => {
                 <Text>{'# ' + reports}</Text>
               </Chip>
             </View>
-            {
-              <View style={{ marginTop: 80 }}></View>
-            }
+            <View style={{ marginTop: 80 }}></View>
           </View>
         </View>
         <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.report.subtitle')} buttons={alertButtons} />

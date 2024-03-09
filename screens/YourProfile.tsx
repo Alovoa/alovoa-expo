@@ -147,21 +147,21 @@ const YourProfile = ({ route, navigation }) => {
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, { data: data })}>{i18n.t('profile.screen.search')}</Button>
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
-            style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SETTINGS)}>{i18n.t('profile.screen.settings')}</Button>
+            style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SETTINGS, false, { data: data })}>{i18n.t('profile.screen.settings')}</Button>
 
-          {numReferred < MAX_REFERRALS && <Button icon="content-copy" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between', flexGrow: 1 }}
-            style={{ marginBottom: 8 }} onPress={copyReferralCodeToClipboard}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-              <Text style={{ color: colors.primary, alignSelf: "center" }}>{i18n.t('referral.title')}</Text>
-              <IconButton
-                icon="help"
-                mode="contained"
-                size={10}
-                style={{ margin: 0, marginLeft: 4 }}
-                onPress={() => setAlertVisible(true)}
-              />
-            </View>
-          </Button>
+          {numReferred < MAX_REFERRALS && <View style={{flexDirection:"row", marginBottom: 8}}>
+            <Button icon="content-copy" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between', flexGrow: 1 }}
+              style={{ flexGrow: 1 }} onPress={copyReferralCodeToClipboard}>
+              {i18n.t('referral.title')}
+            </Button>
+            <IconButton
+              icon="help"
+              mode="contained"
+              size={14}
+              style={{ margin: 0, marginLeft: 4, alignSelf: "center" }}
+              onPress={() => setAlertVisible(true)}
+            />
+          </View>
           }
         </View>
         <View style={[styles.containerProfileItem, { marginTop: 32, marginBottom: 48 }]}>
