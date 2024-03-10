@@ -50,6 +50,8 @@ export const DEFAULT_COLOR_SECONDARY = '#28C4ED';
 export const EMPTY_STRING = "...";
 
 export const MAX_INTERESTS = 10;
+export const MAX_MESSAGE_LENGTH = 255;
+export const MAX_DESCRIPTION_LENGTH = 255;
 
 export async function Fetch(url: string = "", method: string = "get", data: any = undefined,
   contentType: string = "application/json"): Promise<AxiosResponse<any, any>> {

@@ -19,7 +19,8 @@ import InterestModal from "../../components/InterestModal";
 import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
 
-const i18n = I18N.getI18n()
+const i18n = I18N.getI18n();
+const DESCRIPTION_HELPERTEXT_LIMIT = 200;
 
 const ProfileSettings = ({ route, navigation }) => {
 
@@ -34,7 +35,6 @@ const ProfileSettings = ({ route, navigation }) => {
   const [miscInfoDrugs, setMiscInfoDrugs] = React.useState(Array<number>);
   const [miscInfoRelationship, setMiscInfoRelationship] = React.useState(Array<number>);
   const [loading, setLoading] = React.useState(false);
-  const maxDescriptionLength = 200;
 
   const descriptionRef = React.useRef(description);
   const debounceDescriptionHandler = React.useCallback(debounce(updateDescription, 1500), []);
@@ -103,15 +103,17 @@ const ProfileSettings = ({ route, navigation }) => {
                 setDescription(text)
               }}
               placeholder={i18n.t('profile.onboarding.description-placeholder')}
-              maxLength={maxDescriptionLength}
+              maxLength={Global.MAX_DESCRIPTION_LENGTH}
               value={description}
               autoCorrect={false}
-            />
+            /> 
+            { description.length >= DESCRIPTION_HELPERTEXT_LIMIT &&
             <View>
               <HelperText type="info" style={{ textAlign: 'right' }} visible>
-                {description.length} / {maxDescriptionLength}
+                {description.length} / {Global.MAX_DESCRIPTION_LENGTH}
               </HelperText>
             </View>
+            }
           </View>
 
           <View style={{ marginTop: 12 }}>
