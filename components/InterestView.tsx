@@ -146,7 +146,7 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
           ))
         }
         {suggestionsList?.length == 0 && <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>}
-        <ScrollView style={{height: height > 500 ? 300 : 80}}>
+        <ScrollView style={{height: height > 500 ? 240 : 80}}>
           {suggestionsList?.length == 0 &&
             interests.map((item, index) => (
               <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>

@@ -119,7 +119,7 @@ const Prompts = ({ route, navigation }) => {
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >
           <Text style={{ fontSize: 20, marginBottom: 8, paddingHorizontal: 16 }}>{modalTitle}</Text>
-          <TextInput style={{backgroundColor: colors.background}} value={modalText} maxLength={maxPromptTextLength} onChangeText={text => setModalText(text)}></TextInput>
+          <TextInput style={{ backgroundColor: colors.background }} value={modalText} maxLength={maxPromptTextLength} onChangeText={text => setModalText(text)}></TextInput>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <IconButton
               icon="close"
@@ -138,8 +138,8 @@ const Prompts = ({ route, navigation }) => {
       <VerticalView>
         {[...prompts].map(([id, prompt]) => (
           <Surface key={id} style={{ padding: 24, borderRadius: 12, marginBottom: 8 }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>{i18n.t('profile.prompts.' + id)}</Text>
-            <Text style={{ marginBottom: 12 }}>{prompt.text}</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>{i18n.t('profile.prompts.' + id)}</Text>
+            <Text style={{ marginBottom: 12, fontSize: 24 }}>{prompt.text}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <IconButton
                 icon="delete"
@@ -156,8 +156,8 @@ const Prompts = ({ route, navigation }) => {
           </Surface>
         ))}
         {
-          prompts.size < maxPrompts && 
-          <Text style={{fontSize: 20, marginBottom: 18, marginTop: 26}}>{i18n.t('profile.prompts.add')}</Text>
+          prompts.size < maxPrompts &&
+          <Text style={{ fontSize: 20, marginBottom: 18, marginTop: 26 }}>{i18n.t('profile.prompts.add')}</Text>
         }
         {
           prompts.size < maxPrompts && promptIdArray.filter(index => !prompts.has(index)).map(index => (
