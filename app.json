@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alovoa",
     "slug": "alovoa-expo",
-    "version": "1.8.2",
+    "version": "1.9.0",
     "scheme": "alovoa",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -75,7 +75,7 @@
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 22
+      "versionCode": 24
     },
     "web": {
       "bundler": "metro",

@@ -1,0 +1,3 @@
+Added profile prompts
+You can now receive email notifications on likes and chats
+General UI and bug fixes
