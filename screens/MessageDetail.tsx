@@ -132,6 +132,7 @@ const MessageDetail = ({ route, navigation }) => {
           style={{ backgroundColor: colors.surface, height: 52 }}
           value={text}
           dense={true}
+          maxLength={Global.MAX_MESSAGE_LENGTH}
           onChangeText={text => setText(text)}
           onSubmitEditing={sendMessage}
           placeholder={i18n.t('chat.placeholder')}
