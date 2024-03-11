@@ -74,7 +74,7 @@ export const USER_PROMPT_DELETE = DOMAIN + "/user/prompt/delete/%s"
 export const USER_PROMPT_ADD = DOMAIN + "/user/prompt/add"
 export const USER_PROMPT_UPDATE = DOMAIN + "/user/prompt/update"
 
-export const USER_SETTING_EMAIL_LIKE = DOMAIN + "/user/settings/emailLike/update/%s"
-export const USER_SETTING_EMAIL_CHAT = DOMAIN + "/user/settings/emailChat/update/%s"
+export const USER_SETTING_EMAIL_LIKE = DOMAIN + "/user-settings/emailLike/update/%s"
+export const USER_SETTING_EMAIL_CHAT = DOMAIN + "/user-settings/emailChat/update/%s"
 
 export const MESSAGE_SEND = DOMAIN + "/message/send/%s";
