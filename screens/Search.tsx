@@ -102,6 +102,7 @@ const Search = ({ route, navigation }) => {
 
   async function load() {
     setLoaded(false);
+    setResults([]);
     let l1 = await Global.GetStorage(Global.STORAGE_LATITUDE);
     latitude = l1 ? Number(l1) : undefined;
     let l2 = await Global.GetStorage(Global.STORAGE_LONGITUDE);
