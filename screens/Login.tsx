@@ -1,6 +1,6 @@
 import React from "react";
-import { useTheme, Text, Button, Dialog, Portal, Provider, TextInput, IconButton } from "react-native-paper";
-import { View, Platform, StyleSheet, Image, Dimensions, Alert, ScrollView, useWindowDimensions } from "react-native";
+import { useTheme, Text, Button, Dialog, TextInput, IconButton } from "react-native-paper";
+import { View, Platform, StyleSheet, Image, useWindowDimensions } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
@@ -9,14 +9,12 @@ import * as URL from "../URL";
 import * as I18N from "../i18n";
 import { Captcha } from "../types";
 import VerticalView from "../components/VerticalView";
-import styles from "../assets/styles";
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
 const IMAGE_HEADER = "data:image/webp;base64,";
 
 WebBrowser.maybeCompleteAuthSession();
-
 
 const Login = () => {
 
@@ -28,6 +26,7 @@ const Login = () => {
   const [captchaId, setCaptchaId] = React.useState(0);
   const [captchaImage, setCaptchaImage] = React.useState("");
   const [captchaText, setCaptchaText] = React.useState("");
+  const [loading, setLoading] = React.useState(true);
 
   //vars for dialog
   const [visible, setVisible] = React.useState(false);
@@ -36,11 +35,7 @@ const Login = () => {
   const { height, width } = useWindowDimensions();
 
   React.useEffect(() => {
-    Global.GetStorage(Global.STORAGE_PAGE).then((value) => {
-      if (value && value != Global.INDEX_REGISTER) {
-        Global.loadPage(value);
-      }
-    });
+    load();
   }, []);
 
   const _handleRedirect = async (event: { url: string; }) => {
@@ -61,6 +56,15 @@ const Login = () => {
       await Global.SetStorage(Global.STORAGE_LOGIN_DATE, new Date().toISOString());
       Global.loadPage(page);
     }
+  };
+
+  const load = async () => {
+    await Global.GetStorage(Global.STORAGE_PAGE).then((value) => {
+      if (value && value != Global.INDEX_REGISTER) {
+        Global.loadPage(value);
+      }
+    });
+    setTimeout(() => setLoading(false), 200);
   };
 
   const loginGoogle = async () => {
@@ -102,7 +106,7 @@ const Login = () => {
       try {
         let res = await Global.Fetch(url, 'post', {}, "application/x-www-form-urlencoded");
         let redirectHeader = res.headers['redirect-url'];
-        if(!redirectHeader) {
+        if (!redirectHeader) {
           redirectHeader = res.data;
         }
         if (res.request?.responseURL && res.request?.responseURL != URL.AUTH_LOGIN_ERROR && redirectHeader) {
@@ -160,71 +164,73 @@ const Login = () => {
 
   return (
     <VerticalView>
-      <View >
-        <View style={{ minHeight: height }}>
-          <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
+      {!loading &&
+        <View >
+          <View style={{ minHeight: height }}>
+            <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
 
-          <Text style={{ textAlign: 'center', marginBottom: 48, marginTop: 24, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
+            <Text style={{ textAlign: 'center', marginBottom: 48, marginTop: 24, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
 
-          <TextInput
-            style={{ backgroundColor: colors.background }}
-            label={i18n.t('email')}
-            value={email}
-            onChangeText={text => {
-              setEmail(text);
-              setEmailValid(Global.isEmailValid(text));
-            }}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <TextInput
-            style={{ backgroundColor: colors.background }}
-            label={i18n.t('password')}
-            value={password}
-            onChangeText={text => setPassword(text)}
-            autoCapitalize="none"
-            secureTextEntry={true}
-          />
+            <TextInput
+              style={{ backgroundColor: colors.background }}
+              label={i18n.t('email')}
+              value={email}
+              onChangeText={text => {
+                setEmail(text);
+                setEmailValid(Global.isEmailValid(text));
+              }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <TextInput
+              style={{ backgroundColor: colors.background }}
+              label={i18n.t('password')}
+              value={password}
+              onChangeText={text => setPassword(text)}
+              autoCapitalize="none"
+              secureTextEntry={true}
+            />
 
-          <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { emailSignInPress() }}
-          ><Text style={style.buttonText}>{i18n.t('auth.email')}</Text></Button>
+            <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { emailSignInPress() }}
+            ><Text style={style.buttonText}>{i18n.t('auth.email')}</Text></Button>
 
+            <View style={{ paddingBottom: 38 }}></View>
+
+            <Button icon="google" mode="contained" style={[style.buttonGoogle]}
+              onPress={() => {
+                loginGoogle();
+              }}
+            ><Text style={style.buttonText}>{i18n.t('auth.google')}</Text></Button>
+            <Button icon="facebook" mode="contained" style={[style.buttonFacebook, { marginTop: 8 }]}
+              onPress={() => {
+                loginFacebook();
+              }}
+            ><Text style={style.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+          </View>
+
+          <View style={{ marginTop: 64 }}>
+            <Text style={style.link} onPress={() => {
+              Global.navigate("Register", false, { registerEmail: true });
+            }}>{i18n.t('register-email')}</Text>
+            <Text style={style.link} onPress={() => {
+              Global.navigate("PasswordReset", false, {});
+            }}>{i18n.t('password-forget')}</Text>
+          </View>
+
+          <View style={{ marginTop: 24 }}>
+            <Text style={style.link} onPress={() => {
+              WebBrowser.openBrowserAsync(URL.PRIVACY);
+            }}>{i18n.t('privacy-policy')}</Text>
+            <Text style={style.link} onPress={() => {
+              WebBrowser.openBrowserAsync(URL.TOS);
+            }}>{i18n.t('tos')}</Text>
+            <Text style={style.link} onPress={() => {
+              WebBrowser.openBrowserAsync(URL.IMPRINT);
+            }}>{i18n.t('imprint')}</Text>
+          </View>
           <View style={{ paddingBottom: 38 }}></View>
-
-          <Button icon="google" mode="contained" style={[style.buttonGoogle]}
-            onPress={() => {
-              loginGoogle();
-            }}
-          ><Text style={style.buttonText}>{i18n.t('auth.google')}</Text></Button>
-          <Button icon="facebook" mode="contained" style={[style.buttonFacebook, { marginTop: 8 }]}
-            onPress={() => {
-              loginFacebook();
-            }}
-          ><Text style={style.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
         </View>
-
-        <View style={{ marginTop: 64 }}>
-          <Text style={style.link} onPress={() => {
-            Global.navigate("Register", false, { registerEmail: true });
-          }}>{i18n.t('register-email')}</Text>
-          <Text style={style.link} onPress={() => {
-            Global.navigate("PasswordReset", false, {});
-          }}>{i18n.t('password-forget')}</Text>
-        </View>
-
-        <View style={{ marginTop: 24 }}>
-          <Text style={style.link} onPress={() => {
-            WebBrowser.openBrowserAsync(URL.PRIVACY);
-          }}>{i18n.t('privacy-policy')}</Text>
-          <Text style={style.link} onPress={() => {
-            WebBrowser.openBrowserAsync(URL.TOS);
-          }}>{i18n.t('tos')}</Text>
-          <Text style={style.link} onPress={() => {
-            WebBrowser.openBrowserAsync(URL.IMPRINT);
-          }}>{i18n.t('imprint')}</Text>
-        </View>
-        <View style={{ paddingBottom: 38 }}></View>
-      </View>
+      }
 
       <Dialog visible={visible} onDismiss={hideDialog}>
         <Dialog.Title>{i18n.t('captcha.title')}</Dialog.Title>
