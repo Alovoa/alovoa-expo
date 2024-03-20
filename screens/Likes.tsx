@@ -99,10 +99,9 @@ const Likes = ({ navigation }) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (filter != FILTER.RECEIVED_LIKES) {
-        setFilter(FILTER.RECEIVED_LIKES);
-      } else {
         load();
       }
+      setFilter(FILTER.RECEIVED_LIKES);
     });
     return unsubscribe;
   }, [navigation]);
