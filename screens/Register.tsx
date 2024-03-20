@@ -18,7 +18,6 @@ const i18n = I18N.getI18n()
 
 const MIN_AGE = 16
 const MAX_AGE = 100
-const DEFAULT_AGE = 20
 
 function subtractYears(years: number): Date {
   const date = new Date();
@@ -111,6 +110,10 @@ const Register = ({ route, navigation }) => {
     setPasswordSecure(Global.isPasswordSecure(text));
   }
 
+  function getDateInputLocale(): string {
+    return Localization.locale.startsWith("de") ? "de" : "en-GB";
+  }
+
   return (
     <View style={{ height: height - headerHeight }}>
       <VerticalView ref={scrollRef}>
@@ -168,13 +171,16 @@ const Register = ({ route, navigation }) => {
             <DatePickerInput
               mode="outlined"
               style={{ backgroundColor: colors.background }}
-              locale={Localization.locale.startsWith("en") || Localization.locale.startsWith("de") ? Localization.locale : "en-GB"}
+              locale={getDateInputLocale()}
               label={i18n.t('dob') + " *"}
               value={dob}
               onChange={(d) => { if (d) { setDob(d) } }}
               inputMode="start"
               validRange={validDobRange}
             />
+            { (Global.calcAge(dob) >= MIN_AGE && Global.calcAge(dob) <= MAX_AGE) &&
+              <HelperText type="info">{Global.format(i18n.t('register.age-subtitle'), Global.calcAge(dob).toString())}</HelperText>
+            }
           </View>
         </SafeAreaProvider>
 

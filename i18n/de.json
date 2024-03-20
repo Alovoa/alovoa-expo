@@ -16,7 +16,8 @@
         "agree": "Mit meiner Registrierung stimme ich Nutzungsbedingungen und der Datenschutzerklärung zu.",
         "referral-code": "Empfehlungscode",
         "asterisk-warning": "Felder mit einem Sternchen (*) können in Zukunft nicht mehr geändert werden",
-        "gender": "Dein Geschlecht"
+        "gender": "Dein Geschlecht",
+        "age-subtitle": "Du bist %s Jahre alt"
     },
     "gender": {
         "male": "Mann",
