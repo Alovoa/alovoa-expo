@@ -7,7 +7,7 @@ import {
   useWindowDimensions
 } from "react-native";
 
-import { Text, Button, Menu } from "react-native-paper";
+import { Text, Button, Menu, ActivityIndicator } from "react-native-paper";
 import { CardItemDonate } from "../components";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
@@ -29,6 +29,7 @@ const Donate = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [results, setResults] = React.useState(Array<DonationDto>);
   const [filter, setFilter] = React.useState(FILTER_RECENT);
+  const [loading, setLoading] = React.useState(false);
 
   const [menuSortVisible, setMenuSortVisible] = React.useState(false);
 
@@ -36,9 +37,11 @@ const Donate = () => {
   const hideMenuSort = () => setMenuSortVisible(false);
 
   async function load() {
+    setLoading(true);
     let response = await Global.Fetch(Global.format(URL.API_DONATE_RECENT, filter));
     let data: DonationDtoListModel = response.data;
     setResults(data.list);
+    setLoading(false);
   }
 
   function updateFilter(num: number) {
@@ -58,6 +61,11 @@ const Donate = () => {
 
   return (
     <View style={{ height: height }}>
+      {loading &&
+        <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
+          <ActivityIndicator animating={loading} size="large" />
+        </View>
+      }
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
