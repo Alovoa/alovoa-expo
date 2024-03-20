@@ -332,6 +332,7 @@ const Profile = ({ route, navigation }) => {
     }
     setLiked(true);
     setRemoveUser(true);
+    setComplimentModalVisible(false);
   }
 
   async function hideUser() {

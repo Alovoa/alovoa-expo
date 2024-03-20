@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, Text, Button, TextInput, RadioButton, HelperText } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, RadioButton, HelperText, ActivityIndicator } from "react-native-paper";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
@@ -18,7 +18,6 @@ const i18n = I18N.getI18n()
 
 const MIN_AGE = 16
 const MAX_AGE = 100
-const DEFAULT_AGE = 20
 
 function subtractYears(years: number): Date {
   const date = new Date();
@@ -47,6 +46,7 @@ const Register = ({ route, navigation }) => {
   const [dob, setDob] = React.useState<Date>();
   const [gender, setGender] = React.useState("1");
   const [referrerCode, setReferrerCode] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const alertButtons = [
     {
@@ -87,17 +87,23 @@ const Register = ({ route, navigation }) => {
         data.email = email;
         data.password = password;
         try {
+          setLoading(true);
           await Global.Fetch(URL.REGISTER, 'post', data);
+          setLoading(false);
           setAlertVisible(true);
         } catch (e) {
+          setLoading(false);
           Global.ShowToast(i18n.t('error.generic'));
         }
       } else {
         try {
+          setLoading(true);
           await Global.Fetch(URL.REGISTER_OAUTH, 'post', data);
+          setLoading(false);
           await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_ONBOARDING);
           Global.loadPage(Global.INDEX_ONBOARDING);
         } catch (e) {
+          setLoading(false);
           Global.ShowToast(i18n.t('error.generic'));
         }
       }
@@ -111,8 +117,19 @@ const Register = ({ route, navigation }) => {
     setPasswordSecure(Global.isPasswordSecure(text));
   }
 
+  function getDateInputLocale(): string {
+    return Localization.locale.startsWith("de") ? "de" : "en-GB";
+  }
+
   return (
     <View style={{ height: height - headerHeight }}>
+
+      {loading &&
+        <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
+          <ActivityIndicator animating={loading} size="large" />
+        </View>
+      }
+
       <VerticalView ref={scrollRef}>
         <Text style={{ textAlign: 'center', marginBottom: 36, fontSize: 32 }}>{i18n.t('register.subtitle')}</Text>
 
@@ -168,13 +185,16 @@ const Register = ({ route, navigation }) => {
             <DatePickerInput
               mode="outlined"
               style={{ backgroundColor: colors.background }}
-              locale={Localization.locale.startsWith("en") || Localization.locale.startsWith("de") ? Localization.locale : "en-GB"}
+              locale={getDateInputLocale()}
               label={i18n.t('dob') + " *"}
               value={dob}
               onChange={(d) => { if (d) { setDob(d) } }}
               inputMode="start"
               validRange={validDobRange}
             />
+            {(Global.calcAge(dob) >= MIN_AGE && Global.calcAge(dob) <= MAX_AGE) &&
+              <HelperText type="info">{Global.format(i18n.t('register.age-subtitle'), Global.calcAge(dob).toString())}</HelperText>
+            }
           </View>
         </SafeAreaProvider>
 
@@ -224,16 +244,16 @@ const Register = ({ route, navigation }) => {
         </View>
 
         <View>
-          <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }]}>
-            <Text style={[{ flex: 1, flexWrap: 'wrap' }, style.link]} onPress={() => {
-              WebBrowser.openBrowserAsync(URL.TOS);
-            }}>{i18n.t('tos')}</Text>
-            <Text style={[{ flex: 1, flexWrap: 'wrap' }, style.link]} onPress={() => {
-              WebBrowser.openBrowserAsync(URL.PRIVACY);
-            }}>{i18n.t('privacy-policy')}</Text>
-          </View>
+          <Text style={style.link} onPress={() => {
+            WebBrowser.openBrowserAsync(URL.TOS);
+          }}>{i18n.t('tos')}</Text>
+          <Text style={style.link} onPress={() => {
+            WebBrowser.openBrowserAsync(URL.PRIVACY);
+          }}>{i18n.t('privacy-policy')}</Text>
         </View>
-        <View style={{ marginBottom: 12 }}></View>
+
+        <View style={{ marginBottom: 24 }}></View>
+
         <View style={[style.container]}>
           <Text style={{ fontSize: 12, color: "orange" }}>{i18n.t('register.asterisk-warning')}</Text>
         </View>

@@ -67,7 +67,7 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
     })
     if (res.request.responseURL == URL.AUTH_LOGIN) {
       let page = await GetStorage(STORAGE_PAGE);
-      if(page != INDEX_LOGIN) {
+      if (page != INDEX_LOGIN) {
         SetStorage(STORAGE_PAGE, INDEX_LOGIN);
         navigate("Login");
         throw new Error("Not authenticated")
@@ -156,6 +156,15 @@ export function isPasswordSecure(password: string): boolean {
     return false;
   }
   return password.match(/[a-z]/i) != null && password.match(/[0-9]+/) != null;
+}
+
+export function calcAge(dob: Date | undefined): number {
+  if(!dob) {
+    return Number.MIN_VALUE;
+  }
+  let timeDiff = Math.abs(Date.now() - dob.getTime());
+  let age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+  return age;
 }
 
 export const format = (str: string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);
