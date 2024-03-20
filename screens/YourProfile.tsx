@@ -60,6 +60,7 @@ const YourProfile = ({ route, navigation }) => {
 
   async function load() {
     setLoading(true);
+    setTimeout(() => setLoading(false), 5000);
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
     setData(data);
