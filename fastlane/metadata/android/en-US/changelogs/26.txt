@@ -1,1 +1,1 @@
-Fix email settings not applying
+Fixed numerous bugs
