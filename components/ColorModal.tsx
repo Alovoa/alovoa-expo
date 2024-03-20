@@ -1,10 +1,10 @@
 import React from "react";
 import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import { Modal, Portal, Text, Button, useTheme, IconButton } from 'react-native-paper';
-import { ColorValue, ScrollView, View, useWindowDimensions } from "react-native";
+import { ScrollView, View, useWindowDimensions } from "react-native";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
-import ColorPicker, { Panel1, HueSlider, returnedResults, BrightnessSlider } from 'reanimated-color-picker';
+import ColorPicker, { HueSlider, returnedResults, BrightnessSlider } from 'reanimated-color-picker';
 
 const ColorModal = ({ title }: any) => {
 
@@ -16,6 +16,7 @@ const ColorModal = ({ title }: any) => {
   const [secondary, setSecondary] = React.useState<string>(Global.DEFAULT_COLOR_SECONDARY);
   const [changed, setChanged] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
@@ -25,7 +26,7 @@ const ColorModal = ({ title }: any) => {
   }
 
   React.useEffect(() => {
-    loadStoredColors();
+    load();
   }, []);
 
   React.useEffect(() => {
@@ -34,15 +35,20 @@ const ColorModal = ({ title }: any) => {
     }
   }, [changed]);
 
+  async function load() {
+    await loadStoredColors();
+    setLoading(false);
+  }
+
   async function loadStoredColors() {
     let pColor = await Global.GetStorage(Global.STORAGE_SETTINGS_COLOR_PRIMARY);
-    if(pColor) {
-      changePrimaryColor(pColor);
+    if (pColor) {
+      await changePrimaryColor(pColor);
     }
 
     let sColor = await Global.GetStorage(Global.STORAGE_SETTINGS_COLOR_SECONDARY);
-    if(sColor) {
-      changeSecondaryColor(sColor);
+    if (sColor) {
+      await changeSecondaryColor(sColor);
     }
   }
 
@@ -62,16 +68,20 @@ const ColorModal = ({ title }: any) => {
     changeSecondaryColor(Global.DEFAULT_COLOR_SECONDARY);
   }
 
-  function changePrimaryColor(hex: string) {
+  async function changePrimaryColor(hex: string) {
     setPrimary(hex);
-    Global.SetStorage(Global.STORAGE_SETTINGS_COLOR_PRIMARY, hex);
-    setChanged(true);
+    await Global.SetStorage(Global.STORAGE_SETTINGS_COLOR_PRIMARY, hex);
+    if (!loading) {
+      setChanged(true);
+    }
   }
 
-  function changeSecondaryColor(hex: string) {
+  async function changeSecondaryColor(hex: string) {
     setSecondary(hex);
-    Global.SetStorage(Global.STORAGE_SETTINGS_COLOR_SECONDARY, hex);
-    setChanged(true);
+    await Global.SetStorage(Global.STORAGE_SETTINGS_COLOR_SECONDARY, hex);
+    if (!loading) {
+      setChanged(true);
+    }
   }
 
   return (
