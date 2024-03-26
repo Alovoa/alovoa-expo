@@ -39,7 +39,7 @@ const YourProfile = ({ route, navigation }) => {
   const [name, setName] = React.useState("");
   const [age, setAge] = React.useState(0);
   const [numReferred, setNumReferred] = React.useState(MAX_REFERRALS);
-  const [idEnc, setIdEnc] = React.useState("");
+  const [uuid, setUuid] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const alertButtons = [
@@ -65,7 +65,7 @@ const YourProfile = ({ route, navigation }) => {
     let data: YourProfileResource = response.data;
     setData(data);
     setUser(data.user)
-    setIdEnc(data.user.idEncoded);
+    setUuid(data.user.uuid);
     setProfilePic(data.user.profilePicture);
     setName(data.user.firstName);
     setAge(data.user.age);
@@ -77,7 +77,7 @@ const YourProfile = ({ route, navigation }) => {
   }, []);
 
   async function copyReferralCodeToClipboard() {
-    await Clipboard.setStringAsync(idEnc);
+    await Clipboard.setStringAsync(uuid);
     Global.ShowToast(i18n.t('referral.copy'));
   };
 
@@ -88,7 +88,7 @@ const YourProfile = ({ route, navigation }) => {
 
   async function downloadUserData() {
     if (Platform.OS == 'android') {
-      const response = await Global.Fetch(Global.format(URL.USER_USERDATA, idEnc));
+      const response = await Global.Fetch(Global.format(URL.USER_USERDATA, uuid));
       const userData = JSON.stringify(response.data);
       const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
       if (permissions.granted) {
@@ -98,7 +98,7 @@ const YourProfile = ({ route, navigation }) => {
         Global.ShowToast(i18n.t('profile.download-userdata-success'));
       }
     } else if (Platform.OS == 'ios') {
-      const response = await Global.Fetch(Global.format(URL.USER_USERDATA, idEnc));
+      const response = await Global.Fetch(Global.format(URL.USER_USERDATA, uuid));
       const userData = JSON.stringify(response.data);
       let fileName = FileSystem.documentDirectory + '/alovoa.json';
       await FileSystem.writeAsStringAsync(fileName, userData, { encoding: FileSystem.EncodingType.UTF8 });
@@ -107,7 +107,7 @@ const YourProfile = ({ route, navigation }) => {
         Sharing.shareAsync(fileName);
       }
     } else {
-      Linking.openURL(Global.format(URL.USER_USERDATA, idEnc));
+      Linking.openURL(Global.format(URL.USER_USERDATA, uuid));
     }
   }
 

@@ -17,7 +17,7 @@ const Message = ({ conversation }: MessageT) => {
   return (
     <View style={{flexDirection: 'row'}}>
       <View>
-        <TouchableOpacity onPress={() => Global.nagivateProfile(undefined, conversation.userIdEncoded)} >
+        <TouchableOpacity onPress={() => Global.nagivateProfile(undefined, conversation.uuid)} >
           <Image source={{ uri: conversation.userProfilePicture }} style={styles.avatar} />
         </TouchableOpacity>
       </View>

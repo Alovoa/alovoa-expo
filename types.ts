@@ -122,7 +122,7 @@ export type UserImage = {
 }
 
 export type UserDto = {
-  idEncoded: string
+  uuid: string
   email?: string //is null when not current user
   firstName: string
   age: number
@@ -199,7 +199,7 @@ export type ConversationDto = {
   userName: string;
   userProfilePicture: string;
   lastMessage: MessageDto;
-  userIdEncoded: string;
+  uuid: string;
   read: boolean;
 }
 

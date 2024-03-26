@@ -178,7 +178,7 @@ const Search = ({ route, navigation }) => {
 
   async function likeUser(message?: string, pop?: boolean) {
     if (index < results.length) {
-      let id = results[index].idEncoded;
+      let id = results[index].uuid;
       if (!message) {
         await Global.Fetch(Global.format(URL.USER_LIKE, id), 'post');
       } else {
@@ -194,7 +194,7 @@ const Search = ({ route, navigation }) => {
 
   async function hideUser(index: number) {
     if (index < results.length) {
-      let id = results[index].idEncoded;
+      let id = results[index].uuid;
       await Global.Fetch(Global.format(URL.USER_HIDE, id), 'post');
       loadResultsOnEmpty(index);
     }
@@ -246,7 +246,7 @@ const Search = ({ route, navigation }) => {
             onSwipedRight={onSwipeRight}>
             {
               results.map((card, index) => (
-                <Card key={card.idEncoded}>
+                <Card key={card.uuid}>
                   <CardItemSearch
                     user={card}
                     unitsImperial={user?.units == UnitsEnum.IMPERIAL}

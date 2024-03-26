@@ -60,7 +60,7 @@ const Profile = ({ route, navigation }) => {
   const MAX_AGE = 100
 
   var user: UserDto = route.params.user;
-  var idEnc = route.params.idEnc;
+  var uuid = route.params.uuid;
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
 
@@ -122,7 +122,7 @@ const Profile = ({ route, navigation }) => {
     {
       text: i18n.t('ok'),
       onPress: async () => {
-        await Global.Fetch(Global.format(URL.USER_REPORT, user.idEncoded), 'post', ' ', 'text/plain');
+        await Global.Fetch(Global.format(URL.USER_REPORT, user.uuid), 'post', ' ', 'text/plain');
         setReported(true);
         setReportedUser(true);
         setAlertVisible(false);
@@ -143,7 +143,7 @@ const Profile = ({ route, navigation }) => {
   async function load(fetch = false) {
 
     if (fetch || !user) {
-      let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, user == null ? idEnc : user.idEncoded));
+      let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, user == null ? uuid : user.uuid));
       let data: ProfileResource = response.data;
       user = data.user
       setYou(data.currUserDto);
@@ -307,14 +307,14 @@ const Profile = ({ route, navigation }) => {
   }
 
   async function blockUser() {
-    await Global.Fetch(Global.format(URL.USER_BLOCK, user.idEncoded), 'post');
+    await Global.Fetch(Global.format(URL.USER_BLOCK, user.uuid), 'post');
     hideMenu();
     setBlocked(true);
     setRemoveUser(true);
   }
 
   async function unblockUser() {
-    await Global.Fetch(Global.format(URL.USER_UNBLOCK, user.idEncoded), 'post');
+    await Global.Fetch(Global.format(URL.USER_UNBLOCK, user.uuid), 'post');
     hideMenu();
     setBlocked(false);
   }
@@ -326,9 +326,9 @@ const Profile = ({ route, navigation }) => {
 
   async function likeUser(message?: string) {
     if (!message) {
-      await Global.Fetch(Global.format(URL.USER_LIKE, user.idEncoded), 'post');
+      await Global.Fetch(Global.format(URL.USER_LIKE, user.uuid), 'post');
     } else {
-      await Global.Fetch(Global.format(URL.USER_LIKE_MESSAGE, user.idEncoded, message), 'post');
+      await Global.Fetch(Global.format(URL.USER_LIKE_MESSAGE, user.uuid, message), 'post');
     }
     setLiked(true);
     setRemoveUser(true);
@@ -336,7 +336,7 @@ const Profile = ({ route, navigation }) => {
   }
 
   async function hideUser() {
-    await Global.Fetch(Global.format(URL.USER_HIDE, user.idEncoded), 'post');
+    await Global.Fetch(Global.format(URL.USER_HIDE, user.uuid), 'post');
     setHidden(true);
     setRemoveUser(true);
   }

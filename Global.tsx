@@ -79,10 +79,10 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
   }
 }
 
-export function nagivateProfile(user?: UserDto, idEnc?: string) {
+export function nagivateProfile(user?: UserDto, uuid?: string) {
   navigate("Profile", false, {
     user: user,
-    idEnc: idEnc
+    uuid: uuid
   });
 }
 
