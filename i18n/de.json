@@ -73,7 +73,7 @@
                 "title": "Beziehungsstatus",
                 "single": "Single",
                 "taken": "In einer Beziehung",
-                "open" : "Offene Beziehung",
+                "open": "Offene Beziehung",
                 "other": "Es ist kompliziert"
             },
             "none": "Keine"
