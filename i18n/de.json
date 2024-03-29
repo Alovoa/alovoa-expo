@@ -96,7 +96,12 @@
         "logout": "Ausloggen",
         "report": {
             "title": "Melden",
-            "subtitle": "Nutzer wegen Verstoßes gegen die Nutzungsbedingungen melden?"
+            "subtitle": "Nutzer wegen Verstoßes gegen die Nutzungsbedingungen melden",
+            "fake": "Fake, Scam oder Spamprofil",
+            "inappropriate": "Unangemessener Inhalt",
+            "minor": "Nuzter ist Minderjährig",
+            "illegal": "Illegale Inhalte",
+            "other": "Andere"
         },
         "active-state": {
             "1": "Online",

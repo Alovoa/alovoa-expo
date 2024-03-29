@@ -304,6 +304,7 @@ export type ProfileResource = {
   compatible: boolean;
   user: UserDto;
   currUserDto: UserDto;
+  isLegal: boolean,
 }
 
 export type SearchResource = {

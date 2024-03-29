@@ -95,7 +95,12 @@
         "logout": "Logout",
         "report": {
             "title": "Report",
-            "subtitle": "Report user for violating the Terms of Service?"
+            "subtitle": "Report user for violating the Terms of Service",
+            "fake": "Fake, scam or spam profile",
+            "inappropriate": "Inappropriate content",
+            "minor": "Underage",
+            "illegal": "Illegal content",
+            "other": "Other"
         },
         "active-state": {
             "1": "Online",
