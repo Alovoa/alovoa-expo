@@ -100,7 +100,7 @@ const Main = ({ route, navigation }) => {
           },
         }}
         options={{
-          tabBarLabel: <Text>{i18n.t('navigation.profile')}</Text>,
+          tabBarLabel: i18n.t('navigation.profile'),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={ICON_SIZE} />
           ),
@@ -116,7 +116,7 @@ const Main = ({ route, navigation }) => {
         }}
         options={{
           tabBarBadge: newMessage,
-          tabBarLabel: <Text>{i18n.t('navigation.chat')}</Text>,
+          tabBarLabel: i18n.t('navigation.chat'),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="chat" color={color} size={ICON_SIZE} />
           ),
@@ -131,7 +131,7 @@ const Main = ({ route, navigation }) => {
           },
         }}
         options={{
-          tabBarLabel: <Text>{i18n.t('navigation.search')}</Text>,
+          tabBarLabel: i18n.t('navigation.search'),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="magnify" color={color} size={ICON_SIZE} />
           ),
@@ -147,7 +147,7 @@ const Main = ({ route, navigation }) => {
         }}
         options={{
           tabBarBadge: newAlert,
-          tabBarLabel: <Text>{i18n.t('navigation.likes')}</Text>,
+          tabBarLabel: i18n.t('navigation.likes'),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="heart" color={color} size={ICON_SIZE} />
           ),
@@ -162,7 +162,7 @@ const Main = ({ route, navigation }) => {
           },
         }}
         options={{
-          tabBarLabel: <Text>{i18n.t('navigation.donate')}</Text>,
+          tabBarLabel: i18n.t('navigation.donate'),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="cash-multiple" color={color} size={ICON_SIZE} />
           ),
