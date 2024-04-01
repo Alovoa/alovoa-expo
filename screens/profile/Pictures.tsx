@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   FlatList
 } from "react-native";
+import { Buffer } from "buffer";
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
@@ -15,7 +16,7 @@ import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
 import { UserDto, UserImage, YourProfileResource } from "../../types";
-import { FAB, Button } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import Alert from "../../components/Alert";
 import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -28,9 +29,6 @@ const Pictures = ({ route, navigation }) => {
   const headerHeight = useHeaderHeight();
   const i18n = I18N.getI18n()
   const MAX_IMAGES = 4;
-  const IMAGE_HEADER = "data:image/webp;base64,";
-  const IMAGE_HEADER_JPEG = "data:image/jpeg;base64,";
-  const IMG_SIZE_MAX = 600;
 
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [profilePic, setProfilePic] = React.useState("");
@@ -88,53 +86,34 @@ const Pictures = ({ route, navigation }) => {
     setProfilePic(dto.profilePicture);
   }
 
-  async function pickImage(): Promise<string | null | undefined> {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-      base64: true,
-    });
-    if (!result.canceled) {
-      if (Platform.OS == 'android') {
-        let format = ImageManipulator.SaveFormat.JPEG;
-        const saveOptions: ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
-        const resizedImageData = await ImageManipulator.manipulateAsync(
-          result.assets[0].uri,
-          [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
-          saveOptions
-        );
-        return resizedImageData.base64;
-      } else {
-        return result.assets[0].base64;
-      }
-    } else {
-      return null;
-    }
-  };
-
   async function updateProfilePicture() {
-    let imageData: string | null | undefined = await pickImage();
+    let imageData: string | null | undefined = await Global.pickImage();
     if (imageData) {
-      let b64 = IMAGE_HEADER + imageData;
-      await Global.Fetch(URL.USER_UPDATE_PROFILE_PICTURE, 'post', b64, 'text/plain');
-      setProfilePic(b64);
+      const buffer = Buffer.from(imageData, "base64");
+      const blob = new Blob([buffer]);
+      var bodyFormData = new FormData();
+      bodyFormData.append('file', blob);
+      bodyFormData.append('mime', ImageManipulator.SaveFormat.JPEG);
+      console.log(bodyFormData)
+      await Global.Fetch(URL.USER_UPDATE_PROFILE_PICTURE, 'post', bodyFormData, 'multipart/form-data');
+      setProfilePic(profilePic + '?' + new Date());
       setChangedProfilePic(true);
-      user.profilePicture = b64;
       route.params.changed = true;
     }
   }
 
   async function addImage() {
-    let imageData: string | null | undefined = await pickImage();
+    let imageData: string | null | undefined = await Global.pickImage();
     if (imageData != null) {
-      let b64 = IMAGE_HEADER + imageData;
-      if (Platform.OS == 'ios' || Platform.OS == 'android') {
-        b64 = IMAGE_HEADER_JPEG + imageData;
-      }
-      const response = await Global.Fetch(URL.USER_ADD_IMAGE, 'post', b64, 'text/plain');
+      const buffer = Buffer.from(imageData, "base64");
+      const blob = new Blob([buffer]);
+      var bodyFormData = new FormData();
+      bodyFormData.append('file', blob);
+      bodyFormData.append('mime', ImageManipulator.SaveFormat.JPEG);
+      const response = await Global.Fetch(URL.USER_ADD_IMAGE, 'post', bodyFormData, 'multipart/form-data');
       const responseImages: Array<UserImage> = response.data;
+      console.log(images)
+      console.log(responseImages)
       setImages(responseImages);
       user.images = responseImages;
     }

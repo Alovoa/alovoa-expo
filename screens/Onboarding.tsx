@@ -9,6 +9,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText, FAB } from "react-native-paper";
+import { Buffer } from "buffer";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as ImagePicker from 'expo-image-picker';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
@@ -24,15 +25,9 @@ import { IntentionEnum, UserInterest, UserInterestAutocomplete, UserOnboarding, 
 import * as ImageManipulator from 'expo-image-manipulator';
 import InterestView from "../components/InterestView";
 
-const IMAGE_HEADER = "data:image/png;base64,";
+const IMAGE_HEADER = "data:image/jpeg;base64,";
 
 const i18n = I18N.getI18n()
-
-enum Interest {
-  One,
-  Two,
-  Three,
-}
 
 const Onboarding = () => {
 
@@ -122,26 +117,10 @@ const Onboarding = () => {
   }, []);
 
   async function pickImage() {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-      base64: true,
-    });
-    if (!result.canceled) {
-      let format = ImageManipulator.SaveFormat.JPEG;
-      if (Platform.OS == 'web') {
-        format = ImageManipulator.SaveFormat.WEBP;
-      }
-      const saveOptions: ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
-      const resizedImageData = await ImageManipulator.manipulateAsync(
-        result.assets[0].uri,
-        [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
-        saveOptions
-      );
-      setImage(resizedImageData.uri);
-      setImageB64(IMAGE_HEADER + resizedImageData.base64);
+    let b64 = await Global.pickImage();
+    if(b64) {
+      setImage(IMAGE_HEADER + b64);
+      setImageB64(b64);
     }
   };
 
@@ -166,7 +145,10 @@ const Onboarding = () => {
     }
 
     let dto = {} as UserOnboarding;
-    dto.profilePicture = imageB64;
+    const buffer = Buffer.from(imageB64, "base64");
+    const blob = new Blob([buffer]);
+    var bodyFormData = new FormData();
+    dto.profilePictureMime = ImageManipulator.SaveFormat.JPEG;
     let genders = []
     if (isGenderMaleEnabled) {
       genders.push(GENDER_MALE);
@@ -183,7 +165,9 @@ const Onboarding = () => {
     dto.intention = Number(intention);
 
     try {
-      await Global.Fetch(URL.USER_ONBOARDING, 'post', dto);
+      bodyFormData.append('file', blob);
+      bodyFormData.append('data', JSON.stringify(dto));
+      await Global.Fetch(URL.USER_ONBOARDING, 'post', bodyFormData, 'multipart/form-data');
       await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_MAIN);
       Global.loadPage(Global.INDEX_MAIN);
 

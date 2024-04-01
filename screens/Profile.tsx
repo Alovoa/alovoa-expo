@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
   ScrollView,
 } from "react-native";
-import { useTheme, Text, Chip, Card, Menu, Surface } from "react-native-paper";
+import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button } from "react-native-paper";
 import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage, UserPrompt } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
@@ -90,15 +90,24 @@ const Profile = ({ route, navigation }) => {
   const [kidsString, setKidsString] = React.useState<String>();
   const [drugsString, setDrugsString] = React.useState<String>();
   const [swiperImages, setSwiperImages] = React.useState<Array<string>>();
-  const [alertVisible, setAlertVisible] = React.useState(false);
+  const [reportModalVisible, setReportModalVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
   const [previousScreen, setPreviousScreen] = React.useState<String | null>();
   const [reportedUser, setReportedUser] = React.useState(false)
   const [removeUser, setRemoveUser] = React.useState(false);
+  const [isLegal, setIsLegal] = React.useState(false);
+  const [reportOption, setReportOption] = React.useState("");
   const showMenu = () => { setMenuVisible(true) };
   const hideMenu = () => { setMenuVisible(false) };
   const maxWidth = width < WIDESCREEN_HORIZONTAL_MAX ? width : WIDESCREEN_HORIZONTAL_MAX;
   const [complimentModalVisible, setComplimentModalVisible] = React.useState(false);
+  const reportOptions = [
+    "fake_scam_spam",
+    "inappropriate",
+    "minor",
+    "illegal_content",
+    "other"
+  ];
 
   const style = StyleSheet.create({
     image: {
@@ -113,22 +122,6 @@ const Profile = ({ route, navigation }) => {
       fontSize: 18
     }
   });
-
-  const alertButtons = [
-    {
-      text: i18n.t('cancel'),
-      onPress: () => { setAlertVisible(false); },
-    },
-    {
-      text: i18n.t('ok'),
-      onPress: async () => {
-        await Global.Fetch(Global.format(URL.USER_REPORT, user.uuid), 'post', ' ', 'text/plain');
-        setReported(true);
-        setReportedUser(true);
-        setAlertVisible(false);
-      }
-    }
-  ]
 
   function convertGenderText(text: string): Gender {
     switch (text) {
@@ -147,6 +140,7 @@ const Profile = ({ route, navigation }) => {
       let data: ProfileResource = response.data;
       user = data.user
       setYou(data.currUserDto);
+      setIsLegal(data.isLegal);
     }
 
     setLiked(user.likedByCurrentUser);
@@ -165,6 +159,7 @@ const Profile = ({ route, navigation }) => {
     setMaxAge(user.preferedMaxAge);
     setDescription(user.description);
     setGender(convertGenderText(user.gender.text));
+
     if (user.lastActiveState) {
       setLastActiveState(user.lastActiveState);
     }
@@ -321,7 +316,16 @@ const Profile = ({ route, navigation }) => {
 
   async function reportUser() {
     hideMenu();
-    setAlertVisible(true);
+    setReportModalVisible(true);
+  }
+
+  async function reportUserSend() {
+    if (reportOption) {
+      await Global.Fetch(Global.format(URL.USER_REPORT, user.uuid), 'post', reportOption, 'text/plain');
+      setReported(true);
+      setReportedUser(true);
+      setReportModalVisible(false);
+    }
   }
 
   async function likeUser(message?: string) {
@@ -339,6 +343,11 @@ const Profile = ({ route, navigation }) => {
     await Global.Fetch(Global.format(URL.USER_HIDE, user.uuid), 'post');
     setHidden(true);
     setRemoveUser(true);
+  }
+
+  const containerStyle = { backgroundColor: colors.surface, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
+  function calcMarginModal() {
+    return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
   }
 
   return (
@@ -495,7 +504,34 @@ const Profile = ({ route, navigation }) => {
             <View style={{ marginTop: 80 }}></View>
           </View>
         </View>
-        <Alert visible={alertVisible} setVisible={setAlertVisible} message={i18n.t('profile.report.subtitle')} buttons={alertButtons} />
+        <Portal>
+          <Modal visible={reportModalVisible} onDismiss={() => setReportModalVisible(false)} contentContainerStyle={containerStyle} >
+            <View>
+              <IconButton
+                style={{ alignSelf: 'flex-end' }}
+                icon="close"
+                size={20}
+                onPress={() => setReportModalVisible(false)}
+              />
+            </View>
+            <Text style={{ marginBottom: 12 }}>{i18n.t('profile.report.subtitle')}</Text>
+            <View style={{ padding: 12 }}>
+              <RadioButton.Group
+                value={reportOption}
+                onValueChange={(value: string) => setReportOption(value)}>
+                <RadioButton.Item label={i18n.t('profile.report.fake')} value={reportOptions[0]} style={{ flexDirection: 'row-reverse' }} />
+                <RadioButton.Item label={i18n.t('profile.report.inappropriate')} value={reportOptions[1]} style={{ flexDirection: 'row-reverse' }} />
+                {isLegal && <RadioButton.Item label={i18n.t('profile.report.minor')} value={reportOptions[2]} style={{ flexDirection: 'row-reverse' }} />}
+                <RadioButton.Item label={i18n.t('profile.report.illegal')} value={reportOptions[3]} style={{ flexDirection: 'row-reverse' }} />
+                <RadioButton.Item label={i18n.t('profile.report.other')} value={reportOptions[4]} style={{ flexDirection: 'row-reverse' }} />
+              </RadioButton.Group>
+              <View style={{ flexDirection: 'row-reverse' }}>
+                <Button onPress={reportUserSend}>{i18n.t('ok')}</Button>
+                <Button onPress={() => { setReportModalVisible(false) }}>{i18n.t('cancel')}</Button>
+              </View>
+            </View>
+          </Modal>
+        </Portal>
         <ComplimentModal profilePicture={profilePicture} name={name} age={age} onSend={likeUser} visible={complimentModalVisible} setVisible={setComplimentModalVisible}></ComplimentModal>
       </VerticalView>
     </View>

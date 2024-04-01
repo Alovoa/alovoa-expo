@@ -6,6 +6,9 @@ import * as URL from "./URL";
 import { createNavigationContainerRef, CommonActions } from '@react-navigation/native';
 import { ConversationDto, UserDto } from "./types";
 import Toast from 'react-native-toast-message';
+import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
+import { Platform } from 'react-native';
 
 export const FLAG_FDROID = true;
 
@@ -52,6 +55,8 @@ export const EMPTY_STRING = "...";
 export const MAX_INTERESTS = 10;
 export const MAX_MESSAGE_LENGTH = 255;
 export const MAX_DESCRIPTION_LENGTH = 255;
+
+const IMG_SIZE_MAX = 600;
 
 export async function Fetch(url: string = "", method: string = "get", data: any = undefined,
   contentType: string = "application/json"): Promise<AxiosResponse<any, any>> {
@@ -166,5 +171,32 @@ export function calcAge(dob: Date | undefined): number {
   let age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
   return age;
 }
+
+export async function pickImage(): Promise<string | null | undefined> {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 1,
+    base64: true,
+    exif: true,
+  });
+  if (!result.canceled) {
+    if (Platform.OS == 'android') {
+      let format = ImageManipulator.SaveFormat.JPEG;
+      const saveOptions: ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
+      const resizedImageData = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
+        saveOptions
+      );
+      return resizedImageData.base64;
+    } else {
+      return result.assets[0].base64;
+    }
+  } else {
+    return null;
+  }
+};
 
 export const format = (str: string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);
