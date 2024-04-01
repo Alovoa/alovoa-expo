@@ -92,7 +92,7 @@ export type UserInterestAutocomplete = {
 export type UserOnboarding = {
   intention: number
   preferredGenders: Array<number>
-  profilePicture: string
+  profilePictureMime: string;
   description: string
   interests: Array<string>
 }
@@ -118,7 +118,7 @@ export type UserInterest = {
 
 export type UserImage = {
   id: number;
-  content: string
+  content: string;
 }
 
 export type UserDto = {
@@ -130,7 +130,6 @@ export type UserDto = {
   gender: Gender;
   hasAudio: boolean;
   audio: string;
-  zodiac: string;
   units: number;
   preferedMinAge: number;
   preferedMaxAge: number;
@@ -152,8 +151,6 @@ export type UserDto = {
   likedByCurrentUser: boolean
   hiddenByCurrentUser: boolean
   numberReferred: number;
-  numberProfileViews: number;
-  numberSearches: number;
   compatible: boolean
   hasLocation: boolean;
   locationLatitude: number;
