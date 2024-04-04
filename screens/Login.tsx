@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme, Text, Button, Dialog, TextInput, IconButton } from "react-native-paper";
-import { View, Platform, StyleSheet, Image, useWindowDimensions } from "react-native";
+import { View, Platform, StyleSheet, Image, useWindowDimensions, Keyboard } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
@@ -30,7 +30,7 @@ const Login = () => {
 
   //vars for dialog
   const [visible, setVisible] = React.useState(false);
-  const showDialog = () => setVisible(true);
+  const showDialog = () => {setVisible(true); Keyboard.dismiss()};
   const hideDialog = () => setVisible(false);
   const { height, width } = useWindowDimensions();
 
@@ -167,7 +167,7 @@ const Login = () => {
       {!loading &&
         <View >
           <View style={{ minHeight: height }}>
-            <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 8 }} source={require('../assets/splash.png')} />
+            <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 24 }} source={require('../assets/splash.png')} />
 
             <Text style={{ textAlign: 'center', marginBottom: 48, marginTop: 24, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
 
@@ -187,12 +187,14 @@ const Login = () => {
               label={i18n.t('password')}
               value={password}
               onChangeText={text => setPassword(text)}
+              onSubmitEditing={emailSignInPress}
               autoCapitalize="none"
               secureTextEntry={true}
             />
 
-            <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={() => { emailSignInPress() }}
-            ><Text style={style.buttonText}>{i18n.t('auth.email')}</Text></Button>
+            <Button icon="email" mode="contained" style={{ marginTop: 18 }} onPress={emailSignInPress}>
+              <Text style={style.buttonText}>{i18n.t('auth.email')}</Text>
+            </Button>
 
             <View style={{ paddingBottom: 38 }}></View>
 
@@ -241,6 +243,7 @@ const Login = () => {
             label={i18n.t('captcha.placeholder')}
             value={captchaText}
             onChangeText={text => setCaptchaText(text)}
+            onSubmitEditing={loginEmail}
           />
         </Dialog.Content>
         <Dialog.Actions>

@@ -143,6 +143,7 @@ const Likes = ({ navigation }) => {
       </View>
       <VerticalView onRefresh={load} style={{ paddingBottom: topBarHeight + 24 }}>
         <FlatList
+          scrollEnabled={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
           numColumns={2}

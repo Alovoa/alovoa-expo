@@ -9,9 +9,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText, FAB } from "react-native-paper";
-import { Buffer } from "buffer";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import * as ImagePicker from 'expo-image-picker';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
 import SvgDescription from "../assets/onboarding/description.svg";
 import SvgGenders from "../assets/onboarding/genders.svg";
@@ -21,8 +19,7 @@ import SvgMatch from "../assets/onboarding/match.svg";
 import * as I18N from "../i18n";
 import * as URL from "../URL";
 import * as Global from "../Global";
-import { IntentionEnum, UserInterest, UserInterestAutocomplete, UserOnboarding, UserOnboardingResource } from "../types";
-import * as ImageManipulator from 'expo-image-manipulator';
+import { IntentionEnum, UserInterest, UserOnboarding, UserOnboardingResource } from "../types";
 import InterestView from "../components/InterestView";
 
 const IMAGE_HEADER = "data:image/jpeg;base64,";
@@ -43,7 +40,6 @@ const Onboarding = () => {
   const { height, width } = useWindowDimensions();
 
   const [image, setImage] = React.useState("");
-  const [imageB64, setImageB64] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [isLegal, setIsLegal] = React.useState(false);
   const [isGenderMaleEnabled, setIsGenderMaleEnabled] = React.useState(false);
@@ -117,10 +113,9 @@ const Onboarding = () => {
   }, []);
 
   async function pickImage() {
-    let b64 = await Global.pickImage();
-    if(b64) {
-      setImage(IMAGE_HEADER + b64);
-      setImageB64(b64);
+    let imageData = await Global.pickImage();
+    if (imageData) {
+      setImage(imageData.startsWith("file:") ? imageData : IMAGE_HEADER + imageData);
     }
   };
 
@@ -133,7 +128,7 @@ const Onboarding = () => {
   }
 
   async function submit() {
-    if (!imageB64) {
+    if (!image) {
       scrollRef?.current?.scrollToIndex({ index: PAGE_PROFILE_PIC });
       return;
     } else if (!description) {
@@ -144,11 +139,6 @@ const Onboarding = () => {
       return;
     }
 
-    let dto = {} as UserOnboarding;
-    const buffer = Buffer.from(imageB64, "base64");
-    const blob = new Blob([buffer]);
-    var bodyFormData = new FormData();
-    dto.profilePictureMime = ImageManipulator.SaveFormat.JPEG;
     let genders = []
     if (isGenderMaleEnabled) {
       genders.push(GENDER_MALE);
@@ -159,13 +149,15 @@ const Onboarding = () => {
     if (isGenderOtherEnabled) {
       genders.push(GENDER_OTHER);
     }
+
+    let dto = {} as UserOnboarding;
+    var bodyFormData = Global.buildFormData(image);
     dto.preferredGenders = genders;
     dto.description = description;
     dto.interests = interests.map(i => i.text);
     dto.intention = Number(intention);
 
     try {
-      bodyFormData.append('file', blob);
       bodyFormData.append('data', JSON.stringify(dto));
       await Global.Fetch(URL.USER_ONBOARDING, 'post', bodyFormData, 'multipart/form-data');
       await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_MAIN);
@@ -206,16 +198,17 @@ const Onboarding = () => {
               mode="outlined"
               onChangeText={(text) => setDescription(text)}
               placeholder={i18n.t('profile.onboarding.description-placeholder')}
-              maxLength={maxDescriptionLength}
+              maxLength={Global.MAX_DESCRIPTION_LENGTH}
               value={description}
               autoCorrect={false}
-              style={{ maxWidth: width, width: 320 }}
+              style={{ maxWidth: width, width: 320, paddingTop: 12 }}
             />
-            <View>
+            {
+              description.length > Global.MAX_DESCRIPTION_LENGTH/2 &&
               <HelperText type="info" style={{ textAlign: 'right' }} visible>
-                {description.length} / {maxDescriptionLength}
+                {description.length} / {Global.MAX_DESCRIPTION_LENGTH}
               </HelperText>
-            </View>
+            }
           </View>
         </KeyboardAvoidingView>
         <View style={[styles.view]}>

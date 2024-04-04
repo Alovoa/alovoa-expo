@@ -3,14 +3,10 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Platform,
   StyleSheet,
   useWindowDimensions,
   FlatList
 } from "react-native";
-import { Buffer } from "buffer";
-import * as ImagePicker from 'expo-image-picker';
-import * as ImageManipulator from 'expo-image-manipulator';
 import { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
@@ -89,14 +85,9 @@ const Pictures = ({ route, navigation }) => {
   async function updateProfilePicture() {
     let imageData: string | null | undefined = await Global.pickImage();
     if (imageData) {
-      const buffer = Buffer.from(imageData, "base64");
-      const blob = new Blob([buffer]);
-      var bodyFormData = new FormData();
-      bodyFormData.append('file', blob);
-      bodyFormData.append('mime', ImageManipulator.SaveFormat.JPEG);
-      console.log(bodyFormData)
+      const bodyFormData = Global.buildFormData(imageData);
       await Global.Fetch(URL.USER_UPDATE_PROFILE_PICTURE, 'post', bodyFormData, 'multipart/form-data');
-      setProfilePic(profilePic + '?' + new Date());
+      load();
       setChangedProfilePic(true);
       route.params.changed = true;
     }
@@ -105,15 +96,9 @@ const Pictures = ({ route, navigation }) => {
   async function addImage() {
     let imageData: string | null | undefined = await Global.pickImage();
     if (imageData != null) {
-      const buffer = Buffer.from(imageData, "base64");
-      const blob = new Blob([buffer]);
-      var bodyFormData = new FormData();
-      bodyFormData.append('file', blob);
-      bodyFormData.append('mime', ImageManipulator.SaveFormat.JPEG);
+      const bodyFormData = Global.buildFormData(imageData);
       const response = await Global.Fetch(URL.USER_ADD_IMAGE, 'post', bodyFormData, 'multipart/form-data');
       const responseImages: Array<UserImage> = response.data;
-      console.log(images)
-      console.log(responseImages)
       setImages(responseImages);
       user.images = responseImages;
     }
@@ -168,6 +153,7 @@ const Pictures = ({ route, navigation }) => {
         </View>
         <View style={{ flexDirection: 'row', width: '100%' }}>
           <FlatList
+            scrollEnabled={false}
             style={{ marginBottom: 4 }}
             numColumns={2}
             data={images}

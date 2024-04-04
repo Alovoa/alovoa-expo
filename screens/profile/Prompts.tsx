@@ -54,7 +54,6 @@ const Prompts = ({ route, navigation }) => {
   React.useEffect(() => {
     if (user.prompts) {
       let map = new Map(user.prompts.map((obj) => [obj.promptId, obj]));
-      console.log(map)
       setPrompts(map);
     }
   }, []);

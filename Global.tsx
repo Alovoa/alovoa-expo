@@ -9,6 +9,9 @@ import Toast from 'react-native-toast-message';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { Platform } from 'react-native';
+import mime from "mime";
+import FormData from "form-data";
+import { Buffer } from "buffer";
 
 export const FLAG_FDROID = true;
 
@@ -69,7 +72,7 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
         'Content-Type': contentType
       },
       data: data,
-    })
+    });
     if (res.request.responseURL == URL.AUTH_LOGIN) {
       let page = await GetStorage(STORAGE_PAGE);
       if (page != INDEX_LOGIN) {
@@ -80,6 +83,7 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
     }
     return res;
   } catch (e) {
+    console.log(e)
     throw e;
   }
 }
@@ -164,7 +168,7 @@ export function isPasswordSecure(password: string): boolean {
 }
 
 export function calcAge(dob: Date | undefined): number {
-  if(!dob) {
+  if (!dob) {
     return Number.MIN_VALUE;
   }
   let timeDiff = Math.abs(Date.now() - dob.getTime());
@@ -182,21 +186,39 @@ export async function pickImage(): Promise<string | null | undefined> {
     exif: true,
   });
   if (!result.canceled) {
-    if (Platform.OS == 'android') {
-      let format = ImageManipulator.SaveFormat.JPEG;
-      const saveOptions: ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
-      const resizedImageData = await ImageManipulator.manipulateAsync(
-        result.assets[0].uri,
-        [{ resize: { width: IMG_SIZE_MAX, height: IMG_SIZE_MAX } }],
-        saveOptions
-      );
-      return resizedImageData.base64;
+    let format = ImageManipulator.SaveFormat.JPEG;
+    const saveOptions: ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
+    const resizedImageData = await ImageManipulator.manipulateAsync(
+      result.assets[0].uri,
+      [{ resize: { width: IMG_SIZE_MAX, height: Platform.OS == 'android' ? IMG_SIZE_MAX : undefined } }],
+      saveOptions
+    );
+    if (Platform.OS != 'web') {
+      return Platform.select({ ios: resizedImageData.uri.replace('file://', ''), android: resizedImageData.uri })
     } else {
-      return result.assets[0].base64;
+      return resizedImageData.base64;
     }
   } else {
     return null;
   }
+};
+
+export function buildFormData(imageData: string): FormData {
+  const buffer = Buffer.from(imageData, "base64");
+  const blob = new Blob([buffer]);
+  const mimeType = mime.getType(imageData);
+  var bodyFormData = new FormData();
+  if (Platform.OS != "web") {
+    bodyFormData.append('file', {
+      name: imageData.split("/").pop(),
+      type: mimeType,
+      uri: imageData,
+    });
+  } else {
+    bodyFormData.append('file', blob);
+  }
+  bodyFormData.append('mime', mimeType);
+  return bodyFormData;
 };
 
 export const format = (str: string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);
