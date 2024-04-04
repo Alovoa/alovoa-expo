@@ -52,8 +52,8 @@ const YourProfile = ({ route, navigation }) => {
   ]
 
   React.useEffect(() => {
+    load();
     if (route.params) {
-      setProfilePic(user?.profilePicture);
       route.params.changed = false;
     }
   }, [navigation, route]);
@@ -72,9 +72,6 @@ const YourProfile = ({ route, navigation }) => {
     setNumReferred(data.user.numberReferred);
     setLoading(false);
   }
-  React.useEffect(() => {
-    load();
-  }, []);
 
   async function copyReferralCodeToClipboard() {
     await Clipboard.setStringAsync(uuid);
@@ -137,7 +134,7 @@ const YourProfile = ({ route, navigation }) => {
           <Text style={[styles.name]}>{name + ", " + age}</Text>
           <View style={{ marginBottom: 48, marginTop: 12 }}>
             <Card mode="contained" style={{ padding: 12 }}>
-              <Text style={{ textAlign: 'center' }}>{i18n.t('profile.donated') + ": " + String(user?.totalDonations) + ' €'}</Text>
+              <Text style={{ textAlign: 'center' }}>{i18n.t('profile.donated') + ": " + String(user ? user.totalDonations : 0) + ' €'}</Text>
             </Card>
           </View>
 
@@ -150,7 +147,7 @@ const YourProfile = ({ route, navigation }) => {
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SETTINGS, false, { data: data })}>{i18n.t('profile.screen.settings')}</Button>
 
-          {numReferred < MAX_REFERRALS && <View style={{flexDirection:"row", marginBottom: 8}}>
+          {numReferred < MAX_REFERRALS && <View style={{ flexDirection: "row", marginBottom: 8 }}>
             <Button icon="content-copy" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between', flexGrow: 1 }}
               style={{ flexGrow: 1 }} onPress={copyReferralCodeToClipboard}>
               {i18n.t('referral.title')}
