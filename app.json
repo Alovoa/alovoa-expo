@@ -75,7 +75,7 @@
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 28
+      "versionCode": 31
     },
     "web": {
       "bundler": "metro",

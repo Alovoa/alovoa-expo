@@ -1,0 +1,4 @@
+Improve reporting process of users
+More efficient handling of data
+General bug fixes and improvements
+Temporary move to the beta backend
