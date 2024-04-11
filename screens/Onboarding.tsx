@@ -40,6 +40,7 @@ const Onboarding = () => {
   const { height, width } = useWindowDimensions();
 
   const [image, setImage] = React.useState("");
+  const [imageData, setImageData] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [isLegal, setIsLegal] = React.useState(false);
   const [isGenderMaleEnabled, setIsGenderMaleEnabled] = React.useState(false);
@@ -50,8 +51,6 @@ const Onboarding = () => {
   const scrollRef = React.useRef<SwiperFlatList>(null);
   const svgHeight = 150;
   const svgWidth = 200;
-  const maxDescriptionLength = 200;
-  const IMG_SIZE_MAX = 600;
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: 'white' },
@@ -116,6 +115,7 @@ const Onboarding = () => {
     let imageData = await Global.pickImage();
     if (imageData) {
       setImage(imageData.startsWith("file:") ? imageData : IMAGE_HEADER + imageData);
+      setImageData(imageData);
     }
   };
 
@@ -151,7 +151,7 @@ const Onboarding = () => {
     }
 
     let dto = {} as UserOnboarding;
-    var bodyFormData = Global.buildFormData(image);
+    var bodyFormData = Global.buildFormData(imageData);
     dto.preferredGenders = genders;
     dto.description = description;
     dto.interests = interests.map(i => i.text);

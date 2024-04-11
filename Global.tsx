@@ -204,8 +204,7 @@ export async function pickImage(): Promise<string | null | undefined> {
 };
 
 export function buildFormData(imageData: string): FormData {
-  const buffer = Buffer.from(imageData, "base64");
-  const blob = new Blob([buffer]);
+  
   const mimeType = mime.getType(imageData);
   var bodyFormData = new FormData();
   if (Platform.OS != "web") {
@@ -215,6 +214,8 @@ export function buildFormData(imageData: string): FormData {
       uri: imageData,
     });
   } else {
+    const buffer = Buffer.from(imageData, "base64");
+    const blob = new Blob([buffer]);
     bodyFormData.append('file', blob);
   }
   bodyFormData.append('mime', mimeType);
