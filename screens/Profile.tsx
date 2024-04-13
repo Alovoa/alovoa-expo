@@ -449,8 +449,8 @@ const Profile = ({ route, navigation }) => {
                 {
                   prompts?.map((item, index) => (
                     <Surface key={index} style={{ padding: 12, width: 290, borderRadius: 12, marginRight: 8 }}>
-                      <Text style={{ fontSize: 16, marginBottom: 4 }}>{i18n.t('profile.prompts.' + (item.promptId))}</Text>
-                      <Text style={{ fontSize: 24 }}>{item.text}</Text>
+                      <Text style={{ fontSize: 14, marginBottom: 8 }}>{i18n.t('profile.prompts.' + (item.promptId))}</Text>
+                      <Text style={{ fontSize: 20 }}>{item.text}</Text>
                     </Surface>
                   ))
                 }

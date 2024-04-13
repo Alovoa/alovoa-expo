@@ -11,6 +11,7 @@ export const TOS = DOMAIN + "/tos"
 export const DONATE_LIST = DOMAIN + "/donate-list"
 
 export const AUTH_LOGIN = DOMAIN + "/login"
+export const AUTH_LOGOUT = DOMAIN + "/logout"
 export const AUTH_LOGIN_ERROR = DOMAIN + "/login?error"
 
 export const AUTH_GOOGLE = DOMAIN + "/oauth2/authorization/google"
