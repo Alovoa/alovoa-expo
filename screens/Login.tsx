@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, Text, Button, Dialog, TextInput, IconButton } from "react-native-paper";
+import { useTheme, Text, Button, Dialog, TextInput, IconButton, Divider } from "react-native-paper";
 import { View, Platform, StyleSheet, Image, useWindowDimensions, Keyboard } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
@@ -208,12 +208,16 @@ const Login = () => {
                 loginFacebook();
               }}
             ><Text style={style.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
+
+            <Divider style={{margin: height >= 800? 48 : 18}} />
+            <View>
+              <Button style={{backgroundColor: "#757575"}} onPress={() => {
+                Global.navigate("Register", false, { registerEmail: true });
+              }}><Text style={style.buttonText}>{i18n.t('register-email')}</Text></Button>
+            </View>
           </View>
 
           <View style={{ marginTop: 64 }}>
-            <Text style={style.link} onPress={() => {
-              Global.navigate("Register", false, { registerEmail: true });
-            }}>{i18n.t('register-email')}</Text>
             <Text style={style.link} onPress={() => {
               Global.navigate("PasswordReset", false, {});
             }}>{i18n.t('password-forget')}</Text>
