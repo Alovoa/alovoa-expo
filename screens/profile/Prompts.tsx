@@ -119,7 +119,7 @@ const Prompts = ({ route, navigation }) => {
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >
           <Text style={{ fontSize: 20, marginBottom: 8, paddingHorizontal: 16 }}>{modalTitle}</Text>
           <TextInput style={{ backgroundColor: colors.background }}
-            value={modalText}
+            defaultValue={modalText}
             maxLength={maxPromptTextLength}
             autoCorrect={false}
             onChangeText={text => setModalText(text)}>

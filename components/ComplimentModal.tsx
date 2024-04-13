@@ -44,7 +44,7 @@ const ComplimentModal = ({ visible = false, setVisible, name, age, profilePictur
           <KeyboardAvoidingView>
             <TextInput
               style={{ backgroundColor: colors.surface, height: 52 }}
-              value={text}
+              defaultValue={text}
               dense={true}
               onChangeText={text => setText(text)}
               onSubmitEditing={() => onSend(text, true)}
