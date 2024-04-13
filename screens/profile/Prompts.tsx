@@ -38,7 +38,7 @@ const Prompts = ({ route, navigation }) => {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const [alertVisible, setAlertVisible] = React.useState(false);
-  const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
+  const containerStyle = { backgroundColor: colors.elevation.level3, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
 
   const alertButtons = [
     {
@@ -118,7 +118,7 @@ const Prompts = ({ route, navigation }) => {
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >
           <Text style={{ fontSize: 20, marginBottom: 8, paddingHorizontal: 16 }}>{modalTitle}</Text>
-          <TextInput style={{ backgroundColor: colors.background }}
+          <TextInput style={{ backgroundColor: colors.elevation.level3 }}
             defaultValue={modalText}
             maxLength={maxPromptTextLength}
             autoCorrect={false}
@@ -142,8 +142,8 @@ const Prompts = ({ route, navigation }) => {
       <VerticalView>
         {[...prompts].map(([id, prompt]) => (
           <Surface key={id} style={{ padding: 24, borderRadius: 12, marginBottom: 8 }}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>{i18n.t('profile.prompts.' + id)}</Text>
-            <Text style={{ marginBottom: 12, fontSize: 24 }}>{prompt.text}</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 8 }}>{i18n.t('profile.prompts.' + id)}</Text>
+            <Text style={{ marginBottom: 12, fontSize: 20 }}>{prompt.text}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <IconButton
                 icon="delete"

@@ -12,7 +12,7 @@ const ComplimentModal = ({ visible = false, setVisible, name, age, profilePictur
   const i18n = I18N.getI18n();
   const { colors } = useTheme();
   const [text, setText] = React.useState("");
-  const containerStyle = { backgroundColor: colors.surface, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
+  const containerStyle = { backgroundColor: colors.elevation.level2, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
 
   function calcMarginModal() {
     return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
@@ -43,7 +43,7 @@ const ComplimentModal = ({ visible = false, setVisible, name, age, profilePictur
         <View>
           <KeyboardAvoidingView>
             <TextInput
-              style={{ backgroundColor: colors.surface, height: 52 }}
+              style={{ backgroundColor: colors.elevation.level2, height: 52 }}
               defaultValue={text}
               dense={true}
               onChangeText={text => setText(text)}
