@@ -79,6 +79,7 @@ const YourProfile = ({ route, navigation }) => {
   };
 
   async function logout() {
+    Global.Fetch(URL.AUTH_LOGOUT);
     Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_LOGIN);
     Global.navigate("Login");
   }
