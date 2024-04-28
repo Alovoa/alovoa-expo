@@ -64,9 +64,9 @@ const CardItem = ({
   }, []);
 
   async function showToolTip() {
-    if(index == 0) {
+    if (index == 0) {
       let toolTip = await Global.GetStorage(Global.STORAGE_SEARCH_LIKE_TOOLTIP);
-      if(!toolTip) {
+      if (!toolTip) {
         setShowLikeTooltip(true);
         Global.SetStorage(Global.STORAGE_SEARCH_LIKE_TOOLTIP, "1");
       }
@@ -74,7 +74,7 @@ const CardItem = ({
   }
 
   function onLikeUser() {
-    if(onLikePressed) {
+    if (onLikePressed) {
       onLikePressed();
     }
     setShowLikeTooltip(false);
@@ -108,7 +108,7 @@ const CardItem = ({
 
       {/* COMMON INTERESTS */}{user.commonInterests.length > 0 &&
         <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)} style={styles.marginBottom4}>
-          <View style={{ alignSelf: 'stretch', paddingBottom: 8,}}>
+          <View style={{ alignSelf: 'stretch', paddingBottom: 8, }}>
             <Text style={styles.marginBottom4}>{i18n.t('profile.interests-common')}</Text>
             <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
               {
@@ -122,13 +122,13 @@ const CardItem = ({
       }
 
       {/* DESCRIPTION */}
-      {user.description && (
-        <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1, width: '100%' }}>
-          <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)}>
+      {
+        <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)}>
+          <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1, width: '100%' }}>
             <Text style={styles.descriptionCardItem}>{user.description}</Text>
-          </TouchableWithoutFeedback>
-        </ScrollView>
-      )}
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      }
 
       {/* ACTIONS */}
       <View style={styles.actionsCardItem}>
