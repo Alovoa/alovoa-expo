@@ -65,6 +65,7 @@ const Profile = ({ route, navigation }) => {
   const { height, width } = useWindowDimensions();
 
   const [compatible, setCompatible] = React.useState(false);
+  const [isSelf, setIsSelf] = React.useState(false);
   const [liked, setLiked] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   const [you, setYou] = React.useState<UserDto>();
@@ -138,7 +139,7 @@ const Profile = ({ route, navigation }) => {
     if (fetch || !user) {
       let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, user == null ? uuid : user.uuid));
       let data: ProfileResource = response.data;
-      user = data.user
+      user = data.user;
       setYou(data.currUserDto);
       setIsLegal(data.isLegal);
     }
@@ -159,6 +160,9 @@ const Profile = ({ route, navigation }) => {
     setMaxAge(user.preferedMaxAge);
     setDescription(user.description);
     setGender(convertGenderText(user.gender.text));
+    if (user.email) {
+      setIsSelf(true);
+    }
 
     if (user.lastActiveState) {
       setLastActiveState(user.lastActiveState);
@@ -352,32 +356,38 @@ const Profile = ({ route, navigation }) => {
 
   return (
     <View style={{ height: height }}>
-      <View style={{ zIndex: 1, marginBottom: 16, position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
-            disabled={hidden || liked}>
-            <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, !compatible || liked ? { opacity: 0.5 } : {}, { backgroundColor: colors.primary }]} onPress={() => setComplimentModalVisible(true)} disabled={!compatible || liked}>
-            <Icon name="heart" color={LIKE_ACTIONS} size={25} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 4 }]}>
-        <Pressable onPress={navigation.goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View>
-            <Menu
-              visible={menuVisible}
-              onDismiss={hideMenu}
-              anchor={<Pressable style={{ padding: 8 }} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} /></Pressable>}>
-              {!blocked && <Menu.Item leadingIcon="block-helper" onPress={blockUser} title={i18n.t('profile.block')} />}
-              {blocked && <Menu.Item leadingIcon="block-helper" onPress={unblockUser} title={i18n.t('profile.unblock')} />}
-              {!reported && <Menu.Item leadingIcon="flag" onPress={reportUser} title={i18n.t('profile.report.title')} />}
-            </Menu>
+      {!isSelf &&
+        <View style={{ zIndex: 1, marginBottom: 16, position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
+              disabled={hidden || liked}>
+              <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, !compatible || liked ? { opacity: 0.5 } : {}, { backgroundColor: colors.primary }]} onPress={() => setComplimentModalVisible(true)} disabled={!compatible || liked}>
+              <Icon name="heart" color={LIKE_ACTIONS} size={25} />
+            </TouchableOpacity>
           </View>
         </View>
+      }
+
+      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 4 }]}>
+        <Pressable onPress={navigation.goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
+        {!isSelf &&
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View>
+              <Menu
+                visible={menuVisible}
+                onDismiss={hideMenu}
+                anchor={<Pressable style={{ padding: 8 }} onPress={() => showMenu()}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} /></Pressable>}>
+                {!blocked && <Menu.Item leadingIcon="block-helper" onPress={blockUser} title={i18n.t('profile.block')} />}
+                {blocked && <Menu.Item leadingIcon="block-helper" onPress={unblockUser} title={i18n.t('profile.unblock')} />}
+                {!reported && <Menu.Item leadingIcon="flag" onPress={reportUser} title={i18n.t('profile.report.title')} />}
+              </Menu>
+            </View>
+          </View>
+        }
       </View>
+
       <VerticalView style={{ padding: 0 }} onRefresh={load}>
         <View>
           <SwiperFlatList

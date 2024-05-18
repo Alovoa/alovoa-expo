@@ -131,7 +131,7 @@ const YourProfile = ({ route, navigation }) => {
       <VerticalView onRefresh={load} style={{ padding: 0 }}>
         <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
         <View style={{ paddingTop: 32 }}></View>
-        <Pressable onPress={() => Global.navigate(Global.SCREEN_PROFILE_PICTURES, false, { user: user })}>
+        <Pressable onPress={() => Global.nagivateProfile(user)}>
           <Image source={{ uri: profilePic }}
             style={{ width: '50%', maxWidth: 500, borderRadius: 500, height: 'auto', aspectRatio: 1, alignSelf: 'center' }}>
           </Image>
