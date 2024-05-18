@@ -117,7 +117,7 @@ const Likes = ({ navigation }) => {
   }
 
   return (
-    <View style={{ height: height - NAVIGATION_BAR_HEIGHT }}>
+    <View style={{ height: height }}>
       {loading &&
         <View style={{ zIndex: 1, height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />

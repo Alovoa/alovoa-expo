@@ -12,6 +12,7 @@ import { Platform } from 'react-native';
 import mime from "mime";
 import FormData from "form-data";
 import { Buffer } from "buffer";
+import { cloneDeep } from 'lodash';
 
 export const FLAG_FDROID = true;
 
@@ -204,7 +205,7 @@ export async function pickImage(): Promise<string | null | undefined> {
 };
 
 export function buildFormData(imageData: string): FormData {
-  
+
   const mimeType = mime.getType(imageData);
   var bodyFormData = new FormData();
   if (Platform.OS != "web") {
@@ -221,5 +222,14 @@ export function buildFormData(imageData: string): FormData {
   bodyFormData.append('mime', mimeType);
   return bodyFormData;
 };
+
+export function shuffleArray(array: Array<any>): Array<any> {
+  const copy: Array<any> = cloneDeep(array);
+  for (let i = copy.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
 
 export const format = (str: string, ...args: any[]) => args.reduce((s, v) => s.replace('%s', v), str);

@@ -4,7 +4,8 @@ import {
   Platform,
   useWindowDimensions,
   Image,
-  Linking
+  Linking,
+  Pressable
 } from "react-native";
 import { Text, Button, Card, ActivityIndicator, IconButton, useTheme } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
@@ -19,6 +20,7 @@ import * as Sharing from 'expo-sharing';
 import VerticalView from "../components/VerticalView";
 import * as Clipboard from 'expo-clipboard';
 import Alert from "../components/Alert";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
@@ -129,7 +131,11 @@ const YourProfile = ({ route, navigation }) => {
       <VerticalView onRefresh={load} style={{ padding: 0 }}>
         <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
         <View style={{ paddingTop: 32 }}></View>
-        <Image source={{ uri: profilePic }} style={{ width: '50%', maxWidth: 500, borderRadius: 500, height: 'auto', aspectRatio: 1, alignSelf: 'center' }}></Image>
+        <Pressable onPress={() => Global.nagivateProfile(user)}>
+          <Image source={{ uri: profilePic }}
+            style={{ width: '50%', maxWidth: 500, borderRadius: 500, height: 'auto', aspectRatio: 1, alignSelf: 'center' }}>
+          </Image>
+        </Pressable>
 
         <View style={[styles.containerProfileItem, { marginTop: 12, minHeight: height }]}>
           <Text style={[styles.name]}>{name + ", " + age}</Text>
