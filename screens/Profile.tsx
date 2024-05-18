@@ -172,12 +172,12 @@ const Profile = ({ route, navigation }) => {
       prefGenders.push(convertGenderText(user.preferedGenders[i].text));
     }
     setPreferredGenders(prefGenders);
-    setInterests(user.interests);
-    setPrompts(user.prompts);
+    setInterests(Global.shuffleArray(user.interests));
+    setPrompts(Global.shuffleArray(user.prompts));
     var swiperImageData: Array<string> = [];
     swiperImageData.push(user.profilePicture);
     if (user.images) {
-      user.images.forEach(function (image) {
+      Global.shuffleArray(user.images).forEach(function (image) {
         swiperImageData.push(image.content);
       });
     }
