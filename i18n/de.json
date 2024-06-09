@@ -159,6 +159,16 @@
             "18": "Mein nutzloses Talent",
             "19": "Ich, aber in Emojis",
             "20": "Swipe nach rechts, wenn"
+        },
+        "verification": {
+            "info-1": "Verifiziere dein Profil, um zu beweisen, dass es wirklich du bist",
+            "info-2": "Andere Personen können auch über deine Authentizität abstimmen",
+            "info-3": "Lade ein Bild von dir hoch, auf dem du eine handgeschriebene Notiz mit diesen Zeichen hältst",
+            "info-4": "Stell sicher, dass dein Gesicht vollständig sichtbar ist",
+            "info-5": "Wenn du dein Profilbild änderst musst du dich erneut verifizieren",
+            "verified-no": "Nicht verifiziert",
+            "verified-by-users": "Durch Abstimmung verifiziert",
+            "verified-by-admin": "Verifiziert"
         }
     },
     "cancel": "Abbrechen",

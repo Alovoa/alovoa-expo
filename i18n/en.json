@@ -158,6 +158,16 @@
             "18": "My useless talent",
             "19": "Me, but in emojis",
             "20": "Swipe right if"
+        },
+        "verification": {
+            "info-1": "Verify your profile to prove that you're real",
+            "info-2": "Other people can also vote on your authenticity",
+            "info-3": "Upload a picture of yourself holding a handwritten note containing these characters",
+            "info-4": "Make sure your face is completely visible",
+            "info-5": "You will have to verify again if you change your profile picture",
+            "verified-no": "Not verified",
+            "verified-by-users": "Verified by votes",
+            "verified-by-admin": "Verified"
         }
     },
     "cancel": "Cancel",

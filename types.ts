@@ -158,6 +158,7 @@ export type UserDto = {
   lastActiveState: number;
   userSettings: UserSettings;
   prompts: Array<UserPrompt>;
+  verificationPicture: UserDtoVerificationPicture;
 }
 
 export type UserSettings = {
@@ -333,6 +334,18 @@ export type UserOnboardingResource = {
 export type UserUsersResource = {
   users: Array<UserDto>;
   user: UserDto;
+}
+
+export type UserDtoVerificationPicture = {
+  verifiedByAdmin: boolean;
+  verifiedByUsers: boolean;
+  votedByCurrentUser: boolean;
+  hasPicture: boolean;
+  data: string;
+  text: string;
+  uuid: string;
+  userYes: number;
+  userNo: number;
 }
 
 export type AlertModel = {
