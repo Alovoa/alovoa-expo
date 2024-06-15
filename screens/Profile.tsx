@@ -67,6 +67,7 @@ const Profile = ({ route, navigation }) => {
   const [compatible, setCompatible] = React.useState(false);
   const [isSelf, setIsSelf] = React.useState(false);
   const [liked, setLiked] = React.useState(false);
+  const [likesMe, setLikesMe] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   const [you, setYou] = React.useState<UserDto>();
   const [name, setName] = React.useState("");
@@ -144,6 +145,7 @@ const Profile = ({ route, navigation }) => {
       setIsLegal(data.isLegal);
     }
 
+    setLikesMe(user.likesCurrentUser);
     setLiked(user.likedByCurrentUser);
     setHidden(user.hiddenByCurrentUser);
     setCompatible(user.compatible);
@@ -349,6 +351,14 @@ const Profile = ({ route, navigation }) => {
     setRemoveUser(true);
   }
 
+  async function heartPressed() {
+    if(likesMe) {
+      likeUser();
+    } else {
+      setComplimentModalVisible(true);
+    }
+  }
+
   const containerStyle = { backgroundColor: colors.surface, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 };
   function calcMarginModal() {
     return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
@@ -363,7 +373,7 @@ const Profile = ({ route, navigation }) => {
               disabled={hidden || liked}>
               <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, !compatible || liked ? { opacity: 0.5 } : {}, { backgroundColor: colors.primary }]} onPress={() => setComplimentModalVisible(true)} disabled={!compatible || liked}>
+            <TouchableOpacity style={[styles.button, !compatible || liked ? { opacity: 0.5 } : {}, { backgroundColor: colors.primary }]} onPress={heartPressed} disabled={!compatible || liked}>
               <Icon name="heart" color={LIKE_ACTIONS} size={25} />
             </TouchableOpacity>
           </View>

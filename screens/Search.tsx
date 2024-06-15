@@ -215,8 +215,15 @@ const Search = ({ route, navigation }) => {
   }
 
   async function onLikePressed() {
-    setComplimentModalVisible(true);
-    setIgnoreRightSwipe(true);
+    if (index < results.length) {
+      let likesMe = results[index].likesCurrentUser;
+      if(!likesMe) {
+        setComplimentModalVisible(true);
+        setIgnoreRightSwipe(true);
+      } else {
+        likeUser(undefined, false);
+      }
+    }
   }
 
   function onComplimentModalDismiss() {

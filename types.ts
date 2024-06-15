@@ -146,10 +146,11 @@ export type UserDto = {
   totalDonations: number;
   numBlockedByUsers: number;
   numReports: number;
-  blockedByCurrentUser: boolean
-  reportedByCurrentUser: boolean
-  likedByCurrentUser: boolean
-  hiddenByCurrentUser: boolean
+  blockedByCurrentUser: boolean;
+  reportedByCurrentUser: boolean;
+  likesCurrentUser: boolean;
+  likedByCurrentUser: boolean;
+  hiddenByCurrentUser: boolean;
   numberReferred: number;
   compatible: boolean
   hasLocation: boolean;
