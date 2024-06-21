@@ -1,6 +1,6 @@
-//export const DOMAIN : string = "http://localhost:8080"
+export const DOMAIN : string = "http://localhost:8080"
 //export const DOMAIN : string = "https://beta.alovoa.com"
-export const DOMAIN : string = "https://alovoa.com"
+//export const DOMAIN : string = "https://alovoa.com"
 
 export const PATH_BOOLEAN_TRUE = "true"
 export const PATH_BOOLEAN_FALSE = "false"
@@ -12,7 +12,7 @@ export const DONATE_LIST = DOMAIN + "/donate-list"
 
 export const AUTH_LOGIN = DOMAIN + "/login"
 export const AUTH_LOGOUT = DOMAIN + "/logout"
-export const AUTH_LOGIN_ERROR = DOMAIN + "/login?error"
+export const AUTH_LOGIN_ERROR = DOMAIN + "/?auth-error"
 
 export const AUTH_GOOGLE = DOMAIN + "/oauth2/authorization/google"
 export const AUTH_FACEBOOK = DOMAIN + "/oauth2/authorization/facebook"
