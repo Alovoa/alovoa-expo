@@ -78,4 +78,8 @@ export const USER_PROMPT_UPDATE = DOMAIN + "/user/prompt/update"
 export const USER_SETTING_EMAIL_LIKE = DOMAIN + "/user/settings/emailLike/update/%s"
 export const USER_SETTING_EMAIL_CHAT = DOMAIN + "/user/settings/emailChat/update/%s"
 
+export const USER_UPDATE_VERIFICATION_PICTURE = DOMAIN + "/user/update/verification-picture"
+export const USER_UPDATE_VERIFICATION_PICTURE_UPVOTE = DOMAIN + "/user/update/verification-picture/upvote/%s"
+export const USER_UPDATE_VERIFICATION_PICTURE_DOWNVOTE = DOMAIN + "/user/update/verification-picture/downvote/%s"
+
 export const MESSAGE_SEND = DOMAIN + "/message/send/%s";

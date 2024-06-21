@@ -146,10 +146,11 @@ export type UserDto = {
   totalDonations: number;
   numBlockedByUsers: number;
   numReports: number;
-  blockedByCurrentUser: boolean
-  reportedByCurrentUser: boolean
-  likedByCurrentUser: boolean
-  hiddenByCurrentUser: boolean
+  blockedByCurrentUser: boolean;
+  reportedByCurrentUser: boolean;
+  likesCurrentUser: boolean;
+  likedByCurrentUser: boolean;
+  hiddenByCurrentUser: boolean;
   numberReferred: number;
   compatible: boolean
   hasLocation: boolean;
@@ -158,6 +159,7 @@ export type UserDto = {
   lastActiveState: number;
   userSettings: UserSettings;
   prompts: Array<UserPrompt>;
+  verificationPicture: UserDtoVerificationPicture;
 }
 
 export type UserSettings = {
@@ -333,6 +335,18 @@ export type UserOnboardingResource = {
 export type UserUsersResource = {
   users: Array<UserDto>;
   user: UserDto;
+}
+
+export type UserDtoVerificationPicture = {
+  verifiedByAdmin: boolean;
+  verifiedByUsers: boolean;
+  votedByCurrentUser: boolean;
+  hasPicture: boolean;
+  data: string;
+  text: string;
+  uuid: string;
+  userYes: number;
+  userNo: number;
 }
 
 export type AlertModel = {
