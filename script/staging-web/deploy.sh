@@ -5,5 +5,5 @@ PORT=10082
 
 cd ../..
 fuser -k $PORT/tcp
-nohup npx serve dist --single -l $PORT --ssl-cert $CERT_PATH --ssl-pass "ssl-key" -c "../serve.json" &> /dev/null &
+npx serve dist --single -l $PORT --ssl-cert $CERT_PATH --ssl-pass "ssl-key" -c "../serve.json"
 
