@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView, StyleSheet, useWindowDimensions, TouchableWithoutFeedback, Platform } from "react-native";
+import { View, Image, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView, StyleSheet, useWindowDimensions, TouchableWithoutFeedback, Platform, Pressable } from "react-native";
 import { useTheme, Text, Chip } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT } from "../types";
@@ -86,49 +86,48 @@ const CardItem = ({
 
   return (
     <View style={[styles.containerCardItem, { paddingHorizontal: 20, backgroundColor: colors.surface, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - cardPadding, width: width - cardPadding }]}>
-      {/* IMAGE */}
-      <TouchableOpacity onPress={() => Global.nagivateProfile(user)}>
-        <Image source={{ uri: user.profilePicture ? user.profilePicture : undefined }} style={style.image} />
-      </TouchableOpacity>
 
-      {/* NAME */}
-      <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingTop: 4, paddingBottom: 10, }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text></View>
-            {user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ paddingLeft: 6 }} />}
-          </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: colors?.secondary }]} />
-            <Text>{user.distanceToUser}</Text>
-            <Text>{unitsImperial ? ' mi' : ' km'}</Text>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+      <Pressable style={{flexGrow: 1}} onPress={() => Global.nagivateProfile(user)}>
+        {/* IMAGE */}
+        <TouchableOpacity onPress={() => Global.nagivateProfile(user)}>
+          <Image source={{ uri: user.profilePicture ? user.profilePicture : undefined }} style={style.image} />
+        </TouchableOpacity>
 
-      {/* COMMON INTERESTS */}{user.commonInterests.length > 0 &&
-        <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)} style={styles.marginBottom4}>
-          <View style={{ alignSelf: 'stretch', paddingBottom: 8, }}>
-            <Text style={styles.marginBottom4}>{i18n.t('profile.interests-common')}</Text>
-            <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-              {
-                user.commonInterests?.map((item, index) => (
-                  <Chip key={index} style={[styles.marginRight4, styles.marginBottom4]}><Text>{item.text}</Text></Chip>
-                ))
-              }
+        {/* NAME */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', paddingTop: 4, paddingBottom: 10, }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row' }}><Text style={nameStyle}>{user.firstName + ", " + user.age}</Text></View>
+              {user.lastActiveState <= 2 && <MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ paddingLeft: 6 }} />}
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: colors?.secondary }]} />
+              <Text>{user.distanceToUser}</Text>
+              <Text>{unitsImperial ? ' mi' : ' km'}</Text>
             </View>
           </View>
-        </TouchableWithoutFeedback>
-      }
 
-      {/* DESCRIPTION */}
-      {
-        <TouchableWithoutFeedback onPress={() => Global.nagivateProfile(user)}>
-          <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1, width: '100%' }}>
+        {/* COMMON INTERESTS */}{user.commonInterests.length > 0 &&
+          <View style={styles.marginBottom4}>
+            <View style={{ alignSelf: 'stretch', paddingBottom: 8, }}>
+              <Text style={styles.marginBottom4}>{i18n.t('profile.interests-common')}</Text>
+              <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                {
+                  user.commonInterests?.map((item, index) => (
+                    <Chip key={index} style={[styles.marginRight4, styles.marginBottom4]}><Text>{item.text}</Text></Chip>
+                  ))
+                }
+              </View>
+            </View>
+          </View>
+        }
+
+        {/* DESCRIPTION */}
+        {
+          <View style={{ }}>
             <Text style={styles.descriptionCardItem}>{user.description}</Text>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      }
+          </View>
+        }
+      </Pressable>
 
       {/* ACTIONS */}
       <View style={styles.actionsCardItem}>
