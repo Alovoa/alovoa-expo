@@ -21,6 +21,7 @@ import {
 } from '@expo-google-fonts/montserrat';
 import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types";
 import { enGB, en, de, registerTranslation } from 'react-native-paper-dates'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();
@@ -159,139 +160,141 @@ export default function App() {
   }
 
   return (
-    <PaperProvider theme={{ ...theme, fonts }}>
-      <StatusBar style={isDarkTheme ? "light" : "dark"} />
-      <NavigationContainer theme={themeNavigation} ref={Global.navigationRef}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Login"
-            options={{
-              headerShown: false, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={Login}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Register"
-            options={{
-              title: i18n.t('register.title'),
-              headerShown: true, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={Register}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Onboarding"
-            options={{
-              headerShown: false, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={Onboarding}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Main"
-            options={{
-              headerShown: false, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={Main}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Profile"
-            options={{
-              headerShown: false, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={Profile}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="MessageDetail"
-            options={{
-              headerShown: true, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={MessageDetail}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Profile.Pictures"
-            options={{
-              title: i18n.t('profile.screen.pictures'),
-              headerShown: true, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={Pictures}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Profile.ProfileSettings"
-            options={{
-              title: i18n.t('profile.screen.profile'),
-              headerShown: true, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={ProfileSettings}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Profile.SearchSettings"
-            options={{
-              title: i18n.t('profile.screen.search'),
-              headerShown: true, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={SearchSettings}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Profile.Settings"
-            options={{
-              title: i18n.t('profile.screen.settings'),
-              headerShown: true, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={Settings}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="PasswordReset"
-            options={{
-              headerShown: true, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={PasswordReset}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Profile.Prompts"
-            options={{
-              title: i18n.t('profile.screen.prompts'),
-              headerShown: true, animationEnabled: true, transitionSpec: {
-                open: config,
-                close: config,
-              },
-            }}
-            component={Prompts}
-          ></Stack.Screen>
-        </Stack.Navigator>
-      </NavigationContainer>
-      <Toast config={toastConfig} />
-    </PaperProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <PaperProvider theme={{ ...theme, fonts }}>
+        <StatusBar style={isDarkTheme ? "light" : "dark"} />
+        <NavigationContainer theme={themeNavigation} ref={Global.navigationRef}>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Login"
+              options={{
+                headerShown: false, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={Login}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Register"
+              options={{
+                title: i18n.t('register.title'),
+                headerShown: true, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={Register}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Onboarding"
+              options={{
+                headerShown: false, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={Onboarding}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Main"
+              options={{
+                headerShown: false, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={Main}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Profile"
+              options={{
+                headerShown: false, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={Profile}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="MessageDetail"
+              options={{
+                headerShown: true, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={MessageDetail}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Profile.Pictures"
+              options={{
+                title: i18n.t('profile.screen.pictures'),
+                headerShown: true, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={Pictures}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Profile.ProfileSettings"
+              options={{
+                title: i18n.t('profile.screen.profile'),
+                headerShown: true, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={ProfileSettings}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Profile.SearchSettings"
+              options={{
+                title: i18n.t('profile.screen.search'),
+                headerShown: true, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={SearchSettings}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Profile.Settings"
+              options={{
+                title: i18n.t('profile.screen.settings'),
+                headerShown: true, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={Settings}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="PasswordReset"
+              options={{
+                headerShown: true, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={PasswordReset}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Profile.Prompts"
+              options={{
+                title: i18n.t('profile.screen.prompts'),
+                headerShown: true, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={Prompts}
+            ></Stack.Screen>
+          </Stack.Navigator>
+        </NavigationContainer>
+        <Toast config={toastConfig} />
+      </PaperProvider>
+    </GestureHandlerRootView>
   );
 }

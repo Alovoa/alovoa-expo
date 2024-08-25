@@ -238,6 +238,11 @@
   resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.22.5.tgz#dd7ee3735e8a313b9f7b05a773d892e88e6d7295"
   integrity sha512-uLls06UVKgFG9QD4OeFYLEGteMIAa5kpTPcFL28yuCIIzsf6ZyKZMllKVOCZFhiZ5ptnwX4mtKdWCBE/uT4amg==
 
+"@babel/helper-plugin-utils@^7.24.7":
+  version "7.24.8"
+  resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.24.8.tgz#94ee67e8ec0e5d44ea7baeb51e571bd26af07878"
+  integrity sha512-FFWx5142D8h2Mgr/iPVGH5G7w6jDn4jUSpZTyDnQO0Yn7Ks2Kuz6Pci8H6MPCoUJegd/UZQ3tAvfLCxQSnWWwg==
+
 "@babel/helper-remap-async-to-generator@^7.18.9", "@babel/helper-remap-async-to-generator@^7.22.5":
   version "7.22.5"
   resolved "https://registry.yarnpkg.com/@babel/helper-remap-async-to-generator/-/helper-remap-async-to-generator-7.22.5.tgz#14a38141a7bf2165ad38da61d61cf27b43015da2"
@@ -899,11 +904,11 @@
     "@babel/plugin-syntax-numeric-separator" "^7.10.4"
 
 "@babel/plugin-transform-object-assign@^7.16.7":
-  version "7.22.5"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-object-assign/-/plugin-transform-object-assign-7.22.5.tgz#290c1b9555dcea48bb2c29ad94237777600d04f9"
-  integrity sha512-iDhx9ARkXq4vhZ2CYOSnQXkmxkDgosLi3J8Z17mKz7LyzthtkdVchLD7WZ3aXeCuvJDOW3+1I5TpJmwIbF9MKQ==
+  version "7.24.7"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-object-assign/-/plugin-transform-object-assign-7.24.7.tgz#9d2cc7ee1482bd208fcc51974ca4f7649662c899"
+  integrity sha512-DOzAi77P9jSyPijHS7Z8vH0wLRcZH6wWxuIZgLAiy8FWOkcKMJmnyHjy2JM94k6A0QxlA/hlLh+R9T3GEryjNQ==
   dependencies:
-    "@babel/helper-plugin-utils" "^7.22.5"
+    "@babel/helper-plugin-utils" "^7.24.7"
 
 "@babel/plugin-transform-object-rest-spread@^7.22.5":
   version "7.22.5"
@@ -1879,6 +1884,11 @@
   dependencies:
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
+
+"@likashefqet/react-native-image-zoom@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@likashefqet/react-native-image-zoom/-/react-native-image-zoom-4.0.0.tgz#03559afaa9e7f3daad9e766defb192112def7f0a"
+  integrity sha512-QG6NzjpmhtU94SQwR5EqAL3ebMhCDoqBpIkObeYe5PjlEr7Emx2119uBoRiBeZLKUXbiePGbV0XvmsGO/YVwBA==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -3844,13 +3854,13 @@ expo-asset@~8.10.1:
     path-browserify "^1.0.0"
     url-parse "^1.5.9"
 
-expo-build-properties@~0.8.3:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.8.3.tgz#fbfa156e9619bebda71c66af9a26ebc3490b2365"
-  integrity sha512-kEDDuAadHqJTkvCGK4fXYHVrePiJO1DjyW95AicmwuGwQvGJydYFbuoauf9ybAU+4UH4arhbce8gHI3ZpIj3Jw==
+expo-build-properties@^0.12.5:
+  version "0.12.5"
+  resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.12.5.tgz#4d6232389f00c846ba37ca5df2c0b5527c2d94ca"
+  integrity sha512-donC1le0PYfLKCPKRMGQoixuWuwDWCngzXSoQXUPsgHTDHQUKr8aw+lcWkTwZcItgNovcnk784I0dyfYDcxybA==
   dependencies:
     ajv "^8.11.0"
-    semver "^7.5.3"
+    semver "^7.6.0"
 
 expo-clipboard@^5.0.1:
   version "5.0.1"
@@ -6489,7 +6499,7 @@ react-native-file-access@^2.5.2:
   resolved "https://registry.yarnpkg.com/react-native-file-access/-/react-native-file-access-2.6.0.tgz#d5d007f9360299a3baea9e048641cfe6b8074b09"
   integrity sha512-kZwWIFb4AtaPh+B7EHZBJEiEFdY1FztcF8X35WepdfjDUul0Dk2+CR3Lp45gZ8/nchDthq0iWBhnWr5ffo3+Nw==
 
-react-native-gesture-handler@^2.12.1:
+react-native-gesture-handler@~2.12.0:
   version "2.12.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.12.1.tgz#f11a99fb95169810c6886fad5efa01a17fd81660"
   integrity sha512-deqh36bw82CFUV9EC4tTo2PP1i9HfCOORGS3Zmv71UYhEZEHkzZv18IZNPB+2Awzj45vLIidZxGYGFxHlDSQ5A==
@@ -6974,6 +6984,11 @@ semver@^7.5.2, semver@^7.5.3:
   integrity sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==
   dependencies:
     lru-cache "^6.0.0"
+
+semver@^7.6.0:
+  version "7.6.3"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
+  integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
 
 send@0.18.0, send@^0.18.0:
   version "0.18.0"

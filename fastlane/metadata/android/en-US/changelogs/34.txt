@@ -1,0 +1,2 @@
+You can now double tap on images of a person on their profile to zoom in.
+General UI improvements and bug fixes

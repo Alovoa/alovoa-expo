@@ -14,6 +14,8 @@ import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { ImageZoom } from '@likashefqet/react-native-image-zoom';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import styles, {
   DISLIKE_ACTIONS,
   LIKE_ACTIONS,
@@ -23,10 +25,8 @@ import styles, {
 } from "../assets/styles";
 import Icon from "../components/Icon";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import Alert from "../components/Alert";
 import VerticalView from "../components/VerticalView";
 import ComplimentModal from "../components/ComplimentModal";
-
 
 const i18n = I18N.getI18n()
 
@@ -91,7 +91,7 @@ const Profile = ({ route, navigation }) => {
   const [relationshipString, setRelationshipString] = React.useState<String>();
   const [kidsString, setKidsString] = React.useState<String>();
   const [drugsString, setDrugsString] = React.useState<String>();
-  const [swiperImages, setSwiperImages] = React.useState<Array<string>>();
+  const [swiperImages, setSwiperImages] = React.useState<Array<string>>([]);
   const [reportModalVisible, setReportModalVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
   const [previousScreen, setPreviousScreen] = React.useState<String | null>();
@@ -352,7 +352,7 @@ const Profile = ({ route, navigation }) => {
   }
 
   async function heartPressed() {
-    if(likesMe) {
+    if (likesMe) {
       likeUser();
     } else {
       setComplimentModalVisible(true);
@@ -402,7 +402,7 @@ const Profile = ({ route, navigation }) => {
         <View>
           <SwiperFlatList
             autoplay
-            autoplayDelay={5}
+            autoplayDelay={10}
             paginationActiveColor={colors?.primary}
             paginationDefaultColor={colors?.secondary}
             paginationStyleItem={{ height: 8, width: 8, marginHorizontal: 20 }}
@@ -415,7 +415,15 @@ const Profile = ({ route, navigation }) => {
           >
             {
               swiperImages?.map((image, index) => (
-                <Image key={index} source={{ uri: image ? image : undefined }} style={[style.image]} />
+                <View>
+                <ImageZoom key={index}
+                  uri={image}
+                  style={[style.image]}
+                  maxScale={3}
+                  doubleTapScale={2}
+                  isDoubleTapEnabled
+                />
+                </View>
               ))
             }
           </SwiperFlatList>
@@ -524,6 +532,7 @@ const Profile = ({ route, navigation }) => {
             <View style={{ marginTop: 80 }}></View>
           </View>
         </View>
+
         <Portal>
           <Modal visible={reportModalVisible} onDismiss={() => setReportModalVisible(false)} contentContainerStyle={containerStyle} >
             <View>
