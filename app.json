@@ -16,7 +16,17 @@
       ],
       "./plugins/setClearTextTrafficFalse",
       "expo-localization",
-      "expo-build-properties"
+      "expo-build-properties",
+      {
+        "android": {
+          "compileSdkVersion": 34,
+          "targetSdkVersion": 34,
+          "buildToolsVersion": "34.0.0"
+        },
+        "ios": {
+          "deploymentTarget": "13.4"
+        }
+      }
     ],
     "splash": {
       "image": "./assets/splash.png",
@@ -58,16 +68,20 @@
         "monochromeImage": "./assets/monochrome-icon.png",
         "backgroundColor": "#ec407a"
       },
-      "intentFilters": [{
-        "action": "VIEW",
-        "data": [{
-          "scheme": "alovoa"
-        }],
-        "category": [
-          "BROWSABLE",
-          "DEFAULT"
-        ]
-      }],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "alovoa"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
       "package": "com.alovoa.expo",
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
