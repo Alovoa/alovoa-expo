@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alovoa",
     "slug": "alovoa-expo",
-    "version": "1.11.0",
+    "version": "1.12.0",
     "scheme": "alovoa",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -16,17 +16,19 @@
       ],
       "./plugins/setClearTextTrafficFalse",
       "expo-localization",
-      "expo-build-properties",
-      {
-        "android": {
-          "compileSdkVersion": 34,
-          "targetSdkVersion": 34,
-          "buildToolsVersion": "34.0.0"
-        },
-        "ios": {
-          "deploymentTarget": "13.4"
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "13.4"
+          }
         }
-      }
+      ]
     ],
     "splash": {
       "image": "./assets/splash.png",
@@ -89,7 +91,7 @@
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 33
+      "versionCode": 34
     },
     "web": {
       "bundler": "metro",
