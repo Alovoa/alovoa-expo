@@ -21,7 +21,7 @@
     "@react-navigation/stack": "6.3.17",
     "axios": "1.6.8",
     "expo": "49.0.23",
-    "expo-build-properties": "~0.8.3",
+    "expo-build-properties": "^0.12.5",
     "expo-clipboard": "^5.0.1",
     "expo-device": "5.4.0",
     "expo-file-system": "15.4.5",
