@@ -272,6 +272,7 @@ export type YourProfileResource = {
   interestMaxSize: number,
   referralsLeft: number;
   showIntention: boolean
+  "settings.ignoreIntention": boolean;
 }
 
 export type DonateResource = {
@@ -382,3 +383,9 @@ export const GenderMap = new Map<number, string>([
   [GenderEnum.FEMALE, "female"],
   [GenderEnum.OTHER, "other"],
 ]);
+
+export enum IntentionE {
+  MEET = 1,
+  DATE = 2,
+  SEX = 3
+}

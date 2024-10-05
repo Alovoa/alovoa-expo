@@ -4,7 +4,7 @@ import {
   useWindowDimensions
 } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { YourProfileResource, UserDto, GenderEnum, UserIntention, Gender, } from "../../types";
+import { YourProfileResource, UserDto, GenderEnum, UserIntention, Gender, IntentionE } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -17,12 +17,6 @@ const i18n = I18N.getI18n()
 const MIN_AGE = 18;
 const MAX_AGE = 100;
 
-enum Intention {
-  MEET = 1,
-  DATE = 2,
-  SEX = 3
-}
-
 const SearchSettings = ({ route, navigation }) => {
 
   var data: YourProfileResource = route.params.data;
@@ -31,11 +25,12 @@ const SearchSettings = ({ route, navigation }) => {
   const headerHeight = useHeaderHeight();
 
   const [isLegal, setIsLegal] = React.useState(false);
-  const [intention, setIntention] = React.useState(Intention.MEET);
+  const [intention, setIntention] = React.useState(IntentionE.MEET);
   const [showIntention, setShowIntention] = React.useState(false);
   const [minAge, setMinAge] = React.useState(MIN_AGE)
   const [maxAge, setMaxAge] = React.useState(MAX_AGE)
   const [preferredGenders, setPreferredGenders] = React.useState(Array<number>);
+  const [settingsIgnoreIntention, setSettingsIgnoreIntention] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [changed, setChanged] = React.useState(false);
 
@@ -54,6 +49,7 @@ const SearchSettings = ({ route, navigation }) => {
     setMaxAge(data.user.preferedMaxAge);
     setIntention(data.user.intention.id);
     setPreferredGenders(data.user.preferedGenders.map(item => item.id));
+    setSettingsIgnoreIntention(data["settings.ignoreIntention"]);
     setLoading(false);
   }
 
@@ -64,7 +60,7 @@ const SearchSettings = ({ route, navigation }) => {
   }, []);
 
   React.useEffect(() => {
-    if(changed) {
+    if (changed) {
       Global.SetStorage(Global.STORAGE_RELOAD_SEARCH, "true");
     }
   }, [changed]);
@@ -119,18 +115,20 @@ const SearchSettings = ({ route, navigation }) => {
       }
 
       <VerticalView onRefresh={load}>
-        <View>
-          <View>
-            <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
-              data={[{ id: Intention.MEET, title: i18n.t('profile.intention.meet') },
-              { id: Intention.DATE, title: i18n.t('profile.intention.date') },
-              { id: Intention.SEX, title: i18n.t('profile.intention.sex') }]}
-              selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
-                updateIntention(id);
-              }}></SelectModal>
-          </View>
+        <View style={{ gap: 12 }}>
+          {!settingsIgnoreIntention &&
+            <View>
+              <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
+                data={[{ id: IntentionE.MEET, title: i18n.t('profile.intention.meet') },
+                { id: IntentionE.DATE, title: i18n.t('profile.intention.date') },
+                { id: IntentionE.SEX, title: i18n.t('profile.intention.sex') }]}
+                selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
+                  updateIntention(id);
+                }}></SelectModal>
+            </View>
+          }
 
-          <View style={{ marginTop: 12 }}>
+          <View>
             <SelectModal disabled={false} multi={true} minItems={1} title={i18n.t('profile.gender')} data={[{ id: GenderEnum.MALE, title: i18n.t('gender.male') },
             { id: GenderEnum.FEMALE, title: i18n.t('gender.female') }, { id: GenderEnum.OTHER, title: i18n.t('gender.other') }]}
               selected={preferredGenders} onValueChanged={function (id: number, checked: boolean): void {
@@ -139,7 +137,7 @@ const SearchSettings = ({ route, navigation }) => {
           </View>
 
           {isLegal &&
-            <View style={{ marginTop: 12 }}>
+            <View>
               <AgeRangeSliderModal title={i18n.t('profile.preferred-age-range')} titleLower={i18n.t('profile.age.min')} titleUpper={i18n.t('profile.age.max')}
                 valueLower={minAge} valueUpper={maxAge} onValueLowerChanged={updateMinAge} onValueUpperChanged={updateMaxAge}></AgeRangeSliderModal>
             </View>

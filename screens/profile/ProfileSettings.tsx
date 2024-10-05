@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { TextInput, Button, HelperText, ActivityIndicator } from "react-native-paper";
 import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
-import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo } from "../../types";
+import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -24,7 +24,8 @@ const DESCRIPTION_HELPERTEXT_LIMIT = 200;
 
 const ProfileSettings = ({ route, navigation }) => {
 
-  var user: UserDto = route.params.user;
+  var data: YourProfileResource = route.params.data;
+  var user: UserDto = data.user;
 
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
@@ -35,6 +36,9 @@ const ProfileSettings = ({ route, navigation }) => {
   const [miscInfoDrugs, setMiscInfoDrugs] = React.useState(Array<number>);
   const [miscInfoRelationship, setMiscInfoRelationship] = React.useState(Array<number>);
   const [loading, setLoading] = React.useState(false);
+  const [settingsIgnoreIntention, setSettingsIgnoreIntention] = React.useState(false);
+  const [intention, setIntention] = React.useState(IntentionE.MEET);
+  const [showIntention, setShowIntention] = React.useState(false);
 
   const descriptionRef = React.useRef(description);
   const debounceDescriptionHandler = React.useCallback(debounce(updateDescription, 1500), []);
@@ -54,6 +58,9 @@ const ProfileSettings = ({ route, navigation }) => {
       .map(item => item.value));
     setMiscInfoRelationship(user.miscInfos.filter(item => item.value <= UserMiscInfoEnum.RELATIONSHIP_OTHER && item.value >= UserMiscInfoEnum.RELATIONSHIP_SINGLE)
       .map(item => item.value));
+    setIntention(user.intention.id)
+    setShowIntention(data.showIntention);
+    setSettingsIgnoreIntention(data["settings.ignoreIntention"]);
     setLoading(false);
   }
 
@@ -62,6 +69,16 @@ const ProfileSettings = ({ route, navigation }) => {
       loadUser(user);
     }
   }, []);
+
+  async function updateIntention(num: number) {
+    await Global.Fetch(Global.format(URL.USER_UPDATE_INTENTION, String(num)), 'post');
+    Global.ShowToast(i18n.t('profile.intention-toast'));
+    setIntention(num);
+    setShowIntention(false);
+
+    let intention: UserIntention = { id: num, text: "" };
+    data.user.intention = intention;
+  }
 
   async function updateDescription() {
     if (descriptionRef.current) {
@@ -88,12 +105,12 @@ const ProfileSettings = ({ route, navigation }) => {
         </View>
       }
 
-      <VerticalView style={{ padding: 0 }}>
+      <VerticalView style={{ padding: 0, gap: 12 }}>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -54 }}>
           <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Pictures", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
         </View>
 
-        <View style={[styles.containerProfileItem, { marginTop: 32 }]}>
+        <View style={[styles.containerProfileItem, { marginTop: 20, gap: 12 }]}>
           <View>
             <TextInput style={[styles.textInputAlign, { height: 128 }]}
               label={i18n.t('profile.onboarding.description')}
@@ -106,21 +123,31 @@ const ProfileSettings = ({ route, navigation }) => {
               maxLength={Global.MAX_DESCRIPTION_LENGTH}
               value={description}
               autoCorrect={false}
-            /> 
-            { description.length >= DESCRIPTION_HELPERTEXT_LIMIT &&
-            <View>
-              <HelperText type="info" style={{ textAlign: 'right' }} visible>
-                {description.length} / {Global.MAX_DESCRIPTION_LENGTH}
-              </HelperText>
-            </View>
+            />
+            {description.length >= DESCRIPTION_HELPERTEXT_LIMIT &&
+              <View>
+                <HelperText type="info" style={{ textAlign: 'right' }} visible>
+                  {description.length} / {Global.MAX_DESCRIPTION_LENGTH}
+                </HelperText>
+              </View>
             }
           </View>
 
-          <View style={{ marginTop: 12 }}>
-            <InterestModal user={user} data={interests} />
-          </View>
+          <InterestModal user={user} data={interests} />
 
-          <View style={{ marginTop: 12 }}>
+          {settingsIgnoreIntention &&
+            <View>
+              <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
+                data={[{ id: IntentionE.MEET, title: i18n.t('profile.intention.meet') },
+                { id: IntentionE.DATE, title: i18n.t('profile.intention.date') },
+                { id: IntentionE.SEX, title: i18n.t('profile.intention.sex') }]}
+                selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
+                  updateIntention(id);
+                }}></SelectModal>
+            </View>
+          }
+
+          <View>
             <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
               data={[{ id: UserMiscInfoEnum.RELATIONSHIP_SINGLE, title: i18n.t('profile.misc-info.relationship.single') },
               { id: UserMiscInfoEnum.RELATIONSHIP_TAKEN, title: i18n.t('profile.misc-info.relationship.taken') },
@@ -131,7 +158,7 @@ const ProfileSettings = ({ route, navigation }) => {
               }}></SelectModal>
           </View>
 
-          <View style={{ marginTop: 12 }}>
+          <View>
             <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
               data={[{ id: UserMiscInfoEnum.KIDS_NO, title: i18n.t('profile.misc-info.kids.no') },
               { id: UserMiscInfoEnum.KIDS_YES, title: i18n.t('profile.misc-info.kids.yes') }]}
@@ -140,7 +167,7 @@ const ProfileSettings = ({ route, navigation }) => {
               }}></SelectModal>
           </View>
 
-          <View style={{ marginTop: 12 }}>
+          <View>
             <SelectModal disabled={false} multi={true} minItems={0} title={i18n.t('profile.misc-info.drugs.title')}
               data={[{ id: UserMiscInfoEnum.DRUGS_ALCOHOL, title: i18n.t('profile.misc-info.drugs.alcohol') },
               { id: UserMiscInfoEnum.DRUGS_TOBACCO, title: i18n.t('profile.misc-info.drugs.tobacco') },
@@ -150,7 +177,8 @@ const ProfileSettings = ({ route, navigation }) => {
                 updateMiscInfo(id, checked, true);
               }}></SelectModal>
           </View>
-          <View style={{ marginTop: 12 }}>
+
+          <View>
             <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.prompts.title')}</Text>
             <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
               style={{ alignSelf: 'stretch' }} onPress={navigatePrompts}>{i18n.t('profile.prompts.subtitle')}</Button>
