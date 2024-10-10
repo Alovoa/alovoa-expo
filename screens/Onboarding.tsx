@@ -16,6 +16,7 @@ import SvgGenders from "../assets/onboarding/genders.svg";
 import SvgIntention from "../assets/onboarding/intention.svg";
 import SvgInterests from "../assets/onboarding/interests.svg";
 import SvgMatch from "../assets/onboarding/match.svg";
+import SvgNotification from "../assets/onboarding/notification.svg";
 import * as I18N from "../i18n";
 import * as URL from "../URL";
 import * as Global from "../Global";
@@ -35,6 +36,10 @@ const Onboarding = () => {
   const PAGE_PROFILE_PIC = 0;
   const PAGE_DESCRIPTION = 1;
   const PAGE_PREF_GENDER = 2;
+  const PAGE_PREF_INTENTION = 3;
+  const PAGE_PREF_INTERESTS = 4;
+  const PAGE_PREF_NOTIFICATION = 5;
+  const PAGE_FINAL = 6;
 
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -46,6 +51,8 @@ const Onboarding = () => {
   const [isGenderMaleEnabled, setIsGenderMaleEnabled] = React.useState(false);
   const [isGenderFemaleEnabled, setIsGenderFemaleEnabled] = React.useState(false);
   const [isGenderOtherEnabled, setIsGenderOtherEnabled] = React.useState(false);
+  const [isNotificationLike, setIsNotificationLike] = React.useState(false);
+  const [isNotificationChat, setIsNotificationChat] = React.useState(false);
   const [intention, setIntention] = React.useState("1");
   const [interests, setInterests] = React.useState(Array<UserInterest>);
   const scrollRef = React.useRef<SwiperFlatList>(null);
@@ -122,9 +129,18 @@ const Onboarding = () => {
   const toggleGenderMaleSwitch = () => setIsGenderMaleEnabled(previousState => !previousState);
   const toggleGenderFemaleSwitch = () => setIsGenderFemaleEnabled(previousState => !previousState);
   const toggleGenderOtherSwitch = () => setIsGenderOtherEnabled(previousState => !previousState);
+  const toggleNotificationLikeSwitch = () => setIsNotificationLike(previousState => !previousState);
+  const toggleNotificationChatSwitch = () => setIsNotificationChat(previousState => !previousState);
 
   function moveFlatlistNext() {
-    scrollRef?.current?.scrollToIndex({ index: scrollRef?.current?.getCurrentIndex() + 1, animated: true });
+    let position = scrollRef?.current?.getCurrentIndex();
+    if (position != undefined) {
+      if (position < PAGE_FINAL) {
+        scrollRef?.current?.scrollToIndex({ index: position + 1, animated: true });
+      } else {
+        submit();
+      }
+    }
   }
 
   async function submit() {
@@ -156,6 +172,8 @@ const Onboarding = () => {
     dto.description = description;
     dto.interests = interests.map(i => i.text);
     dto.intention = Number(intention);
+    dto.notificationLike = isNotificationLike;
+    dto.notificationChat = isNotificationLike;
 
     try {
       bodyFormData.append('data', JSON.stringify(dto));
@@ -204,7 +222,7 @@ const Onboarding = () => {
               style={{ maxWidth: width, width: 320, paddingTop: 12 }}
             />
             {
-              description.length > Global.MAX_DESCRIPTION_LENGTH/2 &&
+              description.length > Global.MAX_DESCRIPTION_LENGTH / 2 &&
               <HelperText type="info" style={{ textAlign: 'right' }} visible>
                 {description.length} / {Global.MAX_DESCRIPTION_LENGTH}
               </HelperText>
@@ -246,6 +264,20 @@ const Onboarding = () => {
           <SvgInterests style={styles.svg} height={svgHeight} width={svgWidth} />
           <InterestView data={interests} setInterestsExternal={setInterests}></InterestView>
           <Text style={styles.warning}>{i18n.t('optional')}</Text>
+        </View>
+        <View style={[styles.view]}>
+          <SvgNotification style={styles.svg} height={svgHeight} width={svgWidth} />
+          <Text style={styles.title}>{i18n.t('profile.settings.notification')}</Text>
+          <View>
+            <View style={{ flexDirection: "row" }}>
+              <Checkbox.Item onPress={toggleNotificationLikeSwitch} position="leading"
+                status={isNotificationLike ? 'checked' : 'unchecked'} label={i18n.t('profile.settings.email.like')} />
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <Checkbox.Item onPress={toggleNotificationChatSwitch} position="leading"
+                status={isNotificationChat ? 'checked' : 'unchecked'} label={i18n.t('profile.settings.email.chat')} />
+            </View>
+          </View>
         </View>
         <View style={[styles.view]}>
           <SvgMatch style={styles.svg} height={svgHeight} width={svgWidth} />
