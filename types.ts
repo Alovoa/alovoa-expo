@@ -90,11 +90,13 @@ export type UserInterestAutocomplete = {
 }
 
 export type UserOnboarding = {
-  intention: number
-  preferredGenders: Array<number>
+  intention: number;
+  preferredGenders: Array<number>;
   profilePictureMime: string;
-  description: string
-  interests: Array<string>
+  description: string;
+  interests: Array<string>;
+  notificationLike: boolean;
+  notificationChat: boolean;
 }
 
 export type Gender = {
