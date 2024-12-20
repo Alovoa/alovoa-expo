@@ -29,10 +29,7 @@ export const API_RESOURCE_USER_ONBOARDING = DOMAIN + "/api/v1/resource/user/onbo
 export const API_RESOURCE_USER_BLOCKED = DOMAIN + "/api/v1/resource/blocked-users"
 export const API_RESOURCE_USER_LIKED = DOMAIN + "/api/v1/resource/liked-users"
 export const API_RESOURCE_USER_HIDDEN = DOMAIN + "/api/v1/resource/disliked-users"
-
-//lat: number, lon: number, distance: number, sort: number
-export const API_SEARCH_USERS = DOMAIN + "/api/v1/search/users/%s/%s/%s/%s"
-export const API_SEARCH_USERS_DEFAULT = DOMAIN + "/api/v1/search/users/default"
+export const API_SEARCH = DOMAIN + "/api/v1/search/users"
 export const API_DONATE_RECENT = DOMAIN + "/api/v1/donate/recent/%s";
 export const API_MESSAGE_UPDATE = DOMAIN + "/api/v1/message/update/%s/%s";
 

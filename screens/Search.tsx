@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { View, RefreshControl, ScrollView, useWindowDimensions } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
-import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
+import { UserDto, SearchResource, SearchDto, UnitsEnum, SearchParams, SearchParamsSortE } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
-import { ActivityIndicator, Text, Button } from "react-native-paper";
+import { ActivityIndicator, Text, Button, IconButton } from "react-native-paper";
 import CardItemSearch from "../components/CardItemSearch";
 import { useFocusEffect } from "@react-navigation/native";
 import ComplimentModal from "../components/ComplimentModal";
 import SearchEmpty from "../assets/images/search-empty.svg";
-import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
+import styles, { WIDESCREEN_HORIZONTAL_MAX, STATUS_BAR_HEIGHT } from "../assets/styles";
 
 const i18n = I18N.getI18n()
 
@@ -47,6 +47,9 @@ const Search = ({ route, navigation }) => {
   const svgHeight = 150;
   const svgWidth = 200;
 
+  const MIN_AGE = 16;
+  const MAX_AGE = 100;
+
   const { height, width } = useWindowDimensions();
 
   const LOCATION_TIMEOUT_SHORT = 5000;
@@ -55,7 +58,7 @@ const Search = ({ route, navigation }) => {
   const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
     return Promise.race([
       promise,
-      new Promise((resolve, reject) => setTimeout(() => reject(), timeoutMs)),
+      new Promise((_resolve, reject) => setTimeout(() => reject(), timeoutMs)),
     ]);
   }
 
@@ -167,7 +170,22 @@ const Search = ({ route, navigation }) => {
     }
 
     if (lat != undefined && lon != undefined) {
-      let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
+      let params: SearchParams = {
+        distance: 50,
+        showOutsideParameters: true,
+        sort: SearchParamsSortE.DEFAULT,
+        latitude: lat,
+        longitude: lon,
+        //preferredMinAge: user?.preferedMinAge ? user.preferedMinAge : MIN_AGE,
+        //preferredMaxAge: user?.preferedMaxAge ? user.preferedMaxAge : MAX_AGE,
+        miscInfos: [],
+        intentions: [],
+        interests: [],
+        preferredGenderIds: user ? user.preferedGenders.map(gender => gender.id) : []
+      };
+
+      console.log(params)
+      let response = await Global.Fetch(URL.API_SEARCH, 'post', params);
       let result: SearchDto = response.data;
       let incompatible = result.incompatible;
       if (!incompatible && result.users) {
@@ -233,11 +251,29 @@ const Search = ({ route, navigation }) => {
   return (
     <ScrollView contentContainerStyle={{ flex: 1 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
+        
       {loading &&
         <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
         </View>
       }
+
+      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 4, justifyContent: 'flex-end' }]}>
+        { width > WIDESCREEN_HORIZONTAL_MAX &&
+          <Button icon="cog" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
+                      style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})}>
+                        {i18n.t('profile.screen.search')}</Button>
+        }
+        { width <= WIDESCREEN_HORIZONTAL_MAX &&
+        <IconButton
+          icon="cog"
+          mode="contained"
+          size={20}
+          onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})}
+        />
+        }
+      </View>
+
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
           <CardStack

@@ -19,11 +19,12 @@ const MAX_AGE = 100;
 
 const SearchSettings = ({ route, navigation }) => {
 
-  var data: YourProfileResource = route.params.data;
+  //var data: YourProfileResource = route.params.data;
 
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
 
+  const [data, setData] = React.useState<YourProfileResource>(route.params.data);
   const [isLegal, setIsLegal] = React.useState(false);
   const [intention, setIntention] = React.useState(IntentionE.MEET);
   const [showIntention, setShowIntention] = React.useState(false);
@@ -38,11 +39,13 @@ const SearchSettings = ({ route, navigation }) => {
     setLoading(true);
     let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
     let data: YourProfileResource = response.data;
+    setData(data)
     loadUser(data);
   }
 
   async function loadUser(data: YourProfileResource) {
     setLoading(true);
+    console.log(data.user)
     setShowIntention(data.showIntention);
     setIsLegal(data.user.age >= MIN_AGE);
     setMinAge(data.user.preferedMinAge);
@@ -54,8 +57,12 @@ const SearchSettings = ({ route, navigation }) => {
   }
 
   React.useEffect(() => {
+    console.log("TEST")
+    console.log(data)
     if (data) {
       loadUser(data);
+    } else {
+      load();
     }
   }, []);
 

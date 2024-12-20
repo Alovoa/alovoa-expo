@@ -49,6 +49,7 @@ export const SCREEN_DONATE = "Donate"
 export const SCREEN_PROFILE_PICTURES = "Profile.Pictures"
 export const SCREEN_PROFILE_PROFILESETTINGS = "Profile.ProfileSettings"
 export const SCREEN_PROFILE_SEARCHSETTINGS = "Profile.SearchSettings"
+export const SCREEN_PROFILE_SEARCHPARAMETERS = "Profile.SearchParameters"
 export const SCREEN_PROFILE_SETTINGS = "Profile.Settings"
 
 export const DEFAULT_COLOR_PRIMARY = '#EC407A';

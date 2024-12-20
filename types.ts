@@ -391,3 +391,26 @@ export enum IntentionE {
   DATE = 2,
   SEX = 3
 }
+
+export type SearchParams = {
+    distance: number;
+    preferredGenderIds: Array<number>
+    preferredMinAge?: number;
+    preferredMaxAge?: number;
+    showOutsideParameters: boolean;
+    sort: SearchParamsSortE;
+    latitude: number;
+    longitude: number;
+    miscInfos:Array<number>;
+    intentions: Array<number>;
+    interests: Array<string>;
+}
+
+export enum SearchParamsSortE {
+  DISTANCE = 1,
+  ACTIVE_DATE = 2,
+  INTEREST = 3,
+  DEFAULT = 4,
+  DONATION_TOTAL = 5,
+  NEWEST_USER = 6,
+}

@@ -15,7 +15,6 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ImageZoom } from '@likashefqet/react-native-image-zoom';
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import styles, {
   DISLIKE_ACTIONS,
   LIKE_ACTIONS,
