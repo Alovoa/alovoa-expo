@@ -119,6 +119,7 @@
             "profile": "Edit profile",
             "search": "Search preferences",
             "settings": "Settings",
+            "advanced-settings": "Advanced Settings",
             "prompts": "Prompts"
         },
         "settings": {
@@ -132,6 +133,16 @@
                 "like": "Receive e-mails on likes and matches",
                 "chat": "Receive e-mails on chats"
             }
+        },
+        "search": {
+            "settings": {
+                "min-gps-timeout": "Location timeout",
+                "location": {
+                    "latitude": "Latitude",
+                    "longitude": "Longitude"
+                }
+            },
+            "report-card": "Suspicious activities detected on the profile of %s. Show anyway?"
         },
         "prompts": {
             "title": "Your profile prompts",
@@ -166,8 +177,12 @@
             "info-4": "Make sure your face is completely visible",
             "info-5": "You will have to verify again if you change your profile picture",
             "verified-no": "Not verified",
-            "verified-by-users": "Verified by votes",
+            "verified-by-users": "Verified by the community",
             "verified-by-admin": "Verified"
+        },
+        "tooltip": {
+            "blocks": "Blocks by users",
+            "reports": "Reports by users"
         }
     },
     "cancel": "Cancel",

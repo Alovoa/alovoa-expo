@@ -119,7 +119,8 @@
             "pictures": "Fotos verwalten",
             "profile": "Profil bearbeiten",
             "search": "Suchpräferenzen",
-            "settings": "Einstelungen",
+            "settings": "Einstellungen",
+            "advanced-settings": "Erweiterte Einstellungen",
             "prompts": "Eisbrecher"
         },
         "settings": {
@@ -133,6 +134,16 @@
                 "like": "Erhalte E-mails bei Likes und Matches",
                 "chat": "Erhalte E-mails bei Chats"
             }
+        },
+        "search": {
+            "settings": {
+                "min-gps-timeout": "Standort Timeout",
+                "location": {
+                    "latitude": "Latitude",
+                    "longitude": "Longitude"
+                }
+            },
+            "report-card": "Verdächtige Aktivitäten wurden auf dem Profil von %s festgestellt. Trotzdem anzeigen?"
         },
         "prompts": {
             "title": "Deine Eisbrecher",
@@ -167,8 +178,12 @@
             "info-4": "Stell sicher, dass dein Gesicht vollständig sichtbar ist",
             "info-5": "Wenn du dein Profilbild änderst musst du dich erneut verifizieren",
             "verified-no": "Nicht verifiziert",
-            "verified-by-users": "Durch Abstimmung verifiziert",
+            "verified-by-users": "Durch die Community verifiziert",
             "verified-by-admin": "Verifiziert"
+        },
+        "tooltip": {
+            "blocks": "Blockierungen von Nutzern",
+            "reports": "Meldungen von Nutzern"
         }
     },
     "cancel": "Abbrechen",
