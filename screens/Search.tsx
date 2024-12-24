@@ -52,7 +52,7 @@ const Search = ({ route, navigation }) => {
 
   const { height, width } = useWindowDimensions();
 
-  const LOCATION_TIMEOUT_SHORT = 5000;
+  const LOCATION_TIMEOUT_SHORT = 6000;
   const LOCATION_TIMEOUT_LONG = 10000;
 
   const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
