@@ -187,8 +187,7 @@ const Search = ({ route, navigation }) => {
       console.log(params)
       let response = await Global.Fetch(URL.API_SEARCH, 'post', params);
       let result: SearchDto = response.data;
-      let incompatible = result.incompatible;
-      if (!incompatible && result.users) {
+      if (result.users) {
         setResults(result.users);
       }
     }
@@ -248,6 +247,10 @@ const Search = ({ route, navigation }) => {
     setIgnoreRightSwipe(false);
   }
 
+  function openSearchSetting() {
+    Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})
+  }
+
   return (
     <ScrollView contentContainerStyle={{ flex: 1 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
@@ -261,7 +264,7 @@ const Search = ({ route, navigation }) => {
       <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 4, justifyContent: 'flex-end' }]}>
         { width > WIDESCREEN_HORIZONTAL_MAX &&
           <Button icon="cog" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
-                      style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})}>
+                      style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={openSearchSetting}>
                         {i18n.t('profile.screen.search')}</Button>
         }
         { width <= WIDESCREEN_HORIZONTAL_MAX &&
@@ -309,7 +312,7 @@ const Search = ({ route, navigation }) => {
             <SearchEmpty height={svgHeight} width={svgWidth}></SearchEmpty>
             <Text style={{ fontSize: 20, paddingHorizontal: 48, marginTop: 8 }}>{i18n.t('search-empty.title')}</Text>
             <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48, textAlign: 'center' }}>{i18n.t('search-empty.subtitle')}</Text>
-            <Button onPress={() => Global.navigate("YourProfile")}>{i18n.t('search-empty.button')}</Button>
+            <Button onPress={openSearchSetting}>{i18n.t('search-empty.button')}</Button>
           </View>
         </View>
       }
