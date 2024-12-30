@@ -181,6 +181,7 @@
             "verified-by-admin": "Verified"
         },
         "tooltip": {
+            "donated": "Donated",
             "blocks": "Blocks by users",
             "reports": "Reports by users"
         }

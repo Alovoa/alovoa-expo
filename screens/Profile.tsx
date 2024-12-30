@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
   ScrollView,
 } from "react-native";
-import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button } from "react-native-paper";
+import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip } from "react-native-paper";
 import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage, UserPrompt } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
@@ -518,15 +518,21 @@ const Profile = ({ route, navigation }) => {
           <View style={{ marginTop: 16 }}>
             <Text style={style.title}>{i18n.t('profile.profile-page.additional')}</Text>
             <View style={{ paddingBottom: 4, display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-              <Chip icon="hand-coin" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{String(donated) + ' €'}</Text>
-              </Chip>
-              <Chip icon="account-cancel" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{'# ' + blocks}</Text>
-              </Chip>
-              <Chip icon="flag" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{'# ' + reports}</Text>
-              </Chip>
+              <Tooltip title={i18n.t('profile.tooltip.donated')}>
+                <Chip icon="hand-coin" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{String(donated) + ' €'}</Text>
+                </Chip>
+              </Tooltip>
+              <Tooltip title={i18n.t('profile.tooltip.blocks')}>
+                <Chip icon="account-cancel" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{'# ' + blocks}</Text>
+                </Chip>
+              </Tooltip>
+              <Tooltip title={i18n.t('profile.tooltip.reports')}>
+                <Chip icon="flag" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{'# ' + reports}</Text>
+                </Chip>
+              </Tooltip>
             </View>
             <View style={{ marginTop: 80 }}></View>
           </View>

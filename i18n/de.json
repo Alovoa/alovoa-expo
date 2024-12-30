@@ -182,6 +182,7 @@
             "verified-by-admin": "Verifiziert"
         },
         "tooltip": {
+            "donated": "Gespendet",
             "blocks": "Blockierungen von Nutzern",
             "reports": "Meldungen von Nutzern"
         }
