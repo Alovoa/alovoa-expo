@@ -153,9 +153,7 @@ const YourProfile = ({ route, navigation }) => {
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, { data: data })}>{i18n.t('profile.screen.search')}</Button>
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SETTINGS, false, { data: data })}>{i18n.t('profile.screen.settings')}</Button>
-          <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
-            style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_ADVANCED_SETTINGS, false, { user: user })}>{i18n.t('profile.screen.advanced-settings')}</Button>
-
+          
           {numReferred < MAX_REFERRALS && <View style={{ flexDirection: "row", marginBottom: 8 }}>
             <Button icon="content-copy" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between', flexGrow: 1 }}
               style={{ flexGrow: 1 }} onPress={copyReferralCodeToClipboard}>
@@ -186,6 +184,9 @@ const YourProfile = ({ route, navigation }) => {
               <Text style={[styles.link, { padding: 8 }]} onPress={() => {
                 WebBrowser.openBrowserAsync(URL.IMPRINT);
               }}>{i18n.t('imprint')}</Text>
+              <Text style={[styles.link, { padding: 8 }]} onPress={() => {
+                Global.navigate(Global.SCREEN_PROFILE_ADVANCED_SETTINGS, false, { user: user })
+              }}>{i18n.t('profile.screen.advanced-settings')}</Text>
               <Text style={[styles.link, { padding: 8 }]} onPress={() => {
                 downloadUserData();
               }}>{i18n.t('profile.download-userdata')}</Text>
