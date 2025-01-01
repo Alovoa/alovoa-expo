@@ -45,7 +45,6 @@ const SearchSettings = ({ route, navigation }) => {
 
   async function loadUser(data: YourProfileResource) {
     setLoading(true);
-    console.log(data.user)
     setShowIntention(data.showIntention);
     setIsLegal(data.user.age >= MIN_AGE);
     setMinAge(data.user.preferedMinAge);
@@ -57,8 +56,6 @@ const SearchSettings = ({ route, navigation }) => {
   }
 
   React.useEffect(() => {
-    console.log("TEST")
-    console.log(data)
     if (data) {
       loadUser(data);
     } else {
