@@ -143,7 +143,10 @@
                     "longitude": "Longitude"
                 }
             },
-            "report-card": "Verdächtige Aktivitäten wurden auf dem Profil von %s festgestellt. Trotzdem anzeigen?"
+            "report-card": "Verdächtige Aktivitäten wurden auf dem Profil von %s festgestellt. Trotzdem anzeigen?",
+            "report-card-dismiss": "Profil verbergen",
+            "report-card-show": "Trotzdem anzeigen",
+            "report-card-threshold": "Grenzwert für verdächtige Aktivitäten"
         },
         "prompts": {
             "title": "Deine Eisbrecher",

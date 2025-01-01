@@ -20,6 +20,7 @@ const AdvancedSettings = ({ route, navigation }) => {
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
   const defaultTimeoutString = String(Global.DEFAULT_GPS_TIMEOUT);
+  const defaultHideThresholdString = String(Global.DEFAULT_HIDE_THRESHOLD);
 
   React.useEffect(() => {
     load();
@@ -28,6 +29,7 @@ const AdvancedSettings = ({ route, navigation }) => {
   const [latitude, setLatitude] = React.useState("0.00");
   const [longitude, setLongitude] = React.useState("0.00");
   const [gpsTimeout, setGpsTimeout] = React.useState(defaultTimeoutString);
+  const [hideThreshold, setHideThreshold] = React.useState(defaultHideThresholdString);
   
 
   async function load() { 
@@ -35,6 +37,9 @@ const AdvancedSettings = ({ route, navigation }) => {
     setLongitude(String(user.locationLongitude));
     let timeoutStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_GPSTIMEOPUT);
     setGpsTimeout(timeoutStorage ? timeoutStorage : defaultTimeoutString);
+
+    let hideThresholdStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_HIDE_THRESHOLD);
+    setHideThreshold(hideThresholdStorage ? hideThresholdStorage : defaultHideThresholdString);
   }
 
   async function uploadLocation() {
@@ -51,10 +56,18 @@ const AdvancedSettings = ({ route, navigation }) => {
     }
   }
 
+  async function saveHideThreshold(value?: number) {
+    if(value) {
+      Global.SetStorage(Global.STORAGE_ADV_SEARCH_HIDE_THRESHOLD, String(value));
+    } else if(!isNaN(Number(hideThreshold))) {
+      Global.SetStorage(Global.STORAGE_ADV_SEARCH_HIDE_THRESHOLD, hideThreshold);
+    }
+  }
+
   return (
     <View style={{ height: height, width: '100%' }}>
       <VerticalView onRefresh={load} style={{ padding: 0 }}>
-        <View style={[styles.containerProfileItem, { marginTop: 32, flexDirection: 'row', gap: 4, alignItems: 'center' }]}>
+        <View style={[styles.containerProfileItem, { marginTop: 12, gap: 4 }]}>
             <TextInput
               style={{ backgroundColor: colors.background }}
               label={i18n.t('profile.search.settings.location.latitude')}
@@ -71,37 +84,68 @@ const AdvancedSettings = ({ route, navigation }) => {
               onSubmitEditing={uploadLocation}
               keyboardType="decimal-pad"
             />
-            <IconButton
-              icon="upload"
-              size={20}
-              mode="contained"
-              onPress={uploadLocation}
-            />
+            <View style={{flexGrow: 1, alignItems: 'flex-end'}}>
+              <IconButton
+                icon="upload"
+                size={20}
+                mode="contained"
+                onPress={uploadLocation}
+              />
+            </View>
         </View>
-        <View style={[styles.containerProfileItem, { marginTop: 32, flexDirection: 'row', gap: 4, alignItems: 'center' }]}>
+        <View style={[styles.containerProfileItem, { marginTop: 12, gap: 4 }]}>
             <TextInput
               style={{ backgroundColor: colors.background }}
               label={i18n.t('profile.search.settings.min-gps-timeout')}
               value={gpsTimeout}
               onChangeText={setGpsTimeout}
-              onSubmitEditing={() => saveGpsTimeout}
+              onSubmitEditing={() => saveGpsTimeout()}
+              keyboardType="decimal-pad"
+            />         
+            <View style={{flexGrow: 1, alignItems: 'flex-end', justifyContent: 'space-between', flexDirection: 'row' }}>
+              <IconButton
+                icon="undo-variant"
+                size={20}
+                mode="contained"
+                onPress={() => {
+                  setGpsTimeout(defaultTimeoutString);
+                  saveGpsTimeout(Global.DEFAULT_GPS_TIMEOUT)
+                }}
+              />
+              <IconButton
+                icon="check"
+                size={20}
+                mode="contained"
+                onPress={() => saveGpsTimeout()}
+              />
+            </View>
+        </View>
+        <View style={[styles.containerProfileItem, { marginTop: 12, gap: 4 }]}>
+            <TextInput
+              style={{ backgroundColor: colors.background }}
+              label={i18n.t('profile.search.report-card-threshold')}
+              value={hideThreshold}
+              onChangeText={setHideThreshold}
+              onSubmitEditing={() => saveHideThreshold()}
               keyboardType="decimal-pad"
             />
-            <IconButton
-              icon="check"
-              size={20}
-              mode="contained"
-              onPress={() => saveGpsTimeout}
-            />
-            <IconButton
-              icon="undo-variant"
-              size={20}
-              mode="contained"
-              onPress={() => {
-                setGpsTimeout(defaultTimeoutString);
-                saveGpsTimeout(Global.DEFAULT_GPS_TIMEOUT)
-              }}
-            />
+            <View style={{flexGrow: 1, alignItems: 'flex-end', justifyContent: 'space-between', flexDirection: 'row' }}>
+              <IconButton
+                icon="undo-variant"
+                size={20}
+                mode="contained"
+                onPress={() => {
+                  setHideThreshold(defaultHideThresholdString);
+                  saveHideThreshold(Global.DEFAULT_HIDE_THRESHOLD)
+                }}
+              />
+              <IconButton
+                icon="check"
+                size={20}
+                mode="contained"
+                onPress={() => saveHideThreshold()}
+              />
+            </View>
         </View>
       </VerticalView>
     </View>

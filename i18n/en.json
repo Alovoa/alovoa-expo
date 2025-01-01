@@ -142,7 +142,10 @@
                     "longitude": "Longitude"
                 }
             },
-            "report-card": "Suspicious activities detected on the profile of %s. Show anyway?"
+            "report-card": "Suspicious activities detected on the profile of %s. Show anyway?",
+            "report-card-dismiss": "Hide profile",
+            "report-card-show": "Show anyway",
+            "report-card-threshold": "Threshold for suspicious activities"
         },
         "prompts": {
             "title": "Your profile prompts",
