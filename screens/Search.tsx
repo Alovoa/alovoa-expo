@@ -52,8 +52,8 @@ const Search = ({ route, navigation }) => {
 
   const { height, width } = useWindowDimensions();
 
-  const LOCATION_TIMEOUT_SHORT = 6000;
-  const LOCATION_TIMEOUT_LONG = 10000;
+  const LOCATION_TIMEOUT_SHORT = Global.DEFAULT_GPS_TIMEOUT;
+  const LOCATION_TIMEOUT_LONG = LOCATION_TIMEOUT_SHORT * 2;
 
   const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
     return Promise.race([
@@ -151,7 +151,11 @@ const Search = ({ route, navigation }) => {
         if (status == 'granted') {
           hasLocationPermission = true;
           try {
-            location = await promiseWithTimeout(hasLocation ? LOCATION_TIMEOUT_SHORT : LOCATION_TIMEOUT_LONG, Location.getCurrentPositionAsync({}));
+            let storedGpsTimeout = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_GPSTIMEOPUT);
+            let gpsTimeout = storedGpsTimeout ? 
+              hasLocation ? Math.max(LOCATION_TIMEOUT_SHORT, Number(storedGpsTimeout)) : Math.max(LOCATION_TIMEOUT_LONG, Number(storedGpsTimeout)) :
+              hasLocation ? LOCATION_TIMEOUT_SHORT : LOCATION_TIMEOUT_LONG;
+            location = await promiseWithTimeout(gpsTimeout, Location.getCurrentPositionAsync({}));
             hasGpsEnabled = true;
             lat = location?.coords.latitude;
             lon = location?.coords.longitude;

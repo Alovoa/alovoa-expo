@@ -19,6 +19,7 @@ const AdvancedSettings = ({ route, navigation }) => {
   var user: UserDto = route.params.user;
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
+  const defaultTimeoutString = String(Global.DEFAULT_GPS_TIMEOUT);
 
   React.useEffect(() => {
     load();
@@ -26,16 +27,27 @@ const AdvancedSettings = ({ route, navigation }) => {
 
   const [latitude, setLatitude] = React.useState("0.00");
   const [longitude, setLongitude] = React.useState("0.00");
+  const [gpsTimeout, setGpsTimeout] = React.useState(defaultTimeoutString);
   
 
   async function load() { 
     setLatitude(String(user.locationLatitude));
     setLongitude(String(user.locationLongitude));
+    let timeoutStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_GPSTIMEOPUT);
+    setGpsTimeout(timeoutStorage ? timeoutStorage : defaultTimeoutString);
   }
 
   async function uploadLocation() {
     if(!isNaN(Number(latitude)) && !isNaN(Number(longitude))) {
       Global.Fetch(Global.format(URL.USER_UPDATE_LOCATION, latitude, longitude), 'post');
+    }
+  }
+
+  async function saveGpsTimeout(value?: number) {
+    if(value) {
+      Global.SetStorage(Global.STORAGE_ADV_SEARCH_GPSTIMEOPUT, String(value));
+    } else if(!isNaN(Number(gpsTimeout))) {
+      Global.SetStorage(Global.STORAGE_ADV_SEARCH_GPSTIMEOPUT, gpsTimeout);
     }
   }
 
@@ -64,6 +76,31 @@ const AdvancedSettings = ({ route, navigation }) => {
               size={20}
               mode="contained"
               onPress={uploadLocation}
+            />
+        </View>
+        <View style={[styles.containerProfileItem, { marginTop: 32, flexDirection: 'row', gap: 4, alignItems: 'center' }]}>
+            <TextInput
+              style={{ backgroundColor: colors.background }}
+              label={i18n.t('profile.search.settings.min-gps-timeout')}
+              value={gpsTimeout}
+              onChangeText={setGpsTimeout}
+              onSubmitEditing={() => saveGpsTimeout}
+              keyboardType="decimal-pad"
+            />
+            <IconButton
+              icon="check"
+              size={20}
+              mode="contained"
+              onPress={() => saveGpsTimeout}
+            />
+            <IconButton
+              icon="undo-variant"
+              size={20}
+              mode="contained"
+              onPress={() => {
+                setGpsTimeout(defaultTimeoutString);
+                saveGpsTimeout(Global.DEFAULT_GPS_TIMEOUT)
+              }}
             />
         </View>
       </VerticalView>

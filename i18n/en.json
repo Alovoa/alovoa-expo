@@ -136,7 +136,7 @@
         },
         "search": {
             "settings": {
-                "min-gps-timeout": "Location timeout",
+                "min-gps-timeout": "GPS timeout (ms)",
                 "location": {
                     "latitude": "Latitude",
                     "longitude": "Longitude"

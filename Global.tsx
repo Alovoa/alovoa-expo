@@ -40,6 +40,8 @@ export const STORAGE_SETTINGS_UNIT = "settings.unit"
 export const STORAGE_SETTINGS_COLOR_PRIMARY = "settings.color.primary"
 export const STORAGE_SETTINGS_COLOR_SECONDARY = "settings.color.secondary"
 
+export const STORAGE_ADV_SEARCH_GPSTIMEOPUT = "adv-search.gps-timeout";
+
 export const SCREEN_YOURPROFILE = "YourProfile"
 export const SCREEN_CHAT = "Chat"
 export const SCREEN_SEARCH = "Search"
@@ -61,6 +63,7 @@ export const EMPTY_STRING = "...";
 export const MAX_INTERESTS = 10;
 export const MAX_MESSAGE_LENGTH = 255;
 export const MAX_DESCRIPTION_LENGTH = 255;
+export const DEFAULT_GPS_TIMEOUT = 6000;
 
 const IMG_SIZE_MAX = 600;
 
