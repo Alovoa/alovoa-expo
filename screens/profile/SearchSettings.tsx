@@ -3,8 +3,8 @@ import {
   View,
   useWindowDimensions
 } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
-import { YourProfileResource, UserDto, GenderEnum, UserIntention, Gender, IntentionE } from "../../types";
+import { ActivityIndicator, Checkbox, Text, useTheme } from "react-native-paper";
+import { YourProfileResource, UserDto, GenderEnum, UserIntention, Gender, IntentionE, SearchParams, UnitsEnum } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -12,6 +12,8 @@ import SelectModal from "../../components/SelectModal";
 import AgeRangeSliderModal from "../../components/AgeRangeSliderModal";
 import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
+import Slider from "@react-native-community/slider";
+import { GRAY } from "../../assets/styles";
 
 const i18n = I18N.getI18n()
 const MIN_AGE = 18;
@@ -20,7 +22,7 @@ const MAX_AGE = 100;
 const SearchSettings = ({ route, navigation }) => {
 
   //var data: YourProfileResource = route.params.data;
-
+  const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
 
@@ -34,6 +36,13 @@ const SearchSettings = ({ route, navigation }) => {
   const [settingsIgnoreIntention, setSettingsIgnoreIntention] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [changed, setChanged] = React.useState(false);
+
+  const minDistance = 1;
+  const [maxDistance, setMaxDistance] = React.useState(Global.MAX_DISTANCE);
+  const [distance, setDistance] = React.useState(Global.DEFAULT_DISTANCE);
+  const [distanceUnit, setDistanceUnit] = React.useState("km");
+  const [params, setParams] = React.useState<SearchParams>();
+  const [showOutsideParams, setShowOutsideParams] = React.useState(true);
 
   async function load() {
     setLoading(true);
@@ -52,7 +61,30 @@ const SearchSettings = ({ route, navigation }) => {
     setIntention(data.user.intention.id);
     setPreferredGenders(data.user.preferedGenders.map(item => item.id));
     setSettingsIgnoreIntention(data["settings.ignoreIntention"]);
+    let paramsStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_PARAMS);
+    setParams(paramsStorage ? JSON.parse(paramsStorage) : {});
     setLoading(false);
+  }
+
+  async function onDistanceChanged(value: number) {
+    let params: SearchParams = await getStoredParams();
+    params.distance = value;
+    setParams(params);
+  }
+
+  async function toggleShowOutsideParams() {
+    let newState = !showOutsideParams;
+    console.log(newState)
+    setShowOutsideParams(newState);
+    let params: SearchParams = await getStoredParams();
+    params.showOutsideParameters = newState;
+    setParams(params);
+  } 
+
+  async function getStoredParams(): Promise<SearchParams> {
+    let paramsStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_PARAMS);
+    let params: SearchParams = paramsStorage ? JSON.parse(paramsStorage) : {};
+    return params;
   }
 
   React.useEffect(() => {
@@ -65,9 +97,28 @@ const SearchSettings = ({ route, navigation }) => {
 
   React.useEffect(() => {
     if (changed) {
-      Global.SetStorage(Global.STORAGE_RELOAD_SEARCH, "true");
+      Global.SetStorage(Global.STORAGE_RELOAD_SEARCH, Global.STORAGE_TRUE);
     }
   }, [changed]);
+
+  React.useEffect(() => {
+    //TODO
+    //let isIS = data.user.units == UnitsEnum.SI;
+    if(params?.distance) {
+      setDistance(params.distance);
+    }
+    if(params?.showOutsideParameters) {
+      setShowOutsideParams(params.showOutsideParameters);
+    }
+    saveParams();
+  }, [params]);
+
+  async function saveParams() {
+    if(params) {
+      await Global.SetStorage(Global.STORAGE_ADV_SEARCH_PARAMS, JSON.stringify(params));
+      setChanged(true);
+    }
+  }
 
   async function updateIntention(num: number) {
     await Global.Fetch(Global.format(URL.USER_UPDATE_INTENTION, String(num)), 'post');
@@ -119,7 +170,33 @@ const SearchSettings = ({ route, navigation }) => {
       }
 
       <VerticalView onRefresh={load}>
+        
         <View style={{ gap: 12 }}>
+
+          <View style={{ gap: 4}}>
+            <Text>{i18n.t('profile.search.settings.distance')}</Text>
+            <View style={{ flexDirection: 'row', gap: 4 }}>
+              <Slider
+                style={{flex: 1}}
+                value={distance}
+                minimumValue={minDistance}
+                maximumValue={maxDistance}
+                minimumTrackTintColor={colors.secondary}
+                maximumTrackTintColor={GRAY}
+                thumbTintColor={colors.primary}
+                step={1}
+                onValueChange={(value: number) => {
+                  setDistance(value);
+                }}
+                onSlidingComplete={(value: number) => {
+                  onDistanceChanged(value);
+                }}
+              />
+              <Text>{distance}</Text>
+              <Text>{distanceUnit}</Text>
+            </View>
+          </View>
+
           {!settingsIgnoreIntention &&
             <View>
               <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
@@ -146,6 +223,11 @@ const SearchSettings = ({ route, navigation }) => {
                 valueLower={minAge} valueUpper={maxAge} onValueLowerChanged={updateMinAge} onValueUpperChanged={updateMaxAge}></AgeRangeSliderModal>
             </View>
           }
+
+          <View style={{ flexDirection: "row" }}>
+              <Checkbox.Item onPress={toggleShowOutsideParams} position="leading"
+                status={showOutsideParams ? 'checked' : 'unchecked'} label={i18n.t('profile.search.settings.show-outside-parameters')} />
+            </View>
 
         </View>
       </VerticalView>

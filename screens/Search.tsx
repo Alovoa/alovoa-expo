@@ -106,11 +106,11 @@ const Search = ({ route, navigation }) => {
   async function load() {
     setLoaded(false);
     setResults([]);
+    setLoading(true);
     let l1 = await Global.GetStorage(Global.STORAGE_LATITUDE);
     latitude = l1 ? Number(l1) : undefined;
     let l2 = await Global.GetStorage(Global.STORAGE_LONGITUDE);
     longitude = l2 ? Number(l2) : undefined;
-    setLoading(true);
     await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE).then(
       async (response) => {
         let data: SearchResource = response.data;
@@ -174,9 +174,13 @@ const Search = ({ route, navigation }) => {
     }
 
     if (lat != undefined && lon != undefined) {
-      let params: SearchParams = {
-        distance: 50,
-        showOutsideParameters: true,
+
+      let paramsStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_PARAMS);
+      let storedParams: SearchParams = paramsStorage ? JSON.parse(paramsStorage) : {};
+
+      let searchParams: SearchParams = {
+        distance: storedParams?.distance ? storedParams.distance : Global.DEFAULT_DISTANCE,
+        showOutsideParameters:  storedParams?.showOutsideParameters == undefined ? true : storedParams.showOutsideParameters,
         sort: SearchParamsSortE.DEFAULT,
         latitude: lat,
         longitude: lon,
@@ -188,8 +192,8 @@ const Search = ({ route, navigation }) => {
         preferredGenderIds: user ? user.preferedGenders.map(gender => gender.id) : []
       };
 
-      console.log(params)
-      let response = await Global.Fetch(URL.API_SEARCH, 'post', params);
+      console.log(searchParams)
+      let response = await Global.Fetch(URL.API_SEARCH, 'post', searchParams);
       let result: SearchDto = response.data;
       if (result.users) {
         setResults(result.users);

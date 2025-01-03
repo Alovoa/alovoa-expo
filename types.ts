@@ -393,17 +393,17 @@ export enum IntentionE {
 }
 
 export type SearchParams = {
-    distance: number;
-    preferredGenderIds: Array<number>
+    distance?: number;
+    preferredGenderIds?: Array<number>
     preferredMinAge?: number;
     preferredMaxAge?: number;
-    showOutsideParameters: boolean;
-    sort: SearchParamsSortE;
-    latitude: number;
-    longitude: number;
-    miscInfos:Array<number>;
-    intentions: Array<number>;
-    interests: Array<string>;
+    showOutsideParameters?: boolean;
+    sort?: SearchParamsSortE;
+    latitude?: number;
+    longitude?: number;
+    miscInfos?: Array<number>;
+    intentions?: Array<number>;
+    interests?: Array<string>;
 }
 
 export enum SearchParamsSortE {

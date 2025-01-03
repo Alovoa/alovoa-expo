@@ -137,11 +137,13 @@
         },
         "search": {
             "settings": {
+                "distance": "Distanz",
                 "min-gps-timeout": "GPS Timeout (ms)",
                 "location": {
                     "latitude": "Latitude",
                     "longitude": "Longitude"
-                }
+                },
+                "show-outside-parameters": "Auch Profile außerhalb der Einstellungen anzeigen"
             },
             "report-card": "Verdächtige Aktivitäten wurden auf dem Profil von %s festgestellt. Trotzdem anzeigen?",
             "report-card-dismiss": "Profil verbergen",
