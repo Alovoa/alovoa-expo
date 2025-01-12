@@ -3,7 +3,7 @@ import {
   View,
   useWindowDimensions
 } from "react-native";
-import { ActivityIndicator, Checkbox, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Checkbox, Divider, Text, useTheme } from "react-native-paper";
 import { YourProfileResource, UserDto, GenderEnum, UserIntention, Gender, IntentionE, SearchParams, UnitsEnum } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
@@ -173,30 +173,6 @@ const SearchSettings = ({ route, navigation }) => {
         
         <View style={{ gap: 12 }}>
 
-          <View style={{ gap: 4}}>
-            <Text>{i18n.t('profile.search.settings.distance')}</Text>
-            <View style={{ flexDirection: 'row', gap: 4 }}>
-              <Slider
-                style={{flex: 1}}
-                value={distance}
-                minimumValue={minDistance}
-                maximumValue={maxDistance}
-                minimumTrackTintColor={colors.secondary}
-                maximumTrackTintColor={GRAY}
-                thumbTintColor={colors.primary}
-                step={1}
-                onValueChange={(value: number) => {
-                  setDistance(value);
-                }}
-                onSlidingComplete={(value: number) => {
-                  onDistanceChanged(value);
-                }}
-              />
-              <Text>{distance}</Text>
-              <Text>{distanceUnit}</Text>
-            </View>
-          </View>
-
           {!settingsIgnoreIntention &&
             <View>
               <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
@@ -224,10 +200,36 @@ const SearchSettings = ({ route, navigation }) => {
             </View>
           }
 
+          <Divider  style={{marginVertical: 16}} />
+
+          <View style={{ gap: 4}}>
+            <Text>{i18n.t('profile.search.settings.distance')}</Text>
+            <View style={{ flexDirection: 'row', gap: 4 }}>
+              <Slider
+                style={{flex: 1}}
+                value={distance}
+                minimumValue={minDistance}
+                maximumValue={maxDistance}
+                minimumTrackTintColor={colors.secondary}
+                maximumTrackTintColor={GRAY}
+                thumbTintColor={colors.primary}
+                step={1}
+                onValueChange={(value: number) => {
+                  setDistance(value);
+                }}
+                onSlidingComplete={(value: number) => {
+                  onDistanceChanged(value);
+                }}
+              />
+              <Text style={{marginLeft: 8}}>{distance}</Text>
+              <Text>{distanceUnit}</Text>
+            </View>
+          </View>
+
           <View style={{ flexDirection: "row" }}>
               <Checkbox.Item onPress={toggleShowOutsideParams} position="leading"
                 status={showOutsideParams ? 'checked' : 'unchecked'} label={i18n.t('profile.search.settings.show-outside-parameters')} />
-            </View>
+          </View>
 
         </View>
       </VerticalView>
