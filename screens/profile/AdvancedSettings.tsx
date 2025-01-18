@@ -66,8 +66,8 @@ const AdvancedSettings = ({ route, navigation }) => {
 
   return (
     <View style={{ height: height, width: '100%' }}>
-      <VerticalView onRefresh={load} style={{ padding: 0 }}>
-        <View style={[styles.containerProfileItem, { marginTop: 12, gap: 4 }]}>
+      <VerticalView onRefresh={load} style={{ padding: 0 , gap: 12}}>
+        <View style={[styles.containerProfileItem, { gap: 4 }]}>
             <TextInput
               style={{ backgroundColor: colors.background }}
               label={i18n.t('profile.search.settings.location.latitude')}
@@ -93,7 +93,7 @@ const AdvancedSettings = ({ route, navigation }) => {
               />
             </View>
         </View>
-        <View style={[styles.containerProfileItem, { marginTop: 12, gap: 4 }]}>
+        <View style={[styles.containerProfileItem, {gap: 4 }]}>
             <TextInput
               style={{ backgroundColor: colors.background }}
               label={i18n.t('profile.search.settings.min-gps-timeout')}
@@ -120,7 +120,7 @@ const AdvancedSettings = ({ route, navigation }) => {
               />
             </View>
         </View>
-        <View style={[styles.containerProfileItem, { marginTop: 12, gap: 4 }]}>
+        <View style={[styles.containerProfileItem, { gap: 4 }]}>
             <TextInput
               style={{ backgroundColor: colors.background }}
               label={i18n.t('profile.search.report-card-threshold')}

@@ -1,15 +1,11 @@
 import React from "react";
 import {
   View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  StyleSheet,
   useWindowDimensions
 } from "react-native";
-import { TextInput, Button, HelperText, ActivityIndicator } from "react-native-paper";
-import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
-import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE } from "../../types";
+import { Text, TextInput, Button, HelperText, ActivityIndicator } from "react-native-paper";
+import styles from "../../assets/styles";
+import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE, MiscInfoNameMap, IntentionNameMap } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -32,9 +28,18 @@ const ProfileSettings = ({ route, navigation }) => {
 
   const [description, setDescription] = React.useState("");
   const [interests, setInterests] = React.useState(Array<UserInterest>);
+  const [miscInfoTobacco, setMiscInfoTobacco] = React.useState(Array<number>);
+  const [miscInfoCannabis, setMiscInfoCannabis] = React.useState(Array<number>);
+  const [miscInfoAlcohol, setMiscInfoAlcohol] = React.useState(Array<number>);
+  const [miscInfoHardDrugs, setMiscInfoHardDrugs] = React.useState(Array<number>);
   const [miscInfoKids, setMiscInfoKids] = React.useState(Array<number>);
-  const [miscInfoDrugs, setMiscInfoDrugs] = React.useState(Array<number>);
+  const [miscInfoFamily, setMiscInfoFamily] = React.useState(Array<number>);
   const [miscInfoRelationship, setMiscInfoRelationship] = React.useState(Array<number>);
+  const [miscInfoRelationshipType, setMiscInfoRelationshipType] = React.useState(Array<number>);
+  const [miscInfoGenderIdentity, setMiscInfoGenderIdentity] = React.useState(Array<number>);
+  const [miscInfoPolitics, setMiscInfoPolitics] = React.useState(Array<number>);
+  const [miscInfoReligion, setMiscInfoReligion] = React.useState(Array<number>);
+
   const [loading, setLoading] = React.useState(false);
   const [settingsIgnoreIntention, setSettingsIgnoreIntention] = React.useState(false);
   const [intention, setIntention] = React.useState(IntentionE.MEET);
@@ -48,16 +53,32 @@ const ProfileSettings = ({ route, navigation }) => {
     debounceDescriptionHandler();
   }, [description]);
 
+  const miscInfoTobaccoList = [UserMiscInfoEnum.DRUGS_TOBACCO, UserMiscInfoEnum.DRUGS_TOBACCO_NO, UserMiscInfoEnum.DRUGS_TOBACCO_SOMETIMES];
+  const miscInfoAlcoholList = [UserMiscInfoEnum.DRUGS_ALCOHOL, UserMiscInfoEnum.DRUGS_ALCOHOL_NO, UserMiscInfoEnum.DRUGS_ALCOHOL_SOMETIMES];
+  const miscInfoCannabisList = [UserMiscInfoEnum.DRUGS_CANNABIS, UserMiscInfoEnum.DRUGS_CANNABIS_NO, UserMiscInfoEnum.DRUGS_CANNABIS_SOMETIMES];
+  const miscInfoHardDrugsList = [UserMiscInfoEnum.DRUGS_OTHER, UserMiscInfoEnum.DRUGS_OTHER_NO, UserMiscInfoEnum.DRUGS_OTHER_SOMETIMES];
+  const miscInfoRelationshipList = [UserMiscInfoEnum.RELATIONSHIP_OPEN, UserMiscInfoEnum.RELATIONSHIP_OTHER, UserMiscInfoEnum.RELATIONSHIP_SINGLE, UserMiscInfoEnum.RELATIONSHIP_TAKEN];
+  const miscInfoRelationshipTypeList = [UserMiscInfoEnum.RELATIONSHIP_TYPE_MONOGAMOUS, UserMiscInfoEnum.RELATIONSHIP_TYPE_POLYAMOROUS];
+  const miscInfoKidsList = [UserMiscInfoEnum.KIDS_NO, UserMiscInfoEnum.KIDS_YES];
+  const miscInfoFamilyList = [UserMiscInfoEnum.FAMILY_NOT_SURE, UserMiscInfoEnum.FAMILY_NOT_WANT, UserMiscInfoEnum.FAMILY_WANT];
+  const miscInfoGenderIdentityList = [UserMiscInfoEnum.GENDER_IDENTITY_CIS, UserMiscInfoEnum.GENDER_IDENTITY_TRANS];
+  const miscInfoPoliticsList = [UserMiscInfoEnum.POLITICS_LEFT, UserMiscInfoEnum.POLITICS_MODERATE, UserMiscInfoEnum.POLITICS_RIGHT];
+  const miscInfoReligionList = [UserMiscInfoEnum.RELIGION_NO, UserMiscInfoEnum.RELIGION_YES];
+
   async function loadUser(user: UserDto) {
     setDescription(user.description);
     setInterests(user.interests);
-
-    setMiscInfoDrugs(user.miscInfos.filter(item => item.value <= UserMiscInfoEnum.DRUGS_OTHER && item.value >= UserMiscInfoEnum.DRUGS_TOBACCO)
-      .map(item => item.value));
-    setMiscInfoKids(user.miscInfos.filter(item => item.value <= UserMiscInfoEnum.KIDS_YES && item.value >= UserMiscInfoEnum.KIDS_NO)
-      .map(item => item.value));
-    setMiscInfoRelationship(user.miscInfos.filter(item => item.value <= UserMiscInfoEnum.RELATIONSHIP_OTHER && item.value >= UserMiscInfoEnum.RELATIONSHIP_SINGLE)
-      .map(item => item.value));
+    setMiscInfoTobacco(user.miscInfos.filter(item => miscInfoTobaccoList.includes(item.value)).map(item => item.value));
+    setMiscInfoCannabis(user.miscInfos.filter(item => miscInfoCannabisList.includes(item.value)).map(item => item.value));
+    setMiscInfoAlcohol(user.miscInfos.filter(item => miscInfoAlcoholList.includes(item.value)).map(item => item.value));
+    setMiscInfoHardDrugs(user.miscInfos.filter(item => miscInfoHardDrugsList.includes(item.value)).map(item => item.value));
+    setMiscInfoKids(user.miscInfos.filter(item => miscInfoKidsList.includes(item.value)).map(item => item.value));
+    setMiscInfoFamily(user.miscInfos.filter(item => miscInfoFamilyList.includes(item.value)).map(item => item.value));
+    setMiscInfoRelationship(user.miscInfos.filter(item => miscInfoRelationshipList.includes(item.value)).map(item => item.value));
+    setMiscInfoRelationshipType(user.miscInfos.filter(item => miscInfoRelationshipTypeList.includes(item.value)).map(item => item.value));
+    setMiscInfoGenderIdentity(user.miscInfos.filter(item => miscInfoGenderIdentityList.includes(item.value)).map(item => item.value));
+    setMiscInfoPolitics(user.miscInfos.filter(item => miscInfoPoliticsList.includes(item.value)).map(item => item.value));
+    setMiscInfoReligion(user.miscInfos.filter(item => miscInfoReligionList.includes(item.value)).map(item => item.value));
     setIntention(user.intention.id)
     setShowIntention(data.showIntention);
     setSettingsIgnoreIntention(data["settings.ignoreIntention"]);
@@ -105,13 +126,13 @@ const ProfileSettings = ({ route, navigation }) => {
         </View>
       }
 
-      <VerticalView style={{ padding: 0, gap: 12 }}>
+      <VerticalView style={{ padding: 0, gap: 12, paddingBottom: 48 }}>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -54 }}>
           <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Pictures", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
         </View>
 
         <View style={[styles.containerProfileItem, { marginTop: 20, gap: 12 }]}>
-          <View>
+          <View style={{marginBottom: 8}}>
             <TextInput style={[styles.textInputAlign, { height: 128 }]}
               label={i18n.t('profile.onboarding.description')}
               multiline={true}
@@ -138,9 +159,11 @@ const ProfileSettings = ({ route, navigation }) => {
           {settingsIgnoreIntention &&
             <View>
               <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
-                data={[{ id: IntentionE.MEET, title: i18n.t('profile.intention.meet') },
-                { id: IntentionE.DATE, title: i18n.t('profile.intention.date') },
-                { id: IntentionE.SEX, title: i18n.t('profile.intention.sex') }]}
+                data={[
+                  [IntentionE.MEET, IntentionNameMap.get(IntentionE.MEET)],
+                  [IntentionE.DATE, IntentionNameMap.get(IntentionE.DATE)],
+                  [IntentionE.SEX, IntentionNameMap.get(IntentionE.SEX)],
+                ]}
                 selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
                   updateIntention(id);
                 }}></SelectModal>
@@ -148,11 +171,19 @@ const ProfileSettings = ({ route, navigation }) => {
           }
 
           <View>
+            <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.prompts.title')}</Text>
+            <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
+              style={{ alignSelf: 'stretch' }} onPress={navigatePrompts}>{i18n.t('profile.prompts.subtitle')}</Button>
+          </View>
+
+          <View>
             <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
-              data={[{ id: UserMiscInfoEnum.RELATIONSHIP_SINGLE, title: i18n.t('profile.misc-info.relationship.single') },
-              { id: UserMiscInfoEnum.RELATIONSHIP_TAKEN, title: i18n.t('profile.misc-info.relationship.taken') },
-              { id: UserMiscInfoEnum.RELATIONSHIP_OPEN, title: i18n.t('profile.misc-info.relationship.open') },
-              { id: UserMiscInfoEnum.RELATIONSHIP_OTHER, title: i18n.t('profile.misc-info.relationship.other') }]}
+              data={[
+                [UserMiscInfoEnum.RELATIONSHIP_SINGLE, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_SINGLE)],
+                [UserMiscInfoEnum.RELATIONSHIP_TAKEN, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_TAKEN)],
+                [UserMiscInfoEnum.RELATIONSHIP_OPEN, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_OPEN)],
+                [UserMiscInfoEnum.RELATIONSHIP_OTHER, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_OTHER)],
+              ]}
               selected={miscInfoRelationship} onValueChanged={function (id: number, checked: boolean): void {
                 updateMiscInfo(id, checked, false);
               }}></SelectModal>
@@ -160,28 +191,115 @@ const ProfileSettings = ({ route, navigation }) => {
 
           <View>
             <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
-              data={[{ id: UserMiscInfoEnum.KIDS_NO, title: i18n.t('profile.misc-info.kids.no') },
-              { id: UserMiscInfoEnum.KIDS_YES, title: i18n.t('profile.misc-info.kids.yes') }]}
+              data={[
+                [UserMiscInfoEnum.KIDS_NO, MiscInfoNameMap.get(UserMiscInfoEnum.KIDS_NO)],
+                [UserMiscInfoEnum.KIDS_YES, MiscInfoNameMap.get(UserMiscInfoEnum.KIDS_YES)],
+              ]}
               selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
                 updateMiscInfo(id, checked, false);
               }}></SelectModal>
           </View>
 
           <View>
-            <SelectModal disabled={false} multi={true} minItems={0} title={i18n.t('profile.misc-info.drugs.title')}
-              data={[{ id: UserMiscInfoEnum.DRUGS_ALCOHOL, title: i18n.t('profile.misc-info.drugs.alcohol') },
-              { id: UserMiscInfoEnum.DRUGS_TOBACCO, title: i18n.t('profile.misc-info.drugs.tobacco') },
-              { id: UserMiscInfoEnum.DRUGS_CANNABIS, title: i18n.t('profile.misc-info.drugs.cannabis') },
-              { id: UserMiscInfoEnum.DRUGS_OTHER, title: i18n.t('profile.misc-info.drugs.other') }]}
-              selected={miscInfoDrugs} onValueChanged={function (id: number, checked: boolean): void {
+            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.family.title')}
+              data={[
+                [UserMiscInfoEnum.FAMILY_WANT, MiscInfoNameMap.get(UserMiscInfoEnum.FAMILY_WANT)],
+                [UserMiscInfoEnum.FAMILY_NOT_WANT, MiscInfoNameMap.get(UserMiscInfoEnum.FAMILY_NOT_WANT)],
+                [UserMiscInfoEnum.FAMILY_NOT_SURE, MiscInfoNameMap.get(UserMiscInfoEnum.FAMILY_NOT_SURE)],
+              ]}
+              selected={miscInfoFamily} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked, false);
+              }}></SelectModal>
+          </View>
+
+          <View>
+            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.relationship-type.title')}
+              data={[
+                [UserMiscInfoEnum.RELATIONSHIP_TYPE_MONOGAMOUS, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_TYPE_MONOGAMOUS)],
+                [UserMiscInfoEnum.RELATIONSHIP_TYPE_POLYAMOROUS, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_TYPE_POLYAMOROUS)],
+              ]}
+              selected={miscInfoRelationshipType} onValueChanged={function (id: number, checked: boolean): void {
                 updateMiscInfo(id, checked, true);
               }}></SelectModal>
           </View>
 
           <View>
-            <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.prompts.title')}</Text>
-            <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
-              style={{ alignSelf: 'stretch' }} onPress={navigatePrompts}>{i18n.t('profile.prompts.subtitle')}</Button>
+            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.politics.title')}
+              data={[
+                [UserMiscInfoEnum.POLITICS_LEFT, MiscInfoNameMap.get(UserMiscInfoEnum.POLITICS_LEFT)],
+                [UserMiscInfoEnum.POLITICS_MODERATE, MiscInfoNameMap.get(UserMiscInfoEnum.POLITICS_MODERATE)],
+                [UserMiscInfoEnum.POLITICS_RIGHT, MiscInfoNameMap.get(UserMiscInfoEnum.POLITICS_RIGHT)],
+              ]}
+              selected={miscInfoPolitics} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked, true);
+              }}></SelectModal>
+          </View>
+
+          <View>
+            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.gender-identity.title')}
+              data={[
+                [UserMiscInfoEnum.GENDER_IDENTITY_CIS, MiscInfoNameMap.get(UserMiscInfoEnum.GENDER_IDENTITY_CIS)],
+                [UserMiscInfoEnum.GENDER_IDENTITY_TRANS, MiscInfoNameMap.get(UserMiscInfoEnum.GENDER_IDENTITY_TRANS)],
+              ]}
+              selected={miscInfoGenderIdentity} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked, true);
+              }}></SelectModal>
+          </View>
+
+          <View>
+            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.religion.title')}
+              data={[
+                [UserMiscInfoEnum.RELIGION_YES, MiscInfoNameMap.get(UserMiscInfoEnum.RELIGION_YES)],
+                [UserMiscInfoEnum.RELIGION_NO, MiscInfoNameMap.get(UserMiscInfoEnum.RELIGION_NO)],
+              ]}
+              selected={miscInfoReligion} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked, true);
+              }}></SelectModal>
+          </View>
+
+          <View>
+            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.alcohol')}
+              data={[
+                [UserMiscInfoEnum.DRUGS_ALCOHOL, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_ALCOHOL)],
+                [UserMiscInfoEnum.DRUGS_ALCOHOL_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_ALCOHOL_SOMETIMES)],
+                [UserMiscInfoEnum.DRUGS_ALCOHOL_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_ALCOHOL_NO)],
+              ]}
+              selected={miscInfoAlcohol} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked, true);
+              }}></SelectModal>
+          </View>
+          <View>
+            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.tobacco')}
+              data={[
+                [UserMiscInfoEnum.DRUGS_TOBACCO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_TOBACCO)],
+                [UserMiscInfoEnum.DRUGS_TOBACCO_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_TOBACCO_SOMETIMES)],
+                [UserMiscInfoEnum.DRUGS_TOBACCO_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_TOBACCO_NO)],
+              ]}
+              selected={miscInfoTobacco} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked, true);
+              }}></SelectModal>
+          </View>
+          <View>
+            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.cannabis')}
+              data={[
+                [UserMiscInfoEnum.DRUGS_CANNABIS, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_CANNABIS)],
+                [UserMiscInfoEnum.DRUGS_CANNABIS_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_CANNABIS_SOMETIMES)],
+                [UserMiscInfoEnum.DRUGS_CANNABIS_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_CANNABIS_NO)],
+              ]}
+              selected={miscInfoCannabis} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked, true);
+              }}></SelectModal>
+          </View>
+          <View>
+            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.other')}
+              data={[
+                [UserMiscInfoEnum.DRUGS_OTHER, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_OTHER)],
+                [UserMiscInfoEnum.DRUGS_OTHER_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_OTHER_SOMETIMES)],
+                [UserMiscInfoEnum.DRUGS_OTHER_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_OTHER_NO)],
+              ]}
+              selected={miscInfoHardDrugs} onValueChanged={function (id: number, checked: boolean): void {
+                updateMiscInfo(id, checked, true);
+              }}></SelectModal>
           </View>
 
         </View>

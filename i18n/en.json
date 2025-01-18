@@ -20,9 +20,9 @@
         "age-subtitle": "You are %s years old"
     },
     "gender": {
-        "male": "Male",
-        "female": "Female",
-        "other": "Other"
+        "male": "Man",
+        "female": "Woman",
+        "other": "Non-binary"
     },
     "profile": {
         "onboarding": {
@@ -38,8 +38,8 @@
             "submit": "Let's go!"
         },
         "intention": {
-            "title": "I want...",
-            "meet": "To meet new people",
+            "title": "What I want",
+            "meet": "Meet new people",
             "date": "A relationship",
             "sex": "Sexual intimacy",
             "warning": "Can only be changed again after 24 hours"
@@ -57,16 +57,42 @@
         },
         "misc-info": {
             "drugs": {
-                "title": "Drugs",
                 "alcohol": "Alcohol",
                 "tobacco": "Tobacco",
                 "cannabis": "Cannabis",
-                "other": "Other drugs"
+                "other": "Hard drugs"
             },
             "kids": {
                 "title": "Kids",
                 "no": "No kids",
                 "yes": "Has kids"
+            },
+            "family": {
+                "title": "Family plans",
+                "no": "Don't want children",
+                "yes": "Want children",
+                "not-sure": "Not sure"
+            },
+            "relationship-type": {
+                "title": "Relationship type",
+                "monogamous": "Monogamy",
+                "polyamorous": "Non-monogamy"
+            },
+            "gender-identity": {
+                "title": "Gender identity",
+                "cis": "Cis",
+                "trans": "Trans"
+            },
+            "politics": {
+                "title": "Politics",
+                "left": "Left",
+                "right": "Right",
+                "moderate": "Moderate"
+            },
+            "religion": {
+                "title": "Religion",
+                "yes": "Religious",
+                "no": "Not religious"
             },
             "relationship": {
                 "title": "Relationship status",
@@ -75,7 +101,10 @@
                 "open": "Open relationship",
                 "other": "It's complicated"
             },
-            "none": "None"
+            "none": "None",
+            "yes": "Yes",
+            "no": "No",
+            "sometimes": "Sometimes"
         },
         "intention-toast": "Intention changed. You cannot change it for another 24 hours.",
         "preferred-age-range": "Preferred age range",
@@ -142,7 +171,7 @@
                     "latitude": "Latitude",
                     "longitude": "Longitude"
                 },
-                "show-outside-parameters": "Also show profiles outside of settings"
+                "show-outside-parameters": "Also show profiles outside of my preferences once they run out"
             },
             "report-card": "Suspicious activities detected on the profile of %s. Show anyway?",
             "report-card-dismiss": "Hide profile",

@@ -31,7 +31,7 @@ export type SelectModalT = {
   multi: boolean,
   minItems: number,
   title: string;
-  data: Array<SelectModalDataT>;
+  data: Array<[number, string | undefined]>;
   selected: Array<number>;
   onValueChanged: (id: number, checked: boolean) => void
 };
@@ -61,11 +61,6 @@ export type InterestModalT = {
   user?: UserDto;
   updateButtonText?: (interests: UserInterest[]) => void;
   setInterestsExternal?: (interests: UserInterest[]) => void;
-};
-
-export type SelectModalDataT = {
-  id: number;
-  title: string;
 };
 
 export type DonationDtoListModel = {
@@ -241,7 +236,27 @@ export enum UserMiscInfoEnum {
   RELATIONSHIP_OPEN = 13,
   RELATIONSHIP_OTHER = 14,
   KIDS_NO = 21,
-  KIDS_YES = 22
+  KIDS_YES = 22,
+  DRUGS_TOBACCO_NO = 31,
+  DRUGS_ALCOHOL_NO = 32,
+  DRUGS_CANNABIS_NO = 33,
+  DRUGS_OTHER_NO = 34,
+  DRUGS_TOBACCO_SOMETIMES = 41,
+  DRUGS_ALCOHOL_SOMETIMES = 42,
+  DRUGS_CANNABIS_SOMETIMES = 43,
+  DRUGS_OTHER_SOMETIMES = 44,
+  RELATIONSHIP_TYPE_MONOGAMOUS = 51,
+  RELATIONSHIP_TYPE_POLYAMOROUS = 52,
+  GENDER_IDENTITY_CIS = 61,
+  GENDER_IDENTITY_TRANS = 62,
+  POLITICS_MODERATE = 71,
+  POLITICS_LEFT = 72,
+  POLITICS_RIGHT = 73,
+  RELIGION_NO = 81,
+  RELIGION_YES = 82,
+  FAMILY_WANT = 91,
+  FAMILY_NOT_WANT = 92,
+  FAMILY_NOT_SURE = 93,
 }
 
 export enum GenderEnum {
@@ -414,3 +429,121 @@ export enum SearchParamsSortE {
   DONATION_TOTAL = 5,
   NEWEST_USER = 6,
 }
+
+export const MiscInfoNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.RELATIONSHIP_SINGLE, 'profile.misc-info.relationship.single'],
+  [UserMiscInfoEnum.RELATIONSHIP_TAKEN, 'profile.misc-info.relationship.taken'],
+  [UserMiscInfoEnum.RELATIONSHIP_OPEN, 'profile.misc-info.relationship.open'],
+  [UserMiscInfoEnum.RELATIONSHIP_OTHER, 'profile.misc-info.relationship.other'],
+  [UserMiscInfoEnum.KIDS_NO, 'profile.misc-info.kids.no'],
+  [UserMiscInfoEnum.KIDS_YES, 'profile.misc-info.kids.yes'],
+  [UserMiscInfoEnum.FAMILY_WANT, 'profile.misc-info.family.yes'],
+  [UserMiscInfoEnum.FAMILY_NOT_WANT, 'profile.misc-info.family.no'],
+  [UserMiscInfoEnum.FAMILY_NOT_SURE, 'profile.misc-info.family.not-sure'],
+  [UserMiscInfoEnum.RELATIONSHIP_TYPE_MONOGAMOUS, 'profile.misc-info.relationship-type.monogamous'],
+  [UserMiscInfoEnum.RELATIONSHIP_TYPE_POLYAMOROUS, 'profile.misc-info.relationship-type.polyamorous'],
+  [UserMiscInfoEnum.POLITICS_LEFT, 'profile.misc-info.politics.left'],
+  [UserMiscInfoEnum.POLITICS_MODERATE, 'profile.misc-info.politics.moderate'],
+  [UserMiscInfoEnum.POLITICS_RIGHT, 'profile.misc-info.politics.right'],
+  [UserMiscInfoEnum.GENDER_IDENTITY_CIS, 'profile.misc-info.gender-identity.cis'],
+  [UserMiscInfoEnum.GENDER_IDENTITY_TRANS, 'profile.misc-info.gender-identity.trans'],
+  [UserMiscInfoEnum.RELIGION_YES, 'profile.misc-info.religion.yes'],
+  [UserMiscInfoEnum.RELIGION_NO, 'profile.misc-info.religion.no'],
+  [UserMiscInfoEnum.DRUGS_ALCOHOL, 'profile.misc-info.yes'],
+  [UserMiscInfoEnum.DRUGS_ALCOHOL_SOMETIMES, 'profile.misc-info.sometimes'],
+  [UserMiscInfoEnum.DRUGS_ALCOHOL_NO, 'profile.misc-info.no'],
+  [UserMiscInfoEnum.DRUGS_TOBACCO, 'profile.misc-info.yes'],
+  [UserMiscInfoEnum.DRUGS_TOBACCO_SOMETIMES, 'profile.misc-info.sometimes'],
+  [UserMiscInfoEnum.DRUGS_TOBACCO_NO, 'profile.misc-info.no'],
+  [UserMiscInfoEnum.DRUGS_CANNABIS, 'profile.misc-info.yes'],
+  [UserMiscInfoEnum.DRUGS_CANNABIS_SOMETIMES, 'profile.misc-info.sometimes'],
+  [UserMiscInfoEnum.DRUGS_CANNABIS_NO, 'profile.misc-info.no'],
+  [UserMiscInfoEnum.DRUGS_OTHER, 'profile.misc-info.yes'],
+  [UserMiscInfoEnum.DRUGS_OTHER_SOMETIMES, 'profile.misc-info.sometimes'],
+  [UserMiscInfoEnum.DRUGS_OTHER_NO, 'profile.misc-info.no'],
+]); 
+
+export const MiscInfoRelationshipNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.RELATIONSHIP_SINGLE, 'profile.misc-info.relationship.single'],
+  [UserMiscInfoEnum.RELATIONSHIP_TAKEN, 'profile.misc-info.relationship.taken'],
+  [UserMiscInfoEnum.RELATIONSHIP_OPEN, 'profile.misc-info.relationship.open'],
+  [UserMiscInfoEnum.RELATIONSHIP_OTHER, 'profile.misc-info.relationship.other'],
+]);
+
+export const MiscInfoKidsNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.KIDS_NO, 'profile.misc-info.kids.no'],
+  [UserMiscInfoEnum.KIDS_YES, 'profile.misc-info.kids.yes'],
+]); 
+
+export const MiscInfoFamilyNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.FAMILY_WANT, 'profile.misc-info.family.yes'],
+  [UserMiscInfoEnum.FAMILY_NOT_WANT, 'profile.misc-info.family.no'],
+  [UserMiscInfoEnum.FAMILY_NOT_SURE, 'profile.misc-info.family.not-sure'],
+]); 
+
+export const MiscInfoRelationshipTypeNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.RELATIONSHIP_TYPE_MONOGAMOUS, 'profile.misc-info.relationship-type.monogamous'],
+  [UserMiscInfoEnum.RELATIONSHIP_TYPE_POLYAMOROUS, 'profile.misc-info.relationship-type.polyamorous'],
+]); 
+
+export const MiscInfoPoliticsNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.POLITICS_LEFT, 'profile.misc-info.politics.left'],
+  [UserMiscInfoEnum.POLITICS_MODERATE, 'profile.misc-info.politics.moderate'],
+  [UserMiscInfoEnum.POLITICS_RIGHT, 'profile.misc-info.politics.right'],
+]); 
+
+export const MiscInfoGenderIdentityNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.GENDER_IDENTITY_CIS, 'profile.misc-info.gender-identity.cis'],
+  [UserMiscInfoEnum.GENDER_IDENTITY_TRANS, 'profile.misc-info.gender-identity.trans'],
+]); 
+
+export const MiscInfoReligionNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.RELIGION_YES, 'profile.misc-info.religion.yes'],
+  [UserMiscInfoEnum.RELIGION_NO, 'profile.misc-info.religion.no'],
+]); 
+
+export const MiscInfoDrugsAlcoholNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.DRUGS_ALCOHOL, 'profile.misc-info.yes'],
+  [UserMiscInfoEnum.DRUGS_ALCOHOL_SOMETIMES, 'profile.misc-info.sometimes'],
+  [UserMiscInfoEnum.DRUGS_ALCOHOL_NO, 'profile.misc-info.no'],
+]); 
+
+export const MiscInfoDrugsTobaccoNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.DRUGS_TOBACCO, 'profile.misc-info.yes'],
+  [UserMiscInfoEnum.DRUGS_TOBACCO_SOMETIMES, 'profile.misc-info.sometimes'],
+  [UserMiscInfoEnum.DRUGS_TOBACCO_NO, 'profile.misc-info.no'],
+]); 
+
+export const MiscInfoDrugsCannabisNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.DRUGS_CANNABIS, 'profile.misc-info.yes'],
+  [UserMiscInfoEnum.DRUGS_CANNABIS_SOMETIMES, 'profile.misc-info.sometimes'],
+  [UserMiscInfoEnum.DRUGS_CANNABIS_NO, 'profile.misc-info.no'],
+]); 
+
+export const MiscInfoDrugsOtherNameMap = new Map<number, string>([
+  [UserMiscInfoEnum.DRUGS_OTHER, 'profile.misc-info.yes'],
+  [UserMiscInfoEnum.DRUGS_OTHER_SOMETIMES, 'profile.misc-info.sometimes'],
+  [UserMiscInfoEnum.DRUGS_OTHER_NO, 'profile.misc-info.no'],
+]); 
+
+export const IntentionNameMap = new Map<number, string>([
+  [IntentionE.MEET, 'profile.intention.meet'],
+  [IntentionE.DATE, 'profile.intention.date'],
+  [IntentionE.SEX, 'profile.intention.sex'],
+]); 
+
+export const GenderNameMap = new Map<number, string>([
+  [GenderEnum.MALE, 'gender.male'],
+  [GenderEnum.FEMALE, 'gender.female'],
+  [GenderEnum.OTHER, 'gender.other'],
+]); 
+
+export const UnitsNameMap = new Map<number, string>([
+  [UnitsEnum.SI, 'profile.units.si'],
+  [UnitsEnum.IMPERIAL, 'profile.units.imperial'],
+]); 
+
+export const SettingsEmailNameMap = new Map<number, string>([
+  [SettingsEmailEnum.LIKE, 'profile.settings.email.like'],
+  [SettingsEmailEnum.CHAT, 'profile.settings.email.chat'],
+]); 

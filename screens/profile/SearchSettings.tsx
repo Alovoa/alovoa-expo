@@ -4,7 +4,7 @@ import {
   useWindowDimensions
 } from "react-native";
 import { ActivityIndicator, Checkbox, Divider, Text, useTheme } from "react-native-paper";
-import { YourProfileResource, UserDto, GenderEnum, UserIntention, Gender, IntentionE, SearchParams, UnitsEnum } from "../../types";
+import { YourProfileResource, UserDto, GenderEnum, UserIntention, Gender, IntentionE, SearchParams, UnitsEnum, IntentionNameMap, GenderNameMap } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -176,9 +176,11 @@ const SearchSettings = ({ route, navigation }) => {
           {!settingsIgnoreIntention &&
             <View>
               <SelectModal disabled={!showIntention} multi={false} minItems={1} title={i18n.t('profile.intention.title')}
-                data={[{ id: IntentionE.MEET, title: i18n.t('profile.intention.meet') },
-                { id: IntentionE.DATE, title: i18n.t('profile.intention.date') },
-                { id: IntentionE.SEX, title: i18n.t('profile.intention.sex') }]}
+                data={[
+                  [IntentionE.MEET, IntentionNameMap.get(IntentionE.MEET)],
+                  [IntentionE.DATE, IntentionNameMap.get(IntentionE.DATE)],
+                  [IntentionE.SEX, IntentionNameMap.get(IntentionE.SEX)],
+                ]}
                 selected={[intention]} onValueChanged={function (id: number, checked: boolean): void {
                   updateIntention(id);
                 }}></SelectModal>
@@ -186,8 +188,12 @@ const SearchSettings = ({ route, navigation }) => {
           }
 
           <View>
-            <SelectModal disabled={false} multi={true} minItems={1} title={i18n.t('profile.gender')} data={[{ id: GenderEnum.MALE, title: i18n.t('gender.male') },
-            { id: GenderEnum.FEMALE, title: i18n.t('gender.female') }, { id: GenderEnum.OTHER, title: i18n.t('gender.other') }]}
+            <SelectModal disabled={false} multi={true} minItems={1} title={i18n.t('profile.gender')}
+              data={[
+                [GenderEnum.MALE, GenderNameMap.get(GenderEnum.MALE)],
+                [GenderEnum.FEMALE, GenderNameMap.get(GenderEnum.FEMALE)],
+                [GenderEnum.OTHER, GenderNameMap.get(GenderEnum.OTHER)],
+              ]}
               selected={preferredGenders} onValueChanged={function (id: number, checked: boolean): void {
                 updateGenders(id, checked);
               }}></SelectModal>

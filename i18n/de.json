@@ -22,7 +22,7 @@
     "gender": {
         "male": "Mann",
         "female": "Frau",
-        "other": "Divers"
+        "other": "Nicht-binär"
     },
     "profile": {
         "onboarding": {
@@ -39,7 +39,7 @@
             "submit": "Los geht's!"
         },
         "intention": {
-            "title": "I möchte...",
+            "title": "Wonach ich suche",
             "meet": "Neue Leute kennenlernen",
             "date": "Eine romantische Beziehung",
             "sex": "Sexuelle Intimität",
@@ -62,12 +62,38 @@
                 "alcohol": "Alkohol",
                 "tobacco": "Tabak",
                 "cannabis": "Cannabis",
-                "other": "Andere Drogen"
+                "other": "Harte Drogen"
             },
             "kids": {
                 "title": "Kinder",
-                "no": "Keine Kinder",
-                "yes": "Hat Kinder"
+                "no": "Habe keine Kinder",
+                "yes": "Habe Kinder"
+            },
+            "family": {
+                "title": "Familienpläne",
+                "no": "Möchte keine Kinder",
+                "yes": "Möchte Kinder"
+            },
+            "relationship-type": {
+                "title": "Beziehungstyp",
+                "monogamous": "Monogamie",
+                "polyamorous": "Nicht-Monogamie"
+            },
+            "gender-identity": {
+                "title": "Geschlechtsidentität",
+                "cis": "Cis",
+                "trans": "Trans"
+            },
+            "politics": {
+                "title": "Politik",
+                "left": "Links",
+                "right": "Rechts",
+                "moderate": "Mitte"
+            },
+            "religion": {
+                "title": "Religion",
+                "yes": "Religiös",
+                "no": "Nicht religiös"
             },
             "relationship": {
                 "title": "Beziehungsstatus",
@@ -76,7 +102,10 @@
                 "open": "Offene Beziehung",
                 "other": "Es ist kompliziert"
             },
-            "none": "Keine"
+            "none": "Keine",
+            "yes": "Ja",
+            "no": "Nein",
+            "sometimes": "Manchmal"
         },
         "intention-toast": "Intention geändert. Du kannst dies in 24h wieder ändern.",
         "preferred-age-range": "Bevorzugte Altersspanne",
@@ -143,7 +172,7 @@
                     "latitude": "Latitude",
                     "longitude": "Longitude"
                 },
-                "show-outside-parameters": "Auch Profile außerhalb der Einstellungen anzeigen"
+                "show-outside-parameters": "Auch Profile außerhalb meiner Präferenzen anzeigen sobald ich keine mehr erhalte"
             },
             "report-card": "Verdächtige Aktivitäten wurden auf dem Profil von %s festgestellt. Trotzdem anzeigen?",
             "report-card-dismiss": "Profil verbergen",
