@@ -266,7 +266,7 @@ const Profile = ({ route, navigation }) => {
     let id = miscInfo.map(m => m.value).find(e => [...map.keys()].includes(e));
     if(id != undefined) {
       const text = map.get(id);
-      return text ? i18n.t(text) : '';
+      return text ? i18n.t(text) : Global.EMPTY_STRING;
     } else {
       return '';
     }
@@ -415,9 +415,11 @@ const Profile = ({ route, navigation }) => {
                 <Chip icon="gender-male-female" style={[styles.marginRight4, styles.marginBottom4]}>
                   <Text>{gender ? i18n.t(GenderNameMap.get(gender.id)) : ''}</Text>
                 </Chip>
-                <Chip icon="gender-male-female-variant" style={[styles.marginRight4, styles.marginBottom4]}>
-                  <Text>{getMiscInfoText(MiscInfoGenderIdentityNameMap)}</Text>
-                </Chip>
+                { miscInfo.map(m => m.value) &&
+                  <Chip icon="gender-male-female-variant" style={[styles.marginRight4, styles.marginBottom4]}>
+                    <Text>{getMiscInfoText(MiscInfoGenderIdentityNameMap)}</Text>
+                  </Chip>
+                }
                 <Chip icon="drama-masks" style={[styles.marginRight4, styles.marginBottom4]}>
                   <Text>{String(minAge) + " - " + String(maxAge)}</Text>
                 </Chip>
