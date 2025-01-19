@@ -192,7 +192,7 @@ const Search = ({ route, navigation }) => {
         preferredGenderIds: user ? user.preferedGenders.map(gender => gender.id) : []
       };
 
-      console.log(searchParams)
+      //console.log(searchParams)
       let response = await Global.Fetch(URL.API_SEARCH, 'post', searchParams);
       let result: SearchDto = response.data;
       if (result.users) {

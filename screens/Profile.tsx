@@ -76,9 +76,6 @@ const Profile = ({ route, navigation }) => {
   const [gender, setGender] = React.useState<Gender>()
   const [preferredGenders, setPreferredGenders] = React.useState(Array<Gender>);
   const [miscInfo, setMiscInfo] = React.useState<UserMiscInfo[]>([])
-  //const [relationshipString, setRelationshipString] = React.useState<String>();
-  //const [kidsString, setKidsString] = React.useState<String>();
-  //const [drugsString, setDrugsString] = React.useState<String>();
   const [swiperImages, setSwiperImages] = React.useState<Array<string>>([]);
   const [reportModalVisible, setReportModalVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
@@ -112,22 +109,6 @@ const Profile = ({ route, navigation }) => {
       fontSize: 18
     }
   });
-
-  console.log("intention")
-  console.log(intention)
-  console.log(IntentionNameMap.get(intention?.id))
-
-  /*
-  function convertGenderText(text: string): Gender {
-    switch (text) {
-      case GenderText.MALE:
-        return Gender.MALE;
-      case GenderText.FEMALE:
-        return Gender.FEMALE;
-    }
-    return Gender.OTHER;
-  }
-    */
 
   async function load(fetch = false) {
 
@@ -189,49 +170,6 @@ const Profile = ({ route, navigation }) => {
 
     setMiscInfo(user.miscInfos);
 
-    /*
-    let relationShip;
-    if (miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_SINGLE)) {
-      relationShip = i18n.t('profile.misc-info.relationship.single');
-    }
-    else if (miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_TAKEN)) {
-      relationShip = i18n.t('profile.misc-info.relationship.taken');
-    }
-    else if (miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OPEN)) {
-      relationShip = i18n.t('profile.misc-info.relationship.open');
-    }
-    else if (miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OTHER)) {
-      relationShip = i18n.t('profile.misc-info.relationship.other');
-    }
-    setRelationshipString(relationShip);
-
-    let kids;
-    if (miscInfoData.includes(UserMiscInfoEnum.KIDS_NO)) {
-      kids = i18n.t('profile.misc-info.kids.no');
-    }
-    else if (miscInfoData.includes(UserMiscInfoEnum.KIDS_YES)) {
-      kids = i18n.t('profile.misc-info.kids.yes');
-    }
-    setKidsString(kids);
-
-    let drugs: string[] = [];
-    if (miscInfoData.includes(UserMiscInfoEnum.DRUGS_TOBACCO)) {
-      drugs.push(i18n.t('profile.misc-info.drugs.tobacco'));
-    }
-    if (miscInfoData.includes(UserMiscInfoEnum.DRUGS_ALCOHOL)) {
-      drugs.push(i18n.t('profile.misc-info.drugs.alcohol'));
-    }
-    if (miscInfoData.includes(UserMiscInfoEnum.DRUGS_CANNABIS)) {
-      drugs.push(i18n.t('profile.misc-info.drugs.cannabis'));
-    }
-    if (miscInfoData.includes(UserMiscInfoEnum.DRUGS_OTHER)) {
-      drugs.push(i18n.t('profile.misc-info.drugs.other'));
-    }
-    if (drugs.length > 0) {
-      let s = drugs.join(', ');
-      setDrugsString(s);
-    }
-      */
   }
 
   React.useEffect(() => {
@@ -325,8 +263,6 @@ const Profile = ({ route, navigation }) => {
   }
 
   function getMiscInfoText(map: Map<number, string>): string {
-    console.log(map)
-    console.log(miscInfo)
     let id = miscInfo.map(m => m.value).find(e => [...map.keys()].includes(e));
     if(id != undefined) {
       const text = map.get(id);

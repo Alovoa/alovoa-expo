@@ -74,7 +74,6 @@ const SearchSettings = ({ route, navigation }) => {
 
   async function toggleShowOutsideParams() {
     let newState = !showOutsideParams;
-    console.log(newState)
     setShowOutsideParams(newState);
     let params: SearchParams = await getStoredParams();
     params.showOutsideParameters = newState;
