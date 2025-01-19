@@ -118,6 +118,10 @@ const ProfileSettings = ({ route, navigation }) => {
     Global.navigate("Profile.Prompts", false, { user: user });
   }
 
+  const halfWidth = {
+    height: height/2
+  };
+
   return (
     <View style={{ height: height - headerHeight }}>
       {loading &&
@@ -176,132 +180,137 @@ const ProfileSettings = ({ route, navigation }) => {
               style={{ alignSelf: 'stretch' }} onPress={navigatePrompts}>{i18n.t('profile.prompts.subtitle')}</Button>
           </View>
 
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
-              data={[
-                [UserMiscInfoEnum.RELATIONSHIP_SINGLE, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_SINGLE)],
-                [UserMiscInfoEnum.RELATIONSHIP_TAKEN, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_TAKEN)],
-                [UserMiscInfoEnum.RELATIONSHIP_OPEN, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_OPEN)],
-                [UserMiscInfoEnum.RELATIONSHIP_OTHER, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_OTHER)],
-              ]}
-              selected={miscInfoRelationship} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, false);
-              }}></SelectModal>
-          </View>
+          <View style={{flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.relationship.title')}
+                data={[
+                  [UserMiscInfoEnum.RELATIONSHIP_SINGLE, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_SINGLE)],
+                  [UserMiscInfoEnum.RELATIONSHIP_TAKEN, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_TAKEN)],
+                  [UserMiscInfoEnum.RELATIONSHIP_OPEN, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_OPEN)],
+                  [UserMiscInfoEnum.RELATIONSHIP_OTHER, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_OTHER)],
+                ]}
+                selected={miscInfoRelationship} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, false);
+                }}></SelectModal>
+            </View>
 
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
-              data={[
-                [UserMiscInfoEnum.KIDS_NO, MiscInfoNameMap.get(UserMiscInfoEnum.KIDS_NO)],
-                [UserMiscInfoEnum.KIDS_YES, MiscInfoNameMap.get(UserMiscInfoEnum.KIDS_YES)],
-              ]}
-              selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, false);
-              }}></SelectModal>
-          </View>
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.kids.title')}
+                data={[
+                  [UserMiscInfoEnum.KIDS_NO, MiscInfoNameMap.get(UserMiscInfoEnum.KIDS_NO)],
+                  [UserMiscInfoEnum.KIDS_YES, MiscInfoNameMap.get(UserMiscInfoEnum.KIDS_YES)],
+                ]}
+                selected={miscInfoKids} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, false);
+                }}></SelectModal>
+            </View>
 
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.family.title')}
-              data={[
-                [UserMiscInfoEnum.FAMILY_WANT, MiscInfoNameMap.get(UserMiscInfoEnum.FAMILY_WANT)],
-                [UserMiscInfoEnum.FAMILY_NOT_WANT, MiscInfoNameMap.get(UserMiscInfoEnum.FAMILY_NOT_WANT)],
-                [UserMiscInfoEnum.FAMILY_NOT_SURE, MiscInfoNameMap.get(UserMiscInfoEnum.FAMILY_NOT_SURE)],
-              ]}
-              selected={miscInfoFamily} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, false);
-              }}></SelectModal>
-          </View>
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.misc-info.family.title')}
+                data={[
+                  [UserMiscInfoEnum.FAMILY_WANT, MiscInfoNameMap.get(UserMiscInfoEnum.FAMILY_WANT)],
+                  [UserMiscInfoEnum.FAMILY_NOT_WANT, MiscInfoNameMap.get(UserMiscInfoEnum.FAMILY_NOT_WANT)],
+                  [UserMiscInfoEnum.FAMILY_NOT_SURE, MiscInfoNameMap.get(UserMiscInfoEnum.FAMILY_NOT_SURE)],
+                ]}
+                selected={miscInfoFamily} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, false);
+                }}></SelectModal>
+            </View>
 
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.relationship-type.title')}
-              data={[
-                [UserMiscInfoEnum.RELATIONSHIP_TYPE_MONOGAMOUS, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_TYPE_MONOGAMOUS)],
-                [UserMiscInfoEnum.RELATIONSHIP_TYPE_POLYAMOROUS, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_TYPE_POLYAMOROUS)],
-              ]}
-              selected={miscInfoRelationshipType} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, true);
-              }}></SelectModal>
-          </View>
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.relationship-type.title')}
+                data={[
+                  [UserMiscInfoEnum.RELATIONSHIP_TYPE_MONOGAMOUS, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_TYPE_MONOGAMOUS)],
+                  [UserMiscInfoEnum.RELATIONSHIP_TYPE_POLYAMOROUS, MiscInfoNameMap.get(UserMiscInfoEnum.RELATIONSHIP_TYPE_POLYAMOROUS)],
+                ]}
+                selected={miscInfoRelationshipType} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, true);
+                }}></SelectModal>
+            </View>
 
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.politics.title')}
-              data={[
-                [UserMiscInfoEnum.POLITICS_LEFT, MiscInfoNameMap.get(UserMiscInfoEnum.POLITICS_LEFT)],
-                [UserMiscInfoEnum.POLITICS_MODERATE, MiscInfoNameMap.get(UserMiscInfoEnum.POLITICS_MODERATE)],
-                [UserMiscInfoEnum.POLITICS_RIGHT, MiscInfoNameMap.get(UserMiscInfoEnum.POLITICS_RIGHT)],
-              ]}
-              selected={miscInfoPolitics} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, true);
-              }}></SelectModal>
-          </View>
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.politics.title')}
+                data={[
+                  [UserMiscInfoEnum.POLITICS_LEFT, MiscInfoNameMap.get(UserMiscInfoEnum.POLITICS_LEFT)],
+                  [UserMiscInfoEnum.POLITICS_MODERATE, MiscInfoNameMap.get(UserMiscInfoEnum.POLITICS_MODERATE)],
+                  [UserMiscInfoEnum.POLITICS_RIGHT, MiscInfoNameMap.get(UserMiscInfoEnum.POLITICS_RIGHT)],
+                ]}
+                selected={miscInfoPolitics} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, true);
+                }}></SelectModal>
+            </View>
 
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.gender-identity.title')}
-              data={[
-                [UserMiscInfoEnum.GENDER_IDENTITY_CIS, MiscInfoNameMap.get(UserMiscInfoEnum.GENDER_IDENTITY_CIS)],
-                [UserMiscInfoEnum.GENDER_IDENTITY_TRANS, MiscInfoNameMap.get(UserMiscInfoEnum.GENDER_IDENTITY_TRANS)],
-              ]}
-              selected={miscInfoGenderIdentity} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, true);
-              }}></SelectModal>
-          </View>
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.religion.title')}
+                data={[
+                  [UserMiscInfoEnum.RELIGION_YES, MiscInfoNameMap.get(UserMiscInfoEnum.RELIGION_YES)],
+                  [UserMiscInfoEnum.RELIGION_NO, MiscInfoNameMap.get(UserMiscInfoEnum.RELIGION_NO)],
+                ]}
+                selected={miscInfoReligion} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, true);
+                }}></SelectModal>
+            </View>
 
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.religion.title')}
-              data={[
-                [UserMiscInfoEnum.RELIGION_YES, MiscInfoNameMap.get(UserMiscInfoEnum.RELIGION_YES)],
-                [UserMiscInfoEnum.RELIGION_NO, MiscInfoNameMap.get(UserMiscInfoEnum.RELIGION_NO)],
-              ]}
-              selected={miscInfoReligion} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, true);
-              }}></SelectModal>
-          </View>
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.alcohol')}
+                data={[
+                  [UserMiscInfoEnum.DRUGS_ALCOHOL, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_ALCOHOL)],
+                  [UserMiscInfoEnum.DRUGS_ALCOHOL_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_ALCOHOL_SOMETIMES)],
+                  [UserMiscInfoEnum.DRUGS_ALCOHOL_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_ALCOHOL_NO)],
+                ]}
+                selected={miscInfoAlcohol} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, true);
+                }}></SelectModal>
+            </View>
 
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.alcohol')}
-              data={[
-                [UserMiscInfoEnum.DRUGS_ALCOHOL, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_ALCOHOL)],
-                [UserMiscInfoEnum.DRUGS_ALCOHOL_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_ALCOHOL_SOMETIMES)],
-                [UserMiscInfoEnum.DRUGS_ALCOHOL_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_ALCOHOL_NO)],
-              ]}
-              selected={miscInfoAlcohol} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, true);
-              }}></SelectModal>
-          </View>
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.tobacco')}
-              data={[
-                [UserMiscInfoEnum.DRUGS_TOBACCO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_TOBACCO)],
-                [UserMiscInfoEnum.DRUGS_TOBACCO_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_TOBACCO_SOMETIMES)],
-                [UserMiscInfoEnum.DRUGS_TOBACCO_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_TOBACCO_NO)],
-              ]}
-              selected={miscInfoTobacco} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, true);
-              }}></SelectModal>
-          </View>
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.cannabis')}
-              data={[
-                [UserMiscInfoEnum.DRUGS_CANNABIS, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_CANNABIS)],
-                [UserMiscInfoEnum.DRUGS_CANNABIS_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_CANNABIS_SOMETIMES)],
-                [UserMiscInfoEnum.DRUGS_CANNABIS_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_CANNABIS_NO)],
-              ]}
-              selected={miscInfoCannabis} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, true);
-              }}></SelectModal>
-          </View>
-          <View>
-            <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.other')}
-              data={[
-                [UserMiscInfoEnum.DRUGS_OTHER, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_OTHER)],
-                [UserMiscInfoEnum.DRUGS_OTHER_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_OTHER_SOMETIMES)],
-                [UserMiscInfoEnum.DRUGS_OTHER_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_OTHER_NO)],
-              ]}
-              selected={miscInfoHardDrugs} onValueChanged={function (id: number, checked: boolean): void {
-                updateMiscInfo(id, checked, true);
-              }}></SelectModal>
-          </View>
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.tobacco')}
+                data={[
+                  [UserMiscInfoEnum.DRUGS_TOBACCO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_TOBACCO)],
+                  [UserMiscInfoEnum.DRUGS_TOBACCO_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_TOBACCO_SOMETIMES)],
+                  [UserMiscInfoEnum.DRUGS_TOBACCO_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_TOBACCO_NO)],
+                ]}
+                selected={miscInfoTobacco} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, true);
+                }}></SelectModal>
+            </View>
 
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.cannabis')}
+                data={[
+                  [UserMiscInfoEnum.DRUGS_CANNABIS, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_CANNABIS)],
+                  [UserMiscInfoEnum.DRUGS_CANNABIS_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_CANNABIS_SOMETIMES)],
+                  [UserMiscInfoEnum.DRUGS_CANNABIS_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_CANNABIS_NO)],
+                ]}
+                selected={miscInfoCannabis} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, true);
+                }}></SelectModal>
+            </View>
+
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.drugs.other')}
+                data={[
+                  [UserMiscInfoEnum.DRUGS_OTHER, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_OTHER)],
+                  [UserMiscInfoEnum.DRUGS_OTHER_SOMETIMES, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_OTHER_SOMETIMES)],
+                  [UserMiscInfoEnum.DRUGS_OTHER_NO, MiscInfoNameMap.get(UserMiscInfoEnum.DRUGS_OTHER_NO)],
+                ]}
+                selected={miscInfoHardDrugs} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, true);
+                }}></SelectModal>
+            </View>
+
+            <View style={{minWidth: 100}}>
+              <SelectModal disabled={false} multi={false} minItems={0} title={i18n.t('profile.misc-info.gender-identity.title')}
+                data={[
+                  [UserMiscInfoEnum.GENDER_IDENTITY_CIS, MiscInfoNameMap.get(UserMiscInfoEnum.GENDER_IDENTITY_CIS)],
+                  [UserMiscInfoEnum.GENDER_IDENTITY_TRANS, MiscInfoNameMap.get(UserMiscInfoEnum.GENDER_IDENTITY_TRANS)],
+                ]}
+                selected={miscInfoGenderIdentity} onValueChanged={function (id: number, checked: boolean): void {
+                  updateMiscInfo(id, checked, true);
+                }}></SelectModal>
+            </View>
+            
+          </View>
         </View>
       </VerticalView>
     </View>
