@@ -31,7 +31,7 @@ const Search = ({ route, navigation }) => {
   const [user, setUser] = React.useState<UserDto>();
   const [results, setResults] = useState(Array<UserDto>);
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
-  const [distance, setDistance] = React.useState(50);
+  const [distance, setDistance] = React.useState(160);
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
@@ -180,7 +180,7 @@ const Search = ({ route, navigation }) => {
 
       let searchParams: SearchParams = {
         distance: storedParams?.distance ? storedParams.distance : Global.DEFAULT_DISTANCE,
-        showOutsideParameters:  storedParams?.showOutsideParameters == undefined ? true : storedParams.showOutsideParameters,
+        showOutsideParameters:  storedParams?.showOutsideParameters == undefined ? false : storedParams.showOutsideParameters,
         sort: SearchParamsSortE.DEFAULT,
         latitude: lat,
         longitude: lon,
