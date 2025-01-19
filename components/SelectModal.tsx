@@ -25,7 +25,8 @@ const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, dat
   }
 
   function updateButtonText() {
-    let text = data.filter(item => selectedIds.includes(item.id)).map(item => item.title).join(", ");
+    let text = [...data.entries()].filter(([key, value]) => 
+      selectedIds.includes(value[0])).map(([key, value]) => value[1] != undefined ? i18n.t(value[1]) : '').join(", ");
     if(!text) {
       text = Global.EMPTY_STRING;
     }
@@ -59,26 +60,26 @@ const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, dat
           </View>
           <Text style={{ marginBottom: 12 }}>{title}</Text>
           <View style={{ padding: 12 }}>
-            {data.map((item, index) => (
-              <Checkbox.Item label={item.title} key={index}
-                status={selectedIds.includes(item.id) ? 'checked' : 'unchecked'}
+            {[...data].map(([key, value], index) => (
+              <Checkbox.Item label={value ? i18n.t(value) : ''} key={index}
+                status={selectedIds.includes(key) ? 'checked' : 'unchecked'}
                 onPress={() => {
-                  let hasItem = selectedIds.includes(item.id);
+                  let hasItem = selectedIds.includes(key);
                   if (multi) {
                     if (hasItem) {
-                      let copy = selectedIds.filter(s => s !== item.id);
+                      let copy = selectedIds.filter(s => s !== key);
                       if (copy.length >= minItems) {
                         setSelectedIds(copy);
                       }
                     } else {
                       const copy = [...selectedIds];
-                      copy.push(item.id)
+                      copy.push(key)
                       setSelectedIds(copy);
                     }
-                    onValueChanged(item.id, !hasItem);
+                    onValueChanged(key, !hasItem);
                   } else {
-                    setSelectedIds([item.id]);
-                    onValueChanged(item.id, true);
+                    setSelectedIds([key]);
+                    onValueChanged(key, true);
                     hideModal();
                   }
                 }}

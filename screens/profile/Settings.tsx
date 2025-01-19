@@ -4,7 +4,7 @@ import {
   useWindowDimensions
 } from "react-native";
 import styles from "../../assets/styles";
-import { SettingsEmailEnum, UnitsEnum, YourProfileResource } from "../../types";
+import { SettingsEmailEnum, SettingsEmailNameMap, UnitsEnum, UnitsNameMap, YourProfileResource } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -68,8 +68,10 @@ const Settings = ({ route, navigation }) => {
           </View>
           <View style={{ marginTop: 12 }}>
             <SelectModal disabled={false} multi={false} minItems={1} title={i18n.t('profile.units.title')}
-              data={[{ id: UnitsEnum.SI, title: i18n.t('profile.units.si') },
-              { id: UnitsEnum.IMPERIAL, title: i18n.t('profile.units.imperial') }]}
+              data={[
+                [UnitsEnum.SI, UnitsNameMap.get(UnitsEnum.SI)],
+                [UnitsEnum.IMPERIAL, UnitsNameMap.get(UnitsEnum.IMPERIAL)],
+              ]}
               selected={[units]} onValueChanged={function (id: number, checked: boolean): void {
                 if (checked) {
                   updateUnits(id);
@@ -78,8 +80,10 @@ const Settings = ({ route, navigation }) => {
           </View>
           <View style={{ marginTop: 12 }}>
             <SelectModal disabled={false} multi={true} minItems={0} title={i18n.t('profile.settings.notification')}
-              data={[{ id: SettingsEmailEnum.LIKE, title: i18n.t('profile.settings.email.like') },
-              { id: SettingsEmailEnum.CHAT, title: i18n.t('profile.settings.email.chat') }]}
+              data={[
+                [SettingsEmailEnum.LIKE, SettingsEmailNameMap.get(SettingsEmailEnum.LIKE)],
+                [SettingsEmailEnum.CHAT, SettingsEmailNameMap.get(SettingsEmailEnum.CHAT)],
+              ]}
               selected={[...emailSettings.entries()].filter((item) => item[1]).map((item) => item[0])}
               onValueChanged={updateEmailSettings}>
             </SelectModal>

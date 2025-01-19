@@ -31,7 +31,7 @@ const Search = ({ route, navigation }) => {
   const [user, setUser] = React.useState<UserDto>();
   const [results, setResults] = useState(Array<UserDto>);
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
-  const [distance, setDistance] = React.useState(50);
+  const [distance, setDistance] = React.useState(Global.DEFAULT_DISTANCE);
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
@@ -52,8 +52,8 @@ const Search = ({ route, navigation }) => {
 
   const { height, width } = useWindowDimensions();
 
-  const LOCATION_TIMEOUT_SHORT = 6000;
-  const LOCATION_TIMEOUT_LONG = 10000;
+  const LOCATION_TIMEOUT_SHORT = Global.DEFAULT_GPS_TIMEOUT;
+  const LOCATION_TIMEOUT_LONG = LOCATION_TIMEOUT_SHORT * 10;
 
   const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
     return Promise.race([
@@ -106,11 +106,11 @@ const Search = ({ route, navigation }) => {
   async function load() {
     setLoaded(false);
     setResults([]);
+    setLoading(true);
     let l1 = await Global.GetStorage(Global.STORAGE_LATITUDE);
     latitude = l1 ? Number(l1) : undefined;
     let l2 = await Global.GetStorage(Global.STORAGE_LONGITUDE);
     longitude = l2 ? Number(l2) : undefined;
-    setLoading(true);
     await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE).then(
       async (response) => {
         let data: SearchResource = response.data;
@@ -151,7 +151,11 @@ const Search = ({ route, navigation }) => {
         if (status == 'granted') {
           hasLocationPermission = true;
           try {
-            location = await promiseWithTimeout(hasLocation ? LOCATION_TIMEOUT_SHORT : LOCATION_TIMEOUT_LONG, Location.getCurrentPositionAsync({}));
+            let storedGpsTimeout = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_GPSTIMEOPUT);
+            let gpsTimeout = storedGpsTimeout ? 
+              hasLocation ? Math.max(LOCATION_TIMEOUT_SHORT, Number(storedGpsTimeout)) : Math.max(LOCATION_TIMEOUT_LONG, Number(storedGpsTimeout)) :
+              hasLocation ? LOCATION_TIMEOUT_SHORT : LOCATION_TIMEOUT_LONG;
+            location = await promiseWithTimeout(gpsTimeout, Location.getCurrentPositionAsync({}));
             hasGpsEnabled = true;
             lat = location?.coords.latitude;
             lon = location?.coords.longitude;
@@ -170,9 +174,13 @@ const Search = ({ route, navigation }) => {
     }
 
     if (lat != undefined && lon != undefined) {
-      let params: SearchParams = {
-        distance: 50,
-        showOutsideParameters: true,
+
+      let paramsStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_PARAMS);
+      let storedParams: SearchParams = paramsStorage ? JSON.parse(paramsStorage) : {};
+
+      let searchParams: SearchParams = {
+        distance: storedParams?.distance ? storedParams.distance : Global.DEFAULT_DISTANCE,
+        showOutsideParameters:  storedParams?.showOutsideParameters == undefined ? true : storedParams.showOutsideParameters,
         sort: SearchParamsSortE.DEFAULT,
         latitude: lat,
         longitude: lon,
@@ -184,8 +192,8 @@ const Search = ({ route, navigation }) => {
         preferredGenderIds: user ? user.preferedGenders.map(gender => gender.id) : []
       };
 
-      console.log(params)
-      let response = await Global.Fetch(URL.API_SEARCH, 'post', params);
+      //console.log(searchParams)
+      let response = await Global.Fetch(URL.API_SEARCH, 'post', searchParams);
       let result: SearchDto = response.data;
       if (result.users) {
         setResults(result.users);
@@ -261,7 +269,7 @@ const Search = ({ route, navigation }) => {
         </View>
       }
 
-      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 4, justifyContent: 'flex-end' }]}>
+      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 8, justifyContent: 'flex-end' }]}>
         { width > WIDESCREEN_HORIZONTAL_MAX &&
           <Button icon="cog" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
                       style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={openSearchSetting}>
