@@ -70,7 +70,7 @@ export const MAX_MESSAGE_LENGTH = 255;
 export const MAX_DESCRIPTION_LENGTH = 255;
 export const DEFAULT_GPS_TIMEOUT = 6000;
 export const DEFAULT_HIDE_THRESHOLD = 3;
-export const DEFAULT_DISTANCE = 50;
+export const DEFAULT_DISTANCE = 120;
 export const MAX_DISTANCE = 160;
 
 const IMG_SIZE_MAX = 600;
