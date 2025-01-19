@@ -31,7 +31,7 @@ const Search = ({ route, navigation }) => {
   const [user, setUser] = React.useState<UserDto>();
   const [results, setResults] = useState(Array<UserDto>);
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
-  const [distance, setDistance] = React.useState(160);
+  const [distance, setDistance] = React.useState(Global.DEFAULT_DISTANCE);
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
@@ -53,7 +53,7 @@ const Search = ({ route, navigation }) => {
   const { height, width } = useWindowDimensions();
 
   const LOCATION_TIMEOUT_SHORT = Global.DEFAULT_GPS_TIMEOUT;
-  const LOCATION_TIMEOUT_LONG = LOCATION_TIMEOUT_SHORT * 2;
+  const LOCATION_TIMEOUT_LONG = LOCATION_TIMEOUT_SHORT * 10;
 
   const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
     return Promise.race([
@@ -180,7 +180,7 @@ const Search = ({ route, navigation }) => {
 
       let searchParams: SearchParams = {
         distance: storedParams?.distance ? storedParams.distance : Global.DEFAULT_DISTANCE,
-        showOutsideParameters:  storedParams?.showOutsideParameters == undefined ? false : storedParams.showOutsideParameters,
+        showOutsideParameters:  storedParams?.showOutsideParameters == undefined ? true : storedParams.showOutsideParameters,
         sort: SearchParamsSortE.DEFAULT,
         latitude: lat,
         longitude: lon,
@@ -269,7 +269,7 @@ const Search = ({ route, navigation }) => {
         </View>
       }
 
-      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 4, justifyContent: 'flex-end' }]}>
+      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 8, justifyContent: 'flex-end' }]}>
         { width > WIDESCREEN_HORIZONTAL_MAX &&
           <Button icon="cog" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
                       style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={openSearchSetting}>

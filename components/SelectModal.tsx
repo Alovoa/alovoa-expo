@@ -25,7 +25,6 @@ const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, dat
   }
 
   function updateButtonText() {
-    console.log(selectedIds)
     let text = [...data.entries()].filter(([key, value]) => 
       selectedIds.includes(value[0])).map(([key, value]) => value[1] != undefined ? i18n.t(value[1]) : '').join(", ");
     if(!text) {

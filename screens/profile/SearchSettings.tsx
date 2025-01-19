@@ -97,6 +97,7 @@ const SearchSettings = ({ route, navigation }) => {
   React.useEffect(() => {
     if (changed) {
       Global.SetStorage(Global.STORAGE_RELOAD_SEARCH, Global.STORAGE_TRUE);
+      setChanged(false)
     }
   }, [changed]);
 
@@ -232,7 +233,7 @@ const SearchSettings = ({ route, navigation }) => {
           </View>
 
           <View style={{ flexDirection: "row" }}>
-              <Checkbox.Item onPress={toggleShowOutsideParams} position="leading"
+              <Checkbox.Item onPress={toggleShowOutsideParams}
                 status={showOutsideParams ? 'checked' : 'unchecked'} label={i18n.t('profile.search.settings.show-outside-parameters')} />
           </View>
 

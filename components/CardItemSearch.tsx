@@ -96,7 +96,7 @@ const CardItem = ({
   }
 
   return (
-    <View style={[styles.containerCardItem, { paddingHorizontal: 20, backgroundColor: colors.surface, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - cardPadding, width: width - cardPadding }]}>
+    <View style={[styles.containerCardItem, { paddingHorizontal: 20, backgroundColor: colors.surface, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - STATUS_BAR_HEIGHT - cardPadding, width: width - cardPadding }]}>
       { tooManyReports &&
         <View style={{flexGrow: 1, height: '100%', alignItems: 'center', justifyContent: 'center'}}>
           <View style={{gap: 24}}>
