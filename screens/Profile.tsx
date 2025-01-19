@@ -268,7 +268,7 @@ const Profile = ({ route, navigation }) => {
       const text = map.get(id);
       return text ? i18n.t(text) : Global.EMPTY_STRING;
     } else {
-      return '';
+      return Global.EMPTY_STRING;
     }
   }
 
