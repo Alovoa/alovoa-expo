@@ -40,6 +40,13 @@ export const STORAGE_SETTINGS_UNIT = "settings.unit"
 export const STORAGE_SETTINGS_COLOR_PRIMARY = "settings.color.primary"
 export const STORAGE_SETTINGS_COLOR_SECONDARY = "settings.color.secondary"
 
+export const STORAGE_ADV_SEARCH_GPSTIMEOPUT = "adv-search.gps-timeout";
+export const STORAGE_ADV_SEARCH_HIDE_THRESHOLD = "adv-search.hide-threshold";
+export const STORAGE_ADV_SEARCH_PARAMS = "adv-search.params";
+
+export const STORAGE_TRUE = "true";
+export const STORAGE_FALSE = "false";
+
 export const SCREEN_YOURPROFILE = "YourProfile"
 export const SCREEN_CHAT = "Chat"
 export const SCREEN_SEARCH = "Search"
@@ -49,7 +56,9 @@ export const SCREEN_DONATE = "Donate"
 export const SCREEN_PROFILE_PICTURES = "Profile.Pictures"
 export const SCREEN_PROFILE_PROFILESETTINGS = "Profile.ProfileSettings"
 export const SCREEN_PROFILE_SEARCHSETTINGS = "Profile.SearchSettings"
+export const SCREEN_PROFILE_SEARCHPARAMETERS = "Profile.SearchParameters"
 export const SCREEN_PROFILE_SETTINGS = "Profile.Settings"
+export const SCREEN_PROFILE_ADVANCED_SETTINGS = "Profile.AdvancedSettings"
 
 export const DEFAULT_COLOR_PRIMARY = '#EC407A';
 export const DEFAULT_COLOR_SECONDARY = '#28C4ED';
@@ -59,6 +68,10 @@ export const EMPTY_STRING = "...";
 export const MAX_INTERESTS = 10;
 export const MAX_MESSAGE_LENGTH = 255;
 export const MAX_DESCRIPTION_LENGTH = 255;
+export const DEFAULT_GPS_TIMEOUT = 6000;
+export const DEFAULT_HIDE_THRESHOLD = 3;
+export const DEFAULT_DISTANCE = 120;
+export const MAX_DISTANCE = 160;
 
 const IMG_SIZE_MAX = 600;
 

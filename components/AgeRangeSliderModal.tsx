@@ -67,46 +67,49 @@ const AgeRangeSliderModal = ({
           </View>
           <Text style={{ marginBottom: 12 }}>{title}</Text>
           <View style={{ padding: 12 }}>
-            <View style={{ marginTop: 12 }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text>{titleLower}: </Text>
-                <Text>{minAgeText}</Text>
+            <View style={{ marginTop: 12, gap: 12 }}>
+              <View>
+                <View style={{ flexDirection: 'row' }}>
+                  <Text>{titleLower}: </Text>
+                  <Text>{minAgeText}</Text>
+                </View>
+                <Slider
+                  value={lowerValue}
+                  minimumValue={MIN_AGE}
+                  maximumValue={upperValue}
+                  minimumTrackTintColor={colors.secondary}
+                  maximumTrackTintColor={GRAY}
+                  thumbTintColor={colors.primary}
+                  step={1}
+                  onValueChange={(value: number) => {
+                    setMinAgeText(value);
+                  }}
+                  onSlidingComplete={(value: number) => {
+                    onValueLowerChanged(value);
+                  }}
+                />
               </View>
-              <Slider
-                value={lowerValue}
-                minimumValue={MIN_AGE}
-                maximumValue={upperValue}
-                minimumTrackTintColor={colors.secondary}
-                maximumTrackTintColor={GRAY}
-                thumbTintColor={colors.primary}
-                step={1}
-                onValueChange={(value: number) => {
-                  setMinAgeText(value);
-                }}
-                onSlidingComplete={(value: number) => {
-                  onValueLowerChanged(value);
-                }}
-              />
-
-              <View style={{ flexDirection: 'row' }}>
-                <Text>{titleUpper}: </Text>
-                <Text>{maxAgeText}</Text>
+              <View>
+                <View style={{ flexDirection: 'row' }}>
+                  <Text>{titleUpper}: </Text>
+                  <Text>{maxAgeText}</Text>
+                </View>
+                <Slider
+                  value={upperValue}
+                  minimumValue={lowerValue}
+                  maximumValue={MAX_AGE}
+                  minimumTrackTintColor={colors.secondary}
+                  maximumTrackTintColor={GRAY}
+                  thumbTintColor={colors.primary}
+                  step={1}
+                  onValueChange={(value: number) => {
+                    setMaxAgeText(value);
+                  }}
+                  onSlidingComplete={(value: number) => {
+                    onValueUpperChanged(value);
+                  }}
+                />
               </View>
-              <Slider
-                value={upperValue}
-                minimumValue={lowerValue}
-                maximumValue={MAX_AGE}
-                minimumTrackTintColor={colors.secondary}
-                maximumTrackTintColor={GRAY}
-                thumbTintColor={colors.primary}
-                step={1}
-                onValueChange={(value: number) => {
-                  setMaxAgeText(value);
-                }}
-                onSlidingComplete={(value: number) => {
-                  onValueUpperChanged(value);
-                }}
-              />
             </View>
           </View>
         </Modal>

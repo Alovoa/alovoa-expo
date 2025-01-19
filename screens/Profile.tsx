@@ -8,14 +8,13 @@ import {
   useWindowDimensions,
   ScrollView,
 } from "react-native";
-import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button } from "react-native-paper";
-import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage, UserPrompt } from "../types";
+import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip } from "react-native-paper";
+import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage, UserPrompt, GenderNameMap, GenderEnum, Gender, IntentionNameMap, UserMiscInfo, MiscInfoRelationshipNameMap, MiscInfoKidsNameMap, MiscInfoDrugsOtherNameMap, MiscInfoDrugsAlcoholNameMap, MiscInfoDrugsTobaccoNameMap, MiscInfoDrugsCannabisNameMap, MiscInfoRelationshipTypeNameMap, MiscInfoFamilyNameMap, MiscInfoPoliticsNameMap, MiscInfoReligionNameMap, MiscInfoGenderIdentityNameMap } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ImageZoom } from '@likashefqet/react-native-image-zoom';
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import styles, {
   DISLIKE_ACTIONS,
   LIKE_ACTIONS,
@@ -29,18 +28,6 @@ import VerticalView from "../components/VerticalView";
 import ComplimentModal from "../components/ComplimentModal";
 
 const i18n = I18N.getI18n()
-
-enum Gender {
-  MALE = 1,
-  FEMALE = 2,
-  OTHER = 3
-}
-
-enum GenderText {
-  MALE = "male",
-  FEMALE = "female",
-  OTHER = "other"
-}
 
 enum Intention {
   MEET = 1,
@@ -88,9 +75,7 @@ const Profile = ({ route, navigation }) => {
   const [reported, setReported] = React.useState(false)
   const [gender, setGender] = React.useState<Gender>()
   const [preferredGenders, setPreferredGenders] = React.useState(Array<Gender>);
-  const [relationshipString, setRelationshipString] = React.useState<String>();
-  const [kidsString, setKidsString] = React.useState<String>();
-  const [drugsString, setDrugsString] = React.useState<String>();
+  const [miscInfo, setMiscInfo] = React.useState<UserMiscInfo[]>([])
   const [swiperImages, setSwiperImages] = React.useState<Array<string>>([]);
   const [reportModalVisible, setReportModalVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
@@ -125,16 +110,6 @@ const Profile = ({ route, navigation }) => {
     }
   });
 
-  function convertGenderText(text: string): Gender {
-    switch (text) {
-      case GenderText.MALE:
-        return Gender.MALE;
-      case GenderText.FEMALE:
-        return Gender.FEMALE;
-    }
-    return Gender.OTHER;
-  }
-
   async function load(fetch = false) {
 
     if (fetch || !user) {
@@ -161,19 +136,14 @@ const Profile = ({ route, navigation }) => {
     setMinAge(user.preferedMinAge);
     setMaxAge(user.preferedMaxAge);
     setDescription(user.description);
-    setGender(convertGenderText(user.gender.text));
+    setGender(user.gender);
     if (user.email) {
       setIsSelf(true);
     }
-
     if (user.lastActiveState) {
       setLastActiveState(user.lastActiveState);
     }
-    let prefGenders: Array<Gender> = [];
-    for (let i = 0; i < user.preferedGenders.length; i++) {
-      prefGenders.push(convertGenderText(user.preferedGenders[i].text));
-    }
-    setPreferredGenders(prefGenders);
+    setPreferredGenders(user.preferedGenders);
     setInterests(Global.shuffleArray(user.interests));
     setPrompts(Global.shuffleArray(user.prompts));
     var swiperImageData: Array<string> = [];
@@ -198,49 +168,8 @@ const Profile = ({ route, navigation }) => {
         break;
     }
 
-    let miscInfoData = user.miscInfos.map(item => item.value);
+    setMiscInfo(user.miscInfos);
 
-    let relationShip;
-    if (miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_SINGLE)) {
-      relationShip = i18n.t('profile.misc-info.relationship.single');
-    }
-    else if (miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_TAKEN)) {
-      relationShip = i18n.t('profile.misc-info.relationship.taken');
-    }
-    else if (miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OPEN)) {
-      relationShip = i18n.t('profile.misc-info.relationship.open');
-    }
-    else if (miscInfoData.includes(UserMiscInfoEnum.RELATIONSHIP_OTHER)) {
-      relationShip = i18n.t('profile.misc-info.relationship.other');
-    }
-    setRelationshipString(relationShip);
-
-    let kids;
-    if (miscInfoData.includes(UserMiscInfoEnum.KIDS_NO)) {
-      kids = i18n.t('profile.misc-info.kids.no');
-    }
-    else if (miscInfoData.includes(UserMiscInfoEnum.KIDS_YES)) {
-      kids = i18n.t('profile.misc-info.kids.yes');
-    }
-    setKidsString(kids);
-
-    let drugs: string[] = [];
-    if (miscInfoData.includes(UserMiscInfoEnum.DRUGS_TOBACCO)) {
-      drugs.push(i18n.t('profile.misc-info.drugs.tobacco'));
-    }
-    if (miscInfoData.includes(UserMiscInfoEnum.DRUGS_ALCOHOL)) {
-      drugs.push(i18n.t('profile.misc-info.drugs.alcohol'));
-    }
-    if (miscInfoData.includes(UserMiscInfoEnum.DRUGS_CANNABIS)) {
-      drugs.push(i18n.t('profile.misc-info.drugs.cannabis'));
-    }
-    if (miscInfoData.includes(UserMiscInfoEnum.DRUGS_OTHER)) {
-      drugs.push(i18n.t('profile.misc-info.drugs.other'));
-    }
-    if (drugs.length > 0) {
-      let s = drugs.join(', ');
-      setDrugsString(s);
-    }
   }
 
   React.useEffect(() => {
@@ -289,24 +218,6 @@ const Profile = ({ route, navigation }) => {
     setPreviousScreen(await Global.GetStorage(Global.STORAGE_SCREEN));
   }
 
-  function getGendersText() {
-    let arr: string[] = [];
-    preferredGenders.forEach(element => {
-      switch (element) {
-        case Gender.MALE:
-          arr.push(i18n.t('gender.male'));
-          break;
-        case Gender.FEMALE:
-          arr.push(i18n.t('gender.female'));
-          break;
-        case Gender.OTHER:
-          arr.push(i18n.t('gender.other'));
-          break;
-      }
-    });
-    return arr.join(', ');
-  }
-
   async function blockUser() {
     await Global.Fetch(Global.format(URL.USER_BLOCK, user.uuid), 'post');
     hideMenu();
@@ -349,6 +260,16 @@ const Profile = ({ route, navigation }) => {
     await Global.Fetch(Global.format(URL.USER_HIDE, user.uuid), 'post');
     setHidden(true);
     setRemoveUser(true);
+  }
+
+  function getMiscInfoText(map: Map<number, string>): string {
+    let id = miscInfo.map(m => m.value).find(e => [...map.keys()].includes(e));
+    if(id != undefined) {
+      const text = map.get(id);
+      return text ? i18n.t(text) : '';
+    } else {
+      return '';
+    }
   }
 
   async function heartPressed() {
@@ -488,46 +409,87 @@ const Profile = ({ route, navigation }) => {
 
           <View style={{ marginTop: 24 }}>
             <Text style={style.title}>{i18n.t('profile.profile-page.basics')}</Text>
-            <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-              <Chip icon="gender-male-female" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{gender == Gender.MALE ? i18n.t('gender.male') :
-                  gender == Gender.FEMALE ? i18n.t('gender.female') : i18n.t('gender.other')}</Text>
-              </Chip>
-              <Chip icon="drama-masks" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{String(minAge) + " - " + String(maxAge)}</Text>
-              </Chip>
-              <Chip icon="magnify" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{getGendersText()}</Text>
-              </Chip>
-              <Chip icon="magnify-plus-outline" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{intention == Intention.MEET ? i18n.t('profile.intention.meet') :
-                  intention == Intention.DATE ? i18n.t('profile.intention.date') : i18n.t('profile.intention.sex')}</Text>
-              </Chip>
-              {relationshipString &&
+            <View>
+
+              <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                <Chip icon="gender-male-female" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{gender ? i18n.t(GenderNameMap.get(gender.id)) : ''}</Text>
+                </Chip>
+                <Chip icon="gender-male-female-variant" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoGenderIdentityNameMap)}</Text>
+                </Chip>
+                <Chip icon="drama-masks" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{String(minAge) + " - " + String(maxAge)}</Text>
+                </Chip>
+                <Chip icon="magnify" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{preferredGenders.map(g => i18n.t(GenderNameMap.get(g.id))).filter(e => e).join(", ")}</Text>
+                </Chip>
+                <Chip icon="magnify-plus-outline" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{intention ? i18n.t(IntentionNameMap.get(intention)) : ''}</Text>
+                </Chip>
+              </View>
+
+              <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                 <Chip icon="heart-multiple" style={[styles.marginRight4, styles.marginBottom4]}>
-                  <Text>{relationshipString}</Text>
-                </Chip>}
-              {kidsString && <Chip icon="baby-carriage" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{kidsString}</Text>
-              </Chip>}
-              {drugsString && <Chip icon="pill" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{drugsString}</Text>
-              </Chip>}
+                  <Text>{getMiscInfoText(MiscInfoRelationshipNameMap)}</Text>
+                </Chip>
+                <Chip icon="heart-multiple-outline" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoRelationshipTypeNameMap)}</Text>
+                </Chip>
+
+                <Chip icon="baby-carriage" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoKidsNameMap)}</Text>
+                </Chip>
+                <Chip icon="baby-bottle" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoFamilyNameMap)}</Text>
+                </Chip>
+              </View>
+
+              <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                <Chip icon="liquor" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoDrugsAlcoholNameMap)}</Text>
+                </Chip>
+                <Chip icon="smoking" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoDrugsTobaccoNameMap)}</Text>
+                </Chip>
+                <Chip icon="cannabis" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoDrugsCannabisNameMap)}</Text>
+                </Chip>
+                <Chip icon="pill" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoDrugsOtherNameMap)}</Text>
+                </Chip>
+              </View>
+
+              <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                <Chip icon="vote" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoPoliticsNameMap)}</Text>
+                </Chip>
+                <Chip icon="hands-pray" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{getMiscInfoText(MiscInfoReligionNameMap)}</Text>
+                </Chip>
+              </View>
+
             </View>
           </View>
 
           <View style={{ marginTop: 16 }}>
             <Text style={style.title}>{i18n.t('profile.profile-page.additional')}</Text>
             <View style={{ paddingBottom: 4, display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-              <Chip icon="hand-coin" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{String(donated) + ' €'}</Text>
-              </Chip>
-              <Chip icon="account-cancel" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{'# ' + blocks}</Text>
-              </Chip>
-              <Chip icon="flag" style={[styles.marginRight4, styles.marginBottom4]}>
-                <Text>{'# ' + reports}</Text>
-              </Chip>
+              <Tooltip title={i18n.t('profile.tooltip.donated')}>
+                <Chip icon="hand-coin" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{String(donated) + ' €'}</Text>
+                </Chip>
+              </Tooltip>
+              <Tooltip title={i18n.t('profile.tooltip.blocks')}>
+                <Chip icon="account-cancel" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{'# ' + blocks}</Text>
+                </Chip>
+              </Tooltip>
+              <Tooltip title={i18n.t('profile.tooltip.reports')}>
+                <Chip icon="flag" style={[styles.marginRight4, styles.marginBottom4]}>
+                  <Text>{'# ' + reports}</Text>
+                </Chip>
+              </Tooltip>
             </View>
             <View style={{ marginTop: 80 }}></View>
           </View>

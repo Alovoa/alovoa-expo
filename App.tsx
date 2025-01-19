@@ -9,7 +9,7 @@ import { LogBox, useColorScheme } from 'react-native';
 import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider, configureFonts } from 'react-native-paper';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { Pictures, ProfileSettings, SearchSettings, Settings, Prompts } from "./screens/profile";
+import { Pictures, ProfileSettings, SearchSettings, Settings, Prompts, AdvancedSettings } from "./screens/profile";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as Device from 'expo-device';
 import { ThemeProp } from "react-native-paper/lib/typescript/types";
@@ -227,7 +227,7 @@ export default function App() {
               component={MessageDetail}
             ></Stack.Screen>
             <Stack.Screen
-              name="Profile.Pictures"
+              name={Global.SCREEN_PROFILE_PICTURES}
               options={{
                 title: i18n.t('profile.screen.pictures'),
                 headerShown: true, animationEnabled: true, transitionSpec: {
@@ -238,7 +238,7 @@ export default function App() {
               component={Pictures}
             ></Stack.Screen>
             <Stack.Screen
-              name="Profile.ProfileSettings"
+              name={Global.SCREEN_PROFILE_PROFILESETTINGS}
               options={{
                 title: i18n.t('profile.screen.profile'),
                 headerShown: true, animationEnabled: true, transitionSpec: {
@@ -249,7 +249,7 @@ export default function App() {
               component={ProfileSettings}
             ></Stack.Screen>
             <Stack.Screen
-              name="Profile.SearchSettings"
+              name={Global.SCREEN_PROFILE_SEARCHSETTINGS}
               options={{
                 title: i18n.t('profile.screen.search'),
                 headerShown: true, animationEnabled: true, transitionSpec: {
@@ -260,7 +260,7 @@ export default function App() {
               component={SearchSettings}
             ></Stack.Screen>
             <Stack.Screen
-              name="Profile.Settings"
+              name={Global.SCREEN_PROFILE_SETTINGS}
               options={{
                 title: i18n.t('profile.screen.settings'),
                 headerShown: true, animationEnabled: true, transitionSpec: {
@@ -269,6 +269,17 @@ export default function App() {
                 },
               }}
               component={Settings}
+            ></Stack.Screen>
+            <Stack.Screen
+              name={Global.SCREEN_PROFILE_ADVANCED_SETTINGS}
+              options={{
+                title: i18n.t('profile.screen.advanced-settings'),
+                headerShown: true, animationEnabled: true, transitionSpec: {
+                  open: config,
+                  close: config,
+                },
+              }}
+              component={AdvancedSettings}
             ></Stack.Screen>
             <Stack.Screen
               name="PasswordReset"

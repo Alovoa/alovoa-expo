@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { View, RefreshControl, ScrollView, useWindowDimensions } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
-import { UserDto, SearchResource, SearchDto, UnitsEnum } from "../types";
+import { UserDto, SearchResource, SearchDto, UnitsEnum, SearchParams, SearchParamsSortE } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
-import { ActivityIndicator, Text, Button } from "react-native-paper";
+import { ActivityIndicator, Text, Button, IconButton } from "react-native-paper";
 import CardItemSearch from "../components/CardItemSearch";
 import { useFocusEffect } from "@react-navigation/native";
 import ComplimentModal from "../components/ComplimentModal";
 import SearchEmpty from "../assets/images/search-empty.svg";
-import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
+import styles, { WIDESCREEN_HORIZONTAL_MAX, STATUS_BAR_HEIGHT } from "../assets/styles";
 
 const i18n = I18N.getI18n()
 
@@ -31,7 +31,7 @@ const Search = ({ route, navigation }) => {
   const [user, setUser] = React.useState<UserDto>();
   const [results, setResults] = useState(Array<UserDto>);
   const [sort, setSort] = useState(SORT.DONATION_LATEST);
-  const [distance, setDistance] = React.useState(50);
+  const [distance, setDistance] = React.useState(Global.DEFAULT_DISTANCE);
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
@@ -47,15 +47,18 @@ const Search = ({ route, navigation }) => {
   const svgHeight = 150;
   const svgWidth = 200;
 
+  const MIN_AGE = 16;
+  const MAX_AGE = 100;
+
   const { height, width } = useWindowDimensions();
 
-  const LOCATION_TIMEOUT_SHORT = 5000;
-  const LOCATION_TIMEOUT_LONG = 10000;
+  const LOCATION_TIMEOUT_SHORT = Global.DEFAULT_GPS_TIMEOUT;
+  const LOCATION_TIMEOUT_LONG = LOCATION_TIMEOUT_SHORT * 10;
 
   const promiseWithTimeout = (timeoutMs: number, promise: Promise<any>) => {
     return Promise.race([
       promise,
-      new Promise((resolve, reject) => setTimeout(() => reject(), timeoutMs)),
+      new Promise((_resolve, reject) => setTimeout(() => reject(), timeoutMs)),
     ]);
   }
 
@@ -103,11 +106,11 @@ const Search = ({ route, navigation }) => {
   async function load() {
     setLoaded(false);
     setResults([]);
+    setLoading(true);
     let l1 = await Global.GetStorage(Global.STORAGE_LATITUDE);
     latitude = l1 ? Number(l1) : undefined;
     let l2 = await Global.GetStorage(Global.STORAGE_LONGITUDE);
     longitude = l2 ? Number(l2) : undefined;
-    setLoading(true);
     await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE).then(
       async (response) => {
         let data: SearchResource = response.data;
@@ -148,7 +151,11 @@ const Search = ({ route, navigation }) => {
         if (status == 'granted') {
           hasLocationPermission = true;
           try {
-            location = await promiseWithTimeout(hasLocation ? LOCATION_TIMEOUT_SHORT : LOCATION_TIMEOUT_LONG, Location.getCurrentPositionAsync({}));
+            let storedGpsTimeout = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_GPSTIMEOPUT);
+            let gpsTimeout = storedGpsTimeout ? 
+              hasLocation ? Math.max(LOCATION_TIMEOUT_SHORT, Number(storedGpsTimeout)) : Math.max(LOCATION_TIMEOUT_LONG, Number(storedGpsTimeout)) :
+              hasLocation ? LOCATION_TIMEOUT_SHORT : LOCATION_TIMEOUT_LONG;
+            location = await promiseWithTimeout(gpsTimeout, Location.getCurrentPositionAsync({}));
             hasGpsEnabled = true;
             lat = location?.coords.latitude;
             lon = location?.coords.longitude;
@@ -167,10 +174,28 @@ const Search = ({ route, navigation }) => {
     }
 
     if (lat != undefined && lon != undefined) {
-      let response = await Global.Fetch(Global.format(URL.API_SEARCH_USERS, lat, lon, distance, sort));
+
+      let paramsStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_PARAMS);
+      let storedParams: SearchParams = paramsStorage ? JSON.parse(paramsStorage) : {};
+
+      let searchParams: SearchParams = {
+        distance: storedParams?.distance ? storedParams.distance : Global.DEFAULT_DISTANCE,
+        showOutsideParameters:  storedParams?.showOutsideParameters == undefined ? true : storedParams.showOutsideParameters,
+        sort: SearchParamsSortE.DEFAULT,
+        latitude: lat,
+        longitude: lon,
+        //preferredMinAge: user?.preferedMinAge ? user.preferedMinAge : MIN_AGE,
+        //preferredMaxAge: user?.preferedMaxAge ? user.preferedMaxAge : MAX_AGE,
+        miscInfos: [],
+        intentions: [],
+        interests: [],
+        preferredGenderIds: user ? user.preferedGenders.map(gender => gender.id) : []
+      };
+
+      //console.log(searchParams)
+      let response = await Global.Fetch(URL.API_SEARCH, 'post', searchParams);
       let result: SearchDto = response.data;
-      let incompatible = result.incompatible;
-      if (!incompatible && result.users) {
+      if (result.users) {
         setResults(result.users);
       }
     }
@@ -230,14 +255,36 @@ const Search = ({ route, navigation }) => {
     setIgnoreRightSwipe(false);
   }
 
+  function openSearchSetting() {
+    Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})
+  }
+
   return (
     <ScrollView contentContainerStyle={{ flex: 1 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
+        
       {loading &&
         <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
         </View>
       }
+
+      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 8, justifyContent: 'flex-end' }]}>
+        { width > WIDESCREEN_HORIZONTAL_MAX &&
+          <Button icon="cog" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
+                      style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={openSearchSetting}>
+                        {i18n.t('profile.screen.search')}</Button>
+        }
+        { width <= WIDESCREEN_HORIZONTAL_MAX &&
+        <IconButton
+          icon="cog"
+          mode="contained"
+          size={20}
+          onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})}
+        />
+        }
+      </View>
+
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
           <CardStack
@@ -273,7 +320,7 @@ const Search = ({ route, navigation }) => {
             <SearchEmpty height={svgHeight} width={svgWidth}></SearchEmpty>
             <Text style={{ fontSize: 20, paddingHorizontal: 48, marginTop: 8 }}>{i18n.t('search-empty.title')}</Text>
             <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48, textAlign: 'center' }}>{i18n.t('search-empty.subtitle')}</Text>
-            <Button onPress={() => Global.navigate("YourProfile")}>{i18n.t('search-empty.button')}</Button>
+            <Button onPress={openSearchSetting}>{i18n.t('search-empty.button')}</Button>
           </View>
         </View>
       }

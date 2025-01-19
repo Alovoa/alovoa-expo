@@ -1,0 +1,6 @@
+Change to and updated Search API
+Additional search setting fields
+Tons of new fields you can set in your profile
+Automatically hide suspicious profiles
+New advanced settings
+Bug fixes and improvements
