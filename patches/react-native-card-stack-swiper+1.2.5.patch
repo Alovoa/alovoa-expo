@@ -1,0 +1,56 @@
+diff --git a/node_modules/react-native-card-stack-swiper/Card.js b/node_modules/react-native-card-stack-swiper/Card.js
+index 4d89c12..63094a9 100644
+--- a/node_modules/react-native-card-stack-swiper/Card.js
++++ b/node_modules/react-native-card-stack-swiper/Card.js
+@@ -4,7 +4,16 @@ import {
+   View,
+ } from 'react-native';
+ 
+-const Card = ({ style, children }) => (
++// Warning: Card: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.
++const Card = ({
++  style = {},
++  children,
++  onSwiped = () => {},
++  onSwipedLeft = () => {},
++  onSwipedRight = () => {},
++  onSwipedTop = () => {},
++  onSwipedBottom = () => {},
++}) => (
+   <View style={style} >
+     {children}
+   </View>);
+@@ -18,13 +27,5 @@ Card.propTypes = {
+   onSwipedBottom: PropTypes.func,
+   onSwiped: PropTypes.func,
+ }
+-Card.defaultProps = {
+-  style:{},
+-  onSwiped: () => {},
+-  onSwipedLeft: () => {},
+-  onSwipedRight: () => {},
+-  onSwipedTop: () => {},
+-  onSwipedBottom: () => {},
+-}
+ 
+ export default Card;
+diff --git a/node_modules/react-native-card-stack-swiper/index.d.ts b/node_modules/react-native-card-stack-swiper/index.d.ts
+index 112c474..862a215 100644
+--- a/node_modules/react-native-card-stack-swiper/index.d.ts
++++ b/node_modules/react-native-card-stack-swiper/index.d.ts
+@@ -2,6 +2,7 @@ import * as React from 'react';
+ import { StyleProp, ViewProps, ViewStyle } from 'react-native';
+ 
+ export interface CardStackProps {
++  children?: React.ReactNode; // TS2322: Type '{ children: Element[]; ... }' is not assignable to type ...
+   style?: StyleProp<ViewStyle>;
+   secondCardZoom?: number;
+   loop?: boolean;
+@@ -38,6 +39,7 @@ export default class CardStack extends React.Component<CardStackProps> {
+ }
+ 
+ export interface CardProps {
++  children?: React.ReactNode; // TS2322: Type '{ children: Element; ... }' is not assignable to type ...
+   style?: StyleProp<ViewStyle>;
+   onSwiped?: () => void;
+   onSwipedLeft?: () => void;

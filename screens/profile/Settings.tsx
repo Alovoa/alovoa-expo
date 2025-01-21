@@ -4,18 +4,20 @@ import {
   useWindowDimensions
 } from "react-native";
 import styles from "../../assets/styles";
-import { SettingsEmailEnum, SettingsEmailNameMap, UnitsEnum, UnitsNameMap, YourProfileResource } from "../../types";
+import { RootStackParamList, SettingsEmailEnum, SettingsEmailNameMap, UnitsEnum, UnitsNameMap, YourProfileResource } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
 import SelectModal from "../../components/SelectModal";
 import VerticalView from "../../components/VerticalView";
 import ColorModal from "../../components/ColorModal";
+import { MaterialBottomTabScreenProps } from "react-native-paper";
 
 
 const i18n = I18N.getI18n();
 
-const Settings = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.Settings'>
+const Settings = ({ route }: Props) => {
 
   var data: YourProfileResource = route.params.data;
 
