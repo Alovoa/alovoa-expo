@@ -2,7 +2,7 @@ import React from "react";
 import { Search, Likes, Messages, YourProfile, Donate } from "../screens";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import * as I18N from "../i18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Text } from 'react-native-paper';
@@ -15,8 +15,8 @@ const ICON_SIZE = 26;
 const Tab = createMaterialBottomTabNavigator();
 
 const SECOND_MS = 1000;
-const POLL_ALERT = 5 * SECOND_MS;
-const POLL_MESSAGE = 5 * SECOND_MS;
+const POLL_ALERT = 15 * SECOND_MS;
+const POLL_MESSAGE = 15 * SECOND_MS;
 
 const Main = ({ route, navigation }) => {
 

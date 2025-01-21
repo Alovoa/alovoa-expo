@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import { StyleSheet, StatusBar, I18nManager } from "react-native";
 
 export const WHITE = "#FFFFFF";
@@ -12,7 +13,7 @@ export const OFFLINE_STATUS = "#D04949";
 export const LIKE_ACTIONS = WHITE;
 export const DISLIKE_ACTIONS = WHITE;
 
-export const STATUS_BAR_HEIGHT: number = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
+export const STATUS_BAR_HEIGHT: number = Constants.statusBarHeight;
 export const NAVIGATION_BAR_HEIGHT = 80;
 export const WIDESCREEN_HORIZONTAL_MAX = 600;
 

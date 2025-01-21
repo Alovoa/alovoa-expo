@@ -60,7 +60,7 @@ const Donate = () => {
   }, []);
 
   return (
-    <View style={{ height: height }}>
+    <View style={{ flex: 1, height: height }}>
       {loading &&
         <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />

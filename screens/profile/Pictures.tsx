@@ -109,7 +109,7 @@ const Pictures = ({ route, navigation }) => {
   }
 
   async function goBack() {
-    navigation.navigate({
+    navigation.navigate('Main', {
       name: 'YourProfile',
       params: { changed: changedProfilePic },
       merge: true,

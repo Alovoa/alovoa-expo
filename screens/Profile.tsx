@@ -207,7 +207,7 @@ const Profile = ({ route, navigation }) => {
   }, [removeUser]);
 
   async function goBack() {
-    navigation.navigate({
+    navigation.navigate('Main', {
       name: 'Search',
       params: { changed: removeUser },
       merge: true,

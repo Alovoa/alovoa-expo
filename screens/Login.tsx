@@ -9,6 +9,7 @@ import * as URL from "../URL";
 import * as I18N from "../i18n";
 import { Captcha } from "../types";
 import VerticalView from "../components/VerticalView";
+import { STATUS_BAR_HEIGHT } from "../assets/styles";
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
@@ -163,7 +164,7 @@ const Login = () => {
   });
 
   return (
-    <VerticalView>
+    <VerticalView style={{ paddingTop: STATUS_BAR_HEIGHT }}>
       {!loading &&
         <View >
           <View style={{ minHeight: height }}>
