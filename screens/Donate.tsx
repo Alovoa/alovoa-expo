@@ -7,17 +7,17 @@ import {
   useWindowDimensions
 } from "react-native";
 
-import { Text, Button, Menu, ActivityIndicator } from "react-native-paper";
+import { Text, Button, Menu, ActivityIndicator, MaterialBottomTabScreenProps } from "react-native-paper";
 import { CardItemDonate } from "../components";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { DonationDtoListModel, DonationDto } from "../types";
+import { DonationDtoListModel, DonationDto, RootStackParamList } from "../types";
 import * as Linking from 'expo-linking';
-import VerticalView from "../components/VerticalView";
 
-const Donate = () => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Donate'>
+const Donate = ({}: Props) => {
 
   const FILTER_RECENT = 1;
   const FILTER_AMOUNT = 2;
@@ -60,7 +60,7 @@ const Donate = () => {
   }, []);
 
   return (
-    <View style={{ height: height }}>
+    <View style={{ flex: 1, height: height }}>
       {loading &&
         <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
@@ -69,7 +69,7 @@ const Donate = () => {
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Global.FLAG_FDROID &&
+          {Global.FLAG_ENABLE_DONATION &&
             <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{ marginRight: 4 }}>
               <Text>{i18n.t('navigation.donate')}</Text>
             </Button>}
@@ -86,7 +86,7 @@ const Donate = () => {
           </View>
         </View>
       </View>
-      <VerticalView style={{ paddingBottom: topBarHeight + 24 }}>
+      <View style={{ flex: 1 }}>
         <FlatList
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
@@ -102,7 +102,7 @@ const Donate = () => {
             </TouchableOpacity>
           )}
         />
-      </VerticalView>
+      </View>
     </View>
   )
 };
