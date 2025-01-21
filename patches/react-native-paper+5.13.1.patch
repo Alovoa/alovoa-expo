@@ -1,0 +1,20 @@
+diff --git a/node_modules/react-native-paper/lib/module/react-navigation/views/MaterialBottomTabView.js b/node_modules/react-native-paper/lib/module/react-navigation/views/MaterialBottomTabView.js
+index 0a0b234..68da627 100644
+--- a/node_modules/react-native-paper/lib/module/react-navigation/views/MaterialBottomTabView.js
++++ b/node_modules/react-native-paper/lib/module/react-navigation/views/MaterialBottomTabView.js
+@@ -11,7 +11,14 @@ export default function MaterialBottomTabView(_ref) {
+     descriptors,
+     ...rest
+   } = _ref;
+-  const buildLink = useLinkBuilder();
++  // react-native-paper@5 & @react-navigation/native@7 compatibility hack
++  // https://github.com/callstack/react-native-paper/issues/4601
++  // https://github.com/callstack/react-native-paper/pull/3958
++  // https://reactnavigation.org/docs/use-link-builder/#buildhref
++  // https://reactnavigation.org/docs/upgrading-from-6.x/#the-uselinkbuilder-hooks-now-returns-an-object-instead-of-a-function
++  // todo: remove this patch after react-native-paper@5 fixes support for @react-navigation/native@7
++  const linkBuilder = useLinkBuilder();
++  const buildLink = linkBuilder.buildHref || linkBuilder;
+   return /*#__PURE__*/React.createElement(BottomNavigation, _extends({}, rest, {
+     onIndexChange: noop,
+     navigationState: state,

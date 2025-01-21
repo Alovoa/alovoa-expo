@@ -40,6 +40,8 @@ xcuserdata
 *.xccheckout
 *.moved-aside
 DerivedData
+*.aab
+*.apk
 *.hmap
 *.ipa
 *.xcuserstate
@@ -74,6 +76,8 @@ buck-out/
 
 # Expo
 .expo/
+credentials.json
+credentials/
 web-build/
 dist/
 

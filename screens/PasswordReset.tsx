@@ -1,12 +1,12 @@
 import React from "react";
-import { useTheme, Text, Button, Dialog, Portal, Provider, TextInput, IconButton } from "react-native-paper";
-import { View, Platform, StyleSheet, Image, Dimensions, useWindowDimensions } from "react-native";
+import { useTheme, Text, Button, Dialog, TextInput, IconButton, MaterialBottomTabScreenProps } from "react-native-paper";
+import { View, Platform, StyleSheet, Image, useWindowDimensions } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
 import SvgPasswordReset from "../assets/images/password-reset.svg";
-import { Captcha, PasswordResetDto } from "../types";
+import { Captcha, PasswordResetDto, RootStackParamList } from "../types";
 import VerticalView from "../components/VerticalView";
 
 const i18n = I18N.getI18n()
@@ -14,7 +14,8 @@ const IMAGE_HEADER = "data:image/webp;base64,";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const PasswordReset = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'PasswordReset'>
+const PasswordReset = ({ route, navigation }: Props) => {
 
   const { colors } = useTheme();
 
