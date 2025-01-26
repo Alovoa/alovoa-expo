@@ -4,12 +4,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
-  Image,
   useWindowDimensions,
   ScrollView,
 } from "react-native";
-import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip } from "react-native-paper";
-import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage, UserPrompt, GenderNameMap, GenderEnum, Gender, IntentionNameMap, UserMiscInfo, MiscInfoRelationshipNameMap, MiscInfoKidsNameMap, MiscInfoDrugsOtherNameMap, MiscInfoDrugsAlcoholNameMap, MiscInfoDrugsTobaccoNameMap, MiscInfoDrugsCannabisNameMap, MiscInfoRelationshipTypeNameMap, MiscInfoFamilyNameMap, MiscInfoPoliticsNameMap, MiscInfoReligionNameMap, MiscInfoGenderIdentityNameMap } from "../types";
+import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip, MaterialBottomTabScreenProps } from "react-native-paper";
+import { UserInterest, UnitsEnum, ProfileResource, UserDto, UserPrompt, GenderNameMap, Gender, IntentionNameMap, UserMiscInfo, MiscInfoRelationshipNameMap, MiscInfoKidsNameMap, MiscInfoDrugsOtherNameMap, MiscInfoDrugsAlcoholNameMap, MiscInfoDrugsTobaccoNameMap, MiscInfoDrugsCannabisNameMap, MiscInfoRelationshipTypeNameMap, MiscInfoFamilyNameMap, MiscInfoPoliticsNameMap, MiscInfoReligionNameMap, MiscInfoGenderIdentityNameMap, RootStackParamList } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -26,6 +25,7 @@ import Icon from "../components/Icon";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import VerticalView from "../components/VerticalView";
 import ComplimentModal from "../components/ComplimentModal";
+import { ParamListBase } from "@react-navigation/native";
 
 const i18n = I18N.getI18n()
 
@@ -41,7 +41,8 @@ enum IntentionText {
   SEX = "sex"
 }
 
-const Profile = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile'>
+const Profile = ({ route, navigation }: Props) => {
 
   const MIN_AGE = 16
   const MAX_AGE = 100
@@ -336,8 +337,8 @@ const Profile = ({ route, navigation }) => {
           >
             {
               swiperImages?.map((image, index) => (
-                <View>
-                <ImageZoom key={index}
+                <View key={index}>
+                <ImageZoom
                   uri={image}
                   style={[style.image]}
                   maxScale={3}
@@ -413,7 +414,7 @@ const Profile = ({ route, navigation }) => {
 
               <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                 <Chip icon="gender-male-female" style={[styles.marginRight4, styles.marginBottom4]}>
-                  <Text>{gender ? i18n.t(GenderNameMap.get(gender.id)) : ''}</Text>
+                  <Text>{gender ? i18n.t(GenderNameMap.get(gender.id) || '') : ''}</Text>
                 </Chip>
                 { miscInfo.map(m => m.value) &&
                   <Chip icon="gender-male-female-variant" style={[styles.marginRight4, styles.marginBottom4]}>
@@ -424,10 +425,10 @@ const Profile = ({ route, navigation }) => {
                   <Text>{String(minAge) + " - " + String(maxAge)}</Text>
                 </Chip>
                 <Chip icon="magnify" style={[styles.marginRight4, styles.marginBottom4]}>
-                  <Text>{preferredGenders.map(g => i18n.t(GenderNameMap.get(g.id))).filter(e => e).join(", ")}</Text>
+                  <Text>{preferredGenders.map(g => i18n.t(GenderNameMap.get(g.id) || '')).filter(e => e).join(", ")}</Text>
                 </Chip>
                 <Chip icon="magnify-plus-outline" style={[styles.marginRight4, styles.marginBottom4]}>
-                  <Text>{intention ? i18n.t(IntentionNameMap.get(intention)) : ''}</Text>
+                  <Text>{intention ? i18n.t(IntentionNameMap.get(intention) || '') : ''}</Text>
                 </Chip>
               </View>
 

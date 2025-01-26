@@ -1,3 +1,51 @@
+import * as Global from "./Global";
+
+export type RootStackParamList = {
+  [Global.SCREEN_CHAT]: undefined;
+  [Global.SCREEN_DONATE]: undefined;
+  [Global.SCREEN_LIKES]: undefined;
+  Login: undefined;
+  Main: {};
+  MessageDetail: {
+    conversation: ConversationDto;
+  };
+  Onboarding: undefined;
+  PasswordReset: undefined;
+  Profile: {
+    user: UserDto;
+    uuid: string;
+  };
+  [Global.SCREEN_PROFILE_ADVANCED_SETTINGS]: {
+    user: UserDto
+  };
+  [Global.SCREEN_PROFILE_PICTURES]: {
+    changed: boolean;
+    user: UserDto;
+  };
+  'Profile.Prompts': {
+    user: UserDto;
+  };
+  [Global.SCREEN_PROFILE_PROFILESETTINGS]: {
+    data: YourProfileResource;
+    user: UserDto;
+  };
+  [Global.SCREEN_PROFILE_SEARCHSETTINGS]: {
+    data: YourProfileResource
+  }
+  [Global.SCREEN_PROFILE_SETTINGS]: {
+    data: YourProfileResource
+  };
+  Register: {
+    registerEmail: boolean
+  };
+  [Global.SCREEN_SEARCH]: {
+    changed: boolean
+  };
+  [Global.SCREEN_YOURPROFILE]: {
+    changed: boolean
+  };
+};
+
 export type CardItemT = {
   user: UserDto;
   donation?: number;
@@ -116,6 +164,22 @@ export type UserInterest = {
 export type UserImage = {
   id: number;
   content: string;
+}
+
+export type DataT = {
+    id: number
+    name: string
+    isOnline: boolean
+    match: string
+    description: string
+    age?: string
+    location?: string
+    info1?: string
+    info2?: string
+    info3?: string
+    info4?: string
+    message: string
+    image: string
 }
 
 export type UserDto = {
@@ -547,3 +611,49 @@ export const SettingsEmailNameMap = new Map<number, string>([
   [SettingsEmailEnum.LIKE, 'profile.settings.email.like'],
   [SettingsEmailEnum.CHAT, 'profile.settings.email.chat'],
 ]); 
+
+// react-native-paper@5 & @react-navigation/native@7 type compatibility hack
+// https://github.com/callstack/react-native-paper/issues/4572#issuecomment-2558782323
+// todo: remove below after react-native-paper@5 fixes support for @react-navigation/native@7
+
+import {
+  DefaultNavigatorOptions,
+  EventMapBase,
+  NavigationState,
+  ParamListBase,
+  RouteConfig,
+  RouteGroupConfig,
+  TabNavigationState
+} from '@react-navigation/native'
+import {
+  MaterialBottomTabNavigationEventMap,
+  MaterialBottomTabNavigationOptions
+} from 'react-native-paper'
+import {
+  MaterialBottomTabNavigatorProps
+} from 'react-native-paper/lib/typescript/react-navigation/navigators/createMaterialBottomTabNavigator'
+
+type LegacyTypedNavigator<
+  ParamList extends ParamListBase,
+  State extends NavigationState,
+  ScreenOptions extends {},
+  EventMap extends EventMapBase,
+  Navigator extends React.ComponentType<any>
+> = {
+  Navigator: React.ComponentType<
+    Omit<React.ComponentProps<Navigator>, keyof DefaultNavigatorOptions<any, any, any, any, any, any>> &
+      DefaultNavigatorOptions<ParamList, any, State, ScreenOptions, EventMap, any>
+  >
+  Group: React.ComponentType<RouteGroupConfig<ParamList, ScreenOptions, any>>
+  Screen: <RouteName extends keyof ParamList>(
+    _: RouteConfig<ParamList, RouteName, State, ScreenOptions, EventMap, any>
+  ) => null
+}
+
+export type MaterialBottomTabNavigator<T extends ParamListBase> = LegacyTypedNavigator<
+  T,
+  TabNavigationState<ParamListBase>,
+  MaterialBottomTabNavigationOptions,
+  MaterialBottomTabNavigationEventMap,
+  (_: MaterialBottomTabNavigatorProps) => React.JSX.Element
+>

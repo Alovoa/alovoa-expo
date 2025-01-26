@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, Text, Button, Dialog, TextInput, IconButton, Divider } from "react-native-paper";
+import { useTheme, Text, Button, Dialog, TextInput, IconButton, Divider, MaterialBottomTabScreenProps } from "react-native-paper";
 import { View, Platform, StyleSheet, Image, useWindowDimensions, Keyboard } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
@@ -7,7 +7,7 @@ import * as Linking from 'expo-linking';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
-import { Captcha } from "../types";
+import { Captcha, RootStackParamList } from "../types";
 import VerticalView from "../components/VerticalView";
 import { STATUS_BAR_HEIGHT } from "../assets/styles";
 
@@ -17,7 +17,8 @@ const IMAGE_HEADER = "data:image/webp;base64,";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const Login = () => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Login'>
+const Login = ({}: Props) => {
 
   const { colors } = useTheme();
 

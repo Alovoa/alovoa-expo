@@ -1,0 +1,23 @@
+name: ci
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: latest
+        cache: 'yarn'
+    - run: yarn install
+    - run: yarn tsc
+    - run: yarn expo prebuild
+    - run: npx expo-doctor@latest
+      env:
+        EXPO_DOCTOR_ENABLE_DIRECTORY_CHECK: false

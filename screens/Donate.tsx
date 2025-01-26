@@ -7,17 +7,17 @@ import {
   useWindowDimensions
 } from "react-native";
 
-import { Text, Button, Menu, ActivityIndicator } from "react-native-paper";
+import { Text, Button, Menu, ActivityIndicator, MaterialBottomTabScreenProps } from "react-native-paper";
 import { CardItemDonate } from "../components";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { DonationDtoListModel, DonationDto } from "../types";
+import { DonationDtoListModel, DonationDto, RootStackParamList } from "../types";
 import * as Linking from 'expo-linking';
-import VerticalView from "../components/VerticalView";
 
-const Donate = () => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Donate'>
+const Donate = ({}: Props) => {
 
   const FILTER_RECENT = 1;
   const FILTER_AMOUNT = 2;
@@ -86,7 +86,7 @@ const Donate = () => {
           </View>
         </View>
       </View>
-      <VerticalView style={{ paddingBottom: topBarHeight + 24 }}>
+      <View style={{ flex: 1 }}>
         <FlatList
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
@@ -102,7 +102,7 @@ const Donate = () => {
             </TouchableOpacity>
           )}
         />
-      </VerticalView>
+      </View>
     </View>
   )
 };

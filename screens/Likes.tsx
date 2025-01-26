@@ -9,18 +9,20 @@ import {
   Image
 } from "react-native";
 
-import { ActivityIndicator, Button, IconButton, Menu, Modal, Portal, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, IconButton, Menu, Modal, Portal, Text, useTheme } from "react-native-paper";
 import { CardItemLikes } from "../components";
 import styles, { NAVIGATION_BAR_HEIGHT, STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { AlertsResource, UserDto, UnitsEnum, UserUsersResource, LikeResultT } from "../types";
+import { AlertsResource, UserDto, UnitsEnum, UserUsersResource, LikeResultT, RootStackParamList } from "../types";
 import LikesEmpty from "../assets/images/likes-empty.svg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import VerticalView from "../components/VerticalView";
+import type { MaterialBottomTabScreenProps } from 'react-native-paper';
 
-const Likes = ({ navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Likes'>
+const Likes = ({ navigation }: Props) => {
 
   const { colors } = useTheme();
   const i18n = I18N.getI18n()

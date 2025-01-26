@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as URL from "./URL";
 import { createNavigationContainerRef, CommonActions } from '@react-navigation/native';
-import { ConversationDto, UserDto } from "./types";
+import { ConversationDto, RootStackParamList, UserDto } from "./types";
 import Toast from 'react-native-toast-message';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -16,7 +16,7 @@ import { cloneDeep } from 'lodash';
 
 export const FLAG_FDROID = true;
 
-export const navigationRef = createNavigationContainerRef()
+export const navigationRef = createNavigationContainerRef<RootStackParamList>()
 export const INDEX_LOGIN = "0"
 export const INDEX_REGISTER = "1"
 export const INDEX_ONBOARDING = "2"
@@ -192,7 +192,7 @@ export function calcAge(dob: Date | undefined): number {
 
 export async function pickImage(): Promise<string | null | undefined> {
   let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    mediaTypes: 'images',
     allowsEditing: true,
     aspect: [1, 1],
     quality: 1,

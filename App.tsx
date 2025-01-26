@@ -1,5 +1,6 @@
 import React from "react";
-import { Login, Register, Onboarding, Main, Profile, MessageDetail, PasswordReset } from "./screens";
+import Main from "./screens/Main";
+import { Login, Register, Onboarding, Profile, MessageDetail, PasswordReset } from "./screens";
 import * as SplashScreen from 'expo-splash-screen';
 import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from "@react-navigation/native";
@@ -9,7 +10,7 @@ import { LogBox, useColorScheme } from 'react-native';
 import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider, configureFonts } from 'react-native-paper';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { Pictures, ProfileSettings, SearchSettings, Settings, Prompts, AdvancedSettings } from "./screens/profile";
+import { Pictures, ProfileSettings, SearchSettings, Settings, Prompts, AdvancedSettings } from "./screens/profile/index";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as Device from 'expo-device';
 import { ThemeProp } from "react-native-paper/lib/typescript/types";
@@ -19,15 +20,16 @@ import {
   useFonts, Montserrat_400Regular, Montserrat_500Medium, Montserrat_500Medium_Italic,
   Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_700Bold_Italic
 } from '@expo-google-fonts/montserrat';
-import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types";
+import { TransitionSpec } from "@react-navigation/stack/src/types";
 import { enGB, en, de, registerTranslation } from 'react-native-paper-dates'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { RootStackParamList } from "./types";
 
 LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 1000)
 WebBrowser.maybeCompleteAuthSession();
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 registerTranslation('en-GB', enGB);
 registerTranslation('en', en);
 registerTranslation('de', de);
@@ -168,7 +170,7 @@ export default function App() {
             <Stack.Screen
               name="Login"
               options={{
-                headerShown: false, animationEnabled: true, transitionSpec: {
+                headerShown: false, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -179,7 +181,7 @@ export default function App() {
               name="Register"
               options={{
                 title: i18n.t('register.title'),
-                headerShown: true, animationEnabled: true, transitionSpec: {
+                headerShown: true, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -189,7 +191,7 @@ export default function App() {
             <Stack.Screen
               name="Onboarding"
               options={{
-                headerShown: false, animationEnabled: true, transitionSpec: {
+                headerShown: false, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -199,7 +201,7 @@ export default function App() {
             <Stack.Screen
               name="Main"
               options={{
-                headerShown: false, animationEnabled: true, transitionSpec: {
+                headerShown: false, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -209,7 +211,7 @@ export default function App() {
             <Stack.Screen
               name="Profile"
               options={{
-                headerShown: false, animationEnabled: true, transitionSpec: {
+                headerShown: false, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -219,7 +221,7 @@ export default function App() {
             <Stack.Screen
               name="MessageDetail"
               options={{
-                headerShown: true, animationEnabled: true, transitionSpec: {
+                headerShown: true, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -230,7 +232,7 @@ export default function App() {
               name={Global.SCREEN_PROFILE_PICTURES}
               options={{
                 title: i18n.t('profile.screen.pictures'),
-                headerShown: true, animationEnabled: true, transitionSpec: {
+                headerShown: true, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -241,7 +243,7 @@ export default function App() {
               name={Global.SCREEN_PROFILE_PROFILESETTINGS}
               options={{
                 title: i18n.t('profile.screen.profile'),
-                headerShown: true, animationEnabled: true, transitionSpec: {
+                headerShown: true, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -252,7 +254,7 @@ export default function App() {
               name={Global.SCREEN_PROFILE_SEARCHSETTINGS}
               options={{
                 title: i18n.t('profile.screen.search'),
-                headerShown: true, animationEnabled: true, transitionSpec: {
+                headerShown: true, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -263,7 +265,7 @@ export default function App() {
               name={Global.SCREEN_PROFILE_SETTINGS}
               options={{
                 title: i18n.t('profile.screen.settings'),
-                headerShown: true, animationEnabled: true, transitionSpec: {
+                headerShown: true, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -274,7 +276,7 @@ export default function App() {
               name={Global.SCREEN_PROFILE_ADVANCED_SETTINGS}
               options={{
                 title: i18n.t('profile.screen.advanced-settings'),
-                headerShown: true, animationEnabled: true, transitionSpec: {
+                headerShown: true, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -284,7 +286,7 @@ export default function App() {
             <Stack.Screen
               name="PasswordReset"
               options={{
-                headerShown: true, animationEnabled: true, transitionSpec: {
+                headerShown: true, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },
@@ -295,7 +297,7 @@ export default function App() {
               name="Profile.Prompts"
               options={{
                 title: i18n.t('profile.screen.prompts'),
-                headerShown: true, animationEnabled: true, transitionSpec: {
+                headerShown: true, animation: 'default', transitionSpec: {
                   open: config,
                   close: config,
                 },

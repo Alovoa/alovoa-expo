@@ -3,9 +3,9 @@ import {
   View,
   useWindowDimensions
 } from "react-native";
-import { useTheme, Text } from "react-native-paper";
+import { Text, MaterialBottomTabScreenProps } from "react-native-paper";
 import { Message } from "../components";
-import { ChatsResource, ConversationDto } from "../types";
+import { ChatsResource, ConversationDto, RootStackParamList } from "../types";
 import { STATUS_BAR_HEIGHT } from "../assets/styles";
 import ConvoEmpty from "../assets/images/convo-empty.svg";
 import * as Global from "../Global";
@@ -13,7 +13,8 @@ import * as URL from "../URL";
 import * as I18N from "../i18n";
 import VerticalView from "../components/VerticalView";
 
-const Messages = ({ navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Chat'>
+const Messages = ({ navigation }: Props) => {
 
   const i18n = I18N.getI18n()
 

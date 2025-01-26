@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { Button, IconButton, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
+import { IconButton, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 import { ComplimentModalT } from '../types';
 import { View, Image, useWindowDimensions, KeyboardAvoidingView } from 'react-native';
 import { WIDESCREEN_HORIZONTAL_MAX } from '../assets/styles';
@@ -51,7 +51,7 @@ const ComplimentModal = ({ visible = false, setVisible, name, age, profilePictur
               placeholder={i18n.t('compliment.title')}
               maxLength={maxLength}
               autoCorrect={false}
-              right={<TextInput.Icon iconColor={colors.secondary} onPress={() => onSend(text, true)} icon="send" />}></TextInput>
+              right={<TextInput.Icon color={colors.secondary} onPress={() => onSend(text, true)} icon="send" />}></TextInput>
           </KeyboardAvoidingView>
         </View>
       </Modal>
