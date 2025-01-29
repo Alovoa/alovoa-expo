@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { View, RefreshControl, ScrollView, useWindowDimensions } from "react-native";
+import { View, RefreshControl, ScrollView, useWindowDimensions, Platform } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
-import { UserDto, SearchResource, SearchDto, UnitsEnum, SearchParams, SearchParamsSortE } from "../types";
+import { UserDto, SearchResource, SearchDto, UnitsEnum, SearchParams, SearchParamsSortE, RootStackParamList } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
-import { ActivityIndicator, Text, Button, IconButton } from "react-native-paper";
+import { ActivityIndicator, Text, Button, IconButton, MaterialBottomTabScreenProps } from "react-native-paper";
 import CardItemSearch from "../components/CardItemSearch";
 import { useFocusEffect } from "@react-navigation/native";
 import ComplimentModal from "../components/ComplimentModal";
@@ -24,7 +24,8 @@ enum SORT {
   NEWEST_USER = 6
 }
 
-const Search = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Search'>
+const Search = ({ route, navigation }: Props) => {
 
   let swiper: any = React.useRef(null);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -96,7 +97,7 @@ const Search = ({ route, navigation }) => {
       let resultsCopy = [...results];
       resultsCopy.shift();
       setResults(resultsCopy);
-      route.params.changed = false;
+      navigation.setParams({changed: false});
       if (resultsCopy.length == 0) {
         load();
       }

@@ -1,12 +1,12 @@
 import React from "react";
-import { useTheme, Text, Button, TextInput, RadioButton, HelperText, ActivityIndicator } from "react-native-paper";
-import { View, StyleSheet, useWindowDimensions } from "react-native";
+import { useTheme, Text, Button, TextInput, RadioButton, HelperText, ActivityIndicator, MaterialBottomTabScreenProps } from "react-native-paper";
+import { View, StyleSheet, useWindowDimensions, ScrollView } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
 import * as Localization from 'expo-localization';
-import { RegisterBody } from "../types";
+import { RegisterBody, RootStackParamList } from "../types";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DatePickerInput } from "react-native-paper-dates";
 import { ValidRangeType } from "react-native-paper-dates/lib/typescript/Date/Calendar";
@@ -25,7 +25,8 @@ function subtractYears(years: number): Date {
   return date;
 }
 
-const Register = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Register'>
+const Register = ({ route, navigation }: Props) => {
 
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
@@ -36,7 +37,7 @@ const Register = ({ route, navigation }) => {
     endDate: subtractYears(MIN_AGE)
   }
   const { colors } = useTheme();
-  const scrollRef = React.useRef(null);
+  const scrollRef = React.useRef<ScrollView | null>(null);
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [email, setEmail] = React.useState<string>();
   const [emailValid, setEmailValid] = React.useState(false);
@@ -118,7 +119,8 @@ const Register = ({ route, navigation }) => {
   }
 
   function getDateInputLocale(): string {
-    return Localization.locale.startsWith("de") ? "de" : "en-GB";
+    const [locale] = Localization.getLocales()
+    return locale.languageTag.startsWith("de") ? "de" : "en-GB";
   }
 
   return (

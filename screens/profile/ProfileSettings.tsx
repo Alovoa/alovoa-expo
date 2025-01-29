@@ -3,9 +3,9 @@ import {
   View,
   useWindowDimensions
 } from "react-native";
-import { Text, TextInput, Button, HelperText, ActivityIndicator } from "react-native-paper";
-import styles from "../../assets/styles";
-import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE, MiscInfoNameMap, IntentionNameMap } from "../../types";
+import { Text, TextInput, Button, HelperText, ActivityIndicator, MaterialBottomTabScreenProps } from "react-native-paper";
+import styles, { STATUS_BAR_HEIGHT } from "../../assets/styles";
+import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE, MiscInfoNameMap, IntentionNameMap, RootStackParamList } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -18,7 +18,8 @@ import { useHeaderHeight } from '@react-navigation/elements';
 const i18n = I18N.getI18n();
 const DESCRIPTION_HELPERTEXT_LIMIT = 200;
 
-const ProfileSettings = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.ProfileSettings'>
+const ProfileSettings = ({ route }: Props) => {
 
   var data: YourProfileResource = route.params.data;
   var user: UserDto = data.user;
@@ -130,7 +131,7 @@ const ProfileSettings = ({ route, navigation }) => {
         </View>
       }
 
-      <VerticalView style={{ padding: 0, gap: 12, paddingBottom: 48 }}>
+      <VerticalView style={{ padding: 0, gap: 12, paddingBottom: 48, paddingTop: STATUS_BAR_HEIGHT + 24 }}>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -54 }}>
           <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Pictures", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
         </View>

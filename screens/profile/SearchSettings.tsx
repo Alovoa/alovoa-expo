@@ -3,8 +3,8 @@ import {
   View,
   useWindowDimensions
 } from "react-native";
-import { ActivityIndicator, Checkbox, Divider, Text, useTheme } from "react-native-paper";
-import { YourProfileResource, UserDto, GenderEnum, UserIntention, Gender, IntentionE, SearchParams, UnitsEnum, IntentionNameMap, GenderNameMap } from "../../types";
+import { ActivityIndicator, Checkbox, Divider, MaterialBottomTabScreenProps, Text, useTheme } from "react-native-paper";
+import { YourProfileResource, GenderEnum, UserIntention, Gender, IntentionE, SearchParams, IntentionNameMap, GenderNameMap, RootStackParamList } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -19,7 +19,8 @@ const i18n = I18N.getI18n()
 const MIN_AGE = 18;
 const MAX_AGE = 100;
 
-const SearchSettings = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.SearchSettings'>
+const SearchSettings = ({ route }: Props) => {
 
   //var data: YourProfileResource = route.params.data;
   const { colors } = useTheme();

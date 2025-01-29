@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
-import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText, FAB } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText, FAB, MaterialBottomTabScreenProps } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
 import SvgDescription from "../assets/onboarding/description.svg";
@@ -20,14 +20,15 @@ import SvgNotification from "../assets/onboarding/notification.svg";
 import * as I18N from "../i18n";
 import * as URL from "../URL";
 import * as Global from "../Global";
-import { IntentionEnum, UserInterest, UserOnboarding, UserOnboardingResource } from "../types";
+import { IntentionEnum, RootStackParamList, UserInterest, UserOnboarding, UserOnboardingResource } from "../types";
 import InterestView from "../components/InterestView";
 
 const IMAGE_HEADER = "data:image/jpeg;base64,";
 
 const i18n = I18N.getI18n()
 
-const Onboarding = () => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Onboarding'>
+const Onboarding = ({}: Props) => {
 
   const GENDER_MALE = 1;
   const GENDER_FEMALE = 2;

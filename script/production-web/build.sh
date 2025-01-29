@@ -7,7 +7,7 @@ yarn
 oldpath=$(readlink dist)
 newpath="dist-$(uuidgen)"
 echo "$newpath"
-npx expo export -p web --output-dir=$newpath
+yarn expo export -p web --output-dir=$newpath
 ln -sfn $newpath dist
 
 read -p "Delete old directory? ($oldpath) " -n 1 -r

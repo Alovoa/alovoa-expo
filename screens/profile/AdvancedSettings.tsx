@@ -4,17 +4,18 @@ import {
   useWindowDimensions
 } from "react-native";
 import styles from "../../assets/styles";
-import { UserDto, YourProfileResource } from "../../types";
+import { RootStackParamList, UserDto } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
 import VerticalView from "../../components/VerticalView";
-import { IconButton, TextInput, useTheme } from "react-native-paper";
+import { IconButton, MaterialBottomTabScreenProps, TextInput, useTheme } from "react-native-paper";
 
 
 const i18n = I18N.getI18n();
 
-const AdvancedSettings = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.AdvancedSettings'>
+const AdvancedSettings = ({ route }: Props) => {
 
   var user: UserDto = route.params.user;
   const { colors } = useTheme();
