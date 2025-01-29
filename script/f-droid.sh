@@ -5,5 +5,4 @@
 cd ..
 yarn
 npx expo prebuild
-cd script
-cp -r ./res/node_modules/expo-location* ../node_modules
+npx patch-package --patch-dir script/patches

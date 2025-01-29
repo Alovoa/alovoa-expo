@@ -16,8 +16,10 @@ jobs:
         node-version: latest
         cache: 'yarn'
     - run: yarn install
+    - run: yarn expo install --check
     - run: yarn tsc
     - run: yarn expo prebuild
+    - run: yarn expo export
     - run: npx expo-doctor@latest
       env:
         EXPO_DOCTOR_ENABLE_DIRECTORY_CHECK: false

@@ -21,7 +21,7 @@ import {
   Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_700Bold_Italic
 } from '@expo-google-fonts/montserrat';
 import { TransitionSpec } from "@react-navigation/stack/src/types";
-import { enGB, en, de, registerTranslation } from 'react-native-paper-dates'
+import { enGB, en, es, de, registerTranslation } from 'react-native-paper-dates'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RootStackParamList } from "./types";
 
@@ -32,6 +32,7 @@ WebBrowser.maybeCompleteAuthSession();
 const Stack = createStackNavigator<RootStackParamList>();
 registerTranslation('en-GB', enGB);
 registerTranslation('en', en);
+registerTranslation('es', es);
 registerTranslation('de', de);
 
 //TEST
