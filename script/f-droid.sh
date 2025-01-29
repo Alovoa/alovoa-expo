@@ -2,7 +2,9 @@
 
 #create android project with some adjustments
 
-cd ..
-yarn
-npx expo prebuild
-npx patch-package --patch-dir script/patches
+# small android adjustments
+./script/android.sh
+# apply node_module patches (`rm -rf node_modules && yarn` to reverse)
+yarn patch-package --patch-dir script/patches
+# remove signing config
+sed -i -e '/signingConfig /d' android/app/build.gradle

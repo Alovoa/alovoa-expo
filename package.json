@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "expo start",
     "android": "expo run:android",
+    "doctor": "npx expo-doctor@latest",
     "ios": "expo run:ios",
-    "web": "expo start --web",
+    "f-droid": "./script/f-droid.sh",
+    "postinstall": "patch-package",
     "prebuild": "expo prebuild",
-    "update": "yarn upgrade-interactive && yarn expo install --fix && npx expo-doctor@latest",
-    "postinstall": "patch-package"
+    "start": "expo start",
+    "update": "yarn upgrade-interactive && yarn expo install --fix && yarn doctor",
+    "web": "expo start --web"
   },
   "dependencies": {
     "@expo-google-fonts/montserrat": "0.2.3",
@@ -63,7 +65,8 @@
     "react-native-vector-icons": "10.2.0",
     "react-native-walkthrough-tooltip": "1.6.0",
     "react-native-web": "0.19.13",
-    "reanimated-color-picker": "3.0.6"
+    "reanimated-color-picker": "3.0.6",
+    "serve": "14.2.4"
   },
   "devDependencies": {
     "@babel/core": "7.26.7",

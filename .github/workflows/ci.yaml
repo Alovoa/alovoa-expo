@@ -20,6 +20,6 @@ jobs:
     - run: yarn tsc
     - run: yarn expo prebuild
     - run: yarn expo export
-    - run: npx expo-doctor@latest
+    - run: yarn doctor
       env:
         EXPO_DOCTOR_ENABLE_DIRECTORY_CHECK: false

@@ -4,13 +4,17 @@
 
 ```bash
 # apply existing patches to node_modules
-npx patch-package --patch-dir script/patches
+yarn patch-package --patch-dir script/patches
 ```
 
 ```bash
 # create new patches from updated node_modules
-npx patch-package expo-location --patch-dir script/patches
+yarn patch-package expo-location --patch-dir script/patches
 ```
+
+## patch-archive
+
+patches no longer in use are located in `patch-archive` for reference
 
 ## expo-application
 

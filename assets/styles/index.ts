@@ -1,5 +1,5 @@
 import Constants from "expo-constants";
-import { StyleSheet, StatusBar, I18nManager } from "react-native";
+import { StyleSheet, I18nManager } from "react-native";
 
 export const WHITE = "#FFFFFF";
 export const GRAY = "#757E90";
