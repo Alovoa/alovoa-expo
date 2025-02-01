@@ -10,6 +10,7 @@ import * as I18N from "../i18n";
 import { Captcha, RootStackParamList } from "../types";
 import VerticalView from "../components/VerticalView";
 import { STATUS_BAR_HEIGHT } from "../assets/styles";
+import splash from '../assets/splash.png';
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
@@ -169,7 +170,7 @@ const Login = ({}: Props) => {
       {!loading &&
         <View >
           <View style={{ minHeight: height }}>
-            <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 24 }} source={require('../assets/splash.png')} />
+            <Image resizeMode='contain' style={{ height: 200, width: '100%', marginTop: 24 }} source={splash} />
 
             <Text style={{ textAlign: 'center', marginBottom: 48, marginTop: 24, fontSize: 32, fontWeight: '500' }}>Alovoa</Text>
 

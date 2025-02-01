@@ -7,14 +7,18 @@ on:
     branches:
     - master
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  prebuild:
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: latest
-        cache: 'yarn'
+        cache: yarn
+    - uses: expo/expo-github-action@v8
+      with:
+        eas-version: latest
+        token: ${{ secrets.EXPO_TOKEN }}
     - run: yarn install
     - run: yarn expo install --check
     - run: yarn tsc
@@ -23,3 +27,32 @@ jobs:
     - run: yarn doctor
       env:
         EXPO_DOCTOR_ENABLE_DIRECTORY_CHECK: false
+  build:
+    needs: prebuild
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+        - platform: android
+        - platform: android
+          f-droid: true
+        - platform: ios
+    steps:
+    - if: matrix.f-droid
+      run: yarn f-droid
+    - run: yarn eas build --platform ${{ matrix.platform }} --local
+  eas:
+    needs: build
+    runs-on: macos-latest
+    steps:
+    - if: false && github.event_name == 'pull_request'
+      uses: expo/expo-github-action/preview@v8
+      with:
+        command: eas update --auto --branch ${{ github.event.pull_request.head.ref }}
+    - if: false && github.event_name == 'push'
+      run: |
+        if git diff --name-only HEAD | grep -E 'app.json|package.json'; then
+          yarn eas build --platform all --non-interactive --no-wait
+        else
+          yarn eas update --auto --non-interactive
+        fi

@@ -35,10 +35,6 @@ registerTranslation('en', en);
 registerTranslation('es', es);
 registerTranslation('de', de);
 
-//TEST
-//const RCTNetworking = require('react-native/Libraries/Network/RCTNetworking');
-//RCTNetworking.clearCookies(() => { });
-
 export default function App() {
 
   const i18n = I18N.getI18n();

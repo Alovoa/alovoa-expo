@@ -43,7 +43,7 @@
     "updates": {
       "enabled": false,
       "checkAutomatically": "ON_ERROR_RECOVERY",
-      "url": "https://github.com/Alovoa/alovoa-expo/releases/latest"
+      "url": "https://u.expo.dev/e1ad49f3-eab0-4365-ae38-8a2391e2af67"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -59,6 +59,7 @@
         "LSApplicationQueriesSchemes": [
           "alovoa"
         ],
+        "ITSAppUsesNonExemptEncryption": false,
         "NSLocationWhenInUseUsageDescription": "This app uses the location to list other users in close proximity",
         "NSDocumentsFolderUsageDescription": "This app uses the Documents folder to store the requested user data",
         "NSMicrophoneUsageDescription": "This app uses the microphone to record the users voice for other users"
@@ -99,9 +100,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "PROJECT_ID"
+        "projectId": "e1ad49f3-eab0-4365-ae38-8a2391e2af67"
       }
     },
-    "owner": "OWNER"
+    "owner": "jarrettconfrey",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }
   }
 }

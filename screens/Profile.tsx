@@ -6,6 +6,7 @@ import {
   Pressable,
   useWindowDimensions,
   ScrollView,
+  Platform,
 } from "react-native";
 import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip, MaterialBottomTabScreenProps } from "react-native-paper";
 import { UserInterest, UnitsEnum, ProfileResource, UserDto, UserPrompt, GenderNameMap, Gender, IntentionNameMap, UserMiscInfo, MiscInfoRelationshipNameMap, MiscInfoKidsNameMap, MiscInfoDrugsOtherNameMap, MiscInfoDrugsAlcoholNameMap, MiscInfoDrugsTobaccoNameMap, MiscInfoDrugsCannabisNameMap, MiscInfoRelationshipTypeNameMap, MiscInfoFamilyNameMap, MiscInfoPoliticsNameMap, MiscInfoReligionNameMap, MiscInfoGenderIdentityNameMap, RootStackParamList } from "../types";
@@ -26,6 +27,7 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import VerticalView from "../components/VerticalView";
 import ComplimentModal from "../components/ComplimentModal";
 import { ParamListBase } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const i18n = I18N.getI18n()
 
@@ -51,6 +53,7 @@ const Profile = ({ route, navigation }: Props) => {
   var uuid = route.params.uuid;
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
+  const insets = useSafeAreaInsets()
 
   const [compatible, setCompatible] = React.useState(false);
   const [isSelf, setIsSelf] = React.useState(false);
@@ -289,7 +292,7 @@ const Profile = ({ route, navigation }: Props) => {
   return (
     <View style={{ height: height }}>
       {!isSelf &&
-        <View style={{ zIndex: 1, marginBottom: 16, position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
+        <View style={{ zIndex: 1, marginBottom: insets.bottom + (Platform.OS === 'android' ? 16 : 0), position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
               disabled={hidden || liked}>

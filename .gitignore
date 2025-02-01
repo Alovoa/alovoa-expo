@@ -40,6 +40,7 @@ xcuserdata
 *.xccheckout
 *.moved-aside
 DerivedData
+*.aab
 *.hmap
 *.ipa
 *.xcuserstate
@@ -78,3 +79,8 @@ web-build/
 dist/
 
 # @end expo-cli
+
+# Expo
+.expo
+dist/
+web-build/

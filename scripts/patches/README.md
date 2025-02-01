@@ -4,12 +4,12 @@
 
 ```bash
 # apply existing patches to node_modules
-yarn patch-package --patch-dir script/patches
+yarn patch-package --patch-dir scripts/patches
 ```
 
 ```bash
 # create new patches from updated node_modules
-yarn patch-package expo-location --patch-dir script/patches
+yarn patch-package expo-location --patch-dir scripts/patches
 ```
 
 ## patch-archive
