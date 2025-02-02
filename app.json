@@ -90,7 +90,7 @@
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 36
+      "versionCode": 37
     },
     "web": {
       "bundler": "metro",

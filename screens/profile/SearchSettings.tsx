@@ -107,7 +107,7 @@ const SearchSettings = ({ route, navigation }) => {
     if(params?.distance) {
       setDistance(params.distance);
     }
-    if(params?.showOutsideParameters) {
+    if(params?.showOutsideParameters != undefined) {
       setShowOutsideParams(params.showOutsideParameters);
     }
     saveParams();
