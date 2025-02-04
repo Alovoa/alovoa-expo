@@ -63,7 +63,8 @@
         "NSLocationWhenInUseUsageDescription": "This app uses the location to list other users in close proximity",
         "NSDocumentsFolderUsageDescription": "This app uses the Documents folder to store the requested user data",
         "NSMicrophoneUsageDescription": "This app uses the microphone to record the users voice for other users"
-      }
+      },
+      "buildNumber": "37"
     },
     "android": {
       "icon": "./assets/icon-round.png",
@@ -106,6 +107,9 @@
     "owner": "jarrettconfrey",
     "runtimeVersion": {
       "policy": "appVersion"
+    },
+    "experiments": {
+      "baseUrl": "/alovoa-expo"
     }
   }
 }

@@ -1,10 +1,11 @@
 #!/bin/bash
-set -e
+set -ex
 
 #create android project with some adjustments
 
+# create android and ios directories
 yarn expo prebuild
-echo "Small Android adjustments..."
-# dark splash
+
+# dark splash - does not work with `eas build`
 cp ./scripts/xml/colors.xml \
   ./android/app/src/main/res/values-night/colors.xml

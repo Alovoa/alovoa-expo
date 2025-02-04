@@ -75,6 +75,8 @@ buck-out/
 
 # Expo
 .expo/
+credentials.json
+credentials/
 web-build/
 dist/
 

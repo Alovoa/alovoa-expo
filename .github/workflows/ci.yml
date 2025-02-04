@@ -1,0 +1,140 @@
+name: ci
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+jobs:
+  prebuild:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: latest
+        cache: yarn
+    - run: yarn install
+    - run: yarn doctor
+      env:
+        # todo: `yarn doctor` - look into warnings that were found when validating dependencies against React Native Directory (@likashefqet/react-native-image-zoom, etc...)
+        EXPO_DOCTOR_ENABLE_DIRECTORY_CHECK: false
+    - run: yarn tsc
+    - run: yarn expo prebuild
+    - run: yarn expo export
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        name: dist
+        path: dist
+        retention-days: 0
+  build:
+    needs: prebuild
+    runs-on: ${{ matrix.run-on }}
+    name: build-${{ matrix.extension }}
+    continue-on-error: true
+    strategy:
+      matrix:
+        include:
+        - platform: android
+          profile: production
+          extension: aab
+          run-on: ubuntu-latest
+        - platform: android
+          profile: preview # builds apk instead of aab
+          extension: apk
+          run-on: ubuntu-latest
+        - platform: ios
+          profile: production
+          extension: ipa
+          run-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: latest
+        cache: yarn
+    - uses: expo/expo-github-action@v8
+      with:
+        eas-version: latest
+        expo-version: latest
+        token: ${{ secrets.EXPO_TOKEN }}
+    - run: yarn install
+    - if: matrix.extension == 'apk'
+      run: yarn f-droid
+    - run: >-
+        yarn eas build --local --non-interactive
+        --output Alovoa.${{ matrix.extension }}
+        --platform ${{ matrix.platform }}
+        --profile ${{ matrix.profile }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Alovoa.${{ matrix.extension }}
+        path: Alovoa.${{ matrix.extension }}
+  verify-artifacts:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: Alovoa.aab
+    - uses: actions/download-artifact@v4
+      with:
+        name: Alovoa.apk
+    - uses: actions/download-artifact@v4
+      with:
+        name: Alovoa.ipa
+    - uses: actions/download-artifact@v4
+      with:
+        name: dist
+    - run: >- # upload-pages-artifact archives dist to artifact.tar
+        mkdir dist &&
+        tar -xvf artifact.tar -C dist &&
+        file Alovoa.* &&
+        ls -lah
+  expo-application-services:
+    needs: verify-artifacts
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: latest
+        cache: yarn
+    - uses: expo/expo-github-action@v8
+      with:
+        eas-version: latest
+        expo-version: latest
+        token: ${{ secrets.EXPO_TOKEN }}
+    - run: yarn install
+    - if: github.event_name == 'pull_request'
+      uses: expo/expo-github-action/preview@v8
+      with:
+        command: eas update --auto --branch ${{ github.event.pull_request.head.ref }}
+        qr-target: expo-go
+    - if: github.ref_name == github.event.repository.default_branch
+      run: |
+        if git diff --name-only HEAD | grep -E 'app.json|package.json'; then
+          yarn eas build --platform all --non-interactive --no-wait
+          # todo: configure and run eas submit to publish new versions
+          # yarn eas submit --platform all --latest --non-interactive --verbose --verbose-fastlane
+        else
+          yarn eas update --auto --non-interactive
+        fi
+  deploy-github-pages:
+    if: github.ref_name == github.event.repository.default_branch
+    needs: verify-artifacts
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+    - uses: actions/configure-pages@v5
+    - id: deployment
+      uses: actions/deploy-pages@v4
+      with:
+        artifact_name: dist
