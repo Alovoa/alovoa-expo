@@ -15,6 +15,7 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import { DonationDtoListModel, DonationDto, RootStackParamList } from "../types";
 import * as Linking from 'expo-linking';
+import VerticalView from "../components/VerticalView";
 
 type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Donate'>
 const Donate = ({}: Props) => {
@@ -86,8 +87,9 @@ const Donate = ({}: Props) => {
           </View>
         </View>
       </View>
-      <View style={{ flex: 1 }}>
+      <VerticalView style={{ paddingBottom: topBarHeight + 24 }}>
         <FlatList
+          scrollEnabled={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
           numColumns={2}
@@ -102,7 +104,7 @@ const Donate = ({}: Props) => {
             </TouchableOpacity>
           )}
         />
-      </View>
+      </VerticalView>
     </View>
   )
 };
