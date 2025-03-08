@@ -292,7 +292,7 @@ const Profile = ({ route, navigation }: Props) => {
   return (
     <View style={{ height: height }}>
       {!isSelf &&
-        <View style={{ zIndex: 1, marginBottom: insets.bottom + (Platform.OS === 'android' ? 16 : 0), position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
+        <View style={{ zIndex: 1, marginBottom: insets.bottom + (Platform.OS === 'ios' ? 0 : 16), position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
               disabled={hidden || liked}>

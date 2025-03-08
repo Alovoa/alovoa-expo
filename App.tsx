@@ -158,7 +158,7 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, overflow: 'scroll' }}>
       <PaperProvider theme={{ ...theme, fonts }}>
         <StatusBar style={isDarkTheme ? "light" : "dark"} />
         <NavigationContainer theme={themeNavigation} ref={Global.navigationRef}>
