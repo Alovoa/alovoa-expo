@@ -111,17 +111,13 @@ const ProfileSettings = ({ route }: Props) => {
 
   async function updateMiscInfo(num: UserMiscInfoEnum, activated: boolean, multi: boolean) {
     const response = await Global.Fetch(Global.format(URL.USER_UPDATE_MISC_INFO, String(num), activated ? "1" : "0"), 'post');
-    const miscInfoArray: Array<UserMiscInfo> = response.data
+    const miscInfoArray: UserMiscInfo[] = response.data
     user.miscInfos = miscInfoArray;
   }
 
   async function navigatePrompts() {
     Global.navigate("Profile.Prompts", false, { user: user });
   }
-
-  const halfWidth = {
-    height: height/2
-  };
 
   return (
     <View style={{ height: height - headerHeight }}>

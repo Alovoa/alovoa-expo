@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Dimensions, TouchableOpacity, StyleProp, TextStyle, useWindowDimensions } from "react-native";
+import { View, Image, TouchableOpacity, StyleProp, TextStyle, useWindowDimensions } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { CardItemT } from "../types";
 import * as Global from "../Global";
@@ -13,7 +13,7 @@ const CardItem = ({
 }: CardItemT) => {
 
   const { colors } = useTheme();
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   // Custom styling
   const cardPadding = 30;

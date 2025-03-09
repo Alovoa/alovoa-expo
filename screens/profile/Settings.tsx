@@ -21,7 +21,7 @@ const Settings = ({ route }: Props) => {
 
   var data: YourProfileResource = route.params.data;
 
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const [units, setUnits] = React.useState(UnitsEnum.SI);
   const [emailSettings, setEmailSettings] = React.useState<Map<number, boolean>>(new Map());
 
@@ -35,8 +35,16 @@ const Settings = ({ route }: Props) => {
       setUnits(unitEnum);
     }
     let emailSettings = new Map<number, boolean>();
-    data.user.userSettings.emailLike ? emailSettings.set(SettingsEmailEnum.LIKE, true) : emailSettings.set(SettingsEmailEnum.LIKE, false);
-    data.user.userSettings.emailChat ? emailSettings.set(SettingsEmailEnum.CHAT, true) : emailSettings.set(SettingsEmailEnum.CHAT, false);
+    if(data.user.userSettings.emailLike) {
+      emailSettings.set(SettingsEmailEnum.LIKE, true);
+    } else {
+      emailSettings.set(SettingsEmailEnum.LIKE, false);
+    }
+    if(data.user.userSettings.emailChat) {
+      emailSettings.set(SettingsEmailEnum.CHAT, true);
+    } else {
+      emailSettings.set(SettingsEmailEnum.CHAT, false);
+    }
     setEmailSettings(emailSettings);
   }
 
@@ -50,10 +58,10 @@ const Settings = ({ route }: Props) => {
     emailSettings.set(id, checked);
     setEmailSettings(emailSettings);
     let value = checked ? URL.PATH_BOOLEAN_TRUE : URL.PATH_BOOLEAN_FALSE;
-    if (id == SettingsEmailEnum.LIKE) {
+    if (id === SettingsEmailEnum.LIKE) {
       Global.Fetch(Global.format(URL.USER_SETTING_EMAIL_LIKE, value), 'post');
       data.user.userSettings.emailLike = checked;
-    } else if (id == SettingsEmailEnum.CHAT) {
+    } else if (id === SettingsEmailEnum.CHAT) {
       Global.Fetch(Global.format(URL.USER_SETTING_EMAIL_CHAT, value), 'post');
       data.user.userSettings.emailChat = checked;
     }

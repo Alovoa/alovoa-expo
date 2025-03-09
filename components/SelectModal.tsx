@@ -10,7 +10,7 @@ const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, dat
 
   const i18n = I18N.getI18n();
   const { colors } = useTheme();
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   
   const [selectedIds, setSelectedIds] = React.useState(selected);
   const [buttonText, setButtonText] = React.useState("");
@@ -26,7 +26,7 @@ const SelectModal = ({ multi = false, disabled = false, minItems = 0, title, dat
 
   function updateButtonText() {
     let text = [...data.entries()].filter(([key, value]) => 
-      selectedIds.includes(value[0])).map(([key, value]) => value[1] != undefined ? i18n.t(value[1]) : '').join(", ");
+      selectedIds.includes(value[0])).map(([key, value]) => value[1] !== undefined ? i18n.t(value[1]) : '').join(", ");
     if(!text) {
       text = Global.EMPTY_STRING;
     }

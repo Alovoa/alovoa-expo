@@ -19,7 +19,7 @@ const AdvancedSettings = ({ route }: Props) => {
 
   var user: UserDto = route.params.user;
   const { colors } = useTheme();
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const defaultTimeoutString = String(Global.DEFAULT_GPS_TIMEOUT);
   const defaultHideThresholdString = String(Global.DEFAULT_HIDE_THRESHOLD);
 

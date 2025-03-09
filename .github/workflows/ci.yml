@@ -19,11 +19,12 @@ jobs:
         node-version: latest
         cache: yarn
     - run: yarn install
+    - run: yarn type-check
+    - run: yarn lint
     - run: yarn doctor
       env:
         # todo: `yarn doctor` - look into warnings that were found when validating dependencies against React Native Directory (@likashefqet/react-native-image-zoom, etc...)
         EXPO_DOCTOR_ENABLE_DIRECTORY_CHECK: false
-    - run: yarn tsc
     - run: yarn expo prebuild
     - run: yarn expo export
     - uses: actions/upload-pages-artifact@v3

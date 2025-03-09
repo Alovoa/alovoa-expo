@@ -26,7 +26,6 @@ import Icon from "../components/Icon";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import VerticalView from "../components/VerticalView";
 import ComplimentModal from "../components/ComplimentModal";
-import { ParamListBase } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const i18n = I18N.getI18n()
@@ -80,10 +79,10 @@ const Profile = ({ route, navigation }: Props) => {
   const [gender, setGender] = React.useState<Gender>()
   const [preferredGenders, setPreferredGenders] = React.useState(Array<Gender>);
   const [miscInfo, setMiscInfo] = React.useState<UserMiscInfo[]>([])
-  const [swiperImages, setSwiperImages] = React.useState<Array<string>>([]);
+  const [swiperImages, setSwiperImages] = React.useState<string[]>([]);
   const [reportModalVisible, setReportModalVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
-  const [previousScreen, setPreviousScreen] = React.useState<String | null>();
+  const [previousScreen, setPreviousScreen] = React.useState<string | null>();
   const [reportedUser, setReportedUser] = React.useState(false)
   const [removeUser, setRemoveUser] = React.useState(false);
   const [isLegal, setIsLegal] = React.useState(false);
@@ -150,7 +149,7 @@ const Profile = ({ route, navigation }: Props) => {
     setPreferredGenders(user.preferedGenders);
     setInterests(Global.shuffleArray(user.interests));
     setPrompts(Global.shuffleArray(user.prompts));
-    var swiperImageData: Array<string> = [];
+    var swiperImageData: string[] = [];
     swiperImageData.push(user.profilePicture);
     if (user.images) {
       Global.shuffleArray(user.images).forEach(function (image) {
@@ -196,7 +195,7 @@ const Profile = ({ route, navigation }: Props) => {
 
   React.useEffect(() => {
     navigation.addListener('beforeRemove', (e: any) => {
-      if (Global.SCREEN_SEARCH == previousScreen) {
+      if (Global.SCREEN_SEARCH === previousScreen) {
         e.preventDefault();
         goBack();
       }
@@ -205,7 +204,7 @@ const Profile = ({ route, navigation }: Props) => {
 
 
   React.useEffect(() => {
-    if (removeUser && Global.SCREEN_SEARCH == previousScreen) {
+    if (removeUser && Global.SCREEN_SEARCH === previousScreen) {
       goBack();
     }
   }, [removeUser]);
@@ -268,7 +267,7 @@ const Profile = ({ route, navigation }: Props) => {
 
   function getMiscInfoText(map: Map<number, string>): string {
     let id = miscInfo.map(m => m.value).find(e => [...map.keys()].includes(e));
-    if(id != undefined) {
+    if(id !== undefined) {
       const text = map.get(id);
       return text ? i18n.t(text) : Global.EMPTY_STRING;
     } else {
@@ -357,10 +356,10 @@ const Profile = ({ route, navigation }: Props) => {
         <View style={[styles.containerProfileItem, { marginTop: 24, paddingBottom: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }]}>
           <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
             {lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
-              {lastActiveState == 1 &&
+              {lastActiveState === 1 &&
                 <Text style={{ alignSelf: 'center' }}>{i18n.t('profile.active-state.1')}</Text>
               }
-              {lastActiveState == 2 &&
+              {lastActiveState === 2 &&
                 <Text style={{ alignSelf: 'center' }}>{i18n.t('profile.active-state.2')}</Text>
               }
             </View>}
@@ -368,7 +367,7 @@ const Profile = ({ route, navigation }: Props) => {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
             <Text>{distance}</Text>
-            <Text>{you?.units == UnitsEnum.IMPERIAL ? ' mi' : ' km'}</Text>
+            <Text>{you?.units === UnitsEnum.IMPERIAL ? ' mi' : ' km'}</Text>
           </View>
         </View>
 

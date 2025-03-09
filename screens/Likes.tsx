@@ -35,7 +35,7 @@ const Likes = ({ navigation }: Props) => {
   }
 
   const [loaded, setLoaded] = React.useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing] = React.useState(false); // todo: setRefreshing
   const [user, setUser] = React.useState<UserDto>();
   const [results, setResults] = React.useState(Array<LikeResultT>);
   const [menuFilterVisible, setMenuFilterVisible] = React.useState(false);
@@ -71,7 +71,7 @@ const Likes = ({ navigation }: Props) => {
     if (url) {
       await Global.Fetch(url).then(
         (response) => {
-          if (filter == FILTER.RECEIVED_LIKES) {
+          if (filter === FILTER.RECEIVED_LIKES) {
             let data: AlertsResource = response.data;
             setUser(data.user);
             let res = data.notifications.map(item => {
@@ -100,7 +100,7 @@ const Likes = ({ navigation }: Props) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      if (filter != FILTER.RECEIVED_LIKES) {
+      if (filter !== FILTER.RECEIVED_LIKES) {
         load();
       }
       setFilter(FILTER.RECEIVED_LIKES);
@@ -127,19 +127,19 @@ const Likes = ({ navigation }: Props) => {
       }
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <View style={[styles.top, { paddingBottom: 8, justifyContent: 'space-between', width: width }]}>
-        {filter == FILTER.RECEIVED_LIKES && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.received-likes')}</Text>}
-        {filter == FILTER.GIVEN_LIKES && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.given-likes')}</Text>}
-        {filter == FILTER.HIDDEN && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.hidden')}</Text>}
-        {filter == FILTER.BLOCKED && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.blocked')}</Text>}
+        {filter === FILTER.RECEIVED_LIKES && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.received-likes')}</Text>}
+        {filter === FILTER.GIVEN_LIKES && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.given-likes')}</Text>}
+        {filter === FILTER.HIDDEN && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.hidden')}</Text>}
+        {filter === FILTER.BLOCKED && <Text style={{ paddingLeft: 12 }}>{i18n.t('likes.blocked')}</Text>}
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Menu
             visible={menuFilterVisible}
             onDismiss={() => setMenuFilterVisible(false)}
             anchor={<Pressable onPress={() => setMenuFilterVisible(true)}><MaterialCommunityIcons name="dots-vertical" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>}>
-            {filter != FILTER.RECEIVED_LIKES && <Menu.Item onPress={() => setFilter(FILTER.RECEIVED_LIKES)} title={i18n.t('likes.received-likes')} />}
-            {filter != FILTER.GIVEN_LIKES && <Menu.Item onPress={() => setFilter(FILTER.GIVEN_LIKES)} title={i18n.t('likes.given-likes')} />}
-            {filter != FILTER.HIDDEN && <Menu.Item onPress={() => setFilter(FILTER.HIDDEN)} title={i18n.t('likes.hidden')} />}
-            {filter != FILTER.BLOCKED && <Menu.Item onPress={() => setFilter(FILTER.BLOCKED)} title={i18n.t('likes.blocked')} />}
+            {filter !== FILTER.RECEIVED_LIKES && <Menu.Item onPress={() => setFilter(FILTER.RECEIVED_LIKES)} title={i18n.t('likes.received-likes')} />}
+            {filter !== FILTER.GIVEN_LIKES && <Menu.Item onPress={() => setFilter(FILTER.GIVEN_LIKES)} title={i18n.t('likes.given-likes')} />}
+            {filter !== FILTER.HIDDEN && <Menu.Item onPress={() => setFilter(FILTER.HIDDEN)} title={i18n.t('likes.hidden')} />}
+            {filter !== FILTER.BLOCKED && <Menu.Item onPress={() => setFilter(FILTER.BLOCKED)} title={i18n.t('likes.blocked')} />}
           </Menu>
         </View>
       </View>
@@ -155,14 +155,14 @@ const Likes = ({ navigation }: Props) => {
             <TouchableOpacity>
               <CardItemLikes
                 user={item.user}
-                unitsImperial={user?.units == UnitsEnum.IMPERIAL}
+                unitsImperial={user?.units === UnitsEnum.IMPERIAL}
                 message={item.message}
                 onMessagePressed={onMessagePressed}
               />
             </TouchableOpacity>
           )}
         />
-        {results && results.length == 0 && loaded && filter == FILTER.RECEIVED_LIKES &&
+        {results && results.length === 0 && loaded && filter === FILTER.RECEIVED_LIKES &&
           <View style={{ height: height - NAVIGATION_BAR_HEIGHT - topBarHeight, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
             <LikesEmpty height={svgHeight} width={svgWidth}></LikesEmpty>
             <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('likes-empty.title')}</Text>

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView, StyleSheet, useWindowDimensions, TouchableWithoutFeedback, Platform, Pressable } from "react-native";
+import { View, Image, TouchableOpacity, StyleProp, TextStyle, StyleSheet, useWindowDimensions, Platform, Pressable } from "react-native";
 import { useTheme, Text, Chip, Button } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT } from "../types";
@@ -75,7 +75,7 @@ const CardItem = ({
   }, []);
 
   async function showToolTip() {
-    if (index == 0) {
+    if (index === 0) {
       let toolTip = await Global.GetStorage(Global.STORAGE_SEARCH_LIKE_TOOLTIP);
       if (!toolTip) {
         setShowLikeTooltip(true);

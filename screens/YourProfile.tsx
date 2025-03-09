@@ -7,7 +7,7 @@ import {
   Linking,
   Pressable
 } from "react-native";
-import { Text, Button, Card, ActivityIndicator, IconButton, useTheme, MaterialBottomTabScreenProps } from "react-native-paper";
+import { Text, Button, Card, ActivityIndicator, IconButton, MaterialBottomTabScreenProps } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import { YourProfileResource, UserDto, RootStackParamList } from "../types";
 import * as I18N from "../i18n";
@@ -30,7 +30,6 @@ type Props = MaterialBottomTabScreenProps<RootStackParamList, 'YourProfile'>
 const YourProfile = ({ route, navigation }: Props) => {
 
   const { height, width } = useWindowDimensions();
-  const { colors } = useTheme();
   const MAX_REFERRALS = 10;
 
   const [requestingDeletion, setRequestingDeletion] = React.useState(false);
@@ -87,7 +86,7 @@ const YourProfile = ({ route, navigation }: Props) => {
   }
 
   async function downloadUserData() {
-    if (Platform.OS == 'android') {
+    if (Platform.OS === 'android') {
       const response = await Global.Fetch(Global.format(URL.USER_USERDATA, uuid));
       const userData = JSON.stringify(response.data);
       const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
@@ -97,7 +96,7 @@ const YourProfile = ({ route, navigation }: Props) => {
         await StorageAccessFramework.writeAsStringAsync(newFile, userData);
         Global.ShowToast(i18n.t('profile.download-userdata-success'));
       }
-    } else if (Platform.OS == 'ios') {
+    } else if (Platform.OS === 'ios') {
       const response = await Global.Fetch(Global.format(URL.USER_USERDATA, uuid));
       const userData = JSON.stringify(response.data);
       let fileName = FileSystem.documentDirectory + '/alovoa.json';

@@ -12,7 +12,7 @@ const Message = ({ conversation }: MessageT) => {
 
   let text: string = !conversation.lastMessage ? "" : conversation.lastMessage.from ? "" : i18n.t('you') + ": ";
   text += conversation.lastMessage ? conversation.lastMessage.content : i18n.t('chat.default');
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   return (
     <View style={{flexDirection: 'row'}}>
