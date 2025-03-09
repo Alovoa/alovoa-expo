@@ -39,9 +39,9 @@ const SearchSettings = ({ route }: Props) => {
   const [changed, setChanged] = React.useState(false);
 
   const minDistance = 1;
-  const [maxDistance, setMaxDistance] = React.useState(Global.MAX_DISTANCE);
+  const [maxDistance] = React.useState(Global.MAX_DISTANCE); // todo: setMaxDistance
   const [distance, setDistance] = React.useState(Global.DEFAULT_DISTANCE);
-  const [distanceUnit, setDistanceUnit] = React.useState("km");
+  const [distanceUnit] = React.useState("km"); // todo: setDistanceUnit
   const [params, setParams] = React.useState<SearchParams>();
   const [showOutsideParams, setShowOutsideParams] = React.useState(true);
 
@@ -108,7 +108,7 @@ const SearchSettings = ({ route }: Props) => {
     if(params?.distance) {
       setDistance(params.distance);
     }
-    if(params?.showOutsideParameters != undefined) {
+    if(params?.showOutsideParameters !== undefined) {
       setShowOutsideParams(params.showOutsideParameters);
     }
     saveParams();
@@ -142,7 +142,7 @@ const SearchSettings = ({ route }: Props) => {
       data.user.preferedGenders.push(gender);
     } else {
       data.user.preferedGenders.forEach((item, index) => {
-        if (item.id == genderId) data.user.preferedGenders.splice(index, 1);
+        if (item.id === genderId) data.user.preferedGenders.splice(index, 1);
       });
     }
     setChanged(true);

@@ -11,7 +11,7 @@ const InterestModal = ({ user }: InterestModalT) => {
 
   const i18n = I18N.getI18n();
   const { colors } = useTheme();
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   const [buttonText, setButtonText] = React.useState("");
   const [visible, setVisible] = React.useState(false);

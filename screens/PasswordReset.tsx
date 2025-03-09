@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme, Text, Button, Dialog, TextInput, IconButton, MaterialBottomTabScreenProps } from "react-native-paper";
-import { View, Platform, StyleSheet, Image, useWindowDimensions } from "react-native";
+import { View, StyleSheet, Image, useWindowDimensions } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -113,6 +113,7 @@ const PasswordReset = ({ route, navigation }: Props) => {
         Global.ShowToast(i18n.t('password-reset-success'));
         Global.navigate("Login");
       } catch (e) {
+        console.error(e);
         hideDialog();
         Global.ShowToast(i18n.t('error.generic'));
       }

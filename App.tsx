@@ -56,7 +56,7 @@ export default function App() {
     }
   }
 
-  if (Device.deviceType != Device.DeviceType.PHONE) {
+  if (Device.deviceType !== Device.DeviceType.PHONE) {
     ScreenOrientation.unlockAsync();
   }
 
@@ -110,7 +110,7 @@ export default function App() {
     }
   } as const;
 
-  const isDarkTheme = useColorScheme() == 'dark';
+  const isDarkTheme = useColorScheme() === 'dark';
 
   const theme: ThemeProp = {
     ...isDarkTheme ? MD3DarkTheme : MD3LightTheme,

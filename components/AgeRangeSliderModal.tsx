@@ -1,7 +1,7 @@
 import React from "react";
-import styles, { GRAY, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
-import { RangeSliderModalT, SelectModalT } from "../types";
-import { Modal, Portal, Text, Button, Checkbox, useTheme, IconButton } from 'react-native-paper';
+import { GRAY, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
+import { RangeSliderModalT } from "../types";
+import { Modal, Portal, Text, Button, useTheme, IconButton } from 'react-native-paper';
 import { View, useWindowDimensions } from "react-native";
 import Slider from "@react-native-community/slider";
 
@@ -18,7 +18,7 @@ const AgeRangeSliderModal = ({
   const MAX_AGE = 100;
 
   const { colors } = useTheme();
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   const [minAgeText, setMinAgeText] = React.useState(MIN_AGE)
   const [maxAgeText, setMaxAgeText] = React.useState(MAX_AGE)

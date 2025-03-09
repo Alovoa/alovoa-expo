@@ -1,4 +1,5 @@
-const { EAS_PROJECT_ID, EXPO_OWNER } = process.env
+const EAS_PROJECT_ID = process.env.EAS_PROJECT_ID;
+const EXPO_OWNER = process.env.EXPO_OWNER;
 
 module.exports = {
   "expo": {

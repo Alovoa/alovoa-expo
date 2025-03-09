@@ -22,7 +22,7 @@ const Pictures = ({ route, navigation }: Props) => {
 
   var user: UserDto = route.params.user;
 
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
   const i18n = I18N.getI18n()
   const MAX_IMAGES = 4;
@@ -99,7 +99,7 @@ const Pictures = ({ route, navigation }: Props) => {
     if (imageData != null) {
       const bodyFormData = Global.buildFormData(imageData);
       const response = await Global.Fetch(URL.USER_ADD_IMAGE, 'post', bodyFormData, 'multipart/form-data');
-      const responseImages: Array<UserImage> = response.data;
+      const responseImages: UserImage[] = response.data;
       setImages(responseImages);
       user.images = responseImages;
     }
