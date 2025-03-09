@@ -11,7 +11,6 @@ import {
 import {
   TextInput, Card, MaterialBottomTabScreenProps
 } from "react-native-paper";
-import { useHeaderHeight } from '@react-navigation/elements';
 import { useTheme, Text } from "react-native-paper";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Autolink, { CustomMatcher } from 'react-native-autolink';
@@ -29,12 +28,11 @@ type Props = MaterialBottomTabScreenProps<RootStackParamList, 'MessageDetail'>
 const MessageDetail = ({ route, navigation }: Props) => {
 
   const { conversation } = route.params;
-  const headerHeight = useHeaderHeight();
   const insets = useSafeAreaInsets();
 
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing] = React.useState(false); // todo: setRefreshing
   const [results, setResults] = React.useState(Array<MessageDto>);
   let scrollViewRef = React.useRef<ScrollView>(null);
   const [text, setText] = React.useState("");

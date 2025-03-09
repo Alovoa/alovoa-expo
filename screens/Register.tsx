@@ -93,6 +93,7 @@ const Register = ({ route, navigation }: Props) => {
           setLoading(false);
           setAlertVisible(true);
         } catch (e) {
+          console.error(e);
           setLoading(false);
           Global.ShowToast(i18n.t('error.generic'));
         }
@@ -104,6 +105,7 @@ const Register = ({ route, navigation }: Props) => {
           await Global.SetStorage(Global.STORAGE_PAGE, Global.INDEX_ONBOARDING);
           Global.loadPage(Global.INDEX_ONBOARDING);
         } catch (e) {
+          console.error(e);
           setLoading(false);
           Global.ShowToast(i18n.t('error.generic'));
         }

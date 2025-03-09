@@ -28,7 +28,7 @@ const IMAGE_HEADER = "data:image/jpeg;base64,";
 const i18n = I18N.getI18n()
 
 type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Onboarding'>
-const Onboarding = ({}: Props) => {
+const Onboarding = ({route: _r, navigation: _n}: Props) => {
 
   const GENDER_MALE = 1;
   const GENDER_FEMALE = 2;
@@ -37,9 +37,9 @@ const Onboarding = ({}: Props) => {
   const PAGE_PROFILE_PIC = 0;
   const PAGE_DESCRIPTION = 1;
   const PAGE_PREF_GENDER = 2;
-  const PAGE_PREF_INTENTION = 3;
-  const PAGE_PREF_INTERESTS = 4;
-  const PAGE_PREF_NOTIFICATION = 5;
+  // const PAGE_PREF_INTENTION = 3;
+  // const PAGE_PREF_INTERESTS = 4;
+  // const PAGE_PREF_NOTIFICATION = 5;
   const PAGE_FINAL = 6;
 
   const { colors } = useTheme();
@@ -135,7 +135,7 @@ const Onboarding = ({}: Props) => {
 
   function moveFlatlistNext() {
     let position = scrollRef?.current?.getCurrentIndex();
-    if (position != undefined) {
+    if (position !== undefined) {
       if (position < PAGE_FINAL) {
         scrollRef?.current?.scrollToIndex({ index: position + 1, animated: true });
       } else {
@@ -183,6 +183,7 @@ const Onboarding = ({}: Props) => {
       Global.loadPage(Global.INDEX_MAIN);
 
     } catch (e) {
+      console.error(e);
       Global.ShowToast(i18n.t('error.generic'));
     }
   }

@@ -1,11 +1,13 @@
-import * as Global from "./Global";
+import * as Global from "./Global"; 
+
+export { MaterialBottomTabNavigator } from './types-hack';
 
 export type RootStackParamList = {
   [Global.SCREEN_CHAT]: undefined;
   [Global.SCREEN_DONATE]: undefined;
   [Global.SCREEN_LIKES]: undefined;
   Login: undefined;
-  Main: {};
+  Main: object;
   MessageDetail: {
     conversation: ConversationDto;
   };
@@ -79,8 +81,8 @@ export type SelectModalT = {
   multi: boolean,
   minItems: number,
   title: string;
-  data: Array<[number, string | undefined]>;
-  selected: Array<number>;
+  data: [number, string | undefined][];
+  selected: number[];
   onValueChanged: (id: number, checked: boolean) => void
 };
 
@@ -105,14 +107,14 @@ export type RangeSliderModalT = {
 };
 
 export type InterestModalT = {
-  data: Array<UserInterest>;
+  data: UserInterest[];
   user?: UserDto;
   updateButtonText?: (interests: UserInterest[]) => void;
   setInterestsExternal?: (interests: UserInterest[]) => void;
 };
 
 export type DonationDtoListModel = {
-  list: Array<DonationDto>;
+  list: DonationDto[];
 }
 
 export type RegisterBody = {
@@ -134,10 +136,10 @@ export type UserInterestAutocomplete = {
 
 export type UserOnboarding = {
   intention: number;
-  preferredGenders: Array<number>;
+  preferredGenders: number[];
   profilePictureMime: string;
   description: string;
-  interests: Array<string>;
+  interests: string[];
   notificationLike: boolean;
   notificationChat: boolean;
 }
@@ -194,16 +196,16 @@ export type UserDto = {
   units: number;
   preferedMinAge: number;
   preferedMaxAge: number;
-  miscInfos: Array<UserMiscInfo>
-  preferedGenders: Array<Gender>;
+  miscInfos: UserMiscInfo[]
+  preferedGenders: Gender[];
   intention: UserIntention;
-  interests: Array<UserInterest>
+  interests: UserInterest[]
   profilePicture: string;
-  images: Array<UserImage>;
+  images: UserImage[];
   description: string;
   country: string;
   distanceToUser: number;
-  commonInterests: Array<UserInterest>;
+  commonInterests: UserInterest[];
   totalDonations: number;
   numBlockedByUsers: number;
   numReports: number;
@@ -219,7 +221,7 @@ export type UserDto = {
   locationLongitude: number;
   lastActiveState: number;
   userSettings: UserSettings;
-  prompts: Array<UserPrompt>;
+  prompts: UserPrompt[];
   verificationPicture: UserDtoVerificationPicture;
 }
 
@@ -336,7 +338,7 @@ export enum IntentionEnum {
 }
 
 export type SearchDto = {
-  users: Array<UserDto>;
+  users: UserDto[];
   message: string;
   stage: SearchStageEnum;
   global: boolean;
@@ -345,8 +347,8 @@ export type SearchDto = {
 
 export type YourProfileResource = {
   user: UserDto;
-  genders: Array<Gender>;
-  intentions: Array<UserIntention>;
+  genders: Gender[];
+  intentions: UserIntention[];
   imageMax: number,
   isLegal: boolean,
   mediaMaxSize: number,
@@ -362,7 +364,7 @@ export type DonateResource = {
 
 export type DonateSearchFilterResource = {
   currUser: UserDto;
-  donations: Array<DonationDto>;
+  donations: DonationDto[];
   filter: number;
 }
 
@@ -373,11 +375,11 @@ export type ChatDetailResource = {
 }
 
 export type ChatMessageUpdateResource = {
-  messages: Array<MessageDto>;
+  messages: MessageDto[];
 }
 
 export type AlertsResource = {
-  notifications: Array<NotificationDto>;
+  notifications: NotificationDto[];
   user: UserDto;
 }
 
@@ -399,23 +401,23 @@ export type SearchUsersResource = {
 
 export type ChatsResource = {
   user: UserDto;
-  conversations: Array<ConversationDto>;
+  conversations: ConversationDto[];
 }
 
 export type MessageDtoListModel = {
-  list: Array<MessageDto>;
+  list: MessageDto[];
 }
 
 export type UserOnboardingResource = {
-  genders: Array<Gender>;
-  intentions: Array<UserIntention>;
+  genders: Gender[];
+  intentions: UserIntention[];
   isLegal: boolean;
   mediaMaxSize: number
   interestMaxSize: number;
 }
 
 export type UserUsersResource = {
-  users: Array<UserDto>;
+  users: UserDto[];
   user: UserDto;
 }
 
@@ -434,7 +436,7 @@ export type UserDtoVerificationPicture = {
 export type AlertModel = {
   visible: boolean;
   message: string;
-  buttons: Array<AlertButtonModel>;
+  buttons: AlertButtonModel[];
   setVisible: (bool: boolean) => void;
 }
 
@@ -473,16 +475,16 @@ export enum IntentionE {
 
 export type SearchParams = {
     distance?: number;
-    preferredGenderIds?: Array<number>
+    preferredGenderIds?: number[]
     preferredMinAge?: number;
     preferredMaxAge?: number;
     showOutsideParameters?: boolean;
     sort?: SearchParamsSortE;
     latitude?: number;
     longitude?: number;
-    miscInfos?: Array<number>;
-    intentions?: Array<number>;
-    interests?: Array<string>;
+    miscInfos?: number[];
+    intentions?: number[];
+    interests?: string[];
 }
 
 export enum SearchParamsSortE {
@@ -610,50 +612,4 @@ export const UnitsNameMap = new Map<number, string>([
 export const SettingsEmailNameMap = new Map<number, string>([
   [SettingsEmailEnum.LIKE, 'profile.settings.email.like'],
   [SettingsEmailEnum.CHAT, 'profile.settings.email.chat'],
-]); 
-
-// react-native-paper@5 & @react-navigation/native@7 type compatibility hack
-// https://github.com/callstack/react-native-paper/issues/4572#issuecomment-2558782323
-// todo: remove below after react-native-paper@5 fixes support for @react-navigation/native@7
-
-import {
-  DefaultNavigatorOptions,
-  EventMapBase,
-  NavigationState,
-  ParamListBase,
-  RouteConfig,
-  RouteGroupConfig,
-  TabNavigationState
-} from '@react-navigation/native'
-import {
-  MaterialBottomTabNavigationEventMap,
-  MaterialBottomTabNavigationOptions
-} from 'react-native-paper'
-import {
-  MaterialBottomTabNavigatorProps
-} from 'react-native-paper/lib/typescript/react-navigation/navigators/createMaterialBottomTabNavigator'
-
-type LegacyTypedNavigator<
-  ParamList extends ParamListBase,
-  State extends NavigationState,
-  ScreenOptions extends {},
-  EventMap extends EventMapBase,
-  Navigator extends React.ComponentType<any>
-> = {
-  Navigator: React.ComponentType<
-    Omit<React.ComponentProps<Navigator>, keyof DefaultNavigatorOptions<any, any, any, any, any, any>> &
-      DefaultNavigatorOptions<ParamList, any, State, ScreenOptions, EventMap, any>
-  >
-  Group: React.ComponentType<RouteGroupConfig<ParamList, ScreenOptions, any>>
-  Screen: <RouteName extends keyof ParamList>(
-    _: RouteConfig<ParamList, RouteName, State, ScreenOptions, EventMap, any>
-  ) => null
-}
-
-export type MaterialBottomTabNavigator<T extends ParamListBase> = LegacyTypedNavigator<
-  T,
-  TabNavigationState<ParamListBase>,
-  MaterialBottomTabNavigationOptions,
-  MaterialBottomTabNavigationEventMap,
-  (_: MaterialBottomTabNavigatorProps) => React.JSX.Element
->
+]);

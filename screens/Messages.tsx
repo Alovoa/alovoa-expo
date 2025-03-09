@@ -20,7 +20,7 @@ const Messages = ({ navigation }: Props) => {
 
   const [loaded, setLoaded] = React.useState(false);
   const [results, setResults] = React.useState(Array<ConversationDto>);
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   const svgHeight = 150;
   const svgWidth = 200;
@@ -49,7 +49,7 @@ const Messages = ({ navigation }: Props) => {
           />
         ))
       }
-      {results && results.length == 0 && loaded &&
+      {results && results.length === 0 && loaded &&
         <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
           <ConvoEmpty height={svgHeight} width={svgWidth}></ConvoEmpty>
           <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('convo-empty.title')}</Text>

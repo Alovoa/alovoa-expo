@@ -18,7 +18,7 @@ import * as Linking from 'expo-linking';
 import VerticalView from "../components/VerticalView";
 
 type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Donate'>
-const Donate = ({}: Props) => {
+const Donate = ({route: _r, navigation: _n}: Props) => {
 
   const FILTER_RECENT = 1;
   const FILTER_AMOUNT = 2;
@@ -27,7 +27,7 @@ const Donate = ({}: Props) => {
   const i18n = I18N.getI18n();
   const { height, width } = useWindowDimensions();
 
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing] = React.useState(false); // todo: setRefreshing
   const [results, setResults] = React.useState(Array<DonationDto>);
   const [filter, setFilter] = React.useState(FILTER_RECENT);
   const [loading, setLoading] = React.useState(false);
@@ -46,7 +46,7 @@ const Donate = ({}: Props) => {
   }
 
   function updateFilter(num: number) {
-    if (num != filter) {
+    if (num !== filter) {
       setFilter(num);
     }
     hideMenuSort();

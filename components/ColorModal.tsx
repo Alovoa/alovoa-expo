@@ -9,7 +9,7 @@ import ColorPicker, { HueSlider, returnedResults, BrightnessSlider } from 'reani
 const ColorModal = ({ title }: any) => {
 
   const { colors } = useTheme();
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const i18n = I18N.getI18n();
 
   const [primary, setPrimary] = React.useState<string>(Global.DEFAULT_COLOR_PRIMARY);

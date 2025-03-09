@@ -8,7 +8,7 @@ import * as I18N from "../i18n";
 
 const ComplimentModal = ({ visible = false, setVisible, name, age, profilePicture, onSend, onDismiss }: ComplimentModalT) => {
 
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const i18n = I18N.getI18n();
   const { colors } = useTheme();
   const [text, setText] = React.useState("");
@@ -17,7 +17,7 @@ const ComplimentModal = ({ visible = false, setVisible, name, age, profilePictur
   function calcMarginModal() {
     return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
   }
-  const showModal = () => setVisible(true);
+  // const showModal = () => setVisible(true); // todo
   const hideModal = () => { setVisible(false); if (onDismiss) { onDismiss() } };
   const maxLength = 120;
 

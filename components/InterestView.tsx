@@ -1,6 +1,6 @@
 import React from "react";
-import { AlertModel, InterestModalT, UserInterest, UserInterestAutocomplete, UserInterestDto } from "../types";
-import { Text, Button, IconButton, Searchbar } from 'react-native-paper';
+import { InterestModalT, UserInterest, UserInterestAutocomplete, UserInterestDto } from "../types";
+import { Text, Button, Searchbar } from 'react-native-paper';
 import { Keyboard, View, useWindowDimensions } from "react-native";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -12,13 +12,13 @@ import { ScrollView } from "react-native-gesture-handler";
 const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: InterestModalT) => {
 
   const i18n = I18N.getI18n();
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   const [interests, setInterests] = React.useState(data);
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [interest, setInterest] = React.useState("");
   const [interestDebounce, setInterestDebounce] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
+  // const [loading, setLoading] = React.useState(false);
   const [suggestionsList, setSuggestionsList] = React.useState(Array<UserInterestDto>);
   const [interestToBeDeleted, setInterestToBeDeleted] = React.useState<UserInterest | null>();
 
@@ -85,15 +85,15 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
       setSuggestionsList([])
       return;
     }
-    setLoading(true)
+    // setLoading(true)
     const response = await Global.Fetch(Global.format(URL.USER_INTEREST_AUTOCOMPLETE, encodeURI(filterToken)));
-    const items: Array<UserInterestAutocomplete> = response.data;
-    const suggestions: Array<UserInterestDto> = items.map(item => {
+    const items: UserInterestAutocomplete[] = response.data;
+    const suggestions: UserInterestDto[] = items.map(item => {
       return { id: item.name, number: item.name + " (" + item.countString + ")" }
     });
 
     setSuggestionsList(suggestions)
-    setLoading(false);
+    // setLoading(false);
   };
 
   async function addInterest(interest: string) {
@@ -145,9 +145,9 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
             </Button>
           ))
         }
-        {suggestionsList?.length == 0 && <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>}
+        {suggestionsList?.length === 0 && <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>}
         <ScrollView style={{maxHeight: height > 500 ? 240 : 80}}>
-          {suggestionsList?.length == 0 &&
+          {suggestionsList?.length === 0 &&
             interests.map((item, index) => (
               <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
                 <Text>{item.text}</Text>

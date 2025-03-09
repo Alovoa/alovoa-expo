@@ -19,7 +19,7 @@ const IMAGE_HEADER = "data:image/webp;base64,";
 WebBrowser.maybeCompleteAuthSession();
 
 type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Login'>
-const Login = ({}: Props) => {
+const Login = ({route: _r, navigation: _n}: Props) => {
 
   const { colors } = useTheme();
 
@@ -35,7 +35,7 @@ const Login = ({}: Props) => {
   const [visible, setVisible] = React.useState(false);
   const showDialog = () => {setVisible(true); Keyboard.dismiss()};
   const hideDialog = () => setVisible(false);
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   React.useEffect(() => {
     load();
@@ -63,7 +63,7 @@ const Login = ({}: Props) => {
 
   const load = async () => {
     await Global.GetStorage(Global.STORAGE_PAGE).then((value) => {
-      if (value && value != Global.INDEX_REGISTER) {
+      if (value && value !== Global.INDEX_REGISTER) {
         Global.loadPage(value);
       }
     });
@@ -76,7 +76,7 @@ const Login = ({}: Props) => {
     e.remove();
 
     //_handleRedirect does not work on iOS and web, get url directly from WebBrowser.openAuthSessionAsync result instead
-    if ((Platform.OS === 'ios' || Platform.OS === 'web') && res.type == "success" && res.url) {
+    if ((Platform.OS === 'ios' || Platform.OS === 'web') && res.type === "success" && res.url) {
       _handleRedirect({ url: res.url });
     }
   };
@@ -87,7 +87,7 @@ const Login = ({}: Props) => {
     e.remove();
 
     //_handleRedirect does not work on iOS and web, get url directly from WebBrowser.openAuthSessionAsync result instead
-    if ((Platform.OS === 'ios' || Platform.OS === 'web') && res.type == "success" && res.url) {
+    if ((Platform.OS === 'ios' || Platform.OS === 'web') && res.type === "success" && res.url) {
       _handleRedirect({ url: res.url });
     }
   };
@@ -112,12 +112,13 @@ const Login = ({}: Props) => {
         if (!redirectHeader) {
           redirectHeader = res.data;
         }
-        if (res.request?.responseURL && res.request?.responseURL != URL.AUTH_LOGIN_ERROR && redirectHeader) {
+        if (res.request?.responseURL && res.request?.responseURL !== URL.AUTH_LOGIN_ERROR && redirectHeader) {
           _handleRedirect({ url: redirectHeader });
         } else {
           Global.ShowToast(i18n.t('error.generic'));
         }
       } catch (e) {
+        console.error(e);
         Global.ShowToast(i18n.t('error.generic'));
       }
     }

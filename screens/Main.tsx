@@ -22,7 +22,7 @@ const POLL_MESSAGE = 15 * SECOND_MS;
 type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Main'>
 const Main = ({ route, navigation }: Props) => {
 
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets()
   
   let messageUpdateInterval: NodeJS.Timeout | undefined;

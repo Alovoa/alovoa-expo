@@ -68,7 +68,7 @@ const Prompts = ({ route }: Props) => {
     setModalText(prompt.text);
     setModalTitle(i18n.t('profile.prompts.' + prompt.promptId));
     setModalMode(mode);
-    if (mode == ModalModeE.DELETE) {
+    if (mode === ModalModeE.DELETE) {
       setAlertVisible(true);
     } else {
       showModal();
@@ -106,10 +106,10 @@ const Prompts = ({ route }: Props) => {
     let prompt = {} as UserPrompt;
     prompt.promptId = modalId;
     prompt.text = modalText;
-    if (modalMode == ModalModeE.ADD) {
+    if (modalMode === ModalModeE.ADD) {
       addPrompt(prompt);
     }
-    else if (modalMode == ModalModeE.EDIT) {
+    else if (modalMode === ModalModeE.EDIT) {
       updatePrompt(prompt);
     }
   }

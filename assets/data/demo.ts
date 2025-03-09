@@ -1,14 +1,16 @@
 import { DataT } from "../../types";
-import IMAGE_01 from "../images/01.jpg";
-import IMAGE_02 from "../images/02.jpg";
-import IMAGE_03 from "../images/03.jpg";
-import IMAGE_04 from "../images/04.jpg";
-import IMAGE_05 from "../images/05.jpg";
-import IMAGE_06 from "../images/06.jpg";
-import IMAGE_07 from "../images/07.jpg";
-import IMAGE_08 from "../images/08.jpg";
-import IMAGE_09 from "../images/09.jpg";
-import IMAGE_10 from "../images/10.jpg";
+import icon from '../icon.png';
+
+const IMAGE_01 = icon,
+  IMAGE_02 = icon,
+  IMAGE_03 = icon,
+  IMAGE_04 = icon,
+  IMAGE_05 = icon,
+  IMAGE_06 = icon,
+  IMAGE_07 = icon,
+  IMAGE_08 = icon,
+  IMAGE_09 = icon,
+  IMAGE_10 = icon;
 
 const data: DataT[] = [
   {
