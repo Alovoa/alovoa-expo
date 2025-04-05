@@ -40,18 +40,18 @@ jobs:
     strategy:
       matrix:
         include:
-        - platform: android
-          profile: production
-          extension: aab
-          run-on: ubuntu-latest
+#        - platform: android
+#          profile: production
+#          extension: aab
+#          run-on: ubuntu-latest
         - platform: android
           profile: preview # builds apk instead of aab
           extension: apk
           run-on: ubuntu-latest
-        - platform: ios
-          profile: production
-          extension: ipa
-          run-on: macos-latest
+#        - platform: ios
+#          profile: production
+#          extension: ipa
+#          run-on: macos-latest
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -79,15 +79,15 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v4
-      with:
-        name: Alovoa.aab
+#    - uses: actions/download-artifact@v4
+#      with:
+#        name: Alovoa.aab
     - uses: actions/download-artifact@v4
       with:
         name: Alovoa.apk
-    - uses: actions/download-artifact@v4
-      with:
-        name: Alovoa.ipa
+#    - uses: actions/download-artifact@v4
+#      with:
+#        name: Alovoa.ipa
     - uses: actions/download-artifact@v4
       with:
         name: dist
