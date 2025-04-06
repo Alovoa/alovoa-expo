@@ -3,9 +3,9 @@ import {
   View,
   useWindowDimensions
 } from "react-native";
-import { useTheme, Text } from "react-native-paper";
+import { Text, MaterialBottomTabScreenProps } from "react-native-paper";
 import { Message } from "../components";
-import { ChatsResource, ConversationDto } from "../types";
+import { ChatsResource, ConversationDto, RootStackParamList } from "../types";
 import { STATUS_BAR_HEIGHT } from "../assets/styles";
 import ConvoEmpty from "../assets/images/convo-empty.svg";
 import * as Global from "../Global";
@@ -13,13 +13,14 @@ import * as URL from "../URL";
 import * as I18N from "../i18n";
 import VerticalView from "../components/VerticalView";
 
-const Messages = ({ navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Chat'>
+const Messages = ({ navigation }: Props) => {
 
   const i18n = I18N.getI18n()
 
   const [loaded, setLoaded] = React.useState(false);
   const [results, setResults] = React.useState(Array<ConversationDto>);
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   const svgHeight = 150;
   const svgWidth = 200;
@@ -48,7 +49,7 @@ const Messages = ({ navigation }) => {
           />
         ))
       }
-      {results && results.length == 0 && loaded &&
+      {results && results.length === 0 && loaded &&
         <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
           <ConvoEmpty height={svgHeight} width={svgWidth}></ConvoEmpty>
           <Text style={{ fontSize: 20, paddingHorizontal: 48 }}>{i18n.t('convo-empty.title')}</Text>

@@ -7,17 +7,18 @@ import {
   useWindowDimensions
 } from "react-native";
 
-import { Text, Button, Menu, ActivityIndicator } from "react-native-paper";
+import { Text, Button, Menu, ActivityIndicator, MaterialBottomTabScreenProps } from "react-native-paper";
 import { CardItemDonate } from "../components";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { DonationDtoListModel, DonationDto } from "../types";
+import { DonationDtoListModel, DonationDto, RootStackParamList } from "../types";
 import * as Linking from 'expo-linking';
 import VerticalView from "../components/VerticalView";
 
-const Donate = () => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Donate'>
+const Donate = ({route: _r, navigation: _n}: Props) => {
 
   const FILTER_RECENT = 1;
   const FILTER_AMOUNT = 2;
@@ -26,7 +27,7 @@ const Donate = () => {
   const i18n = I18N.getI18n();
   const { height, width } = useWindowDimensions();
 
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing] = React.useState(false); // todo: setRefreshing
   const [results, setResults] = React.useState(Array<DonationDto>);
   const [filter, setFilter] = React.useState(FILTER_RECENT);
   const [loading, setLoading] = React.useState(false);
@@ -45,7 +46,7 @@ const Donate = () => {
   }
 
   function updateFilter(num: number) {
-    if (num != filter) {
+    if (num !== filter) {
       setFilter(num);
     }
     hideMenuSort();
@@ -60,7 +61,7 @@ const Donate = () => {
   }, []);
 
   return (
-    <View style={{ height: height }}>
+    <View style={{ flex: 1, height: height }}>
       {loading &&
         <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
@@ -69,7 +70,7 @@ const Donate = () => {
       <View style={{ paddingTop: STATUS_BAR_HEIGHT }}></View>
       <View style={[styles.top, { paddingBottom: 8, justifyContent: 'flex-end' }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Global.FLAG_FDROID &&
+          {Global.FLAG_ENABLE_DONATION &&
             <Button icon="cash-multiple" mode="contained-tonal" onPress={() => Linking.openURL(URL.DONATE_LIST)} style={{ marginRight: 4 }}>
               <Text>{i18n.t('navigation.donate')}</Text>
             </Button>}
@@ -88,6 +89,7 @@ const Donate = () => {
       </View>
       <VerticalView style={{ paddingBottom: topBarHeight + 24 }}>
         <FlatList
+          scrollEnabled={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}
           columnWrapperStyle={{ flex: 1, justifyContent: "space-around" }}
           numColumns={2}

@@ -5,7 +5,7 @@ import { useWindowDimensions } from 'react-native';
 import { WIDESCREEN_HORIZONTAL_MAX } from '../assets/styles';
 
 const Alert = ({ visible = false, setVisible, message = "", buttons = [] }: AlertModel) => {
-    const { height, width } = useWindowDimensions();
+    const { width } = useWindowDimensions();
     function calcMarginModal() {
         return width < WIDESCREEN_HORIZONTAL_MAX + 24 ? 24 : width / 5 + 24;
     }

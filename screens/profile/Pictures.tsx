@@ -11,17 +11,18 @@ import { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
-import { UserDto, UserImage, YourProfileResource } from "../../types";
-import { Button } from 'react-native-paper';
+import { RootStackParamList, UserDto, UserImage, YourProfileResource } from "../../types";
+import { Button, MaterialBottomTabScreenProps } from 'react-native-paper';
 import Alert from "../../components/Alert";
 import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
 
-const Pictures = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.Pictures'>
+const Pictures = ({ route, navigation }: Props) => {
 
   var user: UserDto = route.params.user;
 
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
   const i18n = I18N.getI18n()
   const MAX_IMAGES = 4;
@@ -89,7 +90,7 @@ const Pictures = ({ route, navigation }) => {
       await Global.Fetch(URL.USER_UPDATE_PROFILE_PICTURE, 'post', bodyFormData, 'multipart/form-data');
       load();
       setChangedProfilePic(true);
-      route.params.changed = true;
+      navigation.setParams({changed: false});
     }
   }
 
@@ -98,7 +99,7 @@ const Pictures = ({ route, navigation }) => {
     if (imageData != null) {
       const bodyFormData = Global.buildFormData(imageData);
       const response = await Global.Fetch(URL.USER_ADD_IMAGE, 'post', bodyFormData, 'multipart/form-data');
-      const responseImages: Array<UserImage> = response.data;
+      const responseImages: UserImage[] = response.data;
       setImages(responseImages);
       user.images = responseImages;
     }
@@ -109,7 +110,7 @@ const Pictures = ({ route, navigation }) => {
   }
 
   async function goBack() {
-    navigation.navigate({
+    navigation.navigate('Main', {
       name: 'YourProfile',
       params: { changed: changedProfilePic },
       merge: true,

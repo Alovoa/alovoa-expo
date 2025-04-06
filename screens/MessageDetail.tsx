@@ -9,12 +9,12 @@ import {
   useWindowDimensions
 } from "react-native";
 import {
-  TextInput, Card
+  TextInput, Card, MaterialBottomTabScreenProps
 } from "react-native-paper";
-import { useHeaderHeight } from '@react-navigation/elements';
 import { useTheme, Text } from "react-native-paper";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Autolink, { CustomMatcher } from 'react-native-autolink';
-import { MessageDtoListModel, MessageDto } from "../types";
+import { MessageDtoListModel, MessageDto, RootStackParamList } from "../types";
 import styles from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -24,14 +24,15 @@ const i18n = I18N.getI18n()
 const SECOND_MS = 1000;
 const POLL_MESSAGE = 5 * SECOND_MS;
 
-const MessageDetail = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'MessageDetail'>
+const MessageDetail = ({ route, navigation }: Props) => {
 
   const { conversation } = route.params;
-  const headerHeight = useHeaderHeight();
+  const insets = useSafeAreaInsets();
 
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing] = React.useState(false); // todo: setRefreshing
   const [results, setResults] = React.useState(Array<MessageDto>);
   let scrollViewRef = React.useRef<ScrollView>(null);
   const [text, setText] = React.useState("");
@@ -56,7 +57,7 @@ const MessageDetail = ({ route, navigation }) => {
 
   React.useEffect(() => {
     navigation.setOptions({
-      title: conversation.userName, headerRight: () => (
+      title: conversation.userName, tabBarIcon: () => (
         <Image source={{ uri: conversation.userProfilePicture }} style={{ height: 36, width: 36, borderRadius: 36, marginRight: 18 }} />
       )
     });
@@ -111,7 +112,7 @@ const MessageDetail = ({ route, navigation }) => {
   }
 
   return (
-    <View style={[styles.containerMessages, { paddingHorizontal: 0, display: 'flex', maxHeight: height }]}>
+    <View style={[styles.containerMessages, { paddingHorizontal: 0, display: 'flex', maxHeight: height, marginBottom: insets.bottom }]}>
       <ScrollView
         style={{ padding: 8, flexGrow: 1 }}
         ref={scrollViewRef}
@@ -136,7 +137,7 @@ const MessageDetail = ({ route, navigation }) => {
           onChangeText={text => setText(text)}
           onSubmitEditing={sendMessage}
           placeholder={i18n.t('chat.placeholder')}
-          right={<TextInput.Icon iconColor={colors.secondary} onPress={() => sendMessage()} icon="send" />}></TextInput>
+          right={<TextInput.Icon color={colors.secondary} onPress={() => sendMessage()} icon="send" />}></TextInput>
       </KeyboardAvoidingView>
     </View>
   )

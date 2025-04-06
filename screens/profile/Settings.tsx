@@ -4,22 +4,24 @@ import {
   useWindowDimensions
 } from "react-native";
 import styles from "../../assets/styles";
-import { SettingsEmailEnum, SettingsEmailNameMap, UnitsEnum, UnitsNameMap, YourProfileResource } from "../../types";
+import { RootStackParamList, SettingsEmailEnum, SettingsEmailNameMap, UnitsEnum, UnitsNameMap, YourProfileResource } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
 import SelectModal from "../../components/SelectModal";
 import VerticalView from "../../components/VerticalView";
 import ColorModal from "../../components/ColorModal";
+import { MaterialBottomTabScreenProps } from "react-native-paper";
 
 
 const i18n = I18N.getI18n();
 
-const Settings = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.Settings'>
+const Settings = ({ route }: Props) => {
 
   var data: YourProfileResource = route.params.data;
 
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const [units, setUnits] = React.useState(UnitsEnum.SI);
   const [emailSettings, setEmailSettings] = React.useState<Map<number, boolean>>(new Map());
 
@@ -33,8 +35,16 @@ const Settings = ({ route, navigation }) => {
       setUnits(unitEnum);
     }
     let emailSettings = new Map<number, boolean>();
-    data.user.userSettings.emailLike ? emailSettings.set(SettingsEmailEnum.LIKE, true) : emailSettings.set(SettingsEmailEnum.LIKE, false);
-    data.user.userSettings.emailChat ? emailSettings.set(SettingsEmailEnum.CHAT, true) : emailSettings.set(SettingsEmailEnum.CHAT, false);
+    if(data.user.userSettings.emailLike) {
+      emailSettings.set(SettingsEmailEnum.LIKE, true);
+    } else {
+      emailSettings.set(SettingsEmailEnum.LIKE, false);
+    }
+    if(data.user.userSettings.emailChat) {
+      emailSettings.set(SettingsEmailEnum.CHAT, true);
+    } else {
+      emailSettings.set(SettingsEmailEnum.CHAT, false);
+    }
     setEmailSettings(emailSettings);
   }
 
@@ -48,10 +58,10 @@ const Settings = ({ route, navigation }) => {
     emailSettings.set(id, checked);
     setEmailSettings(emailSettings);
     let value = checked ? URL.PATH_BOOLEAN_TRUE : URL.PATH_BOOLEAN_FALSE;
-    if (id == SettingsEmailEnum.LIKE) {
+    if (id === SettingsEmailEnum.LIKE) {
       Global.Fetch(Global.format(URL.USER_SETTING_EMAIL_LIKE, value), 'post');
       data.user.userSettings.emailLike = checked;
-    } else if (id == SettingsEmailEnum.CHAT) {
+    } else if (id === SettingsEmailEnum.CHAT) {
       Global.Fetch(Global.format(URL.USER_SETTING_EMAIL_CHAT, value), 'post');
       data.user.userSettings.emailChat = checked;
     }

@@ -1,3 +1,53 @@
+import * as Global from "./Global"; 
+
+export { MaterialBottomTabNavigator } from './types-hack';
+
+export type RootStackParamList = {
+  [Global.SCREEN_CHAT]: undefined;
+  [Global.SCREEN_DONATE]: undefined;
+  [Global.SCREEN_LIKES]: undefined;
+  Login: undefined;
+  Main: object;
+  MessageDetail: {
+    conversation: ConversationDto;
+  };
+  Onboarding: undefined;
+  PasswordReset: undefined;
+  Profile: {
+    user: UserDto;
+    uuid: string;
+  };
+  [Global.SCREEN_PROFILE_ADVANCED_SETTINGS]: {
+    user: UserDto
+  };
+  [Global.SCREEN_PROFILE_PICTURES]: {
+    changed: boolean;
+    user: UserDto;
+  };
+  'Profile.Prompts': {
+    user: UserDto;
+  };
+  [Global.SCREEN_PROFILE_PROFILESETTINGS]: {
+    data: YourProfileResource;
+    user: UserDto;
+  };
+  [Global.SCREEN_PROFILE_SEARCHSETTINGS]: {
+    data: YourProfileResource
+  }
+  [Global.SCREEN_PROFILE_SETTINGS]: {
+    data: YourProfileResource
+  };
+  Register: {
+    registerEmail: boolean
+  };
+  [Global.SCREEN_SEARCH]: {
+    changed: boolean
+  };
+  [Global.SCREEN_YOURPROFILE]: {
+    changed: boolean
+  };
+};
+
 export type CardItemT = {
   user: UserDto;
   donation?: number;
@@ -31,8 +81,8 @@ export type SelectModalT = {
   multi: boolean,
   minItems: number,
   title: string;
-  data: Array<[number, string | undefined]>;
-  selected: Array<number>;
+  data: [number, string | undefined][];
+  selected: number[];
   onValueChanged: (id: number, checked: boolean) => void
 };
 
@@ -57,14 +107,14 @@ export type RangeSliderModalT = {
 };
 
 export type InterestModalT = {
-  data: Array<UserInterest>;
+  data: UserInterest[];
   user?: UserDto;
   updateButtonText?: (interests: UserInterest[]) => void;
   setInterestsExternal?: (interests: UserInterest[]) => void;
 };
 
 export type DonationDtoListModel = {
-  list: Array<DonationDto>;
+  list: DonationDto[];
 }
 
 export type RegisterBody = {
@@ -86,10 +136,10 @@ export type UserInterestAutocomplete = {
 
 export type UserOnboarding = {
   intention: number;
-  preferredGenders: Array<number>;
+  preferredGenders: number[];
   profilePictureMime: string;
   description: string;
-  interests: Array<string>;
+  interests: string[];
   notificationLike: boolean;
   notificationChat: boolean;
 }
@@ -118,6 +168,22 @@ export type UserImage = {
   content: string;
 }
 
+export type DataT = {
+    id: number
+    name: string
+    isOnline: boolean
+    match: string
+    description: string
+    age?: string
+    location?: string
+    info1?: string
+    info2?: string
+    info3?: string
+    info4?: string
+    message: string
+    image: string
+}
+
 export type UserDto = {
   uuid: string
   email?: string //is null when not current user
@@ -130,16 +196,16 @@ export type UserDto = {
   units: number;
   preferedMinAge: number;
   preferedMaxAge: number;
-  miscInfos: Array<UserMiscInfo>
-  preferedGenders: Array<Gender>;
+  miscInfos: UserMiscInfo[]
+  preferedGenders: Gender[];
   intention: UserIntention;
-  interests: Array<UserInterest>
+  interests: UserInterest[]
   profilePicture: string;
-  images: Array<UserImage>;
+  images: UserImage[];
   description: string;
   country: string;
   distanceToUser: number;
-  commonInterests: Array<UserInterest>;
+  commonInterests: UserInterest[];
   totalDonations: number;
   numBlockedByUsers: number;
   numReports: number;
@@ -155,7 +221,7 @@ export type UserDto = {
   locationLongitude: number;
   lastActiveState: number;
   userSettings: UserSettings;
-  prompts: Array<UserPrompt>;
+  prompts: UserPrompt[];
   verificationPicture: UserDtoVerificationPicture;
 }
 
@@ -272,7 +338,7 @@ export enum IntentionEnum {
 }
 
 export type SearchDto = {
-  users: Array<UserDto>;
+  users: UserDto[];
   message: string;
   stage: SearchStageEnum;
   global: boolean;
@@ -281,8 +347,8 @@ export type SearchDto = {
 
 export type YourProfileResource = {
   user: UserDto;
-  genders: Array<Gender>;
-  intentions: Array<UserIntention>;
+  genders: Gender[];
+  intentions: UserIntention[];
   imageMax: number,
   isLegal: boolean,
   mediaMaxSize: number,
@@ -298,7 +364,7 @@ export type DonateResource = {
 
 export type DonateSearchFilterResource = {
   currUser: UserDto;
-  donations: Array<DonationDto>;
+  donations: DonationDto[];
   filter: number;
 }
 
@@ -309,11 +375,11 @@ export type ChatDetailResource = {
 }
 
 export type ChatMessageUpdateResource = {
-  messages: Array<MessageDto>;
+  messages: MessageDto[];
 }
 
 export type AlertsResource = {
-  notifications: Array<NotificationDto>;
+  notifications: NotificationDto[];
   user: UserDto;
 }
 
@@ -335,23 +401,23 @@ export type SearchUsersResource = {
 
 export type ChatsResource = {
   user: UserDto;
-  conversations: Array<ConversationDto>;
+  conversations: ConversationDto[];
 }
 
 export type MessageDtoListModel = {
-  list: Array<MessageDto>;
+  list: MessageDto[];
 }
 
 export type UserOnboardingResource = {
-  genders: Array<Gender>;
-  intentions: Array<UserIntention>;
+  genders: Gender[];
+  intentions: UserIntention[];
   isLegal: boolean;
   mediaMaxSize: number
   interestMaxSize: number;
 }
 
 export type UserUsersResource = {
-  users: Array<UserDto>;
+  users: UserDto[];
   user: UserDto;
 }
 
@@ -370,7 +436,7 @@ export type UserDtoVerificationPicture = {
 export type AlertModel = {
   visible: boolean;
   message: string;
-  buttons: Array<AlertButtonModel>;
+  buttons: AlertButtonModel[];
   setVisible: (bool: boolean) => void;
 }
 
@@ -409,16 +475,16 @@ export enum IntentionE {
 
 export type SearchParams = {
     distance?: number;
-    preferredGenderIds?: Array<number>
+    preferredGenderIds?: number[]
     preferredMinAge?: number;
     preferredMaxAge?: number;
     showOutsideParameters?: boolean;
     sort?: SearchParamsSortE;
     latitude?: number;
     longitude?: number;
-    miscInfos?: Array<number>;
-    intentions?: Array<number>;
-    interests?: Array<string>;
+    miscInfos?: number[];
+    intentions?: number[];
+    interests?: string[];
 }
 
 export enum SearchParamsSortE {
@@ -546,4 +612,4 @@ export const UnitsNameMap = new Map<number, string>([
 export const SettingsEmailNameMap = new Map<number, string>([
   [SettingsEmailEnum.LIKE, 'profile.settings.email.like'],
   [SettingsEmailEnum.CHAT, 'profile.settings.email.chat'],
-]); 
+]);

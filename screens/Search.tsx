@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { View, RefreshControl, ScrollView, useWindowDimensions } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
-import { UserDto, SearchResource, SearchDto, UnitsEnum, SearchParams, SearchParamsSortE } from "../types";
+import { UserDto, SearchResource, SearchDto, UnitsEnum, SearchParams, SearchParamsSortE, RootStackParamList } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
-import { ActivityIndicator, Text, Button, IconButton } from "react-native-paper";
+import { ActivityIndicator, Text, Button, IconButton, MaterialBottomTabScreenProps } from "react-native-paper";
 import CardItemSearch from "../components/CardItemSearch";
 import { useFocusEffect } from "@react-navigation/native";
 import ComplimentModal from "../components/ComplimentModal";
@@ -15,23 +15,24 @@ import styles, { WIDESCREEN_HORIZONTAL_MAX, STATUS_BAR_HEIGHT } from "../assets/
 
 const i18n = I18N.getI18n()
 
-enum SORT {
-  DISTANCE = 1,
-  ACTIVE_DATE = 2,
-  INTEREST = 3,
-  DONATION_LATEST = 4,
-  DONATION_TOTAL = 5,
-  NEWEST_USER = 6
-}
+// enum SORT {
+//   DISTANCE = 1,
+//   ACTIVE_DATE = 2,
+//   INTEREST = 3,
+//   DONATION_LATEST = 4,
+//   DONATION_TOTAL = 5,
+//   NEWEST_USER = 6
+// }
 
-const Search = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Search'>
+const Search = ({ route, navigation }: Props) => {
 
   let swiper: any = React.useRef(null);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing] = React.useState(false); // todo: setRefreshing
   const [user, setUser] = React.useState<UserDto>();
   const [results, setResults] = useState(Array<UserDto>);
-  const [sort, setSort] = useState(SORT.DONATION_LATEST);
-  const [distance, setDistance] = React.useState(Global.DEFAULT_DISTANCE);
+  // const [sort, setSort] = useState(SORT.DONATION_LATEST);
+  // const [distance, setDistance] = React.useState(Global.DEFAULT_DISTANCE);
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
@@ -47,8 +48,8 @@ const Search = ({ route, navigation }) => {
   const svgHeight = 150;
   const svgWidth = 200;
 
-  const MIN_AGE = 16;
-  const MAX_AGE = 100;
+  // const MIN_AGE = 16;
+  // const MAX_AGE = 100;
 
   const { height, width } = useWindowDimensions();
 
@@ -96,8 +97,8 @@ const Search = ({ route, navigation }) => {
       let resultsCopy = [...results];
       resultsCopy.shift();
       setResults(resultsCopy);
-      route.params.changed = false;
-      if (resultsCopy.length == 0) {
+      navigation.setParams({changed: false});
+      if (resultsCopy.length === 0) {
         load();
       }
     }
@@ -141,14 +142,14 @@ const Search = ({ route, navigation }) => {
     
     let lat = latitude;
     let lon = longitude;
-    let hasLocation = lat != undefined && lon != undefined;
+    let hasLocation = lat !== undefined && lon !== undefined;
     if (firstSearch) {
       try {
         let location: Location.LocationObject | undefined;
         let hasLocationPermission = false;
         let hasGpsEnabled = false;
         let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status == 'granted') {
+        if (status === 'granted') {
           hasLocationPermission = true;
           try {
             let storedGpsTimeout = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_GPSTIMEOPUT);
@@ -160,6 +161,7 @@ const Search = ({ route, navigation }) => {
             lat = location?.coords.latitude;
             lon = location?.coords.longitude;
           } catch (e) {
+            console.error(e);
           }
         }
         if (!hasLocationPermission) {
@@ -169,18 +171,18 @@ const Search = ({ route, navigation }) => {
         }
         setFirstSearch(false);
       } catch (e) {
-        console.log(e)
+        console.error(e)
       }
     }
 
-    if (lat != undefined && lon != undefined) {
+    if (lat !== undefined && lon !== undefined) {
 
       let paramsStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_PARAMS);
       let storedParams: SearchParams = paramsStorage ? JSON.parse(paramsStorage) : {};
 
       let searchParams: SearchParams = {
         distance: storedParams?.distance ? storedParams.distance : Global.DEFAULT_DISTANCE,
-        showOutsideParameters:  storedParams?.showOutsideParameters == undefined ? true : storedParams.showOutsideParameters,
+        showOutsideParameters:  storedParams?.showOutsideParameters === undefined ? true : storedParams.showOutsideParameters,
         sort: SearchParamsSortE.DEFAULT,
         latitude: lat,
         longitude: lon,
@@ -227,7 +229,7 @@ const Search = ({ route, navigation }) => {
   }
 
   async function loadResultsOnEmpty(index: number) {
-    if (index == results.length - 1) {
+    if (index === results.length - 1) {
       load();
     }
   }
@@ -303,7 +305,7 @@ const Search = ({ route, navigation }) => {
                 <Card key={card.uuid}>
                   <CardItemSearch
                     user={card}
-                    unitsImperial={user?.units == UnitsEnum.IMPERIAL}
+                    unitsImperial={user?.units === UnitsEnum.IMPERIAL}
                     swiper={swiper}
                     onLikePressed={onLikePressed}
                     index={index}
@@ -314,7 +316,7 @@ const Search = ({ route, navigation }) => {
           </CardStack>
         </View>
       </View>
-      {results && results.length == 0 && loaded &&
+      {results && results.length === 0 && loaded &&
         <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
           <View style={[styles.center, { maxWidth: WIDESCREEN_HORIZONTAL_MAX }]}>
             <SearchEmpty height={svgHeight} width={svgWidth}></SearchEmpty>

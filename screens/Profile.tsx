@@ -4,12 +4,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
-  Image,
   useWindowDimensions,
   ScrollView,
+  Platform,
 } from "react-native";
-import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip } from "react-native-paper";
-import { UserMiscInfoEnum, UserInterest, UnitsEnum, ProfileResource, UserDto, UserImage, UserPrompt, GenderNameMap, GenderEnum, Gender, IntentionNameMap, UserMiscInfo, MiscInfoRelationshipNameMap, MiscInfoKidsNameMap, MiscInfoDrugsOtherNameMap, MiscInfoDrugsAlcoholNameMap, MiscInfoDrugsTobaccoNameMap, MiscInfoDrugsCannabisNameMap, MiscInfoRelationshipTypeNameMap, MiscInfoFamilyNameMap, MiscInfoPoliticsNameMap, MiscInfoReligionNameMap, MiscInfoGenderIdentityNameMap } from "../types";
+import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip, MaterialBottomTabScreenProps } from "react-native-paper";
+import { UserInterest, UnitsEnum, ProfileResource, UserDto, UserPrompt, GenderNameMap, Gender, IntentionNameMap, UserMiscInfo, MiscInfoRelationshipNameMap, MiscInfoKidsNameMap, MiscInfoDrugsOtherNameMap, MiscInfoDrugsAlcoholNameMap, MiscInfoDrugsTobaccoNameMap, MiscInfoDrugsCannabisNameMap, MiscInfoRelationshipTypeNameMap, MiscInfoFamilyNameMap, MiscInfoPoliticsNameMap, MiscInfoReligionNameMap, MiscInfoGenderIdentityNameMap, RootStackParamList } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -26,6 +26,7 @@ import Icon from "../components/Icon";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import VerticalView from "../components/VerticalView";
 import ComplimentModal from "../components/ComplimentModal";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const i18n = I18N.getI18n()
 
@@ -41,7 +42,8 @@ enum IntentionText {
   SEX = "sex"
 }
 
-const Profile = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile'>
+const Profile = ({ route, navigation }: Props) => {
 
   const MIN_AGE = 16
   const MAX_AGE = 100
@@ -50,6 +52,7 @@ const Profile = ({ route, navigation }) => {
   var uuid = route.params.uuid;
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
+  const insets = useSafeAreaInsets()
 
   const [compatible, setCompatible] = React.useState(false);
   const [isSelf, setIsSelf] = React.useState(false);
@@ -76,10 +79,10 @@ const Profile = ({ route, navigation }) => {
   const [gender, setGender] = React.useState<Gender>()
   const [preferredGenders, setPreferredGenders] = React.useState(Array<Gender>);
   const [miscInfo, setMiscInfo] = React.useState<UserMiscInfo[]>([])
-  const [swiperImages, setSwiperImages] = React.useState<Array<string>>([]);
+  const [swiperImages, setSwiperImages] = React.useState<string[]>([]);
   const [reportModalVisible, setReportModalVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
-  const [previousScreen, setPreviousScreen] = React.useState<String | null>();
+  const [previousScreen, setPreviousScreen] = React.useState<string | null>();
   const [reportedUser, setReportedUser] = React.useState(false)
   const [removeUser, setRemoveUser] = React.useState(false);
   const [isLegal, setIsLegal] = React.useState(false);
@@ -146,7 +149,7 @@ const Profile = ({ route, navigation }) => {
     setPreferredGenders(user.preferedGenders);
     setInterests(Global.shuffleArray(user.interests));
     setPrompts(Global.shuffleArray(user.prompts));
-    var swiperImageData: Array<string> = [];
+    var swiperImageData: string[] = [];
     swiperImageData.push(user.profilePicture);
     if (user.images) {
       Global.shuffleArray(user.images).forEach(function (image) {
@@ -192,7 +195,7 @@ const Profile = ({ route, navigation }) => {
 
   React.useEffect(() => {
     navigation.addListener('beforeRemove', (e: any) => {
-      if (Global.SCREEN_SEARCH == previousScreen) {
+      if (Global.SCREEN_SEARCH === previousScreen) {
         e.preventDefault();
         goBack();
       }
@@ -201,13 +204,13 @@ const Profile = ({ route, navigation }) => {
 
 
   React.useEffect(() => {
-    if (removeUser && Global.SCREEN_SEARCH == previousScreen) {
+    if (removeUser && Global.SCREEN_SEARCH === previousScreen) {
       goBack();
     }
   }, [removeUser]);
 
   async function goBack() {
-    navigation.navigate({
+    navigation.navigate('Main', {
       name: 'Search',
       params: { changed: removeUser },
       merge: true,
@@ -264,7 +267,7 @@ const Profile = ({ route, navigation }) => {
 
   function getMiscInfoText(map: Map<number, string>): string {
     let id = miscInfo.map(m => m.value).find(e => [...map.keys()].includes(e));
-    if(id != undefined) {
+    if(id !== undefined) {
       const text = map.get(id);
       return text ? i18n.t(text) : Global.EMPTY_STRING;
     } else {
@@ -288,7 +291,7 @@ const Profile = ({ route, navigation }) => {
   return (
     <View style={{ height: height }}>
       {!isSelf &&
-        <View style={{ zIndex: 1, marginBottom: 16, position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
+        <View style={{ zIndex: 1, marginBottom: insets.bottom + (Platform.OS === 'ios' ? 0 : 16), position: 'absolute', width: '100%', right: 0, bottom: 0 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }, hidden || !compatible || liked ? { opacity: 0.5 } : {}]} onPress={() => hideUser()}
               disabled={hidden || liked}>
@@ -336,8 +339,8 @@ const Profile = ({ route, navigation }) => {
           >
             {
               swiperImages?.map((image, index) => (
-                <View>
-                <ImageZoom key={index}
+                <View key={index}>
+                <ImageZoom
                   uri={image}
                   style={[style.image]}
                   maxScale={3}
@@ -353,10 +356,10 @@ const Profile = ({ route, navigation }) => {
         <View style={[styles.containerProfileItem, { marginTop: 24, paddingBottom: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }]}>
           <View><Text style={{ fontSize: 24 }}>{name + ", " + age}</Text>
             {lastActiveState <= 2 && <View style={{ flexDirection: 'row' }}><MaterialCommunityIcons name="circle" size={14} color={"#64DD17"} style={{ padding: 4 }} />
-              {lastActiveState == 1 &&
+              {lastActiveState === 1 &&
                 <Text style={{ alignSelf: 'center' }}>{i18n.t('profile.active-state.1')}</Text>
               }
-              {lastActiveState == 2 &&
+              {lastActiveState === 2 &&
                 <Text style={{ alignSelf: 'center' }}>{i18n.t('profile.active-state.2')}</Text>
               }
             </View>}
@@ -364,7 +367,7 @@ const Profile = ({ route, navigation }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name="map-marker" size={18} style={[{ paddingRight: 4, color: /*colors?.onSurface*/ colors?.secondary }]} />
             <Text>{distance}</Text>
-            <Text>{you?.units == UnitsEnum.IMPERIAL ? ' mi' : ' km'}</Text>
+            <Text>{you?.units === UnitsEnum.IMPERIAL ? ' mi' : ' km'}</Text>
           </View>
         </View>
 
@@ -413,7 +416,7 @@ const Profile = ({ route, navigation }) => {
 
               <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                 <Chip icon="gender-male-female" style={[styles.marginRight4, styles.marginBottom4]}>
-                  <Text>{gender ? i18n.t(GenderNameMap.get(gender.id)) : ''}</Text>
+                  <Text>{gender ? i18n.t(GenderNameMap.get(gender.id) || '') : ''}</Text>
                 </Chip>
                 { miscInfo.map(m => m.value) &&
                   <Chip icon="gender-male-female-variant" style={[styles.marginRight4, styles.marginBottom4]}>
@@ -424,10 +427,10 @@ const Profile = ({ route, navigation }) => {
                   <Text>{String(minAge) + " - " + String(maxAge)}</Text>
                 </Chip>
                 <Chip icon="magnify" style={[styles.marginRight4, styles.marginBottom4]}>
-                  <Text>{preferredGenders.map(g => i18n.t(GenderNameMap.get(g.id))).filter(e => e).join(", ")}</Text>
+                  <Text>{preferredGenders.map(g => i18n.t(GenderNameMap.get(g.id) || '')).filter(e => e).join(", ")}</Text>
                 </Chip>
                 <Chip icon="magnify-plus-outline" style={[styles.marginRight4, styles.marginBottom4]}>
-                  <Text>{intention ? i18n.t(IntentionNameMap.get(intention)) : ''}</Text>
+                  <Text>{intention ? i18n.t(IntentionNameMap.get(intention) || '') : ''}</Text>
                 </Chip>
               </View>
 

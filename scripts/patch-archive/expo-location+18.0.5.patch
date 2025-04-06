@@ -1,0 +1,1320 @@
+diff --git a/node_modules/expo-location/android/build.gradle b/node_modules/expo-location/android/build.gradle
+index 4625d96..2719499 100644
+--- a/node_modules/expo-location/android/build.gradle
++++ b/node_modules/expo-location/android/build.gradle
+@@ -19,6 +19,4 @@ android {
+ }
+ 
+ dependencies {
+-  api 'com.google.android.gms:play-services-location:21.0.1'
+-  implementation project(":${project.name}\$io.nlopez.smartlocation-jetified-aar")
+ }
+diff --git a/node_modules/expo-location/android/libs/io.nlopez.smartlocation-3.3.3-jetified.aar b/node_modules/expo-location/android/libs/io.nlopez.smartlocation-3.3.3-jetified.aar
+deleted file mode 100644
+index 13089d9..0000000
+Binary files a/node_modules/expo-location/android/libs/io.nlopez.smartlocation-3.3.3-jetified.aar and /dev/null differ
+diff --git a/node_modules/expo-location/android/src/main/java/expo/modules/location/LocationHelpers.kt b/node_modules/expo-location/android/src/main/java/expo/modules/location/LocationHelpers.kt
+index 37dbd3b..7ed4b2b 100644
+--- a/node_modules/expo-location/android/src/main/java/expo/modules/location/LocationHelpers.kt
++++ b/node_modules/expo-location/android/src/main/java/expo/modules/location/LocationHelpers.kt
+@@ -4,11 +4,6 @@ import android.content.Context
+ import android.location.Location
+ import android.location.LocationManager
+ import android.os.Bundle
+-import com.google.android.gms.location.CurrentLocationRequest
+-import com.google.android.gms.location.FusedLocationProviderClient
+-import com.google.android.gms.location.Granularity
+-import com.google.android.gms.location.LocationRequest
+-import com.google.android.gms.location.Priority
+ import expo.modules.interfaces.permissions.Permissions
+ import expo.modules.kotlin.Promise
+ import expo.modules.kotlin.exception.CodedException
+@@ -16,8 +11,6 @@ import expo.modules.location.records.LocationLastKnownOptions
+ import expo.modules.location.records.LocationOptions
+ import expo.modules.location.records.LocationResponse
+ import expo.modules.location.records.PermissionRequestResponse
+-import io.nlopez.smartlocation.location.config.LocationAccuracy
+-import io.nlopez.smartlocation.location.config.LocationParams
+ import kotlin.coroutines.resume
+ import kotlin.coroutines.resumeWithException
+ import kotlin.coroutines.suspendCoroutine
+@@ -27,148 +20,50 @@ class LocationHelpers {
+     /**
+      * Checks whether given location didn't exceed given `maxAge` and fits in the required accuracy.
+      */
++    /*
+     internal fun isLocationValid(location: Location?, options: LocationLastKnownOptions): Boolean {
+-      if (location == null) {
+-        return false
+-      }
+-      val maxAge = options.maxAge ?: Double.MAX_VALUE
+-      val requiredAccuracy = options.requiredAccuracy ?: Double.MAX_VALUE
+-      val timeDiff = (System.currentTimeMillis() - location.time).toDouble()
+-      return timeDiff <= maxAge && location.accuracy <= requiredAccuracy
+     }
++    */
+ 
++    /*
+     fun hasNetworkProviderEnabled(context: Context?): Boolean {
+-      if (context == null) {
+-        return false
+-      }
+-      val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+-      return locationManager != null && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+     }
++    */
+ 
++    /*
+     internal fun prepareLocationRequest(options: LocationOptions): LocationRequest {
+-      val locationParams = mapOptionsToLocationParams(options)
+-
+-      return LocationRequest.Builder(locationParams.interval)
+-        .setMinUpdateIntervalMillis(locationParams.interval)
+-        .setMaxUpdateDelayMillis(locationParams.interval)
+-        .setMinUpdateDistanceMeters(locationParams.distance)
+-        .setPriority(mapAccuracyToPriority(options.accuracy))
+-        .build()
+     }
++    */
+ 
++    /*
+     internal fun prepareCurrentLocationRequest(options: LocationOptions): CurrentLocationRequest {
+-      val locationParams = mapOptionsToLocationParams(options)
+-
+-      return CurrentLocationRequest.Builder().apply {
+-        setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
+-        setPriority(mapAccuracyToPriority(options.accuracy))
+-        setMaxUpdateAgeMillis(locationParams.interval)
+-      }.build()
+     }
++    */
+ 
++    /*
+     fun requestSingleLocation(locationProvider: FusedLocationProviderClient, locationRequest: CurrentLocationRequest, promise: Promise) {
+-      try {
+-        locationProvider.getCurrentLocation(locationRequest, null)
+-          .addOnSuccessListener { location: Location? ->
+-            if (location == null) {
+-              promise.reject(CurrentLocationIsUnavailableException())
+-              return@addOnSuccessListener
+-            }
+-
+-            promise.resolve(LocationResponse(location))
+-          }
+-          .addOnFailureListener {
+-            promise.reject(LocationRequestRejectedException(it))
+-          }
+-          .addOnCanceledListener {
+-            promise.reject(LocationRequestCancelledException())
+-          }
+-      } catch (e: SecurityException) {
+-        promise.reject(LocationRequestRejectedException(e))
+-      }
+     }
++    */
+ 
++    /*
+     fun requestContinuousUpdates(locationModule: LocationModule, locationRequest: LocationRequest, watchId: Int, promise: Promise) {
+-      locationModule.requestLocationUpdates(
+-        locationRequest,
+-        watchId,
+-        object : LocationRequestCallbacks {
+-          override fun onLocationChanged(location: Location) {
+-            locationModule.sendLocationResponse(watchId, LocationResponse(location))
+-          }
+-
+-          override fun onRequestSuccess() {
+-            promise.resolve(null)
+-          }
+-
+-          override fun onRequestFailed(cause: CodedException) {
+-            promise.reject(cause)
+-          }
+-        }
+-      )
+     }
++    */
+ 
++    /*
+     private fun mapOptionsToLocationParams(options: LocationOptions): LocationParams {
+-      val accuracy = options.accuracy
+-      val locationParamsBuilder = buildLocationParamsForAccuracy(accuracy)
+-
+-      options.timeInterval?.let {
+-        locationParamsBuilder.setInterval(it)
+-      }
+-      options.distanceInterval?.let {
+-        locationParamsBuilder.setDistance(it.toFloat())
+-      }
+-
+-      return locationParamsBuilder.build()
+     }
++    */
+ 
++    /*
+     private fun mapAccuracyToPriority(accuracy: Int): Int {
+-      return when (accuracy) {
+-        LocationModule.ACCURACY_BEST_FOR_NAVIGATION, LocationModule.ACCURACY_HIGHEST, LocationModule.ACCURACY_HIGH -> Priority.PRIORITY_HIGH_ACCURACY
+-        LocationModule.ACCURACY_BALANCED, LocationModule.ACCURACY_LOW -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
+-        LocationModule.ACCURACY_LOWEST -> Priority.PRIORITY_LOW_POWER
+-        else -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
+-      }
+     }
++    */
+ 
++    /*
+     private fun buildLocationParamsForAccuracy(accuracy: Int): LocationParams.Builder {
+-      return when (accuracy) {
+-        LocationModule.ACCURACY_LOWEST -> LocationParams.Builder()
+-          .setAccuracy(LocationAccuracy.LOWEST)
+-          .setDistance(3000f)
+-          .setInterval(10000)
+-
+-        LocationModule.ACCURACY_LOW -> LocationParams.Builder()
+-          .setAccuracy(LocationAccuracy.LOW)
+-          .setDistance(1000f)
+-          .setInterval(5000)
+-
+-        LocationModule.ACCURACY_BALANCED -> LocationParams.Builder()
+-          .setAccuracy(LocationAccuracy.MEDIUM)
+-          .setDistance(100f)
+-          .setInterval(3000)
+-
+-        LocationModule.ACCURACY_HIGH -> LocationParams.Builder()
+-          .setAccuracy(LocationAccuracy.HIGH)
+-          .setDistance(50f)
+-          .setInterval(2000)
+-
+-        LocationModule.ACCURACY_HIGHEST -> LocationParams.Builder()
+-          .setAccuracy(LocationAccuracy.HIGH)
+-          .setDistance(25f)
+-          .setInterval(1000)
+-
+-        LocationModule.ACCURACY_BEST_FOR_NAVIGATION -> LocationParams.Builder()
+-          .setAccuracy(LocationAccuracy.HIGH)
+-          .setDistance(0f)
+-          .setInterval(500)
+-
+-        else -> LocationParams.Builder()
+-          .setAccuracy(LocationAccuracy.MEDIUM)
+-          .setDistance(100f)
+-          .setInterval(3000)
+-      }
+     }
++    */
+ 
+     fun isAnyProviderAvailable(context: Context?): Boolean {
+       val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+diff --git a/node_modules/expo-location/android/src/main/java/expo/modules/location/LocationModule.kt b/node_modules/expo-location/android/src/main/java/expo/modules/location/LocationModule.kt
+index 61d057f..cf6d00e 100644
+--- a/node_modules/expo-location/android/src/main/java/expo/modules/location/LocationModule.kt
++++ b/node_modules/expo-location/android/src/main/java/expo/modules/location/LocationModule.kt
+@@ -12,22 +12,14 @@ import android.hardware.SensorEventListener
+ import android.hardware.SensorManager
+ import android.location.Geocoder
+ import android.location.Location
++import android.location.LocationListener
++import android.location.LocationManager
+ import android.os.Build
+ import android.os.Bundle
+ import android.os.Looper
+ import android.util.Log
+ import androidx.annotation.ChecksSdkIntAtLeast
+ import androidx.core.os.bundleOf
+-import com.google.android.gms.common.api.ApiException
+-import com.google.android.gms.common.api.CommonStatusCodes
+-import com.google.android.gms.common.api.ResolvableApiException
+-import com.google.android.gms.location.FusedLocationProviderClient
+-import com.google.android.gms.location.LocationAvailability
+-import com.google.android.gms.location.LocationCallback
+-import com.google.android.gms.location.LocationRequest
+-import com.google.android.gms.location.LocationResult
+-import com.google.android.gms.location.LocationServices
+-import com.google.android.gms.location.LocationSettingsRequest
+ import expo.modules.core.interfaces.ActivityEventListener
+ import expo.modules.core.interfaces.LifecycleEventListener
+ import expo.modules.core.interfaces.services.UIManager
+@@ -52,9 +44,6 @@ import expo.modules.location.records.ReverseGeocodeLocation
+ import expo.modules.location.records.ReverseGeocodeResponse
+ import expo.modules.location.taskConsumers.GeofencingTaskConsumer
+ import expo.modules.location.taskConsumers.LocationTaskConsumer
+-import io.nlopez.smartlocation.SmartLocation
+-import io.nlopez.smartlocation.geocoding.utils.LocationAddress
+-import io.nlopez.smartlocation.location.config.LocationParams
+ import java.util.Locale
+ import kotlin.coroutines.resume
+ import kotlin.coroutines.resumeWithException
+@@ -63,13 +52,11 @@ import kotlin.math.abs
+ 
+ class LocationModule : Module(), LifecycleEventListener, SensorEventListener, ActivityEventListener {
+   private var mGeofield: GeomagneticField? = null
+-  private val mLocationCallbacks = HashMap<Int, LocationCallback>()
+-  private val mLocationRequests = HashMap<Int, LocationRequest>()
+   private var mPendingLocationRequests = ArrayList<LocationActivityResultListener>()
+   private lateinit var mContext: Context
+   private lateinit var mSensorManager: SensorManager
+   private lateinit var mUIManager: UIManager
+-  private lateinit var mLocationProvider: FusedLocationProviderClient
++  private lateinit var mLocationProvider: LocationManager
+ 
+   private var mGravity: FloatArray = FloatArray(9)
+   private var mGeomagnetic: FloatArray = FloatArray(9)
+@@ -90,7 +77,7 @@ class LocationModule : Module(), LifecycleEventListener, SensorEventListener, Ac
+     OnCreate {
+       mContext = appContext.reactContext ?: throw Exceptions.ReactContextLost()
+       mUIManager = appContext.legacyModule<UIManager>() ?: throw MissingUIManagerException()
+-      mLocationProvider = LocationServices.getFusedLocationProviderClient(mContext)
++      mLocationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+       mSensorManager = mContext.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
+         ?: throw SensorManagerUnavailable()
+     }
+@@ -149,168 +136,84 @@ class LocationModule : Module(), LifecycleEventListener, SensorEventListener, Ac
+       return@Coroutine getBackgroundPermissionsAsync()
+     }
+ 
++    /*
+     AsyncFunction("getLastKnownPositionAsync") Coroutine { options: LocationLastKnownOptions ->
+-      return@Coroutine getLastKnownPositionAsync(options)
+     }
++    */
+ 
+     AsyncFunction("getCurrentPositionAsync") { options: LocationOptions, promise: Promise ->
+       return@AsyncFunction getCurrentPositionAsync(options, promise)
+     }
+ 
++    /*
+     AsyncFunction<LocationProviderStatus>("getProviderStatusAsync") {
+-      val state = SmartLocation.with(mContext).location().state()
+-
+-      return@AsyncFunction LocationProviderStatus().apply {
+-        backgroundModeEnabled = state.locationServicesEnabled()
+-        gpsAvailable = state.isGpsAvailable
+-        networkAvailable = state.isNetworkAvailable
+-        locationServicesEnabled = state.locationServicesEnabled()
+-        passiveAvailable = state.isPassiveAvailable
+-      }
+     }
++    */
+ 
++    /*
+     AsyncFunction("watchDeviceHeading") { watchId: Int ->
+-      mHeadingId = watchId
+-      startHeadingUpdate()
+-      return@AsyncFunction
+     }
++    */
+ 
++    /*
+     AsyncFunction("watchPositionImplAsync") { watchId: Int, options: LocationOptions, promise: Promise ->
+-      // Check for permissions
+-      if (isMissingForegroundPermissions()) {
+-        promise.reject(LocationUnauthorizedException())
+-        return@AsyncFunction
+-      }
+-
+-      val locationRequest = LocationHelpers.prepareLocationRequest(options)
+-      val showUserSettingsDialog = options.mayShowUserSettingsDialog
+-
+-      if (LocationHelpers.hasNetworkProviderEnabled(mContext) || !showUserSettingsDialog) {
+-        LocationHelpers.requestContinuousUpdates(this@LocationModule, locationRequest, watchId, promise)
+-      } else {
+-        // Pending requests can ask the user to turn on improved accuracy mode in user's settings.
+-        addPendingLocationRequest(
+-          locationRequest,
+-          object : LocationActivityResultListener {
+-            override fun onResult(resultCode: Int) {
+-              if (resultCode == Activity.RESULT_OK) {
+-                LocationHelpers.requestContinuousUpdates(this@LocationModule, locationRequest, watchId, promise)
+-              } else {
+-                promise.reject(LocationSettingsUnsatisfiedException())
+-              }
+-            }
+-          }
+-        )
+-      }
+     }
++    */
+ 
++    /*
+     AsyncFunction("removeWatchAsync") { watchId: Int ->
+-      if (isMissingForegroundPermissions()) {
+-        throw LocationUnauthorizedException()
+-      }
+-
+-      // Check if we want to stop watching location or compass
+-      if (watchId == mHeadingId) {
+-        destroyHeadingWatch()
+-      } else {
+-        removeLocationUpdatesForRequest(watchId)
+-      }
+-      return@AsyncFunction
+     }
++    */
+ 
++    /*
+     AsyncFunction("geocodeAsync") Coroutine { address: String ->
+-      return@Coroutine geocode(address)
+     }
++    */
+ 
++    /*
+     AsyncFunction("reverseGeocodeAsync") Coroutine { location: ReverseGeocodeLocation ->
+-      return@Coroutine reverseGeocode(location)
+     }
++    */
+ 
++    /*
+     AsyncFunction("enableNetworkProviderAsync") Coroutine { ->
+-      if (LocationHelpers.hasNetworkProviderEnabled(mContext)) {
+-        return@Coroutine null
+-      }
+-
+-      val locationRequest = LocationHelpers.prepareLocationRequest(LocationOptions())
+-
+-      return@Coroutine suspendCoroutine<String?> { continuation ->
+-        addPendingLocationRequest(
+-          locationRequest,
+-          object : LocationActivityResultListener {
+-            override fun onResult(resultCode: Int) {
+-              if (resultCode == Activity.RESULT_OK) {
+-                continuation.resume(null)
+-              } else {
+-                continuation.resumeWithException(LocationSettingsUnsatisfiedException())
+-              }
+-            }
+-          }
+-        )
+-      }
+     }
++    */
+ 
++    /*
+     AsyncFunction<Boolean>("hasServicesEnabledAsync") {
+-      return@AsyncFunction LocationHelpers.isAnyProviderAvailable(mContext)
+     }
++    */
+ 
++    /*
+     AsyncFunction("startLocationUpdatesAsync") { taskName: String, options: LocationTaskOptions ->
+-      val shouldUseForegroundService = options.foregroundService != null
+-
+-      if (isMissingForegroundPermissions()) {
+-        throw LocationBackgroundUnauthorizedException()
+-      }
+-      // There are two ways of starting this service.
+-      // 1. As a background location service, this requires the background location permission.
+-      // 2. As a user-initiated foreground service with notification, this does NOT require the background location permission.
+-      if (!shouldUseForegroundService && isMissingBackgroundPermissions()) {
+-        throw LocationBackgroundUnauthorizedException()
+-      }
+-      if (!AppForegroundedSingleton.isForegrounded && options.foregroundService != null) {
+-        throw ForegroundServiceStartNotAllowedException()
+-      }
+-
+-      if (!hasForegroundServicePermissions()) {
+-        throw ForegroundServicePermissionsException()
+-      }
+-
+-      mTaskManager.registerTask(taskName, LocationTaskConsumer::class.java, options.toMutableMap())
+-      return@AsyncFunction
+     }
++    */
+ 
++    /*
+     AsyncFunction("stopLocationUpdatesAsync") { taskName: String ->
+-      mTaskManager.unregisterTask(taskName, LocationTaskConsumer::class.java)
+-      return@AsyncFunction
+     }
++    */
+ 
++    /*
+     AsyncFunction("hasStartedLocationUpdatesAsync") { taskName: String ->
+-      return@AsyncFunction mTaskManager.taskHasConsumerOfClass(taskName, LocationTaskConsumer::class.java)
+     }
++    */
+ 
++    /*
+     AsyncFunction("startGeofencingAsync") { taskName: String, options: GeofencingOptions ->
+-      if (isMissingBackgroundPermissions()) {
+-        throw LocationBackgroundUnauthorizedException()
+-      }
+-
+-      mTaskManager.registerTask(taskName, GeofencingTaskConsumer::class.java, options.toMap())
+-      return@AsyncFunction
+     }
++    */
+ 
++    /*
+     AsyncFunction("hasStartedGeofencingAsync") { taskName: String ->
+-      if (isMissingBackgroundPermissions()) {
+-        throw LocationBackgroundUnauthorizedException()
+-      }
+-
+-      return@AsyncFunction mTaskManager.taskHasConsumerOfClass(taskName, GeofencingTaskConsumer::class.java)
+     }
++    */
+ 
++    /*
+     AsyncFunction("stopGeofencingAsync") { taskName: String ->
+-      if (isMissingBackgroundPermissions()) {
+-        throw LocationBackgroundUnauthorizedException()
+-      }
+-
+-      mTaskManager.unregisterTask(taskName, GeofencingTaskConsumer::class.java)
+-      return@AsyncFunction
+     }
++    */
+ 
+     OnActivityEntersForeground {
+       AppForegroundedSingleton.isForegrounded = true
+@@ -370,341 +273,146 @@ class LocationModule : Module(), LifecycleEventListener, SensorEventListener, Ac
+   /**
+    * Resolves to the last known position if it is available and matches given requirements or null otherwise.
+    */
++  /*
+   private suspend fun getLastKnownPositionAsync(options: LocationLastKnownOptions): LocationResponse? {
+-    // Check for permissions
+-    if (isMissingForegroundPermissions()) {
+-      throw LocationUnauthorizedException()
+-    }
+-    val lastKnownLocation = getLastKnownLocation() ?: return null
+-
+-    if (LocationHelpers.isLocationValid(lastKnownLocation, options)) {
+-      return LocationResponse(lastKnownLocation)
+-    }
+-    return null
+   }
++  */
+ 
+   /**
+    * Requests for the current position. Depending on given accuracy, it may take some time to resolve.
+    * If you don't need an up-to-date location see `getLastKnownPosition`.
+    */
++  @Suppress("UNUSED_PARAMETER") // Parameter 'options' is never used
+   private fun getCurrentPositionAsync(options: LocationOptions, promise: Promise) {
+-    // Read options
+-    val locationRequest = LocationHelpers.prepareLocationRequest(options)
+-    val currentLocationRequest = LocationHelpers.prepareCurrentLocationRequest(options)
+-    val showUserSettingsDialog = options.mayShowUserSettingsDialog
+-
+     // Check for permissions
+     if (isMissingForegroundPermissions()) {
+       promise.reject(LocationUnauthorizedException())
+       return
+     }
+-    if (LocationHelpers.hasNetworkProviderEnabled(mContext) || !showUserSettingsDialog) {
+-      LocationHelpers.requestSingleLocation(mLocationProvider, currentLocationRequest, promise)
+-    } else {
+-      addPendingLocationRequest(
+-        locationRequest,
+-        object : LocationActivityResultListener {
+-          override fun onResult(resultCode: Int) {
+-            if (resultCode == Activity.RESULT_OK) {
+-              LocationHelpers.requestSingleLocation(mLocationProvider, currentLocationRequest, promise)
+-            } else {
+-              promise.reject(LocationSettingsUnsatisfiedException())
+-            }
+-          }
++
++    val locationListener = object : LocationListener {
++      var promiseResolved = false
++
++      override fun onLocationChanged(location: Location) {
++        if (!promiseResolved) {
++          promiseResolved = true
++          promise.resolve(LocationResponse(location))
+         }
+-      )
++      }
++
++      override fun onProviderDisabled(provider: String) {}
++      override fun onProviderEnabled(provider: String) {}
++    }
++
++    // Request location updates from both GPS and Network providers
++    if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
++      mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, locationListener)
++    }
++    if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
++      mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
+     }
+   }
+ 
++  /*
+   fun requestLocationUpdates(locationRequest: LocationRequest, requestId: Int?, callbacks: LocationRequestCallbacks) {
+-    val locationProvider: FusedLocationProviderClient = mLocationProvider
+-
+-    val locationCallback: LocationCallback = object : LocationCallback() {
+-      var isLocationAvailable = false
+-
+-      override fun onLocationResult(locationResult: LocationResult) {
+-        val location = locationResult.lastLocation
+-        if (location != null) {
+-          callbacks.onLocationChanged(location)
+-        } else if (!isLocationAvailable) {
+-          callbacks.onLocationError(LocationUnavailableException())
+-        } else {
+-          callbacks.onRequestFailed(LocationUnknownException())
+-        }
+-      }
+-
+-      override fun onLocationAvailability(locationAvailability: LocationAvailability) {
+-        isLocationAvailable = locationAvailability.isLocationAvailable
+-      }
+-    }
+-
+-    if (requestId != null) {
+-      // Save location callback and request so we will be able to pause/resume receiving updates.
+-      mLocationCallbacks[requestId] = locationCallback
+-      mLocationRequests[requestId] = locationRequest
+-    }
+-
+-    try {
+-      locationProvider.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+-      callbacks.onRequestSuccess()
+-    } catch (e: SecurityException) {
+-      callbacks.onRequestFailed(LocationRequestRejectedException(e))
+-    }
+   }
++  */
+ 
++  /*
+   private fun addPendingLocationRequest(locationRequest: LocationRequest, listener: LocationActivityResultListener) {
+-    // Add activity result listener to an array of pending requests.
+-    mPendingLocationRequests.add(listener)
+-
+-    // If it's the first pending request, let's ask the user to turn on high accuracy location.
+-    if (mPendingLocationRequests.size == 1) {
+-      resolveUserSettingsForRequest(locationRequest)
+-    }
+   }
++  */
+ 
+   /**
+    * Triggers system's dialog to ask the user to enable settings required for given location request.
+    */
++  /*
+   private fun resolveUserSettingsForRequest(locationRequest: LocationRequest) {
+-    val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+-    val client = LocationServices.getSettingsClient(mContext)
+-    val task = client.checkLocationSettings(builder.build())
+-    task.addOnSuccessListener {
+-      // All location settings requirements are satisfied.
+-      executePendingRequests(Activity.RESULT_OK)
+-    }
+-    task.addOnFailureListener { e: Exception ->
+-      val statusCode = (e as ApiException).statusCode
+-      if (statusCode == CommonStatusCodes.RESOLUTION_REQUIRED) {
+-        // Location settings are not satisfied, but this can be fixed by showing the user a dialog.
+-        // Show the dialog by calling startResolutionForResult(), and check the result in onActivityResult().
+-        try {
+-          val resolvable = e as ResolvableApiException
+-          mUIManager.registerActivityEventListener(this@LocationModule)
+-          resolvable.startResolutionForResult(appContext.throwingActivity, CHECK_SETTINGS_REQUEST_CODE)
+-        } catch (e: SendIntentException) {
+-          // Ignore the error.
+-          executePendingRequests(Activity.RESULT_CANCELED)
+-        }
+-      } else { // Location settings are not satisfied. However, we have no way to fix the settings so we won't show the dialog.
+-        executePendingRequests(Activity.RESULT_CANCELED)
+-      }
+-    }
+   }
++  */
+ 
++  /*
+   private fun executePendingRequests(resultCode: Int) {
+-    // Propagate result to pending location requests.
+-    for (listener in mPendingLocationRequests) {
+-      listener.onResult(resultCode)
+-    }
+-    mPendingLocationRequests.clear()
+   }
++  */
+ 
++  /*
+   private fun startHeadingUpdate() {
+-    val locationControl = SmartLocation.with(mContext).location().oneFix().config(LocationParams.BEST_EFFORT)
+-    val currLoc = locationControl.lastLocation
+-    if (currLoc != null) {
+-      mGeofield = GeomagneticField(
+-        currLoc.latitude.toFloat(), currLoc.longitude.toFloat(), currLoc.altitude.toFloat(),
+-        System.currentTimeMillis()
+-      )
+-    } else {
+-      locationControl.start { location: Location ->
+-        mGeofield = GeomagneticField(
+-          location.latitude.toFloat(), location.longitude.toFloat(), location.altitude.toFloat(),
+-          System.currentTimeMillis()
+-        )
+-      }
+-    }
+-    mSensorManager.registerListener(
+-      this,
+-      mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
+-      SensorManager.SENSOR_DELAY_NORMAL
+-    )
+-    mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
+   }
++  */
+ 
++  /*
+   private fun sendUpdate() {
+-    val rotationMatrix = FloatArray(9)
+-    val inclinationMatrix = FloatArray(9)
+-    val success = SensorManager.getRotationMatrix(rotationMatrix, inclinationMatrix, mGravity, mGeomagnetic)
+-    if (success) {
+-      val orientation = FloatArray(3)
+-      SensorManager.getOrientation(rotationMatrix, orientation)
+-
+-      // Make sure Delta is big enough to warrant an update
+-      // Currently: 50ms and ~2 degrees of change (android has a lot of useless updates block up the sending)
+-      if (abs(orientation[0] - mLastAzimuth) > DEGREE_DELTA && System.currentTimeMillis() - mLastUpdate > TIME_DELTA) {
+-        mLastAzimuth = orientation[0]
+-        mLastUpdate = System.currentTimeMillis()
+-        val magneticNorth: Float = calcMagNorth(orientation[0])
+-        val trueNorth: Float = calcTrueNorth(magneticNorth)
+-
+-        // Write data to send back to React
+-        val response = HeadingEventResponse(
+-          watchId = mHeadingId,
+-          heading = Heading(
+-            trueHeading = trueNorth,
+-            magHeading = magneticNorth,
+-            accuracy = mAccuracy
+-          )
+-        )
+-        sendEvent(HEADING_EVENT_NAME, response.toBundle())
+-      }
+-    }
+   }
++  */
+ 
++  /*
+   internal fun sendLocationResponse(watchId: Int, response: LocationResponse) {
+-    val responseBundle = bundleOf()
+-    responseBundle.putBundle("location", response.toBundle(Bundle::class.java))
+-    responseBundle.putInt("watchId", watchId)
+-    sendEvent(LOCATION_EVENT_NAME, responseBundle)
+   }
++  */
+ 
++  /*
+   private fun calcMagNorth(azimuth: Float): Float {
+-    val azimuthDeg = Math.toDegrees(azimuth.toDouble()).toFloat()
+-    return (azimuthDeg + 360) % 360
+   }
++  */
+ 
++  /*
+   private fun calcTrueNorth(magNorth: Float): Float {
+-    // Need to request geo location info to calculate true north
+-    val geofield = mGeofield.takeIf { !isMissingForegroundPermissions() } ?: return -1f
+-    return (magNorth + geofield.declination) % 360
+   }
++  */
+ 
++  /*
+   private fun stopHeadingWatch() {
+-    mSensorManager.unregisterListener(this)
+   }
++  */
+ 
++  /*
+   private fun destroyHeadingWatch() {
+-    stopHeadingWatch()
+-    mGravity = FloatArray(9)
+-    mGeomagnetic = FloatArray(9)
+-    mGeofield = null
+-    mHeadingId = 0
+-    mLastAzimuth = 0f
+-    mAccuracy = 0
+   }
++  */
+ 
++  /*
+   private fun startWatching() {
+-    // if permissions not granted it won't work anyway, but this can be invoked when permission dialog disappears
+-    if (!isMissingForegroundPermissions()) {
+-      mGeocoderPaused = false
+-    }
+-
+-    // Resume paused location updates
+-    resumeLocationUpdates()
+   }
++  */
+ 
++  /*
+   private fun stopWatching() {
+-    // if permissions not granted it won't work anyway, but this can be invoked when permission dialog appears
+-    if (Geocoder.isPresent() && !isMissingForegroundPermissions()) {
+-      SmartLocation.with(mContext).geocoding().stop()
+-      mGeocoderPaused = true
+-    }
+-    for (requestId in mLocationCallbacks.keys) {
+-      pauseLocationUpdatesForRequest(requestId)
+-    }
+   }
++  */
+ 
++  /*
+   private fun pauseLocationUpdatesForRequest(requestId: Int) {
+-    val locationCallback = mLocationCallbacks[requestId]
+-    if (locationCallback != null) {
+-      mLocationProvider.removeLocationUpdates(locationCallback)
+-    }
+   }
++  */
+ 
++  /*
+   private fun removeLocationUpdatesForRequest(requestId: Int) {
+-    pauseLocationUpdatesForRequest(requestId)
+-    mLocationCallbacks.remove(requestId)
+-    mLocationRequests.remove(requestId)
+   }
++  */
+ 
++  /*
+   private fun resumeLocationUpdates() {
+-    for (requestId in mLocationCallbacks.keys) {
+-      val locationCallback = mLocationCallbacks[requestId] ?: return
+-      val locationRequest = mLocationRequests[requestId] ?: return
+-      try {
+-        mLocationProvider.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+-      } catch (e: SecurityException) {
+-        Log.e(TAG, "Error occurred while resuming location updates: $e")
+-      }
+-    }
+   }
++  */
+ 
+   /**
+    * Gets the best most recent location found by the provider.
+    */
++  /*
+   private suspend fun getLastKnownLocation(): Location? {
+-    return suspendCoroutine { continuation ->
+-      try {
+-        mLocationProvider.lastLocation
+-          .addOnSuccessListener { location: Location? -> continuation.resume(location) }
+-          .addOnCanceledListener { continuation.resume(null) }
+-          .addOnFailureListener { continuation.resume(null) }
+-      } catch (e: SecurityException) {
+-        continuation.resume(null)
+-      }
+-    }
+   }
++  */
+ 
++  /*
+   private suspend fun geocode(address: String): List<GeocodeResponse> {
+-    if (mGeocoderPaused) {
+-      throw GeocodeException("Geocoder is not running")
+-    }
+-
+-    if (isMissingForegroundPermissions()) {
+-      throw LocationUnauthorizedException()
+-    }
+-
+-    if (!Geocoder.isPresent()) {
+-      throw NoGeocodeException()
+-    }
+-
+-    return suspendCoroutine { continuation ->
+-      val locations = Geocoder(mContext, Locale.getDefault()).getFromLocationName(address, 1)
+-      locations?.let { location ->
+-        location.let {
+-          val results = it.mapNotNull { address ->
+-            val locationAddress = LocationAddress(address)
+-            GeocodeResponse.from(locationAddress.location)
+-          }
+-          continuation.resume(results)
+-        }
+-      } ?: continuation.resume(emptyList())
+-    }
+   }
++  */
+ 
++  /*
+   private suspend fun reverseGeocode(location: ReverseGeocodeLocation): List<ReverseGeocodeResponse> {
+-    if (mGeocoderPaused) {
+-      throw GeocodeException("Geocoder is not running")
+-    }
+-
+-    if (isMissingForegroundPermissions()) {
+-      throw LocationUnauthorizedException()
+-    }
+-
+-    if (!Geocoder.isPresent()) {
+-      throw NoGeocodeException()
+-    }
+-
+-    val androidLocation = Location("").apply {
+-      latitude = location.latitude
+-      longitude = location.longitude
+-    }
+-
+-    return suspendCoroutine { continuation ->
+-      val locations = Geocoder(mContext, Locale.getDefault()).getFromLocation(androidLocation.latitude, androidLocation.longitude, 1)
+-      locations?.let { addresses ->
+-        val results = addresses.mapNotNull { address ->
+-          address?.let {
+-            ReverseGeocodeResponse(it)
+-          }
+-        }
+-        continuation.resume(results)
+-      } ?: continuation.resume(emptyList())
+-    }
+   }
++  */
+ 
+   //region private methods
+   /**
+@@ -774,55 +482,27 @@ class LocationModule : Module(), LifecycleEventListener, SensorEventListener, Ac
+     private const val HEADING_EVENT_NAME = "Expo.headingChanged"
+     private const val CHECK_SETTINGS_REQUEST_CODE = 42
+ 
+-    const val ACCURACY_LOWEST = 1
+-    const val ACCURACY_LOW = 2
+     const val ACCURACY_BALANCED = 3
+-    const val ACCURACY_HIGH = 4
+-    const val ACCURACY_HIGHEST = 5
+-    const val ACCURACY_BEST_FOR_NAVIGATION = 6
+ 
+-    const val GEOFENCING_EVENT_ENTER = 1
+-    const val GEOFENCING_EVENT_EXIT = 2
+-
+-    const val DEGREE_DELTA = 0.0355 // in radians, about 2 degrees
+-    const val TIME_DELTA = 50f // in milliseconds
++    private lateinit var mLocationManager: LocationManager
+   }
+ 
+   override fun onHostResume() {
+-    startWatching()
+-    startHeadingUpdate()
+   }
+ 
+   override fun onHostPause() {
+-    stopWatching()
+-    stopHeadingWatch()
+   }
+ 
+   override fun onHostDestroy() {
+-    stopWatching()
+-    stopHeadingWatch()
+   }
+ 
+   override fun onSensorChanged(event: SensorEvent?) {
+-    event ?: return
+-    if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+-      mGravity = event.values
+-    } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
+-      mGeomagnetic = event.values
+-    }
+-    sendUpdate()
+   }
+ 
+   override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+-    mAccuracy = accuracy
+   }
+ 
+   override fun onActivityResult(activity: Activity?, requestCode: Int, resultCode: Int, data: Intent?) {
+-    if (requestCode != CHECK_SETTINGS_REQUEST_CODE) {
+-      return
+-    }
+-    executePendingRequests(resultCode)
+-    mUIManager.unregisterActivityEventListener(this)
+   }
+ 
+   override fun onNewIntent(intent: Intent?) {}
+diff --git a/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/GeofencingTaskConsumer.kt b/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/GeofencingTaskConsumer.kt
+index cafc11b..bb88c4c 100644
+--- a/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/GeofencingTaskConsumer.kt
++++ b/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/GeofencingTaskConsumer.kt
+@@ -8,12 +8,6 @@ import android.content.Intent
+ import android.os.Bundle
+ import android.os.PersistableBundle
+ import android.util.Log
+-import com.google.android.gms.location.Geofence
+-import com.google.android.gms.location.GeofenceStatusCodes
+-import com.google.android.gms.location.GeofencingClient
+-import com.google.android.gms.location.GeofencingEvent
+-import com.google.android.gms.location.GeofencingRequest
+-import com.google.android.gms.location.LocationServices
+ import expo.modules.interfaces.taskManager.TaskConsumer
+ import expo.modules.interfaces.taskManager.TaskConsumerInterface
+ import expo.modules.interfaces.taskManager.TaskInterface
+@@ -25,221 +19,86 @@ import expo.modules.location.LocationModule
+ import java.util.UUID
+ 
+ class GeofencingTaskConsumer(context: Context, taskManagerUtils: TaskManagerUtilsInterface?) : TaskConsumer(context, taskManagerUtils), TaskConsumerInterface {
+-  private var mTask: TaskInterface? = null
+-  private var mPendingIntent: PendingIntent? = null
+-  private var mGeofencingClient: GeofencingClient? = null
+-  private var mGeofencingRequest: GeofencingRequest? = null
+-  private var mGeofencingList: MutableList<Geofence> = ArrayList()
+-  private var mRegions: MutableMap<String, PersistableBundle> = HashMap()
+ 
+   //region TaskConsumerInterface
+-  override fun taskType(): String {
+-    return "geofencing"
++  override fun taskType(): String? {
++    return null;
+   }
+ 
+   override fun didRegister(task: TaskInterface) {
+-    mTask = task
+-    startGeofencing()
+   }
+ 
+   override fun didUnregister() {
+-    stopGeofencing()
+-    mTask = null
+-    mPendingIntent = null
+-    mGeofencingClient = null
+-    mGeofencingRequest = null
+-    mGeofencingList.clear()
+   }
+ 
++  /*
+   override fun setOptions(options: Map<String, Any>) {
+-    super.setOptions(options)
+-    stopGeofencing()
+-    startGeofencing()
+   }
++  */
+ 
++  /*
+   override fun didReceiveBroadcast(intent: Intent) {
+-    val event = GeofencingEvent.fromIntent(intent) ?: run {
+-      Log.w(TAG, "Received a null geofencing event. Ignoring")
+-      return
+-    }
+-
+-    if (event.hasError()) {
+-      val errorMessage = getErrorString(event.errorCode)
+-      val error = Error(errorMessage)
+-      mTask?.execute(null, error)
+-      return
+-    }
+-
+-    // Get region state and event type from given transition type.
+-    val geofenceTransition = event.geofenceTransition
+-    val regionState = regionStateForTransitionType(geofenceTransition)
+-    val eventType = eventTypeFromTransitionType(geofenceTransition)
+-    val triggeringGeofences = event.triggeringGeofences ?: return
+-
+-    for (geofence in triggeringGeofences) {
+-      mRegions[geofence.requestId]?.let {
+-        val data = PersistableBundle()
+-
+-        // Update region state in region bundle.
+-        it.putInt("state", regionState.ordinal)
+-        data.putInt("eventType", eventType)
+-        data.putPersistableBundle("region", it)
+-        val context = context.applicationContext
+-        taskManagerUtils.scheduleJob(context, mTask, listOf(data))
+-      }
+-    }
+   }
++  */
+ 
++  /*
+   override fun didExecuteJob(jobService: JobService, params: JobParameters): Boolean {
+-    val task = mTask ?: return false
+-
+-    val data = taskManagerUtils.extractDataFromJobParams(params)
+-    for (item in data) {
+-      val bundle = Bundle()
+-      val region = Bundle()
+-      region.putAll(item.getPersistableBundle("region"))
+-      bundle.putInt("eventType", item.getInt("eventType"))
+-      bundle.putBundle("region", region)
+-
+-      task.execute(bundle, null) { jobService.jobFinished(params, false) }
+-    }
+-
+-    // Returning `true` indicates that the job is still running, but in async mode.
+-    // In that case we're obligated to call `jobService.jobFinished` as soon as the async block finishes.
+-    return true
+   }
++  */
+ 
+   //endregion
+   //region helpers
++  /*
+   private fun startGeofencing() {
+-    val context = context ?: run {
+-      Log.w(TAG, "The context has been abandoned")
+-      return
+-    }
+-
+-    if (!LocationHelpers.isAnyProviderAvailable(context)) {
+-      Log.w(TAG, "There is no location provider available")
+-      return
+-    }
+-    mRegions = HashMap()
+-    mGeofencingList = ArrayList()
+-
+-    // Create geofences from task options.
+-    val options = mTask?.options
+-      ?: throw GeofencingException("Task is null, can't start geofencing")
+-    val regions: List<HashMap<String, Any>> = (options["regions"] as ArrayList<*>).filterIsInstance<HashMap<String, Any>>()
+-
+-    for (region in regions) {
+-      val geofence = geofenceFromRegion(region)
+-      val regionIdentifier = geofence.requestId
+-
+-      // Make a bundle for the region to remember its attributes. Only request ID is public in Geofence object.
+-      mRegions[regionIdentifier] = bundleFromRegion(regionIdentifier, region)
+-
+-      // Add geofence to the list of observed regions.
+-      mGeofencingList.add(geofence)
+-    }
+-
+-    // Prepare pending intent, geofencing request and client.
+-    mPendingIntent = preparePendingIntent()
+-    mGeofencingRequest = prepareGeofencingRequest(mGeofencingList)
+-    mGeofencingClient = LocationServices.getGeofencingClient(getContext())
+-
+-    try {
+-      mPendingIntent?.let { pendingIntent ->
+-        mGeofencingRequest?.let { geofencingRequest ->
+-          mGeofencingClient?.addGeofences(geofencingRequest, pendingIntent)
+-        }
+-      }
+-    } catch (e: SecurityException) {
+-      Log.w(TAG, "Geofencing request has been rejected.", e)
+-    }
+   }
++  */
+ 
++  /*
+   private fun stopGeofencing() {
+-    mPendingIntent?.let {
+-      mGeofencingClient?.removeGeofences(it)
+-      it.cancel()
+-    }
+   }
++  */
+ 
++  /*
+   private fun prepareGeofencingRequest(geofences: List<Geofence>): GeofencingRequest {
+-    return GeofencingRequest.Builder()
+-      .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER or GeofencingRequest.INITIAL_TRIGGER_EXIT)
+-      .addGeofences(geofences)
+-      .build()
+   }
++  */
+ 
++  /*
+   private fun preparePendingIntent(): PendingIntent {
+-    return taskManagerUtils.createTaskIntent(context, mTask)
+   }
++  */
+ 
++  /*
+   private fun getParamAsDouble(param: Any?, errorMessage: String): Double {
+-    return when (param) {
+-      is Double -> param
+-      is Float -> param.toDouble()
+-      is Int -> param.toDouble()
+-      is Long -> param.toDouble()
+-      is String -> param.toDoubleOrNull()
+-      else -> null
+-    } ?: throw GeofencingException(errorMessage)
+   }
++  */
+ 
++  /*
+   private fun geofenceFromRegion(region: Map<String, Any>): Geofence {
+-    val identifier = region["identifier"] as? String ?: UUID.randomUUID().toString()
+-    val radius = getParamAsDouble(region["radius"], "Region: radius: `${region["radius"]}` can't be cast to Double")
+-    val longitude = getParamAsDouble(region["longitude"], "Region: longitude: `${region["longitude"]}` can't be cast to Double")
+-    val latitude = getParamAsDouble(region["latitude"], "Region: latitude `${region["latitude"]}` can't be cast to Double")
+-    val notifyOnEnter = region["notifyOnEnter"] as? Boolean ?: true
+-    val notifyOnExit = region["notifyOnExit"] as? Boolean ?: true
+-    val transitionTypes = (if (notifyOnEnter) Geofence.GEOFENCE_TRANSITION_ENTER else 0) or if (notifyOnExit) Geofence.GEOFENCE_TRANSITION_EXIT else 0
+-    return Geofence.Builder()
+-      .setRequestId(identifier)
+-      .setCircularRegion(latitude, longitude, radius.toFloat())
+-      .setExpirationDuration(Geofence.NEVER_EXPIRE)
+-      .setTransitionTypes(transitionTypes)
+-      .build()
+   }
++  */
+ 
++  /*
+   private fun bundleFromRegion(identifier: String, region: Map<String, Any>): PersistableBundle {
+-    return PersistableBundle().apply {
+-      val radius = getParamAsDouble(region["radius"], "Region: radius: `${region["radius"]}` can't be cast to Double")
+-      val longitude = getParamAsDouble(region["longitude"], "Region: longitude: `${region["longitude"]}` can't be cast to Double")
+-      val latitude = getParamAsDouble(region["latitude"], "Region: latitude: `${region["latitude"]}` can't be cast to Double")
+-      putString("identifier", identifier)
+-      putDouble("radius", radius)
+-      putDouble("latitude", latitude)
+-      putDouble("longitude", longitude)
+-      putInt("state", GeofencingRegionState.UNKNOWN.ordinal)
+-    }
+   }
++  */
+ 
++  /*
+   private fun regionStateForTransitionType(transitionType: Int): GeofencingRegionState {
+-    return when (transitionType) {
+-      Geofence.GEOFENCE_TRANSITION_ENTER, Geofence.GEOFENCE_TRANSITION_DWELL -> GeofencingRegionState.INSIDE
+-      Geofence.GEOFENCE_TRANSITION_EXIT -> GeofencingRegionState.OUTSIDE
+-      else -> GeofencingRegionState.UNKNOWN
+-    }
+   }
++  */
+ 
++  /*
+   private fun eventTypeFromTransitionType(transitionType: Int): Int {
+-    return when (transitionType) {
+-      Geofence.GEOFENCE_TRANSITION_ENTER -> LocationModule.GEOFENCING_EVENT_ENTER
+-      Geofence.GEOFENCE_TRANSITION_EXIT -> LocationModule.GEOFENCING_EVENT_EXIT
+-      else -> 0
+-    }
+   }
++  */
+ 
+   companion object {
+     private const val TAG = "GeofencingTaskConsumer"
+ 
++    /*
+     private fun getErrorString(errorCode: Int): String {
+-      return when (errorCode) {
+-        GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE -> "Geofencing not available."
+-        GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES -> "Too many geofences."
+-        GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS -> "Too many pending intents."
+-        else -> "Unknown geofencing error."
+-      }
+     } //endregion
++    */
+   }
+ }
+diff --git a/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/LocationTaskConsumer.kt b/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/LocationTaskConsumer.kt
+index e659285..50717b5 100644
+--- a/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/LocationTaskConsumer.kt
++++ b/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/LocationTaskConsumer.kt
+@@ -13,10 +13,6 @@ import android.os.Bundle
+ import android.os.IBinder
+ import android.os.PersistableBundle
+ import android.util.Log
+-import com.google.android.gms.location.FusedLocationProviderClient
+-import com.google.android.gms.location.LocationRequest
+-import com.google.android.gms.location.LocationResult
+-import com.google.android.gms.location.LocationServices
+ import expo.modules.core.MapHelper
+ import expo.modules.core.arguments.MapArguments
+ import expo.modules.core.arguments.ReadableArguments
+@@ -37,16 +33,11 @@ import kotlin.math.abs
+ 
+ class LocationTaskConsumer(context: Context, taskManagerUtils: TaskManagerUtilsInterface?) : TaskConsumer(context, taskManagerUtils), TaskConsumerInterface, LifecycleEventListener {
+   private var mTask: TaskInterface? = null
+-  private var mPendingIntent: PendingIntent? = null
+   private var mService: LocationTaskService? = null
+-  private var mLocationRequest: LocationRequest? = null
+   private var mLastReportedLocation: Location? = null
+   private var mDeferredDistance = 0.0
+   private val mDeferredLocations: MutableList<Location> = ArrayList()
+   private var mIsHostPaused = true
+-  private val mLocationClient: FusedLocationProviderClient by lazy {
+-    LocationServices.getFusedLocationProviderClient(context)
+-  }
+ 
+   //region TaskConsumerInterface
+   override fun taskType(): String {
+@@ -63,8 +54,6 @@ class LocationTaskConsumer(context: Context, taskManagerUtils: TaskManagerUtilsI
+     stopLocationUpdates()
+     stopForegroundService()
+     mTask = null
+-    mPendingIntent = null
+-    mLocationRequest = null
+   }
+ 
+   override fun setOptions(options: Map<String, Any>) {
+@@ -79,24 +68,6 @@ class LocationTaskConsumer(context: Context, taskManagerUtils: TaskManagerUtilsI
+   }
+ 
+   override fun didReceiveBroadcast(intent: Intent) {
+-    mTask ?: return
+-    val result = LocationResult.extractResult(intent)
+-    if (result != null) {
+-      val locations = result.locations
+-      deferLocations(locations)
+-      maybeReportDeferredLocations()
+-    } else {
+-      try {
+-        mLocationClient.lastLocation.addOnCompleteListener { task ->
+-          task.result?.let {
+-            deferLocations(listOf(it))
+-            maybeReportDeferredLocations()
+-          }
+-        }
+-      } catch (e: SecurityException) {
+-        Log.e(TAG, "Cannot get last location: " + e.message)
+-      }
+-    }
+   }
+ 
+   override fun didExecuteJob(jobService: JobService, params: JobParameters): Boolean {
+@@ -134,30 +105,9 @@ class LocationTaskConsumer(context: Context, taskManagerUtils: TaskManagerUtilsI
+       Log.w(TAG, "Could not find a location task for the location update")
+       return
+     }
+-    mLocationRequest = LocationHelpers.prepareLocationRequest(LocationOptions(task.options))
+-    mPendingIntent = preparePendingIntent()
+-
+-    val locationRequest = mLocationRequest ?: run {
+-      Log.w(TAG, "Could not find a location request for the location update")
+-      return
+-    }
+-    val intent = mPendingIntent ?: run {
+-      Log.w(TAG, "Could not find intent for the location update")
+-      return
+-    }
+-
+-    try {
+-      mLocationClient.requestLocationUpdates(locationRequest, intent)
+-    } catch (e: SecurityException) {
+-      Log.w(TAG, "Location request has been rejected.", e)
+-    }
+   }
+ 
+   private fun stopLocationUpdates() {
+-    mPendingIntent?.let {
+-      mLocationClient.removeLocationUpdates(it)
+-      it.cancel()
+-    }
+   }
+ 
+   private fun maybeStartForegroundService() {
+@@ -284,9 +234,10 @@ class LocationTaskConsumer(context: Context, taskManagerUtils: TaskManagerUtilsI
+     return newestLocation.time - oldestLocation.time >= interval && mDeferredDistance >= distance
+   }
+ 
++  /*
+   private fun preparePendingIntent(): PendingIntent {
+-    return taskManagerUtils.createTaskIntent(context, mTask)
+   }
++  */
+ 
+   private fun executeTaskWithLocationBundles(locationBundles: ArrayList<Bundle>, callback: TaskExecutionCallback) {
+     if (locationBundles.size > 0 && mTask != null) {
+diff --git a/node_modules/expo-location/expo-module.config.json b/node_modules/expo-location/expo-module.config.json
+index 6b45067..224c837 100644
+--- a/node_modules/expo-location/expo-module.config.json
++++ b/node_modules/expo-location/expo-module.config.json
+@@ -13,10 +13,6 @@
+       "expo.modules.location.LocationModule"
+     ],
+     "gradleAarProjects": [
+-      {
+-        "name": "io.nlopez.smartlocation-jetified-aar",
+-        "aarFilePath": "android/libs/io.nlopez.smartlocation-3.3.3-jetified.aar"
+-      }
+     ]
+   }
+ }

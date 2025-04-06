@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, TouchableOpacity, StyleProp, TextStyle, FlatList, ScrollView, StyleSheet, useWindowDimensions, TouchableWithoutFeedback, Platform, Pressable } from "react-native";
+import { View, Image, TouchableOpacity, StyleProp, TextStyle, StyleSheet, useWindowDimensions, Platform, Pressable } from "react-native";
 import { useTheme, Text, Chip, Button } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT } from "../types";
@@ -39,7 +39,7 @@ const CardItem = ({
       width: calcImageSize(),
       height: 'auto',
       maxWidth: WIDESCREEN_HORIZONTAL_MAX - cardPadding * 2,
-      marginTop: cardPadding / 2 + 2,
+      marginTop: cardPadding / 2 + STATUS_BAR_HEIGHT,
       marginBottom: cardPadding / 2,
       aspectRatio: 1,
     },
@@ -75,7 +75,7 @@ const CardItem = ({
   }, []);
 
   async function showToolTip() {
-    if (index == 0) {
+    if (index === 0) {
       let toolTip = await Global.GetStorage(Global.STORAGE_SEARCH_LIKE_TOOLTIP);
       if (!toolTip) {
         setShowLikeTooltip(true);
@@ -163,7 +163,7 @@ const CardItem = ({
           contentStyle={{
             backgroundColor: colors.surface
           }}
-          topAdjustment={Platform.OS === 'android' ? -STATUS_BAR_HEIGHT - 12 : 0}
+          topAdjustment={Platform.OS === 'android' ? -STATUS_BAR_HEIGHT : 0}
           isVisible={showLikeTooltip}
           content={<Text>{i18n.t('compliment.tooltip')}</Text>}
           placement="top"

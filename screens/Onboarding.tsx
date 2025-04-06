@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
-import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText, FAB } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText, FAB, MaterialBottomTabScreenProps } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
 import SvgDescription from "../assets/onboarding/description.svg";
@@ -20,14 +20,15 @@ import SvgNotification from "../assets/onboarding/notification.svg";
 import * as I18N from "../i18n";
 import * as URL from "../URL";
 import * as Global from "../Global";
-import { IntentionEnum, UserInterest, UserOnboarding, UserOnboardingResource } from "../types";
+import { IntentionEnum, RootStackParamList, UserInterest, UserOnboarding, UserOnboardingResource } from "../types";
 import InterestView from "../components/InterestView";
 
 const IMAGE_HEADER = "data:image/jpeg;base64,";
 
 const i18n = I18N.getI18n()
 
-const Onboarding = () => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Onboarding'>
+const Onboarding = ({route: _r, navigation: _n}: Props) => {
 
   const GENDER_MALE = 1;
   const GENDER_FEMALE = 2;
@@ -36,9 +37,9 @@ const Onboarding = () => {
   const PAGE_PROFILE_PIC = 0;
   const PAGE_DESCRIPTION = 1;
   const PAGE_PREF_GENDER = 2;
-  const PAGE_PREF_INTENTION = 3;
-  const PAGE_PREF_INTERESTS = 4;
-  const PAGE_PREF_NOTIFICATION = 5;
+  // const PAGE_PREF_INTENTION = 3;
+  // const PAGE_PREF_INTERESTS = 4;
+  // const PAGE_PREF_NOTIFICATION = 5;
   const PAGE_FINAL = 6;
 
   const { colors } = useTheme();
@@ -134,7 +135,7 @@ const Onboarding = () => {
 
   function moveFlatlistNext() {
     let position = scrollRef?.current?.getCurrentIndex();
-    if (position != undefined) {
+    if (position !== undefined) {
       if (position < PAGE_FINAL) {
         scrollRef?.current?.scrollToIndex({ index: position + 1, animated: true });
       } else {
@@ -182,6 +183,7 @@ const Onboarding = () => {
       Global.loadPage(Global.INDEX_MAIN);
 
     } catch (e) {
+      console.error(e);
       Global.ShowToast(i18n.t('error.generic'));
     }
   }

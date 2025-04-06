@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as URL from "./URL";
 import { createNavigationContainerRef, CommonActions } from '@react-navigation/native';
-import { ConversationDto, UserDto } from "./types";
+import { ConversationDto, RootStackParamList, UserDto } from "./types";
 import Toast from 'react-native-toast-message';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -14,9 +14,10 @@ import FormData from "form-data";
 import { Buffer } from "buffer";
 import { cloneDeep } from 'lodash';
 
-export const FLAG_FDROID = true;
+export const FLAG_FDROID = false; // updated by f-droid.sh
+export const FLAG_ENABLE_DONATION = !FLAG_FDROID;
 
-export const navigationRef = createNavigationContainerRef()
+export const navigationRef = createNavigationContainerRef<RootStackParamList>()
 export const INDEX_LOGIN = "0"
 export const INDEX_REGISTER = "1"
 export const INDEX_ONBOARDING = "2"
@@ -87,9 +88,9 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
       },
       data: data,
     });
-    if (res.request.responseURL == URL.AUTH_LOGIN) {
+    if (res.request.responseURL === URL.AUTH_LOGIN) {
       let page = await GetStorage(STORAGE_PAGE);
-      if (page != INDEX_LOGIN) {
+      if (page !== INDEX_LOGIN) {
         SetStorage(STORAGE_PAGE, INDEX_LOGIN);
         navigate("Login");
         throw new Error("Not authenticated")
@@ -97,7 +98,7 @@ export async function Fetch(url: string = "", method: string = "get", data: any 
     }
     return res;
   } catch (e) {
-    console.log(e)
+    console.error(e)
     throw e;
   }
 }
@@ -147,11 +148,11 @@ export async function SetStorage(key: string, value: string) {
 }
 
 export function loadPage(page: string = INDEX_REGISTER) {
-  if (INDEX_ONBOARDING == page) {
+  if (INDEX_ONBOARDING === page) {
     navigate("Onboarding");
-  } else if (INDEX_MAIN == page) {
+  } else if (INDEX_MAIN === page) {
     navigate("Main", true);
-  } else if (INDEX_REGISTER == page) {
+  } else if (INDEX_REGISTER === page) {
     navigate("Register");
   }
 }
@@ -192,7 +193,7 @@ export function calcAge(dob: Date | undefined): number {
 
 export async function pickImage(): Promise<string | null | undefined> {
   let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    mediaTypes: 'images',
     allowsEditing: true,
     aspect: [1, 1],
     quality: 1,
@@ -204,10 +205,10 @@ export async function pickImage(): Promise<string | null | undefined> {
     const saveOptions: ImageManipulator.SaveOptions = { compress: 0.8, format: format, base64: true }
     const resizedImageData = await ImageManipulator.manipulateAsync(
       result.assets[0].uri,
-      [{ resize: { width: IMG_SIZE_MAX, height: Platform.OS == 'android' ? IMG_SIZE_MAX : undefined } }],
+      [{ resize: { width: IMG_SIZE_MAX, height: Platform.OS === 'android' ? IMG_SIZE_MAX : undefined } }],
       saveOptions
     );
-    if (Platform.OS != 'web') {
+    if (Platform.OS !== 'web') {
       return Platform.select({ ios: resizedImageData.uri.replace('file://', ''), android: resizedImageData.uri })
     } else {
       return resizedImageData.base64;
@@ -221,7 +222,7 @@ export function buildFormData(imageData: string): FormData {
 
   const mimeType = mime.getType(imageData);
   var bodyFormData = new FormData();
-  if (Platform.OS != "web") {
+  if (Platform.OS !== "web") {
     bodyFormData.append('file', {
       name: imageData.split("/").pop(),
       type: mimeType,
@@ -236,8 +237,8 @@ export function buildFormData(imageData: string): FormData {
   return bodyFormData;
 };
 
-export function shuffleArray(array: Array<any>): Array<any> {
-  const copy: Array<any> = cloneDeep(array);
+export function shuffleArray(array: any[]): any[] {
+  const copy: any[] = cloneDeep(array);
   for (let i = copy.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
     [copy[i], copy[j]] = [copy[j], copy[i]];

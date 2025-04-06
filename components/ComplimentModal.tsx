@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { Button, IconButton, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
+import { IconButton, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 import { ComplimentModalT } from '../types';
 import { View, Image, useWindowDimensions, KeyboardAvoidingView } from 'react-native';
 import { WIDESCREEN_HORIZONTAL_MAX } from '../assets/styles';
@@ -8,7 +8,7 @@ import * as I18N from "../i18n";
 
 const ComplimentModal = ({ visible = false, setVisible, name, age, profilePicture, onSend, onDismiss }: ComplimentModalT) => {
 
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const i18n = I18N.getI18n();
   const { colors } = useTheme();
   const [text, setText] = React.useState("");
@@ -17,7 +17,7 @@ const ComplimentModal = ({ visible = false, setVisible, name, age, profilePictur
   function calcMarginModal() {
     return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
   }
-  const showModal = () => setVisible(true);
+  // const showModal = () => setVisible(true); // todo
   const hideModal = () => { setVisible(false); if (onDismiss) { onDismiss() } };
   const maxLength = 120;
 
@@ -51,7 +51,7 @@ const ComplimentModal = ({ visible = false, setVisible, name, age, profilePictur
               placeholder={i18n.t('compliment.title')}
               maxLength={maxLength}
               autoCorrect={false}
-              right={<TextInput.Icon iconColor={colors.secondary} onPress={() => onSend(text, true)} icon="send" />}></TextInput>
+              right={<TextInput.Icon color={colors.secondary} onPress={() => onSend(text, true)} icon="send" />}></TextInput>
           </KeyboardAvoidingView>
         </View>
       </Modal>

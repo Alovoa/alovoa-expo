@@ -7,9 +7,9 @@ import {
   Linking,
   Pressable
 } from "react-native";
-import { Text, Button, Card, ActivityIndicator, IconButton, useTheme } from "react-native-paper";
-import styles, { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
-import { YourProfileResource, UserDto } from "../types";
+import { Text, Button, Card, ActivityIndicator, IconButton, MaterialBottomTabScreenProps } from "react-native-paper";
+import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
+import { YourProfileResource, UserDto, RootStackParamList } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
@@ -20,17 +20,16 @@ import * as Sharing from 'expo-sharing';
 import VerticalView from "../components/VerticalView";
 import * as Clipboard from 'expo-clipboard';
 import Alert from "../components/Alert";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
 
 const i18n = I18N.getI18n()
 
-const YourProfile = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'YourProfile'>
+const YourProfile = ({ route, navigation }: Props) => {
 
   const { height, width } = useWindowDimensions();
-  const { colors } = useTheme();
   const MAX_REFERRALS = 10;
 
   const [requestingDeletion, setRequestingDeletion] = React.useState(false);
@@ -56,7 +55,7 @@ const YourProfile = ({ route, navigation }) => {
   React.useEffect(() => {
     load();
     if (route.params) {
-      route.params.changed = false;
+      navigation.setParams({changed: false});
     }
   }, [navigation, route]);
 
@@ -87,7 +86,7 @@ const YourProfile = ({ route, navigation }) => {
   }
 
   async function downloadUserData() {
-    if (Platform.OS == 'android') {
+    if (Platform.OS === 'android') {
       const response = await Global.Fetch(Global.format(URL.USER_USERDATA, uuid));
       const userData = JSON.stringify(response.data);
       const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
@@ -97,7 +96,7 @@ const YourProfile = ({ route, navigation }) => {
         await StorageAccessFramework.writeAsStringAsync(newFile, userData);
         Global.ShowToast(i18n.t('profile.download-userdata-success'));
       }
-    } else if (Platform.OS == 'ios') {
+    } else if (Platform.OS === 'ios') {
       const response = await Global.Fetch(Global.format(URL.USER_USERDATA, uuid));
       const userData = JSON.stringify(response.data);
       let fileName = FileSystem.documentDirectory + '/alovoa.json';
@@ -121,7 +120,7 @@ const YourProfile = ({ route, navigation }) => {
   }
 
   return (
-    <View style={{ height: height }}>
+    <View style={{ flex: 1, height: height }}>
       {loading &&
         <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />

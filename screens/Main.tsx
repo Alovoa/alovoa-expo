@@ -2,25 +2,28 @@ import React from "react";
 import { Search, Likes, Messages, YourProfile, Donate } from "../screens";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createMaterialBottomTabNavigator, MaterialBottomTabScreenProps } from 'react-native-paper/react-navigation';
 import * as I18N from "../i18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Text } from 'react-native-paper';
 import { NAVIGATION_BAR_HEIGHT } from "../assets/styles";
 import { useWindowDimensions } from "react-native";
+import { RootStackParamList, MaterialBottomTabNavigator } from "../types";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const i18n = I18N.getI18n()
 const ICON_SIZE = 26;
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab: MaterialBottomTabNavigator<RootStackParamList> = createMaterialBottomTabNavigator<RootStackParamList>();
 
 const SECOND_MS = 1000;
-const POLL_ALERT = 5 * SECOND_MS;
-const POLL_MESSAGE = 5 * SECOND_MS;
+const POLL_ALERT = 15 * SECOND_MS;
+const POLL_MESSAGE = 15 * SECOND_MS;
 
-const Main = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Main'>
+const Main = ({ route, navigation }: Props) => {
 
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
+  const insets = useSafeAreaInsets()
   
   let messageUpdateInterval: NodeJS.Timeout | undefined;
   let alertUpdateInterval: NodeJS.Timeout | undefined;
@@ -90,7 +93,7 @@ const Main = ({ route, navigation }) => {
   }
 
   return (
-    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH} barStyle={{height: NAVIGATION_BAR_HEIGHT}} style={{height: height}}>
+    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH} barStyle={{height: NAVIGATION_BAR_HEIGHT, marginBottom: insets.bottom}} style={{height: height}}>
       <Tab.Screen
         name={Global.SCREEN_YOURPROFILE}
         component={YourProfile}

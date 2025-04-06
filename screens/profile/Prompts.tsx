@@ -1,16 +1,17 @@
 import React from "react";
 import { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
-import { Modal, Portal, Text, Button, useTheme, IconButton, Surface, TextInput } from 'react-native-paper';
-import { Pressable, ScrollView, View, useWindowDimensions } from "react-native";
+import { Modal, Portal, Text, useTheme, IconButton, Surface, TextInput, MaterialBottomTabScreenProps } from 'react-native-paper';
+import { Pressable, View, useWindowDimensions } from "react-native";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
-import { UserDto, UserPrompt } from "../../types";
+import { RootStackParamList, UserDto, UserPrompt } from "../../types";
 import Alert from "../../components/Alert";
 import { useHeaderHeight } from '@react-navigation/elements';
 import VerticalView from "../../components/VerticalView";
 
-const Prompts = ({ route, navigation }) => {
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.Prompts'>
+const Prompts = ({ route }: Props) => {
 
   var user: UserDto = route.params.user;
 
@@ -67,7 +68,7 @@ const Prompts = ({ route, navigation }) => {
     setModalText(prompt.text);
     setModalTitle(i18n.t('profile.prompts.' + prompt.promptId));
     setModalMode(mode);
-    if (mode == ModalModeE.DELETE) {
+    if (mode === ModalModeE.DELETE) {
       setAlertVisible(true);
     } else {
       showModal();
@@ -105,10 +106,10 @@ const Prompts = ({ route, navigation }) => {
     let prompt = {} as UserPrompt;
     prompt.promptId = modalId;
     prompt.text = modalText;
-    if (modalMode == ModalModeE.ADD) {
+    if (modalMode === ModalModeE.ADD) {
       addPrompt(prompt);
     }
-    else if (modalMode == ModalModeE.EDIT) {
+    else if (modalMode === ModalModeE.EDIT) {
       updatePrompt(prompt);
     }
   }
