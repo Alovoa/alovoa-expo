@@ -1,0 +1,2 @@
+Update Expo to version 52
+Smaller UI fixes
