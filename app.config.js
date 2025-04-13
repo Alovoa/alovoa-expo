@@ -99,7 +99,6 @@ module.exports = {
       "versionCode": 37
     },
     "web": {
-      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
     "extra": {
@@ -110,9 +109,6 @@ module.exports = {
     "owner": EXPO_OWNER,
     "runtimeVersion": {
       "policy": "appVersion"
-    },
-    "experiments": {
-      "baseUrl": "/alovoa-expo"
     }
   }
 };
