@@ -480,17 +480,17 @@ const Profile = ({ route, navigation }: Props) => {
           <View style={{ marginTop: 16 }}>
             <Text style={style.title}>{i18n.t('profile.profile-page.additional')}</Text>
             <View style={{ paddingBottom: 4, display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-              <Tooltip title={i18n.t('profile.tooltip.donated')}>
+              <Tooltip title={i18n.t('profile.tooltip.donated')} leaveTouchDelay={0}>
                 <Chip icon="hand-coin" style={[styles.marginRight4, styles.marginBottom4]}>
                   <Text>{String(donated) + ' €'}</Text>
                 </Chip>
               </Tooltip>
-              <Tooltip title={i18n.t('profile.tooltip.blocks')}>
+              <Tooltip title={i18n.t('profile.tooltip.blocks')} leaveTouchDelay={0}>
                 <Chip icon="account-cancel" style={[styles.marginRight4, styles.marginBottom4]}>
                   <Text>{'# ' + blocks}</Text>
                 </Chip>
               </Tooltip>
-              <Tooltip title={i18n.t('profile.tooltip.reports')}>
+              <Tooltip title={i18n.t('profile.tooltip.reports')} leaveTouchDelay={0}>
                 <Chip icon="flag" style={[styles.marginRight4, styles.marginBottom4]}>
                   <Text>{'# ' + reports}</Text>
                 </Chip>

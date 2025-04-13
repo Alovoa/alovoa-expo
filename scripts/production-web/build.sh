@@ -2,7 +2,6 @@
 set -ex
 
 cd ../..
-git fetch
 git pull
 yarn
 oldpath=$(readlink dist)

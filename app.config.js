@@ -5,7 +5,7 @@ module.exports = {
   "expo": {
     "name": "Alovoa",
     "slug": "alovoa-expo",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "scheme": "alovoa",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -96,10 +96,9 @@ module.exports = {
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 37
+      "versionCode": 38
     },
     "web": {
-      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
     "extra": {
@@ -110,9 +109,6 @@ module.exports = {
     "owner": EXPO_OWNER,
     "runtimeVersion": {
       "policy": "appVersion"
-    },
-    "experiments": {
-      "baseUrl": "/alovoa-expo"
     }
   }
 };
