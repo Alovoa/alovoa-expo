@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Image, TouchableOpacity, StyleProp, TextStyle, StyleSheet, useWindowDimensions, Platform, Pressable } from "react-native";
-import { useTheme, Text, Chip, Button } from "react-native-paper";
+import { useTheme, Text, Chip, Button, Tooltip } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT } from "../types";
 import * as Global from "../Global";
@@ -13,7 +13,6 @@ import styles, {
   STATUS_BAR_HEIGHT
 } from "../assets/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import * as I18N from "../i18n";
 
 const CardItem = ({
@@ -159,17 +158,7 @@ const CardItem = ({
         <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onHideUser()}>
           <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
         </TouchableOpacity>
-        <Tooltip
-          contentStyle={{
-            backgroundColor: colors.surface
-          }}
-          topAdjustment={Platform.OS === 'android' ? -STATUS_BAR_HEIGHT : 0}
-          isVisible={showLikeTooltip}
-          content={<Text>{i18n.t('compliment.tooltip')}</Text>}
-          placement="top"
-          disableShadow={true}
-          onClose={() => setShowLikeTooltip(false)}
-        >
+        <Tooltip title={i18n.t('compliment.tooltip')}>
           <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={() => onLikeUser()}>
             <Icon name="heart" color={LIKE_ACTIONS} size={25} />
           </TouchableOpacity>
