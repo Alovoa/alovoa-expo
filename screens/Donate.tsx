@@ -7,7 +7,7 @@ import {
   useWindowDimensions
 } from "react-native";
 
-import { Text, Button, Menu, ActivityIndicator, MaterialBottomTabScreenProps } from "react-native-paper";
+import { Text, Button, Menu, ActivityIndicator, MaterialBottomTabScreenProps, useTheme } from "react-native-paper";
 import { CardItemDonate } from "../components";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
@@ -20,6 +20,8 @@ import VerticalView from "../components/VerticalView";
 type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Donate'>
 const Donate = ({route: _r, navigation: _n}: Props) => {
 
+  const { colors } = useTheme();
+  
   const FILTER_RECENT = 1;
   const FILTER_AMOUNT = 2;
   const topBarHeight = 62;
@@ -61,7 +63,7 @@ const Donate = ({route: _r, navigation: _n}: Props) => {
   }, []);
 
   return (
-    <View style={{ flex: 1, height: height }}>
+    <View style={{ flex: 1, height: height, backgroundColor: colors.background }}>
       {loading &&
         <View style={{ height: height, width: width, zIndex: 1, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
