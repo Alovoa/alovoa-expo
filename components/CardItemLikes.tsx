@@ -13,6 +13,7 @@ const CardItem = ({
 
   const { colors } = useTheme();
   const { width } = useWindowDimensions();
+  const iconSize = 28;
 
   // Custom styling
   const cardPadding = 30;
@@ -54,7 +55,7 @@ const CardItem = ({
         <View style={{ position: "absolute", top: 0, left: 0 }}>
           <IconButton
             icon="text"
-            size={32}
+            size={iconSize}
             mode="contained"
             onPress={() => {
               if (onMessagePressed) {
