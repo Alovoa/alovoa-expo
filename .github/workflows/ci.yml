@@ -20,7 +20,7 @@ jobs:
         cache: yarn
     - run: yarn install
     - run: yarn type-check
-    - run: yarn lint
+    - run: yarn lint --quiet
     - run: yarn doctor
       env:
         # todo: `yarn doctor` - look into warnings that were found when validating dependencies against React Native Directory (@likashefqet/react-native-image-zoom, etc...)
