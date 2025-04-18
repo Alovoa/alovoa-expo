@@ -119,7 +119,7 @@ const Likes = ({ navigation }: Props) => {
   }
 
   return (
-    <View style={{ flex: 1, height: height }}>
+    <View style={{ flex: 1, height: height, backgroundColor: colors.background }}>
       {loading &&
         <View style={{ zIndex: 1, height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />

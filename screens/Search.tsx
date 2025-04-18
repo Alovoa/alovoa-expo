@@ -6,7 +6,7 @@ import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
-import { ActivityIndicator, Text, Button, IconButton, MaterialBottomTabScreenProps } from "react-native-paper";
+import { ActivityIndicator, Text, Button, IconButton, MaterialBottomTabScreenProps, useTheme } from "react-native-paper";
 import CardItemSearch from "../components/CardItemSearch";
 import { useFocusEffect } from "@react-navigation/native";
 import ComplimentModal from "../components/ComplimentModal";
@@ -15,24 +15,15 @@ import styles, { WIDESCREEN_HORIZONTAL_MAX, STATUS_BAR_HEIGHT } from "../assets/
 
 const i18n = I18N.getI18n()
 
-// enum SORT {
-//   DISTANCE = 1,
-//   ACTIVE_DATE = 2,
-//   INTEREST = 3,
-//   DONATION_LATEST = 4,
-//   DONATION_TOTAL = 5,
-//   NEWEST_USER = 6
-// }
-
 type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Search'>
 const Search = ({ route, navigation }: Props) => {
+
+  const { colors } = useTheme();
 
   let swiper: any = React.useRef(null);
   const [refreshing] = React.useState(false); // todo: setRefreshing
   const [user, setUser] = React.useState<UserDto>();
   const [results, setResults] = useState(Array<UserDto>);
-  // const [sort, setSort] = useState(SORT.DONATION_LATEST);
-  // const [distance, setDistance] = React.useState(Global.DEFAULT_DISTANCE);
   const [stackKey, setStackKey] = React.useState(0);
   const [firstSearch, setFirstSearch] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
@@ -47,9 +38,6 @@ const Search = ({ route, navigation }: Props) => {
 
   const svgHeight = 150;
   const svgWidth = 200;
-
-  // const MIN_AGE = 16;
-  // const MAX_AGE = 100;
 
   const { height, width } = useWindowDimensions();
 
@@ -97,7 +85,7 @@ const Search = ({ route, navigation }: Props) => {
       let resultsCopy = [...results];
       resultsCopy.shift();
       setResults(resultsCopy);
-      navigation.setParams({changed: false});
+      navigation.setParams({ changed: false });
       if (resultsCopy.length === 0) {
         load();
       }
@@ -139,7 +127,7 @@ const Search = ({ route, navigation }: Props) => {
   }
 
   async function loadResults() {
-    
+
     let lat = latitude;
     let lon = longitude;
     let hasLocation = lat !== undefined && lon !== undefined;
@@ -153,7 +141,7 @@ const Search = ({ route, navigation }: Props) => {
           hasLocationPermission = true;
           try {
             let storedGpsTimeout = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_GPSTIMEOPUT);
-            let gpsTimeout = storedGpsTimeout ? 
+            let gpsTimeout = storedGpsTimeout ?
               hasLocation ? Math.max(LOCATION_TIMEOUT_SHORT, Number(storedGpsTimeout)) : Math.max(LOCATION_TIMEOUT_LONG, Number(storedGpsTimeout)) :
               hasLocation ? LOCATION_TIMEOUT_SHORT : LOCATION_TIMEOUT_LONG;
             location = await promiseWithTimeout(gpsTimeout, Location.getCurrentPositionAsync({}));
@@ -182,7 +170,7 @@ const Search = ({ route, navigation }: Props) => {
 
       let searchParams: SearchParams = {
         distance: storedParams?.distance ? storedParams.distance : Global.DEFAULT_DISTANCE,
-        showOutsideParameters:  storedParams?.showOutsideParameters === undefined ? true : storedParams.showOutsideParameters,
+        showOutsideParameters: storedParams?.showOutsideParameters === undefined ? true : storedParams.showOutsideParameters,
         sort: SearchParamsSortE.DEFAULT,
         latitude: lat,
         longitude: lon,
@@ -244,7 +232,7 @@ const Search = ({ route, navigation }: Props) => {
   async function onLikePressed() {
     if (index < results.length) {
       let likesMe = results[index].likesCurrentUser;
-      if(!likesMe) {
+      if (!likesMe) {
         setComplimentModalVisible(true);
         setIgnoreRightSwipe(true);
       } else {
@@ -262,9 +250,9 @@ const Search = ({ route, navigation }: Props) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ flex: 1 }}
+    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ flex: 1 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
-        
+
       {loading &&
         <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
           <ActivityIndicator animating={loading} size="large" />
@@ -272,18 +260,18 @@ const Search = ({ route, navigation }: Props) => {
       }
 
       <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 8, justifyContent: 'flex-end' }]}>
-        { width > WIDESCREEN_HORIZONTAL_MAX &&
+        {width > WIDESCREEN_HORIZONTAL_MAX &&
           <Button icon="cog" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
-                      style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={openSearchSetting}>
-                        {i18n.t('profile.screen.search')}</Button>
+            style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={openSearchSetting}>
+            {i18n.t('profile.screen.search')}</Button>
         }
-        { width <= WIDESCREEN_HORIZONTAL_MAX &&
-        <IconButton
-          icon="cog"
-          mode="contained"
-          size={20}
-          onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})}
-        />
+        {width <= WIDESCREEN_HORIZONTAL_MAX &&
+          <IconButton
+            icon="cog"
+            mode="contained"
+            size={20}
+            onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})}
+          />
         }
       </View>
 
