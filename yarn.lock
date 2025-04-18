@@ -7855,14 +7855,14 @@ react-native-paper-dates@0.22.34:
   dependencies:
     color "^4.2.3"
 
-react-native-paper@5.13.1:
-  version "5.13.1"
-  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.13.1.tgz#50217012b2d008397296c9bfb755d603a373f48b"
-  integrity sha512-8frKVKJ5JBd8WL1G3tpcYzOgK40kxkD/U+yLHGKNeLnD6v1Qc9W6DxWTHWN7lsX/DPYnhgvw1aKkYaPTmDj5pg==
+react-native-paper@5.13.3:
+  version "5.13.3"
+  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.13.3.tgz#72631d7b02abc32af465fb4b8e8ea90a733fae84"
+  integrity sha512-OyUonUq5JwVClSi21eh0WW4FYnjqEY/6VasOzFi1wit85FBYsL1nYSz1Gqoxsw5bA5yDDyms/gdSvrUcQMYjMw==
   dependencies:
     "@callstack/react-theme-provider" "^3.0.9"
     color "^3.1.2"
-    use-latest-callback "^0.1.5"
+    use-latest-callback "^0.2.3"
 
 react-native-reanimated@3.16.1:
   version "3.16.1"
@@ -9432,12 +9432,7 @@ url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
-use-latest-callback@^0.1.5:
-  version "0.1.11"
-  resolved "https://registry.yarnpkg.com/use-latest-callback/-/use-latest-callback-0.1.11.tgz#e073fcbba792cc95ac661d96bc13b6041956cfe1"
-  integrity sha512-8nhb73STSD/z3GTHklvNjL8F9wMOo0bj0AFnulpIYuFTm6aQlT3ZcNbXF2YurKImIY8+kpSFSDHZZyQmurGrhw==
-
-use-latest-callback@^0.2.1:
+use-latest-callback@^0.2.1, use-latest-callback@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/use-latest-callback/-/use-latest-callback-0.2.3.tgz#2d644d3063040b9bc2d4c55bb525a13ae3de9e16"
   integrity sha512-7vI3fBuyRcP91pazVboc4qu+6ZqM8izPWX9k7cRnT8hbD5svslcknsh3S9BUhaK11OmgTV4oWZZVSeQAiV53SQ==
