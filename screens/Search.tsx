@@ -59,6 +59,7 @@ const Search = ({ route, navigation }: Props) => {
   }, [results]);
 
   React.useEffect(() => {
+    Global.SetStorage(Global.STORAGE_SEARCH_REMOVE_TOP, Global.STORAGE_FALSE);
     load();
   }, []);
 
@@ -74,23 +75,24 @@ const Search = ({ route, navigation }: Props) => {
         if (value) {
           load();
           Global.SetStorage(Global.STORAGE_RELOAD_SEARCH, "");
+        } else {
+          Global.GetStorage(Global.STORAGE_SEARCH_REMOVE_TOP).then(value => {
+            if (value && value === Global.STORAGE_TRUE) {
+              swiper.current?.swipeTop();
+              let resultsCopy = [...results];
+              resultsCopy.shift();
+              setResults(resultsCopy);
+              navigation.setParams({ changed: false });
+              if (resultsCopy.length === 0) {
+                load();
+              }
+            }
+            Global.SetStorage(Global.STORAGE_SEARCH_REMOVE_TOP, Global.STORAGE_FALSE);
+          });
         }
       });
     }, [route, navigation])
   );
-
-  React.useEffect(() => {
-    if (route.params?.changed) {
-      swiper.current?.swipeTop();
-      let resultsCopy = [...results];
-      resultsCopy.shift();
-      setResults(resultsCopy);
-      navigation.setParams({ changed: false });
-      if (resultsCopy.length === 0) {
-        load();
-      }
-    }
-  }, [route.params?.changed]);
 
   async function load() {
     setLoaded(false);
