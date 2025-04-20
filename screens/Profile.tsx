@@ -194,27 +194,16 @@ const Profile = ({ route, navigation }: Props) => {
   }, [reportedUser]);
 
   React.useEffect(() => {
-    navigation.addListener('beforeRemove', (e: any) => {
-      if (Global.SCREEN_SEARCH === previousScreen) {
-        e.preventDefault();
-        goBack();
-      }
-    });
-  }, [previousScreen]);
-
-
-  React.useEffect(() => {
-    if (removeUser && Global.SCREEN_SEARCH === previousScreen) {
+    if (removeUser) {
       goBack();
     }
   }, [removeUser]);
 
   async function goBack() {
-    navigation.navigate('Main', {
-      name: 'Search',
-      params: { changed: removeUser },
-      merge: true,
-    });
+    if (Global.SCREEN_SEARCH === previousScreen) {
+      await Global.SetStorage(Global.STORAGE_SEARCH_REMOVE_TOP, removeUser ? Global.STORAGE_TRUE : Global.STORAGE_FALSE);
+    }
+    navigation.goBack();
   }
 
   async function loadPreviousScreen() {
@@ -267,7 +256,7 @@ const Profile = ({ route, navigation }: Props) => {
 
   function getMiscInfoText(map: Map<number, string>): string {
     let id = miscInfo.map(m => m.value).find(e => [...map.keys()].includes(e));
-    if(id !== undefined) {
+    if (id !== undefined) {
       const text = map.get(id);
       return text ? i18n.t(text) : Global.EMPTY_STRING;
     } else {
@@ -305,7 +294,7 @@ const Profile = ({ route, navigation }: Props) => {
       }
 
       <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 4 }]}>
-        <Pressable onPress={navigation.goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
+        <Pressable onPress={goBack}><MaterialCommunityIcons name="arrow-left" size={24} color={colors?.onSurface} style={{ padding: 8 }} /></Pressable>
         {!isSelf &&
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View>
@@ -340,13 +329,13 @@ const Profile = ({ route, navigation }: Props) => {
             {
               swiperImages?.map((image, index) => (
                 <View key={index}>
-                <ImageZoom
-                  uri={image}
-                  style={[style.image]}
-                  maxScale={3}
-                  doubleTapScale={2}
-                  isDoubleTapEnabled
-                />
+                  <ImageZoom
+                    uri={image}
+                    style={[style.image]}
+                    maxScale={3}
+                    doubleTapScale={2}
+                    isDoubleTapEnabled
+                  />
                 </View>
               ))
             }
@@ -418,7 +407,7 @@ const Profile = ({ route, navigation }: Props) => {
                 <Chip icon="gender-male-female" style={[styles.marginRight4, styles.marginBottom4]}>
                   <Text>{gender ? i18n.t(GenderNameMap.get(gender.id) || '') : ''}</Text>
                 </Chip>
-                { miscInfo.map(m => m.value) &&
+                {miscInfo.map(m => m.value) &&
                   <Chip icon="gender-male-female-variant" style={[styles.marginRight4, styles.marginBottom4]}>
                     <Text>{getMiscInfoText(MiscInfoGenderIdentityNameMap)}</Text>
                   </Chip>

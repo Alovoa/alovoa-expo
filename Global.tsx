@@ -36,6 +36,7 @@ export const STORAGE_LONGITUDE = "longitude"
 export const STORAGE_RELOAD_SEARCH = "reloadSearch";
 export const STORAGE_LOGIN_DATE = "loginDate";
 export const STORAGE_SEARCH_LIKE_TOOLTIP = "search.like-tooltip";
+export const STORAGE_SEARCH_REMOVE_TOP = "search.remove-top";
 
 export const STORAGE_SETTINGS_UNIT = "settings.unit"
 export const STORAGE_SETTINGS_COLOR_PRIMARY = "settings.color.primary"
