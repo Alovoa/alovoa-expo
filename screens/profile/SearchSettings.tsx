@@ -41,6 +41,7 @@ const SearchSettings = ({ route }: Props) => {
   const minDistance = 1;
   const [maxDistance] = React.useState(Global.MAX_DISTANCE); // todo: setMaxDistance
   const [distance, setDistance] = React.useState(Global.DEFAULT_DISTANCE);
+  const [distanceText, setDistanceText] = React.useState(distance);
   const [distanceUnit] = React.useState("km"); // todo: setDistanceUnit
   const [params, setParams] = React.useState<SearchParams>();
   const [showOutsideParams, setShowOutsideParams] = React.useState(true);
@@ -79,7 +80,7 @@ const SearchSettings = ({ route }: Props) => {
     let params: SearchParams = await getStoredParams();
     params.showOutsideParameters = newState;
     setParams(params);
-  } 
+  }
 
   async function getStoredParams(): Promise<SearchParams> {
     let paramsStorage = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_PARAMS);
@@ -105,17 +106,17 @@ const SearchSettings = ({ route }: Props) => {
   React.useEffect(() => {
     //TODO
     //let isIS = data.user.units == UnitsEnum.SI;
-    if(params?.distance) {
+    if (params?.distance) {
       setDistance(params.distance);
     }
-    if(params?.showOutsideParameters !== undefined) {
+    if (params?.showOutsideParameters !== undefined) {
       setShowOutsideParams(params.showOutsideParameters);
     }
     saveParams();
   }, [params]);
 
   async function saveParams() {
-    if(params) {
+    if (params) {
       await Global.SetStorage(Global.STORAGE_ADV_SEARCH_PARAMS, JSON.stringify(params));
       setChanged(true);
     }
@@ -171,7 +172,7 @@ const SearchSettings = ({ route }: Props) => {
       }
 
       <VerticalView onRefresh={load}>
-        
+
         <View style={{ gap: 12 }}>
 
           {!settingsIgnoreIntention &&
@@ -207,13 +208,13 @@ const SearchSettings = ({ route }: Props) => {
             </View>
           }
 
-          <Divider  style={{marginVertical: 16}} />
+          <Divider style={{ marginVertical: 16 }} />
 
-          <View style={{ gap: 4}}>
-            <Text>{i18n.t('profile.search.settings.distance')}</Text>
+          <View style={{ gap: 4 }}>
+            <Text>{i18n.t('profile.search.settings.distance') + ": " + distanceText + " " + distanceUnit}</Text>
             <View style={{ flexDirection: 'row', gap: 4 }}>
               <Slider
-                style={{flex: 1}}
+                style={{ flex: 1 }}
                 value={distance}
                 minimumValue={minDistance}
                 maximumValue={maxDistance}
@@ -222,20 +223,18 @@ const SearchSettings = ({ route }: Props) => {
                 thumbTintColor={colors.primary}
                 step={1}
                 onValueChange={(value: number) => {
-                  setDistance(value);
+                  setDistanceText(value);
                 }}
                 onSlidingComplete={(value: number) => {
                   onDistanceChanged(value);
                 }}
               />
-              <Text style={{marginLeft: 8}}>{distance}</Text>
-              <Text>{distanceUnit}</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: "row" }}>
-              <Checkbox.Item onPress={toggleShowOutsideParams}
-                status={showOutsideParams ? 'checked' : 'unchecked'} label={i18n.t('profile.search.settings.show-outside-parameters')} />
+            <Checkbox.Item onPress={toggleShowOutsideParams}
+              status={showOutsideParams ? 'checked' : 'unchecked'} label={i18n.t('profile.search.settings.show-outside-parameters')} />
           </View>
 
         </View>
