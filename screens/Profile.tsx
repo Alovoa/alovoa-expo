@@ -497,6 +497,9 @@ const Profile = ({ route, navigation }: Props) => {
               </Tooltip>
             </View>
             <View style={{ marginTop: 80 }}></View>
+            <View style={{ marginBottom: 80 }}>
+              <Text style={{ display: "flex", opacity: 0.5, justifyContent: "center" }}>{user.uuid}</Text>
+            </View>
           </View>
         </View>
 
