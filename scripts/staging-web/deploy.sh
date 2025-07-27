@@ -1,5 +1,4 @@
 #!/bin/bash
-set -ex
 
 CERT_PATH="/opt/alovoa/alovoa.pfx"
 PORT=10082
