@@ -5,7 +5,7 @@ module.exports = {
   "expo": {
     "name": "Alovoa",
     "slug": "alovoa-expo",
-    "version": "2.2.3",
+    "version": "2.2.4",
     "scheme": "alovoa",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -96,7 +96,7 @@ module.exports = {
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 41
+      "versionCode": 42
     },
     "web": {
       "favicon": "./assets/favicon.png"
