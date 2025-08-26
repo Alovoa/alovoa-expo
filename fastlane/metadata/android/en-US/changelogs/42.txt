@@ -1,0 +1,1 @@
+Fix screens being forced to reload after certain actions
