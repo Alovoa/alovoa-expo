@@ -200,10 +200,15 @@ const Profile = ({ route, navigation }: Props) => {
   }, [removeUser]);
 
   async function goBack() {
-    if (Global.SCREEN_SEARCH === previousScreen) {
-      await Global.SetStorage(Global.STORAGE_SEARCH_REMOVE_TOP, removeUser ? Global.STORAGE_TRUE : Global.STORAGE_FALSE);
-    }
-    navigation.goBack();
+    const routes = navigation.getState()?.routes;
+    const prevRoute = routes[routes.length - 2];
+    let prev: any = prevRoute.state?.history?.at(-1)
+    let key: string = prev ? prev["key"].split("-")[0] : Global.SCREEN_SEARCH;
+    navigation.navigate('Main', {
+      screen: key,
+      params: { changed: removeUser },
+      merge: true,
+    });
   }
 
   async function loadPreviousScreen() {
