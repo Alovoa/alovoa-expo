@@ -72,7 +72,7 @@ const Search = ({ route, navigation }: Props) => {
   useFocusEffect(
     React.useCallback(() => {
       Global.GetStorage(Global.STORAGE_RELOAD_SEARCH).then(value => {
-        if (value) {
+        if (value == Global.STORAGE_TRUE) {
           load();
           Global.SetStorage(Global.STORAGE_RELOAD_SEARCH, "");
         } else {

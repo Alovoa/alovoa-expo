@@ -111,7 +111,7 @@ const Pictures = ({ route, navigation }: Props) => {
 
   async function goBack() {
     navigation.navigate('Main', {
-      name: 'YourProfile',
+      screen: Global.SCREEN_YOURPROFILE,
       params: { changed: changedProfilePic },
       merge: true,
     });

@@ -89,6 +89,7 @@ const SearchSettings = ({ route }: Props) => {
   }
 
   React.useEffect(() => {
+    Global.SetStorage(Global.STORAGE_RELOAD_SEARCH, Global.STORAGE_FALSE);
     if (data) {
       loadUser(data);
     } else {
@@ -106,13 +107,18 @@ const SearchSettings = ({ route }: Props) => {
   React.useEffect(() => {
     //TODO
     //let isIS = data.user.units == UnitsEnum.SI;
-    if (params?.distance) {
+    let saveParam = false;
+    if(params?.distance) {
       setDistance(params.distance);
+      saveParam = true;
     }
     if (params?.showOutsideParameters !== undefined) {
       setShowOutsideParams(params.showOutsideParameters);
+      saveParam = true;
     }
-    saveParams();
+    if(saveParam) {
+      saveParams()
+    }
   }, [params]);
 
   async function saveParams() {

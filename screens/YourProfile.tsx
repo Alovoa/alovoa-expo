@@ -54,10 +54,14 @@ const YourProfile = ({ route, navigation }: Props) => {
 
   React.useEffect(() => {
     load();
-    if (route.params) {
+  }, []);
+
+  React.useEffect(() => {
+    if (route.params?.changed) {
       navigation.setParams({changed: false});
+      load();
     }
-  }, [navigation, route]);
+  }, [route.params?.changed]);
 
   async function load() {
     setLoading(true);
