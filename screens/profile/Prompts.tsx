@@ -13,7 +13,8 @@ import VerticalView from "../../components/VerticalView";
 type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.Prompts'>
 const Prompts = ({ route }: Props) => {
 
-  var user: UserDto = route.params.user;
+  var userPrompts = route.params.prompts;
+  var updatePrompts = route.params.updatePrompts;
 
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -53,11 +54,15 @@ const Prompts = ({ route }: Props) => {
   ]
 
   React.useEffect(() => {
-    if (user.prompts) {
-      let map = new Map(user.prompts.map((obj) => [obj.promptId, obj]));
+    if (userPrompts) {
+      let map = new Map(userPrompts.map((obj) => [obj.promptId, obj]));
       setPrompts(map);
     }
   }, []);
+
+  React.useEffect(() => {
+    updatePrompts([...prompts.values()]);
+  }, [prompts]);
 
   function calcMarginModal() {
     return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
@@ -79,7 +84,7 @@ const Prompts = ({ route }: Props) => {
     let copy = new Map(prompts);
     copy.set(prompt.promptId, prompt);
     setPrompts(copy);
-    user.prompts = Array.from(copy.values());
+    userPrompts = Array.from(copy.values());
     hideModal();
     await Global.Fetch(URL.USER_PROMPT_ADD, "post", prompt);
   }
@@ -88,7 +93,7 @@ const Prompts = ({ route }: Props) => {
     let copy = new Map(prompts);
     copy.set(prompt.promptId, prompt);
     setPrompts(copy);
-    user.prompts = Array.from(copy.values());
+    userPrompts = Array.from(copy.values());
     hideModal();
     await Global.Fetch(URL.USER_PROMPT_UPDATE, "post", prompt);
   }
@@ -97,7 +102,7 @@ const Prompts = ({ route }: Props) => {
     let copy = new Map(prompts);
     copy.delete(promptId);
     setPrompts(copy);
-    user.prompts = Array.from(copy.values());
+    userPrompts = Array.from(copy.values());
     setAlertVisible(false);
     await Global.Fetch(Global.format(URL.USER_PROMPT_DELETE, promptId), "post");
   }

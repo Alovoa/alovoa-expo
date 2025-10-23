@@ -7,12 +7,12 @@ import {
   useWindowDimensions,
   FlatList
 } from "react-native";
-import { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
+import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
 import { RootStackParamList, UserDto, UserImage, YourProfileResource } from "../../types";
-import { Button, MaterialBottomTabScreenProps } from 'react-native-paper';
+import { Badge, Button, MaterialBottomTabScreenProps } from 'react-native-paper';
 import Alert from "../../components/Alert";
 import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -90,7 +90,7 @@ const Pictures = ({ route, navigation }: Props) => {
       await Global.Fetch(URL.USER_UPDATE_PROFILE_PICTURE, 'post', bodyFormData, 'multipart/form-data');
       load();
       setChangedProfilePic(true);
-      navigation.setParams({changed: false});
+      navigation.setParams({ changed: false });
     }
   }
 
@@ -136,7 +136,12 @@ const Pictures = ({ route, navigation }: Props) => {
         zIndex: 1, position: 'absolute', marginBottom: 16,
         marginRight: 16, width: '100%', right: 0, bottom: 0
       }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <View style={{
+          position: 'absolute',
+          bottom: 10,
+          right: 10
+        }}>
+          <Badge size={12} visible={images.length === 0} style={styles.badge} />
           {images.length < MAX_IMAGES &&
             <Button icon="image-plus" mode="elevated" onPress={() => addImage()}>
               {i18n.t('profile.photos.add')}
