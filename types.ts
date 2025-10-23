@@ -25,7 +25,8 @@ export type RootStackParamList = {
     user: UserDto;
   };
   'Profile.Prompts': {
-    user: UserDto;
+    prompts: UserPrompt[];
+    updatePrompts: (prompts: UserPrompt[]) => void
   };
   [Global.SCREEN_PROFILE_PROFILESETTINGS]: {
     data: YourProfileResource;

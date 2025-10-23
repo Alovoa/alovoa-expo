@@ -3,9 +3,9 @@ import {
   View,
   useWindowDimensions
 } from "react-native";
-import { Text, TextInput, Button, HelperText, ActivityIndicator, MaterialBottomTabScreenProps } from "react-native-paper";
+import { Text, TextInput, Button, HelperText, ActivityIndicator, MaterialBottomTabScreenProps, Badge } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT } from "../../assets/styles";
-import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE, MiscInfoNameMap, IntentionNameMap, RootStackParamList } from "../../types";
+import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE, MiscInfoNameMap, IntentionNameMap, RootStackParamList, UserPrompt } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -14,19 +14,20 @@ import SelectModal from "../../components/SelectModal";
 import InterestModal from "../../components/InterestModal";
 import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
+import { useFocusEffect } from "@react-navigation/native";
 
 const i18n = I18N.getI18n();
 const DESCRIPTION_HELPERTEXT_LIMIT = 200;
 
 type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.ProfileSettings'>
-const ProfileSettings = ({ route }: Props) => {
+const ProfileSettings = ({ route, navigation }: Props) => {
 
   var data: YourProfileResource = route.params.data;
-  var user: UserDto = data.user;
 
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
 
+  const [user, setUser] = React.useState<UserDto>(data.user);
   const [description, setDescription] = React.useState("");
   const [interests, setInterests] = React.useState(Array<UserInterest>);
   const [miscInfoTobacco, setMiscInfoTobacco] = React.useState(Array<number>);
@@ -40,6 +41,7 @@ const ProfileSettings = ({ route }: Props) => {
   const [miscInfoGenderIdentity, setMiscInfoGenderIdentity] = React.useState(Array<number>);
   const [miscInfoPolitics, setMiscInfoPolitics] = React.useState(Array<number>);
   const [miscInfoReligion, setMiscInfoReligion] = React.useState(Array<number>);
+  const [prompts, setPrompts] = React.useState(Array<UserPrompt>);
 
   const [loading, setLoading] = React.useState(false);
   const [settingsIgnoreIntention, setSettingsIgnoreIntention] = React.useState(false);
@@ -82,6 +84,7 @@ const ProfileSettings = ({ route }: Props) => {
     setMiscInfoReligion(user.miscInfos.filter(item => miscInfoReligionList.includes(item.value)).map(item => item.value));
     setIntention(user.intention.id)
     setShowIntention(data.showIntention);
+    setPrompts(user.prompts);
     setSettingsIgnoreIntention(data["settings.ignoreIntention"]);
     setLoading(false);
   }
@@ -92,6 +95,22 @@ const ProfileSettings = ({ route }: Props) => {
     }
   }, []);
 
+  React.useEffect(() => {
+    loadUser(user);
+  }, [user]);
+
+  /*
+  useFocusEffect(
+    React.useCallback(() => {
+      // This runs when the screen is focused (e.g., after goBack())
+      console.log('Screen is focused again');
+      console.log(user)
+      if (user) {
+        loadUser(user);
+      }
+    }, [])
+  );
+*/
   async function updateIntention(num: number) {
     await Global.Fetch(Global.format(URL.USER_UPDATE_INTENTION, String(num)), 'post');
     Global.ShowToast(i18n.t('profile.intention-toast'));
@@ -116,7 +135,7 @@ const ProfileSettings = ({ route }: Props) => {
   }
 
   async function navigatePrompts() {
-    Global.navigate("Profile.Prompts", false, { user: user });
+    Global.navigate("Profile.Prompts", false, { prompts: prompts, updatePrompts: setPrompts });
   }
 
   return (
@@ -173,6 +192,7 @@ const ProfileSettings = ({ route }: Props) => {
 
           <View>
             <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.prompts.title')}</Text>
+            <Badge size={12} visible={prompts.length === 0} style={styles.badge} />
             <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
               style={{ alignSelf: 'stretch' }} onPress={navigatePrompts}>{i18n.t('profile.prompts.subtitle')}</Button>
           </View>

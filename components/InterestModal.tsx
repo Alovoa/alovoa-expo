@@ -1,10 +1,10 @@
 import React from "react";
 import { InterestModalT, UserInterest, } from "../types";
-import { Modal, Portal, Text, Button, useTheme, IconButton } from 'react-native-paper';
+import { Modal, Portal, Text, Button, useTheme, IconButton, Badge } from 'react-native-paper';
 import { View, useWindowDimensions } from "react-native";
 import * as Global from "../Global";
 import * as I18N from "../i18n";
-import { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
+import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import InterestView from "./InterestView";
 
 const InterestModal = ({ user }: InterestModalT) => {
@@ -53,6 +53,7 @@ const InterestModal = ({ user }: InterestModalT) => {
         </Modal>
       </Portal>
       <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.onboarding.interests')}</Text>
+      <Badge size={12} visible={interests === undefined || interests.length === 0} style={styles.badge} />
       <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
         style={{ alignSelf: 'stretch' }} onPress={showModal}>{buttonText}</Button>
     </View>
