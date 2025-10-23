@@ -1288,7 +1288,7 @@
     node-forge "^1.2.1"
     nullthrows "^1.1.1"
 
-"@expo/config-plugins@9.0.16", "@expo/config-plugins@~9.0.15":
+"@expo/config-plugins@~9.0.15":
   version "9.0.16"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-9.0.16.tgz#f018d418ec24d80866ccd3f4277f7502a641cb5d"
   integrity sha512-AnJzmFB7ztM0JZBn+Ut6BQYC2WeGDzfIhBZVOIPMQbdBqvwJ7TmFEsGTGSxdwU/VqJaJK2sWxyt1zbWkpIYCEA==
@@ -1554,7 +1554,7 @@
   dependencies:
     cross-spawn "^7.0.3"
 
-"@expo/vector-icons@14.0.4", "@expo/vector-icons@^14.0.0":
+"@expo/vector-icons@14.0.4", "@expo/vector-icons@~14.0.4":
   version "14.0.4"
   resolved "https://registry.yarnpkg.com/@expo/vector-icons/-/vector-icons-14.0.4.tgz#fa9d4351877312badf91a806598b2f0bab16039a"
   integrity sha512-+yKshcbpDfbV4zoXOgHxCwh7lkE9VVTT5T03OUlBsqfze1PLy6Hi4jp1vSb1GVbY6eskvMIivGVc9SKzIv0oEQ==
@@ -1844,10 +1844,10 @@
   dependencies:
     merge-options "^3.0.4"
 
-"@react-native-community/slider@^4.5.7":
-  version "4.5.7"
-  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.5.7.tgz#523178779f302aa162b0d57211842f81522e8ece"
-  integrity sha512-WMDDZjNF2Bd8M8TrSqKf5xhM9ikdfCHtSPur64Ow3bB/OVrKufUQZ59NmYdNZNeGPvcHHTsafuYTY8zfZfbchQ==
+"@react-native-community/slider@4.5.5":
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.5.5.tgz#d70fc5870477760033769bbd6625d57e7d7678b2"
+  integrity sha512-x2N415pg4ZxIltArOKczPwn7JEYh+1OxQ4+hTnafomnMsqs65HZuEWcX+Ch8c5r8V83DiunuQUf5hWGWlw8hQQ==
 
 "@react-native/assets-registry@0.76.9":
   version "0.76.9"
@@ -4624,10 +4624,10 @@ expo-asset@~11.0.5:
     invariant "^2.2.4"
     md5-file "^3.2.3"
 
-expo-build-properties@0.13.2:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.13.2.tgz#c9cef927fc8236551d940da4fd8dc1332e2d052d"
-  integrity sha512-ML2GwBgn0Bo4yPgnSGb7h3XVxCigS/KFdid3xPC2HldEioTP3UewB/2Qa4WBsam9Fb7lAuRyVHAfRoA3swpDzg==
+expo-build-properties@~0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.13.3.tgz#6b96d0486148fca6e74e62c7c502c0a9990931aa"
+  integrity sha512-gw7AYP+YF50Gr912BedelRDTfR4GnUEn9p5s25g4nv0hTJGWpBZdCYR5/Oi2rmCHJXxBqhPjxzV7JRh72fntLg==
   dependencies:
     ajv "^8.11.0"
     semver "^7.6.0"
@@ -4893,10 +4893,10 @@ expo-web-browser@14.0.2:
   resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-14.0.2.tgz#52d53947c42fdfb225e8c230418ffe508bcf98a7"
   integrity sha512-Hncv2yojhTpHbP6SGWARBFdl7P6wBHc1O8IKaNsH0a/IEakq887o1eRhLxZ5IwztPQyRDhpqHdgJ+BjWolOnwA==
 
-expo@52.0.46:
-  version "52.0.46"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-52.0.46.tgz#3869b87b585da67406a8216539d12a16d736f16e"
-  integrity sha512-JG89IVZLp7DWzgeiQb+0N43kWOF1DUm3esBvAS9cPFWZsM9x8nDXgbvtREcycDPA6E+yJsSC+086CigeUY6sVA==
+expo@~52.0.47:
+  version "52.0.47"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-52.0.47.tgz#b2a25bdcbd2059094396750e896946d2e2e61753"
+  integrity sha512-Mkvl7Qi2k+V3FdNRUD+yDj8GqU4IiYulLfl36BmSZs8lh/kCYPhTiyBLiEGPfz7d25QKbPWG727ESozbkbvatw==
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/cli" "0.22.26"
@@ -4904,7 +4904,7 @@ expo@52.0.46:
     "@expo/config-plugins" "~9.0.17"
     "@expo/fingerprint" "0.11.11"
     "@expo/metro-config" "0.19.12"
-    "@expo/vector-icons" "^14.0.0"
+    "@expo/vector-icons" "~14.0.4"
     babel-preset-expo "~12.0.11"
     expo-asset "~11.0.5"
     expo-constants "~17.0.8"
