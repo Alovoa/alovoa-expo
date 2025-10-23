@@ -7,7 +7,7 @@ import {
   Linking,
   Pressable
 } from "react-native";
-import { Text, Button, Card, ActivityIndicator, IconButton, MaterialBottomTabScreenProps } from "react-native-paper";
+import { Text, Button, Card, ActivityIndicator, IconButton, MaterialBottomTabScreenProps, Badge } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import { YourProfileResource, UserDto, RootStackParamList } from "../types";
 import * as I18N from "../i18n";
@@ -42,6 +42,8 @@ const YourProfile = ({ route, navigation }: Props) => {
   const [numReferred, setNumReferred] = React.useState(MAX_REFERRALS);
   const [uuid, setUuid] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [incompleteProfile, setIncompleteProfile] = React.useState(false);
+  const [imcompletePhotos, setImcompletePhotos] = React.useState(false);
 
   const alertButtons = [
     {
@@ -58,7 +60,7 @@ const YourProfile = ({ route, navigation }: Props) => {
 
   React.useEffect(() => {
     if (route.params?.changed) {
-      navigation.setParams({changed: false});
+      navigation.setParams({ changed: false });
       load();
     }
   }, [route.params?.changed]);
@@ -76,6 +78,13 @@ const YourProfile = ({ route, navigation }: Props) => {
     setAge(data.user.age);
     setNumReferred(data.user.numberReferred);
     setLoading(false);
+
+    if(data.user.interests.length === 0 || data.user.prompts.length == 0) {
+      setIncompleteProfile(true);
+    }
+    if(data.user.images.length == 0) {
+      setImcompletePhotos(true);
+    }
   }
 
   async function copyReferralCodeToClipboard() {
@@ -148,15 +157,17 @@ const YourProfile = ({ route, navigation }: Props) => {
             </Card>
           </View>
 
+          <Badge size={12} visible={imcompletePhotos} style={styles.badge} />
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_PICTURES, false, { user: user })}>{i18n.t('profile.screen.pictures')}</Button>
+          <Badge size={12} visible={incompleteProfile} style={styles.badge} />
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_PROFILESETTINGS, false, { data: data })}>{i18n.t('profile.screen.profile')}</Button>
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, { data: data })}>{i18n.t('profile.screen.search')}</Button>
           <Button icon="chevron-right" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
             style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={() => Global.navigate(Global.SCREEN_PROFILE_SETTINGS, false, { data: data })}>{i18n.t('profile.screen.settings')}</Button>
-          
+
           {numReferred < MAX_REFERRALS && <View style={{ flexDirection: "row", marginBottom: 8 }}>
             <Button icon="content-copy" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between', flexGrow: 1 }}
               style={{ flexGrow: 1 }} onPress={copyReferralCodeToClipboard}>

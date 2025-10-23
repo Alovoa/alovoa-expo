@@ -55,6 +55,10 @@ export default StyleSheet.create({
   padding12: {
     padding: 12
   },
+  badge: {
+    marginBottom: -8,
+    zIndex: 10
+  },
   // COMPONENT - CARD ITEM
   containerCardItem: {
     borderRadius: 8,

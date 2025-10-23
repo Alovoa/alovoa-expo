@@ -7,7 +7,7 @@ import * as I18N from "../i18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NAVIGATION_BAR_HEIGHT } from "../assets/styles";
 import { useWindowDimensions } from "react-native";
-import { RootStackParamList, MaterialBottomTabNavigator } from "../types";
+import { RootStackParamList, MaterialBottomTabNavigator, YourProfileResource, UserDto } from "../types";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const i18n = I18N.getI18n()
@@ -31,6 +31,7 @@ const Main = ({ route, navigation }: Props) => {
 
   const [newAlert, setNewAlert] = React.useState(false);
   const [newMessage, setHasNewMessage] = React.useState(false);
+  const [incompleteProfile, setIncompleteProfile] = React.useState(false);
 
   async function updateNewAlert() {
     let url;
@@ -43,6 +44,20 @@ const Main = ({ route, navigation }: Props) => {
     let response = await Global.Fetch(url);
     let data: boolean = response.data;
     setNewAlert(data);
+  }
+
+  async function checkProfileIncomplete() {
+    let response = await Global.Fetch(URL.API_RESOURCE_YOUR_PROFILE);
+    let data: YourProfileResource = response.data;
+    let user: UserDto = data.user;
+
+    if(user.interests.length === 0) {
+      setIncompleteProfile(true);
+    } else if(user.images.length == 0) {
+      setIncompleteProfile(true);
+    } else if(user.prompts.length == 0) {
+      setIncompleteProfile(true);
+    }
   }
 
   async function updateNewMessage() {
@@ -62,6 +77,7 @@ const Main = ({ route, navigation }: Props) => {
 
     updateNewAlert();
     updateNewMessage();
+    checkProfileIncomplete();
 
     Global.SetStorage(Global.STORAGE_SCREEN, Global.SCREEN_SEARCH);
   }, []);
@@ -103,6 +119,7 @@ const Main = ({ route, navigation }: Props) => {
           },
         }}
         options={{
+          tabBarBadge: incompleteProfile,
           tabBarLabel: i18n.t('navigation.profile'),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={ICON_SIZE} />
