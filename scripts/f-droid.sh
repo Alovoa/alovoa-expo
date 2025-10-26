@@ -3,8 +3,8 @@ set -ex
 
 #create android project with some adjustments
 
-# set flag for f-droid (hide donation button)
-perl -pi -e 's/FLAG_FDROID = false/FLAG_FDROID = true/' Global.tsx
+# install dependencies
+yarn install
 
 # small android adjustments
 ./scripts/android.sh
