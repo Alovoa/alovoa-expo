@@ -1,0 +1,1 @@
+Show notification dots in profile if it's incomplete
