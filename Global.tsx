@@ -14,8 +14,7 @@ import FormData from "form-data";
 import { Buffer } from "buffer";
 import { cloneDeep } from 'lodash';
 
-export const FLAG_FDROID = false; // updated by f-droid.sh
-export const FLAG_ENABLE_DONATION = !FLAG_FDROID;
+export const FLAG_ENABLE_DONATION = true;
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>()
 export const INDEX_LOGIN = "0"
