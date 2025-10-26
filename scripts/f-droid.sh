@@ -3,9 +3,6 @@ set -ex
 
 #create android project with some adjustments
 
-# install dependencies
-yarn install
-
 # small android adjustments
 ./scripts/android.sh
 
