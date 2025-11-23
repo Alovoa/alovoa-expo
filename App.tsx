@@ -6,7 +6,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from "@react-navigation/native";
 import * as Global from "./Global";
 import { createStackNavigator } from "@react-navigation/stack";
-import { LogBox, useColorScheme } from 'react-native';
+import { Animated, LogBox, useColorScheme } from 'react-native';
 import { MD3LightTheme, MD3DarkTheme, Provider as PaperProvider, configureFonts } from 'react-native-paper';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
@@ -20,7 +20,6 @@ import {
   useFonts, Montserrat_400Regular, Montserrat_500Medium, Montserrat_500Medium_Italic,
   Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_700Bold_Italic
 } from '@expo-google-fonts/montserrat';
-import { TransitionSpec } from "@react-navigation/stack/src/types";
 import { enGB, en, de, registerTranslation } from 'react-native-paper-dates'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RootStackParamList } from "./types";
@@ -33,6 +32,22 @@ const Stack = createStackNavigator<RootStackParamList>();
 registerTranslation('en-GB', enGB);
 registerTranslation('en', en);
 registerTranslation('de', de);
+
+export type TransitionSpec =
+  | {
+    animation: 'spring';
+    config: Omit<
+      Animated.SpringAnimationConfig,
+      'toValue' | keyof Animated.AnimationConfig
+    >;
+  }
+  | {
+    animation: 'timing';
+    config: Omit<
+      Animated.TimingAnimationConfig,
+      'toValue' | keyof Animated.AnimationConfig
+    >;
+  };
 
 export default function App() {
 

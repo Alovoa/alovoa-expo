@@ -14,8 +14,7 @@ import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as WebBrowser from 'expo-web-browser';
-import * as FileSystem from 'expo-file-system';
-import { StorageAccessFramework } from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy'
 import * as Sharing from 'expo-sharing';
 import VerticalView from "../components/VerticalView";
 import * as Clipboard from 'expo-clipboard';
@@ -103,11 +102,11 @@ const YourProfile = ({ route, navigation }: Props) => {
     if (Platform.OS === 'android') {
       const response = await Global.Fetch(Global.format(URL.USER_USERDATA, uuid));
       const userData = JSON.stringify(response.data);
-      const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+      const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
       if (permissions.granted) {
         const uri = permissions.directoryUri;
-        let newFile = await StorageAccessFramework.createFileAsync(uri, userdataFileName, MIME_JSON);
-        await StorageAccessFramework.writeAsStringAsync(newFile, userData);
+        let newFile = await FileSystem.StorageAccessFramework.createFileAsync(uri, userdataFileName, MIME_JSON);
+        await FileSystem.StorageAccessFramework.writeAsStringAsync(newFile, userData);
         Global.ShowToast(i18n.t('profile.download-userdata-success'));
       }
     } else if (Platform.OS === 'ios') {
