@@ -7,7 +7,7 @@ import {
   useWindowDimensions
 } from "react-native";
 
-import { Text, Button, Menu, ActivityIndicator, MaterialBottomTabScreenProps, useTheme } from "react-native-paper";
+import { Text, Button, Menu, ActivityIndicator, useTheme } from "react-native-paper";
 import { CardItemDonate } from "../components";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
@@ -16,8 +16,10 @@ import * as URL from "../URL";
 import { DonationDtoListModel, DonationDto, RootStackParamList } from "../types";
 import * as Linking from 'expo-linking';
 import VerticalView from "../components/VerticalView";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Donate'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Donate'>
+
 const Donate = ({route: _r, navigation: _n}: Props) => {
 
   const { colors } = useTheme();

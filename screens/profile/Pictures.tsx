@@ -12,12 +12,14 @@ import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
 import { RootStackParamList, UserDto, UserImage, YourProfileResource } from "../../types";
-import { Badge, Button, MaterialBottomTabScreenProps } from 'react-native-paper';
+import { Badge, Button } from 'react-native-paper';
 import Alert from "../../components/Alert";
 import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.Pictures'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Profile.Pictures'>
+
 const Pictures = ({ route, navigation }: Props) => {
 
   var user: UserDto = route.params.user;

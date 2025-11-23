@@ -8,7 +8,7 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip, MaterialBottomTabScreenProps } from "react-native-paper";
+import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip } from "react-native-paper";
 import { UserInterest, UnitsEnum, ProfileResource, UserDto, UserPrompt, GenderNameMap, Gender, IntentionNameMap, UserMiscInfo, MiscInfoRelationshipNameMap, MiscInfoKidsNameMap, MiscInfoDrugsOtherNameMap, MiscInfoDrugsAlcoholNameMap, MiscInfoDrugsTobaccoNameMap, MiscInfoDrugsCannabisNameMap, MiscInfoRelationshipTypeNameMap, MiscInfoFamilyNameMap, MiscInfoPoliticsNameMap, MiscInfoReligionNameMap, MiscInfoGenderIdentityNameMap, RootStackParamList } from "../types";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
@@ -27,6 +27,9 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import VerticalView from "../components/VerticalView";
 import ComplimentModal from "../components/ComplimentModal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+
+type Props = BottomTabScreenProps<RootStackParamList, 'Profile'>
 
 const i18n = I18N.getI18n()
 
@@ -42,7 +45,6 @@ enum IntentionText {
   SEX = "sex"
 }
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile'>
 const Profile = ({ route, navigation }: Props) => {
 
   const MIN_AGE = 16

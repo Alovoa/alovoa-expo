@@ -6,16 +6,18 @@ import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as Location from 'expo-location';
-import { ActivityIndicator, Text, Button, IconButton, MaterialBottomTabScreenProps, useTheme } from "react-native-paper";
+import { ActivityIndicator, Text, Button, IconButton, useTheme } from "react-native-paper";
 import CardItemSearch from "../components/CardItemSearch";
 import { useFocusEffect } from "@react-navigation/native";
 import ComplimentModal from "../components/ComplimentModal";
 import SearchEmpty from "../assets/images/search-empty.svg";
 import styles, { WIDESCREEN_HORIZONTAL_MAX, STATUS_BAR_HEIGHT } from "../assets/styles";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 const i18n = I18N.getI18n()
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Search'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Search'>
+
 const Search = ({ route, navigation }: Props) => {
 
   const { colors } = useTheme();

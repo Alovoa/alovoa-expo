@@ -19,9 +19,10 @@ import { AlertsResource, UserDto, UnitsEnum, UserUsersResource, LikeResultT, Roo
 import LikesEmpty from "../assets/images/likes-empty.svg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import VerticalView from "../components/VerticalView";
-import type { MaterialBottomTabScreenProps } from 'react-native-paper';
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Likes'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Likes'>
+
 const Likes = ({ navigation }: Props) => {
 
   const { colors } = useTheme();

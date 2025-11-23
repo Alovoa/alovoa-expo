@@ -1,7 +1,5 @@
 import * as Global from "./Global"; 
 
-export { MaterialBottomTabNavigator } from './types-hack';
-
 export type RootStackParamList = {
   [Global.SCREEN_CHAT]: undefined;
   [Global.SCREEN_DONATE]: undefined;
