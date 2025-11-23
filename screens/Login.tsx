@@ -1,6 +1,6 @@
 import React from "react";
-import { useTheme, Text, Button, Dialog, TextInput, IconButton, Divider } from "react-native-paper";
-import { View, Platform, StyleSheet, Image, useWindowDimensions, Keyboard } from "react-native";
+import { useTheme, Text, Button, Dialog, TextInput, IconButton, Divider, Portal } from "react-native-paper";
+import { View, Platform, StyleSheet, Image, useWindowDimensions, Keyboard, KeyboardAvoidingView } from "react-native";
 import { Buffer } from "buffer";
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
@@ -12,6 +12,7 @@ import VerticalView from "../components/VerticalView";
 import { STATUS_BAR_HEIGHT } from "../assets/styles";
 import splash from '../assets/splash.png';
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import Modal from "react-native-modal";
 
 const i18n = I18N.getI18n()
 const APP_URL = Linking.createURL("");
@@ -20,7 +21,7 @@ const IMAGE_HEADER = "data:image/webp;base64,";
 WebBrowser.maybeCompleteAuthSession();
 
 type Props = BottomTabScreenProps<RootStackParamList, 'Login'>
-const Login = ({route: _r, navigation: _n}: Props) => {
+const Login = ({ route: _r, navigation: _n }: Props) => {
 
   const { colors } = useTheme();
 
@@ -34,7 +35,7 @@ const Login = ({route: _r, navigation: _n}: Props) => {
 
   //vars for dialog
   const [visible, setVisible] = React.useState(false);
-  const showDialog = () => {setVisible(true); Keyboard.dismiss()};
+  const showDialog = () => { setVisible(true); Keyboard.dismiss() };
   const hideDialog = () => setVisible(false);
   const { height } = useWindowDimensions();
 
@@ -168,7 +169,7 @@ const Login = ({route: _r, navigation: _n}: Props) => {
   });
 
   return (
-    <VerticalView style={{ paddingTop: STATUS_BAR_HEIGHT }}>
+    <VerticalView style={{ paddingTop: STATUS_BAR_HEIGHT, display: "flex" }}>
       {!loading &&
         <View >
           <View style={{ minHeight: height }}>
@@ -214,9 +215,9 @@ const Login = ({route: _r, navigation: _n}: Props) => {
               }}
             ><Text style={style.buttonText}>{i18n.t('auth.facebook')}</Text></Button>
 
-            <Divider style={{margin: height >= 800? 48 : 18}} />
+            <Divider style={{ margin: height >= 800 ? 48 : 18 }} />
             <View>
-              <Button style={{backgroundColor: "#757575"}} onPress={() => {
+              <Button style={{ backgroundColor: "#757575" }} onPress={() => {
                 Global.navigate("Register", false, { registerEmail: true });
               }}><Text style={style.buttonText}>{i18n.t('register-email')}</Text></Button>
             </View>
@@ -243,33 +244,53 @@ const Login = ({route: _r, navigation: _n}: Props) => {
         </View>
       }
 
-      <Dialog visible={visible} onDismiss={hideDialog}>
-        <Dialog.Title>{i18n.t('captcha.title')}</Dialog.Title>
-        <Dialog.Content>
+
+      <Modal
+        isVisible={visible}
+        onBackdropPress={hideDialog}
+        avoidKeyboard
+        useNativeDriver
+        style={{ justifyContent: 'center', margin: 0 }}>
+
+        <View style={{
+          backgroundColor: colors.elevation.level2,
+          padding: 24,
+          borderRadius: 8
+        }}>
+          <View>
+            <IconButton
+              style={{ alignSelf: 'flex-end' }}
+              icon="close"
+              size={20}
+              onPress={hideDialog}
+            />
+          </View>
+          <Text>{i18n.t('captcha.title')}</Text>
           <Image resizeMode='contain' style={{ height: 100 }} source={{ uri: captchaImage }} />
           <TextInput
             mode="outlined"
+            autoCorrect={false}
             label={i18n.t('captcha.placeholder')}
             value={captchaText}
             onChangeText={text => setCaptchaText(text)}
             onSubmitEditing={loginEmail}
           />
-        </Dialog.Content>
-        <Dialog.Actions>
-          <IconButton
-            icon="reload"
-            iconColor={colors.primary}
-            size={20}
-            onPress={() => { emailSignInPress() }}
-          />
-          <IconButton
-            icon="login-variant"
-            iconColor={colors.primary}
-            size={20}
-            onPress={() => { loginEmail() }}
-          />
-        </Dialog.Actions>
-      </Dialog>
+          <View style={{ flexDirection: 'row', marginTop: 8, justifyContent: 'flex-end' }}>
+            <IconButton
+              icon="reload"
+              iconColor={colors.primary}
+              size={20}
+              onPress={() => { emailSignInPress() }}
+            />
+            <IconButton
+              icon="login-variant"
+              iconColor={colors.primary}
+              size={20}
+              onPress={() => { loginEmail() }}
+            />
+          </View>
+        </View>
+      </Modal>
     </VerticalView>
   )
 };
