@@ -19,7 +19,7 @@ type Props = BottomTabScreenProps<RootStackParamList, 'Profile.Settings'>
 
 const Settings = ({ route }: Props) => {
 
-  var data: YourProfileResource = route.params.data;
+  const data: YourProfileResource = route.params.data;
 
   const { height } = useWindowDimensions();
   const [units, setUnits] = React.useState(UnitsEnum.SI);
