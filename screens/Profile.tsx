@@ -152,7 +152,7 @@ const Profile = ({ route, navigation }: Props) => {
     setPreferredGenders(user.preferedGenders);
     setInterests(Global.shuffleArray(user.interests));
     setPrompts(Global.shuffleArray(user.prompts));
-    var swiperImageData: string[] = [];
+    const swiperImageData: string[] = [];
     swiperImageData.push(user.profilePicture);
     if (user.images) {
       Global.shuffleArray(user.images).forEach(function (image) {
