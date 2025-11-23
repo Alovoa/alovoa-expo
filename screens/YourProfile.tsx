@@ -7,7 +7,7 @@ import {
   Linking,
   Pressable
 } from "react-native";
-import { Text, Button, Card, ActivityIndicator, IconButton, MaterialBottomTabScreenProps, Badge } from "react-native-paper";
+import { Text, Button, Card, ActivityIndicator, IconButton, Badge } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import { YourProfileResource, UserDto, RootStackParamList } from "../types";
 import * as I18N from "../i18n";
@@ -20,13 +20,14 @@ import * as Sharing from 'expo-sharing';
 import VerticalView from "../components/VerticalView";
 import * as Clipboard from 'expo-clipboard';
 import Alert from "../components/Alert";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 const userdataFileName = "userdata-alovoa.json"
 const MIME_JSON = "application/json";
 
 const i18n = I18N.getI18n()
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'YourProfile'>
+type Props = BottomTabScreenProps<RootStackParamList, 'YourProfile'>
 const YourProfile = ({ route, navigation }: Props) => {
 
   const { height, width } = useWindowDimensions();

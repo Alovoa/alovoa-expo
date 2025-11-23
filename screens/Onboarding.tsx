@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
-import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText, FAB, MaterialBottomTabScreenProps } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, RadioButton, IconButton, Checkbox, HelperText, FAB } from "react-native-paper";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import SvgProfilePic from "../assets/onboarding/profilepic.svg";
 import SvgDescription from "../assets/onboarding/description.svg";
@@ -22,12 +22,13 @@ import * as URL from "../URL";
 import * as Global from "../Global";
 import { IntentionEnum, RootStackParamList, UserInterest, UserOnboarding, UserOnboardingResource } from "../types";
 import InterestView from "../components/InterestView";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 const IMAGE_HEADER = "data:image/jpeg;base64,";
-
 const i18n = I18N.getI18n()
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Onboarding'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Onboarding'>
+
 const Onboarding = ({route: _r, navigation: _n}: Props) => {
 
   const GENDER_MALE = 1;
