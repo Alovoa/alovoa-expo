@@ -129,6 +129,7 @@ const Main = ({ route, navigation }: Props) => {
           minWidth: 8,
           height: 8,
         },
+        headerShown: false,
         tabBarActiveTintColor: colors.primary,
       }}>
       <Tab.Screen

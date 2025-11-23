@@ -6,7 +6,6 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
 import { debounce } from "lodash";
-import Alert from "./Alert";
 import { ScrollView } from "react-native-gesture-handler";
 
 const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: InterestModalT) => {
@@ -15,36 +14,10 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
   const { height } = useWindowDimensions();
 
   const [interests, setInterests] = React.useState(data);
-  const [alertVisible, setAlertVisible] = React.useState(false);
   const [interest, setInterest] = React.useState("");
   const [interestDebounce, setInterestDebounce] = React.useState("");
   // const [loading, setLoading] = React.useState(false);
   const [suggestionsList, setSuggestionsList] = React.useState(Array<UserInterestDto>);
-  const [interestToBeDeleted, setInterestToBeDeleted] = React.useState<UserInterest | null>();
-
-  const alertButtons = [
-    {
-      text: i18n.t('cancel'),
-      onPress: () => { setAlertVisible(false); },
-    },
-    {
-      text: i18n.t('ok'),
-      onPress: async () => {
-        if (interestToBeDeleted) {
-          if (user) await Global.Fetch(Global.format(URL.USER_REMOVE_INTEREST, interestToBeDeleted.text), 'post');
-          let interestsCopy = [...interests];
-          interestsCopy.forEach((item, index) => {
-            if (item === interestToBeDeleted) interestsCopy.splice(index, 1);
-          });
-          setInterests(interestsCopy);
-          if (setInterestsExternal) setInterestsExternal(interestsCopy);
-          setInterestToBeDeleted(null);
-          setAlertVisible(false);
-          if (user) user.interests = interestsCopy;
-        }
-      }
-    }
-  ]
 
   const interestRef = React.useRef(interestDebounce);
   const debounceInterestHandler = React.useCallback(debounce(getSuggestions, 700), []);
@@ -71,12 +44,6 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
       updateButtonText(interests);
     }
   }, [interests]);
-
-  React.useEffect(() => {
-    if (interestToBeDeleted) {
-      setAlertVisible(true);
-    }
-  }, [interestToBeDeleted]);
 
   async function getSuggestions() {
     let q = interestRef.current;
@@ -111,8 +78,13 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
     }
   }
 
-  async function removeInterest(interest: UserInterest) {
-    setInterestToBeDeleted(interest);
+  async function removeInterest(interest: UserInterest, index: number) {
+    if (user) await Global.Fetch(Global.format(URL.USER_REMOVE_INTEREST, interest.text), 'post');
+    let interestsCopy = [...interests];
+    interestsCopy.splice(index, 1);
+    setInterests(interestsCopy);
+    if (setInterestsExternal) setInterestsExternal(interestsCopy);
+    if (user) user.interests = interestsCopy;
   }
 
   function cleanInterest(txt: string) {
@@ -146,17 +118,16 @@ const InterestModal = ({ user, data, updateButtonText, setInterestsExternal }: I
           ))
         }
         {suggestionsList?.length === 0 && <Text style={{ marginBottom: 8 }}>{i18n.t('profile.onboarding.interests')}</Text>}
-        <ScrollView style={{maxHeight: height > 500 ? 240 : 80}}>
+        <ScrollView style={{ maxHeight: height > 500 ? 240 : 80 }}>
           {suggestionsList?.length === 0 &&
             interests.map((item, index) => (
-              <Button key={index} onPress={() => { removeInterest(item) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
+              <Button key={index} onPress={() => { removeInterest(item, index) }} icon="close-circle" mode="elevated" style={{ marginRight: 8, marginBottom: 8 }}>
                 <Text>{item.text}</Text>
               </Button>
             ))
           }
         </ScrollView>
       </View>
-      <Alert visible={alertVisible} setVisible={setAlertVisible} message={Global.format(i18n.t('profile.interest-alert-delete'), interestToBeDeleted?.text)} buttons={alertButtons} />
     </View>
   );
 };

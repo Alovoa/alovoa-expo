@@ -100,18 +100,6 @@ const ProfileSettings = ({ route, navigation }: Props) => {
     loadUser(user);
   }, [user]);
 
-  /*
-  useFocusEffect(
-    React.useCallback(() => {
-      // This runs when the screen is focused (e.g., after goBack())
-      console.log('Screen is focused again');
-      console.log(user)
-      if (user) {
-        loadUser(user);
-      }
-    }, [])
-  );
-*/
   async function updateIntention(num: number) {
     await Global.Fetch(Global.format(URL.USER_UPDATE_INTENTION, String(num)), 'post');
     Global.ShowToast(i18n.t('profile.intention-toast'));
@@ -148,9 +136,6 @@ const ProfileSettings = ({ route, navigation }: Props) => {
       }
 
       <VerticalView style={{ padding: 0, gap: 12, paddingBottom: 48, paddingTop: STATUS_BAR_HEIGHT + 24 }}>
-        <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -54 }}>
-          <Button mode="contained-tonal" style={{ width: 240 }} onPress={() => Global.navigate("Profile.Pictures", false, { user: user })}>{i18n.t('profile.photos.manage')}</Button>
-        </View>
 
         <View style={[styles.containerProfileItem, { marginTop: 20, gap: 12 }]}>
           <View style={{marginBottom: 8}}>
