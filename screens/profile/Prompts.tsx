@@ -1,6 +1,6 @@
 import React from "react";
 import { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
-import { Modal, Portal, Text, useTheme, IconButton, Surface, TextInput } from 'react-native-paper';
+import { Portal, Text, useTheme, IconButton, Surface, TextInput } from 'react-native-paper';
 import { Pressable, View, useWindowDimensions } from "react-native";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
@@ -10,6 +10,7 @@ import Alert from "../../components/Alert";
 import { useHeaderHeight } from '@react-navigation/elements';
 import VerticalView from "../../components/VerticalView";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import Modal from "react-native-modal";
 
 type Props = BottomTabScreenProps<RootStackParamList, 'Profile.Prompts'>
 
@@ -123,8 +124,13 @@ const Prompts = ({ route }: Props) => {
 
   return (
     <View style={{ height: height - headerHeight }}>
-      <Portal>
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} >
+      <Modal isVisible={visible}
+        onDismiss={hideModal}
+        onBackdropPress={hideModal}
+        avoidKeyboard
+        useNativeDriver
+      >
+        <View style={containerStyle}>
           <Text style={{ fontSize: 20, marginBottom: 8, paddingHorizontal: 16 }}>{modalTitle}</Text>
           <TextInput style={{ backgroundColor: colors.elevation.level3 }}
             defaultValue={modalText}
@@ -145,8 +151,8 @@ const Prompts = ({ route }: Props) => {
               onPress={modalOkPressed}
             />
           </View>
-        </Modal>
-      </Portal>
+        </View>
+      </Modal>
       <VerticalView>
         {[...prompts].map(([id, prompt]) => (
           <Surface key={id} style={{ padding: 24, borderRadius: 12, marginBottom: 8 }}>

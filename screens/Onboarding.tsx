@@ -209,7 +209,7 @@ const Onboarding = ({route: _r, navigation: _n}: Props) => {
           <Text style={styles.warning}>{i18n.t('profile.onboarding.profile-picture-subtitle')}</Text>
         </View>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={[styles.view]}>
           <SvgDescription style={styles.svg} height={svgHeight} width={svgWidth} />
           <Text style={styles.title}>{i18n.t('profile.onboarding.description')}</Text>

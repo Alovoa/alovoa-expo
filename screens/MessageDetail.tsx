@@ -6,9 +6,12 @@ import {
   Keyboard,
   Image,
   ScrollView,
-  useWindowDimensions
+  useWindowDimensions,
+  Platform
 } from "react-native";
-import { TextInput, Card } from "react-native-paper";
+import {
+  TextInput, Card, MaterialBottomTabScreenProps
+} from "react-native-paper";
 import { useTheme, Text } from "react-native-paper";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Autolink, { CustomMatcher } from 'react-native-autolink';
@@ -17,14 +20,12 @@ import styles from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 const i18n = I18N.getI18n()
 const SECOND_MS = 1000;
 const POLL_MESSAGE = 5 * SECOND_MS;
 
-type Props = BottomTabScreenProps<RootStackParamList, 'MessageDetail'>
-
+type Props = MaterialBottomTabScreenProps<RootStackParamList, 'MessageDetail'>
 const MessageDetail = ({ route, navigation }: Props) => {
 
   const { conversation } = route.params;
@@ -112,9 +113,9 @@ const MessageDetail = ({ route, navigation }: Props) => {
   }
 
   return (
-    <View style={[styles.containerMessages, { paddingHorizontal: 0, display: 'flex', maxHeight: height, marginBottom: insets.bottom }]}>
+    <View style={[styles.containerMessages, { paddingHorizontal: 0, display: 'flex', marginBottom: insets.bottom }]}>
       <ScrollView
-        style={{ padding: 8, flexGrow: 1 }}
+        style={{ padding: 8, flex: 1 }}
         ref={scrollViewRef}
         contentContainerStyle={{ paddingBottom: 8 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
@@ -128,7 +129,8 @@ const MessageDetail = ({ route, navigation }: Props) => {
           ))
         }
       </ScrollView>
-      <KeyboardAvoidingView>
+      <KeyboardAvoidingView keyboardVerticalOffset={-45}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TextInput
           style={{ backgroundColor: colors.surface, height: 52 }}
           value={text}

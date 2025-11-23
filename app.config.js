@@ -12,9 +12,11 @@ module.exports = {
     "icon": "./assets/icon.png",
     "newArchEnabled": true,
     "plugins": [
+      "expo-font",
+      "expo-secure-store",
+      "expo-web-browser",
       [
-        "expo-image-picker",
-        {
+        "expo-image-picker", {
           "photosPermission": "The app accesses your photos to let you share them with other users."
         }
       ],
@@ -91,6 +93,7 @@ module.exports = {
         }
       ],
       "package": "com.alovoa.expo",
+      "softwareKeyboardLayoutMode": "pan",
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",

@@ -254,74 +254,76 @@ const Search = ({ route, navigation }: Props) => {
   }
 
   return (
-    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ flex: 1 }}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
-
-      {loading &&
-        <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
-          <ActivityIndicator animating={loading} size="large" />
-        </View>
-      }
-
-      <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 8, justifyContent: 'flex-end' }]}>
-        {width > WIDESCREEN_HORIZONTAL_MAX &&
-          <Button icon="cog" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
-            style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={openSearchSetting}>
-            {i18n.t('profile.screen.search')}</Button>
+    <View style={{ flex: 1, backgroundColor: 'red' }}>
+      <ScrollView style={{ backgroundColor: colors.background, flex: 1, }} contentContainerStyle={{ flexGrow: 1 }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
+          
+        {loading &&
+          <View style={{ height: height, width: width, justifyContent: 'center', alignItems: 'center', position: "absolute" }} >
+            <ActivityIndicator animating={loading} size="large" />
+          </View>
         }
-        {width <= WIDESCREEN_HORIZONTAL_MAX &&
-          <IconButton
-            icon="cog"
-            mode="contained"
-            size={20}
-            onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})}
-          />
-        }
-      </View>
 
-      <View style={{ flex: 1 }}>
-        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <CardStack
-            ref={swiper}
-            style={{
-              justifyContent: 'flex-end',
-              alignItems: 'center'
-            }}
-            verticalSwipe={false}
-            renderNoMoreCards={() => null}
-            key={stackKey}
-            onSwipedLeft={hideUser}
-            onSwipedRight={onSwipeRight}>
-            {
-              results.map((card, index) => (
-                <Card key={card.uuid}>
-                  <CardItemSearch
-                    user={card}
-                    unitsImperial={user?.units === UnitsEnum.IMPERIAL}
-                    swiper={swiper}
-                    onLikePressed={onLikePressed}
-                    index={index}
-                  />
-                </Card>
-              ))
-            }
-          </CardStack>
+        <View style={[styles.top, { zIndex: 1, position: "absolute", width: '100%', marginHorizontal: 0, paddingTop: STATUS_BAR_HEIGHT + 8, justifyContent: 'flex-end' }]}>
+          {width > WIDESCREEN_HORIZONTAL_MAX &&
+            <Button icon="cog" mode="elevated" contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
+              style={{ alignSelf: 'stretch', marginBottom: 8 }} onPress={openSearchSetting}>
+              {i18n.t('profile.screen.search')}</Button>
+          }
+          {width <= WIDESCREEN_HORIZONTAL_MAX &&
+            <IconButton
+              icon="cog"
+              mode="contained"
+              size={20}
+              onPress={() => Global.navigate(Global.SCREEN_PROFILE_SEARCHSETTINGS, false, {})}
+            />
+          }
         </View>
-      </View>
-      {results && results.length === 0 && loaded &&
-        <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-          <View style={[styles.center, { maxWidth: WIDESCREEN_HORIZONTAL_MAX }]}>
-            <SearchEmpty height={svgHeight} width={svgWidth}></SearchEmpty>
-            <Text style={{ fontSize: 20, paddingHorizontal: 48, marginTop: 8 }}>{i18n.t('search-empty.title')}</Text>
-            <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48, textAlign: 'center' }}>{i18n.t('search-empty.subtitle')}</Text>
-            <Button onPress={openSearchSetting}>{i18n.t('search-empty.button')}</Button>
+
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+            <CardStack
+              ref={swiper}
+              style={{
+                justifyContent: 'flex-end',
+                alignItems: 'center'
+              }}
+              verticalSwipe={false}
+              renderNoMoreCards={() => null}
+              key={stackKey}
+              onSwipedLeft={hideUser}
+              onSwipedRight={onSwipeRight}>
+              {
+                results.map((card, index) => (
+                  <Card key={card.uuid}>
+                    <CardItemSearch
+                      user={card}
+                      unitsImperial={user?.units === UnitsEnum.IMPERIAL}
+                      swiper={swiper}
+                      onLikePressed={onLikePressed}
+                      index={index}
+                    />
+                  </Card>
+                ))
+              }
+            </CardStack>
           </View>
         </View>
-      }
+        {results && results.length === 0 && loaded &&
+          <View style={{ height: height, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={[styles.center, { maxWidth: WIDESCREEN_HORIZONTAL_MAX }]}>
+              <SearchEmpty height={svgHeight} width={svgWidth}></SearchEmpty>
+              <Text style={{ fontSize: 20, paddingHorizontal: 48, marginTop: 8 }}>{i18n.t('search-empty.title')}</Text>
+              <Text style={{ marginTop: 24, opacity: 0.6, paddingHorizontal: 48, textAlign: 'center' }}>{i18n.t('search-empty.subtitle')}</Text>
+              <Button onPress={openSearchSetting}>{i18n.t('search-empty.button')}</Button>
+            </View>
+          </View>
+        }
+      </ScrollView>
       <ComplimentModal profilePicture={currentUser ? currentUser.profilePicture : ''} name={currentUser ? currentUser.firstName : ''}
         age={currentUser ? currentUser.age : 0} onSend={likeUser} visible={complimentModalVisible} setVisible={setComplimentModalVisible}
         onDismiss={onComplimentModalDismiss}></ComplimentModal>
-    </ScrollView>
+    </View>
   );
 };
 
