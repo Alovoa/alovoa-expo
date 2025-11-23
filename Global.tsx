@@ -221,7 +221,7 @@ export async function pickImage(): Promise<string | null | undefined> {
 export function buildFormData(imageData: string): FormData {
 
   const mimeType = mime.getType(imageData);
-  var bodyFormData = new FormData();
+  const bodyFormData = new FormData();
   if (Platform.OS !== "web") {
     bodyFormData.append('file', {
       name: imageData.split("/").pop(),

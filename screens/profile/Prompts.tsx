@@ -16,8 +16,8 @@ type Props = BottomTabScreenProps<RootStackParamList, 'Profile.Prompts'>
 
 const Prompts = ({ route }: Props) => {
 
-  var userPrompts = route.params.prompts;
-  var updatePrompts = route.params.updatePrompts;
+  const routeUserPrompts = route.params.prompts;
+  const updatePrompts = route.params.updatePrompts;
 
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -35,6 +35,7 @@ const Prompts = ({ route }: Props) => {
   }
 
   const [visible, setVisible] = React.useState(false);
+  const [userPrompts, setUserPrompts] = React.useState(routeUserPrompts);
   const [prompts, setPrompts] = React.useState<Map<number, UserPrompt>>(new Map());
   const [modalId, setModalId] = React.useState(0);
   const [modalText, setModalText] = React.useState("");
@@ -61,7 +62,7 @@ const Prompts = ({ route }: Props) => {
       let map = new Map(userPrompts.map((obj) => [obj.promptId, obj]));
       setPrompts(map);
     }
-  }, []);
+  }, [userPrompts]);
 
   React.useEffect(() => {
     updatePrompts([...prompts.values()]);
@@ -87,7 +88,7 @@ const Prompts = ({ route }: Props) => {
     let copy = new Map(prompts);
     copy.set(prompt.promptId, prompt);
     setPrompts(copy);
-    userPrompts = Array.from(copy.values());
+    setUserPrompts(Array.from(copy.values()));
     hideModal();
     await Global.Fetch(URL.USER_PROMPT_ADD, "post", prompt);
   }
@@ -96,7 +97,7 @@ const Prompts = ({ route }: Props) => {
     let copy = new Map(prompts);
     copy.set(prompt.promptId, prompt);
     setPrompts(copy);
-    userPrompts = Array.from(copy.values());
+    setUserPrompts(Array.from(copy.values()));
     hideModal();
     await Global.Fetch(URL.USER_PROMPT_UPDATE, "post", prompt);
   }
@@ -105,7 +106,7 @@ const Prompts = ({ route }: Props) => {
     let copy = new Map(prompts);
     copy.delete(promptId);
     setPrompts(copy);
-    userPrompts = Array.from(copy.values());
+    setUserPrompts(Array.from(copy.values()));
     setAlertVisible(false);
     await Global.Fetch(Global.format(URL.USER_PROMPT_DELETE, promptId), "post");
   }

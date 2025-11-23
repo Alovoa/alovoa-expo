@@ -50,12 +50,13 @@ const Profile = ({ route, navigation }: Props) => {
   const MIN_AGE = 16
   const MAX_AGE = 100
 
-  var user: UserDto = route.params.user;
-  var uuid = route.params.uuid;
+  const routeUser: UserDto = route.params.user;
+  const uuid = route.params.uuid;
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
   const insets = useSafeAreaInsets()
 
+  const [user, setUser] = React.useState(routeUser);
   const [compatible, setCompatible] = React.useState(false);
   const [isSelf, setIsSelf] = React.useState(false);
   const [liked, setLiked] = React.useState(false);
@@ -120,7 +121,7 @@ const Profile = ({ route, navigation }: Props) => {
     if (fetch || !user) {
       let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, user == null ? uuid : user.uuid));
       let data: ProfileResource = response.data;
-      user = data.user;
+      setUser(data.user);
       setYou(data.currUserDto);
       setIsLegal(data.isLegal);
     }

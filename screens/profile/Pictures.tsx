@@ -22,7 +22,7 @@ type Props = BottomTabScreenProps<RootStackParamList, 'Profile.Pictures'>
 
 const Pictures = ({ route, navigation }: Props) => {
 
-  var user: UserDto = route.params.user;
+  const user: UserDto = route.params.user;
 
   const { height } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
