@@ -8,9 +8,7 @@ import {
   ScrollView,
   useWindowDimensions
 } from "react-native";
-import {
-  TextInput, Card, MaterialBottomTabScreenProps
-} from "react-native-paper";
+import { TextInput, Card } from "react-native-paper";
 import { useTheme, Text } from "react-native-paper";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Autolink, { CustomMatcher } from 'react-native-autolink';
@@ -19,12 +17,14 @@ import styles from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 const i18n = I18N.getI18n()
 const SECOND_MS = 1000;
 const POLL_MESSAGE = 5 * SECOND_MS;
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'MessageDetail'>
+type Props = BottomTabScreenProps<RootStackParamList, 'MessageDetail'>
+
 const MessageDetail = ({ route, navigation }: Props) => {
 
   const { conversation } = route.params;
@@ -116,13 +116,13 @@ const MessageDetail = ({ route, navigation }: Props) => {
       <ScrollView
         style={{ padding: 8, flexGrow: 1 }}
         ref={scrollViewRef}
-        contentContainerStyle={{paddingBottom: 8}}
+        contentContainerStyle={{ paddingBottom: 8 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={load} />}>
         {
           results.map((item, index) => (
             <View key={index} style={[{ flex: 1 }, item.from ? { alignItems: 'flex-start' } : { alignItems: 'flex-end' }]}>
               <Card style={[styleChat, item.from ? {} : styleYourChat]} >
-                {<Autolink style={[item.from ? {} : styleYourChat]} text={item.content} linkStyle={{textDecorationLine: 'underline'}} email={false} phone={true} matchers={[PhoneMatcher]} component={Text}></Autolink>}
+                {<Autolink style={[item.from ? {} : styleYourChat]} text={item.content} linkStyle={{ textDecorationLine: 'underline' }} email={false} phone={true} matchers={[PhoneMatcher]} component={Text}></Autolink>}
               </Card>
             </View>
           ))

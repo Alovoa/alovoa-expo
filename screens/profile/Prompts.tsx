@@ -1,6 +1,6 @@
 import React from "react";
 import { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
-import { Modal, Portal, Text, useTheme, IconButton, Surface, TextInput, MaterialBottomTabScreenProps } from 'react-native-paper';
+import { Modal, Portal, Text, useTheme, IconButton, Surface, TextInput } from 'react-native-paper';
 import { Pressable, View, useWindowDimensions } from "react-native";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
@@ -9,8 +9,10 @@ import { RootStackParamList, UserDto, UserPrompt } from "../../types";
 import Alert from "../../components/Alert";
 import { useHeaderHeight } from '@react-navigation/elements';
 import VerticalView from "../../components/VerticalView";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.Prompts'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Profile.Prompts'>
+
 const Prompts = ({ route }: Props) => {
 
   var userPrompts = route.params.prompts;

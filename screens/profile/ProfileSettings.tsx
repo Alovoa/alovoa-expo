@@ -3,7 +3,7 @@ import {
   View,
   useWindowDimensions
 } from "react-native";
-import { Text, TextInput, Button, HelperText, ActivityIndicator, MaterialBottomTabScreenProps, Badge } from "react-native-paper";
+import { Text, TextInput, Button, HelperText, ActivityIndicator, Badge } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT } from "../../assets/styles";
 import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE, MiscInfoNameMap, IntentionNameMap, RootStackParamList, UserPrompt } from "../../types";
 import * as I18N from "../../i18n";
@@ -14,12 +14,13 @@ import SelectModal from "../../components/SelectModal";
 import InterestModal from "../../components/InterestModal";
 import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useFocusEffect } from "@react-navigation/native";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 const i18n = I18N.getI18n();
 const DESCRIPTION_HELPERTEXT_LIMIT = 200;
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.ProfileSettings'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Profile.ProfileSettings'>
+
 const ProfileSettings = ({ route, navigation }: Props) => {
 
   var data: YourProfileResource = route.params.data;

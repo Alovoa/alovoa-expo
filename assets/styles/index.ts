@@ -56,7 +56,8 @@ export default StyleSheet.create({
     padding: 12
   },
   badge: {
-    marginBottom: -8,
+    backgroundColor: 'red',
+    marginBottom: -12,
     zIndex: 10
   },
   // COMPONENT - CARD ITEM

@@ -3,7 +3,7 @@ import {
   View,
   useWindowDimensions
 } from "react-native";
-import { ActivityIndicator, Checkbox, Divider, MaterialBottomTabScreenProps, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Checkbox, Divider, Text, useTheme } from "react-native-paper";
 import { YourProfileResource, GenderEnum, UserIntention, Gender, IntentionE, SearchParams, IntentionNameMap, GenderNameMap, RootStackParamList } from "../../types";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
@@ -14,12 +14,14 @@ import VerticalView from "../../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
 import Slider from "@react-native-community/slider";
 import { GRAY } from "../../assets/styles";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 const i18n = I18N.getI18n()
 const MIN_AGE = 18;
 const MAX_AGE = 100;
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.SearchSettings'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Profile.SearchSettings'>
+
 const SearchSettings = ({ route }: Props) => {
 
   //var data: YourProfileResource = route.params.data;

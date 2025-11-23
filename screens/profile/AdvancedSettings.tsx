@@ -9,12 +9,13 @@ import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
 import VerticalView from "../../components/VerticalView";
-import { IconButton, MaterialBottomTabScreenProps, TextInput, useTheme } from "react-native-paper";
-
+import { IconButton, TextInput, useTheme } from "react-native-paper";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 const i18n = I18N.getI18n();
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Profile.AdvancedSettings'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Profile.AdvancedSettings'>
+
 const AdvancedSettings = ({ route }: Props) => {
 
   var user: UserDto = route.params.user;
@@ -31,7 +32,6 @@ const AdvancedSettings = ({ route }: Props) => {
   const [longitude, setLongitude] = React.useState("0.00");
   const [gpsTimeout, setGpsTimeout] = React.useState(defaultTimeoutString);
   const [hideThreshold, setHideThreshold] = React.useState(defaultHideThresholdString);
-  
 
   async function load() { 
     setLatitude(String(user.locationLatitude));

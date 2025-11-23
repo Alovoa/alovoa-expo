@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, Text, Button, TextInput, RadioButton, HelperText, ActivityIndicator, MaterialBottomTabScreenProps } from "react-native-paper";
+import { useTheme, Text, Button, TextInput, RadioButton, HelperText, ActivityIndicator } from "react-native-paper";
 import { View, StyleSheet, useWindowDimensions, ScrollView } from "react-native";
 import * as WebBrowser from 'expo-web-browser';
 import * as Global from "../Global";
@@ -13,6 +13,7 @@ import { ValidRangeType } from "react-native-paper-dates/lib/typescript/Date/Cal
 import Alert from "../components/Alert";
 import VerticalView from "../components/VerticalView";
 import { useHeaderHeight } from '@react-navigation/elements';
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 const i18n = I18N.getI18n()
 
@@ -25,7 +26,8 @@ function subtractYears(years: number): Date {
   return date;
 }
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Register'>
+type Props = BottomTabScreenProps<RootStackParamList, 'Register'>
+
 const Register = ({ route, navigation }: Props) => {
 
   const { height, width } = useWindowDimensions();

@@ -2,29 +2,37 @@ import React from "react";
 import { Search, Likes, Messages, YourProfile, Donate } from "../screens";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { createMaterialBottomTabNavigator, MaterialBottomTabScreenProps } from 'react-native-paper/react-navigation';
 import * as I18N from "../i18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NAVIGATION_BAR_HEIGHT } from "../assets/styles";
 import { useWindowDimensions } from "react-native";
-import { RootStackParamList, MaterialBottomTabNavigator, YourProfileResource, UserDto } from "../types";
+import { RootStackParamList, YourProfileResource, UserDto } from "../types";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { useTheme } from "react-native-paper";
 
+const Tab = createBottomTabNavigator();
 const i18n = I18N.getI18n()
 const ICON_SIZE = 26;
-
-const Tab: MaterialBottomTabNavigator<RootStackParamList> = createMaterialBottomTabNavigator<RootStackParamList>();
-
 const SECOND_MS = 1000;
 const POLL_ALERT = 15 * SECOND_MS;
 const POLL_MESSAGE = 15 * SECOND_MS;
+const MOBILE_WIDTH = 768; //from react navigation
 
-type Props = MaterialBottomTabScreenProps<RootStackParamList, 'Main'>
+const YourProfileScreen: React.FC<any> = (props) => <YourProfile {...props} />;
+const MessagesScreen: React.FC<any> = (props) => <Messages {...props} />;
+const SearchScreen: React.FC<any> = (props) => <Search {...props} />;
+const LikesScreen: React.FC<any> = (props) => <Likes {...props} />;
+const DonateScreen: React.FC<any> = (props) => <Donate {...props} />;
+
+type Props = BottomTabScreenProps<RootStackParamList, 'Main'>
 const Main = ({ route, navigation }: Props) => {
 
-  const { height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets()
-  
+  const { colors } = useTheme();
+
   let messageUpdateInterval: NodeJS.Timeout | undefined;
   let alertUpdateInterval: NodeJS.Timeout | undefined;
   let langIso: string | undefined;
@@ -51,11 +59,11 @@ const Main = ({ route, navigation }: Props) => {
     let data: YourProfileResource = response.data;
     let user: UserDto = data.user;
 
-    if(user.interests.length === 0) {
+    if (user.interests.length === 0) {
       setIncompleteProfile(true);
-    } else if(user.images.length == 0) {
+    } else if (user.images.length == 0) {
       setIncompleteProfile(true);
-    } else if(user.prompts.length == 0) {
+    } else if (user.prompts.length == 0) {
       setIncompleteProfile(true);
     }
   }
@@ -109,17 +117,30 @@ const Main = ({ route, navigation }: Props) => {
   }
 
   return (
-    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH} barStyle={{height: NAVIGATION_BAR_HEIGHT, marginBottom: insets.bottom}} style={{height: height}}>
+    <Tab.Navigator initialRouteName={Global.SCREEN_SEARCH}
+      screenOptions={{
+        tabBarStyle: {
+          height: NAVIGATION_BAR_HEIGHT,
+          marginBottom: insets.bottom,
+          paddingTop: width >= MOBILE_WIDTH ? 0 : 12, //react navigation workaround, no way to center icons while having a custom height
+        },
+        tabBarBadgeStyle: {
+          backgroundColor: 'red',
+          minWidth: 8,
+          height: 8,
+        },
+        tabBarActiveTintColor: colors.primary,
+      }}>
       <Tab.Screen
         name={Global.SCREEN_YOURPROFILE}
-        component={YourProfile}
+        component={YourProfileScreen}
         listeners={{
           tabPress: e => {
             saveScreen(e.target);
           },
         }}
         options={{
-          tabBarBadge: incompleteProfile,
+          tabBarBadge: incompleteProfile ? "" : undefined,
           tabBarLabel: i18n.t('navigation.profile'),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={ICON_SIZE} />
@@ -128,14 +149,14 @@ const Main = ({ route, navigation }: Props) => {
       />
       <Tab.Screen
         name={Global.SCREEN_CHAT}
-        component={Messages}
+        component={MessagesScreen}
         listeners={{
           tabPress: e => {
             saveScreen(e.target);
           },
         }}
         options={{
-          tabBarBadge: newMessage,
+          tabBarBadge: newMessage ? "" : undefined,
           tabBarLabel: i18n.t('navigation.chat'),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="chat" color={color} size={ICON_SIZE} />
@@ -144,7 +165,7 @@ const Main = ({ route, navigation }: Props) => {
       />
       <Tab.Screen
         name={Global.SCREEN_SEARCH}
-        component={Search}
+        component={SearchScreen}
         listeners={{
           tabPress: e => {
             saveScreen(e.target);
@@ -159,14 +180,14 @@ const Main = ({ route, navigation }: Props) => {
       />
       <Tab.Screen
         name={Global.SCREEN_LIKES}
-        component={Likes}
+        component={LikesScreen}
         listeners={{
           tabPress: e => {
             saveScreen(e.target);
           },
         }}
         options={{
-          tabBarBadge: newAlert,
+          tabBarBadge: newAlert ? "" : undefined,
           tabBarLabel: i18n.t('navigation.likes'),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="heart" color={color} size={ICON_SIZE} />
@@ -175,7 +196,7 @@ const Main = ({ route, navigation }: Props) => {
       />
       <Tab.Screen
         name={Global.SCREEN_DONATE}
-        component={Donate}
+        component={DonateScreen}
         listeners={{
           tabPress: e => {
             saveScreen(e.target);
