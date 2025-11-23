@@ -92,10 +92,11 @@ const MessageDetail = ({ route, navigation }: Props) => {
   }
 
   async function sendMessage() {
-    await Global.Fetch(Global.format(URL.MESSAGE_SEND, conversation.id), 'post', text, 'text/plain');
-    reloadMessages(false);
+    const textCopy = text;
     setText("");
     Keyboard.dismiss();
+    await Global.Fetch(Global.format(URL.MESSAGE_SEND, conversation.id), 'post', textCopy, 'text/plain');
+    reloadMessages(false);
   }
 
   const styleYourChat = {
@@ -129,7 +130,7 @@ const MessageDetail = ({ route, navigation }: Props) => {
           ))
         }
       </ScrollView>
-      <KeyboardAvoidingView keyboardVerticalOffset={-45}
+      <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TextInput
           style={{ backgroundColor: colors.surface, height: 52 }}
