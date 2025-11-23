@@ -18,7 +18,7 @@ type Props = BottomTabScreenProps<RootStackParamList, 'Profile.AdvancedSettings'
 
 const AdvancedSettings = ({ route }: Props) => {
 
-  var user: UserDto = route.params.user;
+  const user: UserDto = route.params.user;
   const { colors } = useTheme();
   const { height } = useWindowDimensions();
   const defaultTimeoutString = String(Global.DEFAULT_GPS_TIMEOUT);

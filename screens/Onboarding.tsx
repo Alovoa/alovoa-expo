@@ -169,7 +169,7 @@ const Onboarding = ({route: _r, navigation: _n}: Props) => {
     }
 
     let dto = {} as UserOnboarding;
-    var bodyFormData = Global.buildFormData(imageData);
+    const bodyFormData = Global.buildFormData(imageData);
     dto.preferredGenders = genders;
     dto.description = description;
     dto.interests = interests.map(i => i.text);
