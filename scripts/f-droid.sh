@@ -6,6 +6,9 @@ set -ex
 # small android adjustments
 ./scripts/android.sh
 
+#use older expo-location that can be easily patched
+yarn add expo-location@18.0.7
+
 # apply node_module patches (`rm -rf node_modules && yarn` to reverse)
 yarn patch-package --patch-dir scripts/patches
 

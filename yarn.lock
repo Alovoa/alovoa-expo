@@ -5424,7 +5424,7 @@ expo-localization@~17.0.7:
   dependencies:
     rtl-detect "^1.0.2"
 
-expo-location@~19.0.7:
+expo-location@19.0.7:
   version "19.0.7"
   resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-19.0.7.tgz#58ab5b9b59db3a26d0495c19e719d5f559948b1c"
   integrity sha512-YNkh4r9E6ECbPkBCAMG5A5yHDgS0pw+Rzyd0l2ZQlCtjkhlODB55nMCKr5CZnUI0mXTkaSm8CwfoCO8n2MpYfg==
