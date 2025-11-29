@@ -1,7 +1,7 @@
 import React from "react";
 import { InterestModalT, UserInterest, } from "../types";
 import { Text, Button, useTheme, IconButton, Badge } from 'react-native-paper';
-import { View, useWindowDimensions } from "react-native";
+import { KeyboardAvoidingView, View, useWindowDimensions } from "react-native";
 import * as Global from "../Global";
 import * as I18N from "../i18n";
 import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
@@ -43,21 +43,21 @@ const InterestModal = ({ user }: InterestModalT) => {
       <Modal
         isVisible={visible}
         onBackdropPress={hideModal}
-        avoidKeyboard
-        useNativeDriver
+        avoidKeyboard={false}
         style={{ justifyContent: 'center', margin: 0 }}>
-
-        <View style={containerStyle}>
-          <View>
-            <IconButton
-              style={{ alignSelf: 'flex-end' }}
-              icon="close"
-              size={20}
-              onPress={hideModal}
-            />
+        <KeyboardAvoidingView behavior="padding" >
+          <View style={containerStyle}>
+            <View>
+              <IconButton
+                style={{ alignSelf: 'flex-end' }}
+                icon="close"
+                size={20}
+                onPress={hideModal}
+              />
+            </View>
+            <InterestView data={interests ? interests : []} user={user} updateButtonText={updateButtonText} setInterestsExternal={setInterests} />
           </View>
-          <InterestView data={interests ? interests : []} user={user} updateButtonText={updateButtonText} setInterestsExternal={setInterests} />
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
       <Text style={{ paddingBottom: 4 }}>{i18n.t('profile.onboarding.interests')}</Text>
       <Badge size={12} visible={interests === undefined || interests.length === 0} style={styles.badge} />

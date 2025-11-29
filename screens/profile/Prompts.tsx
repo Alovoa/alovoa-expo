@@ -1,7 +1,7 @@
 import React from "react";
 import { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
 import { Portal, Text, useTheme, IconButton, Surface, TextInput } from 'react-native-paper';
-import { Pressable, View, useWindowDimensions } from "react-native";
+import { KeyboardAvoidingView, Pressable, View, useWindowDimensions } from "react-native";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
@@ -128,31 +128,31 @@ const Prompts = ({ route }: Props) => {
       <Modal isVisible={visible}
         onDismiss={hideModal}
         onBackdropPress={hideModal}
-        avoidKeyboard
-        useNativeDriver
-      >
-        <View style={containerStyle}>
-          <Text style={{ fontSize: 20, marginBottom: 8, paddingHorizontal: 16 }}>{modalTitle}</Text>
-          <TextInput style={{ backgroundColor: colors.elevation.level3 }}
-            defaultValue={modalText}
-            maxLength={maxPromptTextLength}
-            autoCorrect={false}
-            onChangeText={text => setModalText(text)}>
-          </TextInput>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <IconButton
-              icon="close"
-              size={28}
-              onPress={hideModal}
-            />
-            <IconButton
-              icon="check"
-              size={28}
-              iconColor={colors.secondary}
-              onPress={modalOkPressed}
-            />
+        avoidKeyboard={false}>
+        <KeyboardAvoidingView behavior="padding">
+          <View style={containerStyle}>
+            <Text style={{ fontSize: 20, marginBottom: 8, paddingHorizontal: 16 }}>{modalTitle}</Text>
+            <TextInput style={{ backgroundColor: colors.elevation.level3 }}
+              defaultValue={modalText}
+              maxLength={maxPromptTextLength}
+              autoCorrect={false}
+              onChangeText={text => setModalText(text)}>
+            </TextInput>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <IconButton
+                icon="close"
+                size={28}
+                onPress={hideModal}
+              />
+              <IconButton
+                icon="check"
+                size={28}
+                iconColor={colors.secondary}
+                onPress={modalOkPressed}
+              />
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
       <VerticalView>
         {[...prompts].map(([id, prompt]) => (
