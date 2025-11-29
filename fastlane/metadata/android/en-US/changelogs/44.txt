@@ -1,0 +1,2 @@
+Update to Expo 54
+Fix virtual keyboard hiding input fields
