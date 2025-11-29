@@ -248,48 +248,48 @@ const Login = ({ route: _r, navigation: _n }: Props) => {
       <Modal
         isVisible={visible}
         onBackdropPress={hideDialog}
-        avoidKeyboard
-        useNativeDriver
+        avoidKeyboard={false}
         style={{ justifyContent: 'center', margin: 0 }}>
-
-        <View style={{
-          backgroundColor: colors.elevation.level2,
-          padding: 24,
-          borderRadius: 8
-        }}>
-          <View>
-            <IconButton
-              style={{ alignSelf: 'flex-end' }}
-              icon="close"
-              size={20}
-              onPress={hideDialog}
+        <KeyboardAvoidingView behavior="padding">
+          <View style={{
+            backgroundColor: colors.elevation.level2,
+            padding: 24,
+            borderRadius: 8
+          }}>
+            <View>
+              <IconButton
+                style={{ alignSelf: 'flex-end' }}
+                icon="close"
+                size={20}
+                onPress={hideDialog}
+              />
+            </View>
+            <Text>{i18n.t('captcha.title')}</Text>
+            <Image resizeMode='contain' style={{ height: 100 }} source={{ uri: captchaImage }} />
+            <TextInput
+              mode="outlined"
+              autoCorrect={false}
+              label={i18n.t('captcha.placeholder')}
+              value={captchaText}
+              onChangeText={text => setCaptchaText(text)}
+              onSubmitEditing={loginEmail}
             />
+            <View style={{ flexDirection: 'row', marginTop: 8, justifyContent: 'flex-end' }}>
+              <IconButton
+                icon="reload"
+                iconColor={colors.primary}
+                size={20}
+                onPress={() => { emailSignInPress() }}
+              />
+              <IconButton
+                icon="login-variant"
+                iconColor={colors.primary}
+                size={20}
+                onPress={() => { loginEmail() }}
+              />
+            </View>
           </View>
-          <Text>{i18n.t('captcha.title')}</Text>
-          <Image resizeMode='contain' style={{ height: 100 }} source={{ uri: captchaImage }} />
-          <TextInput
-            mode="outlined"
-            autoCorrect={false}
-            label={i18n.t('captcha.placeholder')}
-            value={captchaText}
-            onChangeText={text => setCaptchaText(text)}
-            onSubmitEditing={loginEmail}
-          />
-          <View style={{ flexDirection: 'row', marginTop: 8, justifyContent: 'flex-end' }}>
-            <IconButton
-              icon="reload"
-              iconColor={colors.primary}
-              size={20}
-              onPress={() => { emailSignInPress() }}
-            />
-            <IconButton
-              icon="login-variant"
-              iconColor={colors.primary}
-              size={20}
-              onPress={() => { loginEmail() }}
-            />
-          </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </VerticalView>
   )
