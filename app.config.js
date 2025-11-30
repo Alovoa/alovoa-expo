@@ -99,6 +99,9 @@ module.exports = {
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.RECORD_AUDIO"
       ],
+      "gradleProperties": {
+        "org.gradle.jvmargs": "-Xmx4g -XX:MaxMetaspaceSize=1g"
+      },
       "versionCode": 44
     },
     "web": {
@@ -112,6 +115,13 @@ module.exports = {
     "owner": EXPO_OWNER,
     "runtimeVersion": {
       "policy": "appVersion"
+    }
+  },
+  "build": {
+    "android": {
+      "env": {
+        "ORG_GRADLE_JVMARGS": "-Xmx4g -XX:MaxMetaspaceSize=1g"
+      }
     }
   }
 };
