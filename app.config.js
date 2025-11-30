@@ -100,7 +100,7 @@ module.exports = {
         "android.permission.RECORD_AUDIO"
       ],
       "gradleProperties": {
-        "org.gradle.jvmargs": "-Xmx4g -XX:MaxMetaspaceSize=1g"
+        "org.gradle.jvmargs": "-Xmx4g -XX:MaxMetaspaceSize=2g"
       },
       "versionCode": 44
     },
@@ -120,7 +120,7 @@ module.exports = {
   "build": {
     "android": {
       "env": {
-        "ORG_GRADLE_JVMARGS": "-Xmx4g -XX:MaxMetaspaceSize=1g"
+        "ORG_GRADLE_JVMARGS": "-Xmx4g -XX:MaxMetaspaceSize=2g"
       }
     }
   }
