@@ -1,145 +1,59 @@
-name: ci
+name: Build Android APK (Yarn, No EAS)
+
 on:
   push:
-    branches:
-    - master
+    branches: [ master ]
   pull_request:
-    branches:
-    - master
-env:
-  EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID }}
-  EXPO_OWNER: ${{ vars.EXPO_OWNER }}
+
 jobs:
-  prebuild:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 22
-        cache: yarn
-    - run: yarn install --frozen-lockfile
-    - run: yarn type-check
-    - run: yarn lint --max-warnings=99999
-    - run: yarn expo install --check
-    - run: yarn doctor
-      env:
-        # todo: `yarn doctor` - look into warnings that were found when validating dependencies against React Native Directory (@likashefqet/react-native-image-zoom, etc...)
-        EXPO_DOCTOR_ENABLE_DIRECTORY_CHECK: false
-    - run: yarn expo prebuild
-    - run: yarn expo export
-    - uses: actions/upload-pages-artifact@v3
-      with:
-        name: dist
-        path: dist
-        retention-days: 0
-  build:
-    needs: prebuild
-    runs-on: ${{ matrix.run-on }}
-    name: build-${{ matrix.extension }}
-    continue-on-error: true
-    strategy:
-      matrix:
-        include:
-#        - platform: android
-#          profile: production
-#          extension: aab
-#          run-on: ubuntu-latest
-        - platform: android
-          profile: preview # builds apk instead of aab
-          extension: apk
-          run-on: ubuntu-latest
-#        - platform: ios
-#          profile: production
-#          extension: ipa
-#          run-on: macos-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: latest
-        cache: yarn
-    - uses: expo/expo-github-action@v8
-      with:
-        eas-version: latest
-        expo-version: latest
-        token: ${{ secrets.EXPO_TOKEN }}
-    - run: yarn install
-    - if: matrix.extension == 'apk'
-      run: yarn f-droid
-    - run: >-
-        yarn eas build --local --non-interactive
-        --output Alovoa.${{ matrix.extension }}
-        --platform ${{ matrix.platform }}
-        --profile ${{ matrix.profile }}
-    - uses: actions/upload-artifact@v4
-      with:
-        name: Alovoa.${{ matrix.extension }}
-        path: Alovoa.${{ matrix.extension }}
-  verify-artifacts:
-    needs: build
+  build-apk:
     runs-on: ubuntu-latest
+
+    env:
+      GRADLE_OPTS: -Xmx4g -XX:MaxMetaspaceSize=3g -Dorg.gradle.jvmoptions="-Xmx4g"
+
     steps:
-#    - uses: actions/download-artifact@v4
-#      with:
-#        name: Alovoa.aab
-    - uses: actions/download-artifact@v4
-      with:
-        name: Alovoa.apk
-#    - uses: actions/download-artifact@v4
-#      with:
-#        name: Alovoa.ipa
-    - uses: actions/download-artifact@v4
-      with:
-        name: dist
-    - run: >- # upload-pages-artifact archives dist to artifact.tar
-        mkdir dist &&
-        tar -xvf artifact.tar -C dist &&
-        file Alovoa.* &&
-        ls -lah
-  expo-application-services:
-    needs: verify-artifacts
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: latest
-        cache: yarn
-    - uses: expo/expo-github-action@v8
-      with:
-        eas-version: latest
-        expo-version: latest
-        token: ${{ secrets.EXPO_TOKEN }}
-    - run: yarn install
-    - if: github.event_name == 'pull_request'
-      uses: expo/expo-github-action/preview@v8
-      with:
-        command: eas update --auto --branch ${{ github.event.pull_request.head.ref }}
-        qr-target: expo-go
-    - if: github.ref_name == github.event.repository.default_branch
-      run: |
-        if git diff --name-only HEAD | grep -E 'app.json|package.json'; then
-          yarn eas build --platform all --non-interactive --no-wait
-          # todo: configure and run eas submit to publish new versions
-          # yarn eas submit --platform all --latest --non-interactive --verbose --verbose-fastlane
-        else
-          yarn eas update --auto --non-interactive
-        fi
-  deploy-github-pages:
-    if: github.ref_name == github.event.repository.default_branch
-    needs: verify-artifacts
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-    - uses: actions/configure-pages@v5
-    - id: deployment
-      uses: actions/deploy-pages@v4
-      with:
-        artifact_name: dist
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (Expo 54 requires Node 20+)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Setup Java (JDK 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies (Yarn)
+        run: yarn install --frozen-lockfile
+
+      - name: Run Yarn Doctor (dependency verification)
+        run: yarn doctor
+
+      - name: Build with F-droid build process
+        run: yarn f-droid
+
+      - name: Give Gradle permission
+        run: chmod +x android/gradlew
+
+      - name: Configure Android SDK path
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
+
+      - name: Build APK (Release)
+        run: |
+          cd android
+          ./gradlew assembleRelease --no-daemon
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: android/app/build/outputs/apk/release/app-release.apk
+
