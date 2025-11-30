@@ -9,9 +9,6 @@ jobs:
   build-apk:
     runs-on: ubuntu-latest
 
-    env:
-      GRADLE_OPTS: -Xmx4g -XX:MaxMetaspaceSize=3g -Dorg.gradle.jvmoptions="-Xmx4g"
-
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -27,6 +24,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+        
+      - name: Verify Java version
+        run: java -version
 
       - name: Install Android SDK
         uses: android-actions/setup-android@v3
@@ -45,6 +45,19 @@ jobs:
 
       - name: Configure Android SDK path
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
+
+      - name: Configure Gradle memory (CI safe)
+        run: |
+          mkdir -p ~/.gradle
+          cat <<EOF > ~/.gradle/gradle.properties
+          org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8
+          kotlin.daemon.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=1g
+          org.gradle.parallel=false
+          org.gradle.daemon=false
+          org.gradle.caching=false
+          ksp.useKSP2=false
+          ksp.incremental=false
+          EOF
 
       - name: Build APK (Release)
         run: |
