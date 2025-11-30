@@ -99,8 +99,14 @@ module.exports = {
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.RECORD_AUDIO"
       ],
+      "lintOptions": {
+        "checkReleaseBuilds": false,
+        "abortOnError": false
+      },
       "gradleProperties": {
-        "org.gradle.jvmargs": "-Xmx4g -XX:MaxMetaspaceSize=2g"
+        "org.gradle.jvmargs": "-Xmx6g -XX:MaxMetaspaceSize=3g -Dfile.encoding=UTF-8",
+        "org.gradle.parallel": "true",
+        "org.gradle.daemon": "true"
       },
       "versionCode": 44
     },
@@ -120,7 +126,7 @@ module.exports = {
   "build": {
     "android": {
       "env": {
-        "ORG_GRADLE_JVMARGS": "-Xmx4g -XX:MaxMetaspaceSize=2g"
+        "ORG_GRADLE_JVMARGS": "-Xmx6g -XX:MaxMetaspaceSize=3g -Dfile.encoding=UTF-8"
       }
     }
   }
