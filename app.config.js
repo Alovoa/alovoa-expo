@@ -21,20 +21,7 @@ module.exports = {
         }
       ],
       "./plugins/setClearTextTrafficFalse",
-      "expo-localization",
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "compileSdkVersion": 35,
-            "targetSdkVersion": 35,
-            "buildToolsVersion": "35.0.0"
-          },
-          "ios": {
-            "deploymentTarget": "15.1"
-          }
-        }
-      ]
+      "expo-localization"
     ],
     "splash": {
       "image": "./assets/splash.png",
@@ -105,7 +92,6 @@ module.exports = {
       },
       "gradleProperties": {
         "org.gradle.jvmargs": "-Xmx6g -XX:MaxMetaspaceSize=3g -Dfile.encoding=UTF-8",
-        "org.gradle.parallel": "true",
         "org.gradle.daemon": "true"
       },
       "versionCode": 44
