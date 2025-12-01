@@ -17,6 +17,11 @@ module.exports = function withCustomGradleProps(config) {
             key: 'android.dependencyMetadataInApk',
             value: 'false',
         });
+        config.modResults.push({
+            type: 'property',
+            key: 'android.dependencyMetadataInSigning',
+            value: 'false',
+        });
         return config;
     });
 };
