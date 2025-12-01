@@ -21,6 +21,7 @@ module.exports = {
         }
       ],
       "./plugins/setClearTextTrafficFalse",
+      "./plugins/withGradleProperties",
       "expo-localization"
     ],
     "splash": {
@@ -89,11 +90,6 @@ module.exports = {
       "lintOptions": {
         "checkReleaseBuilds": false,
         "abortOnError": false
-      },
-      "gradleProperties": {
-        "org.gradle.jvmargs": "-Xmx6g -XX:MaxMetaspaceSize=3g -Dfile.encoding=UTF-8",
-        "org.gradle.daemon": "true",
-        "android.dependencyMetadataInApk": "false"
       },
       "versionCode": 44
     },
