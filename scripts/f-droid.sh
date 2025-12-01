@@ -14,18 +14,3 @@ yarn remove expo-dev-client
 
 # apply node_module patches (`rm -rf node_modules && yarn` to reverse)
 yarn patch-package --patch-dir scripts/patches
-
-# only use v1SigningEnabled
-perl -i -pe '
-  if (/signingConfigs\s*{/) { $in_signing = 1 }
-  if ($in_signing && /debug {/) {
-    $_ .= qq{
-            enableV1Signing true
-            enableV2Signing false
-            enableV3Signing false
-            enableV4Signing false
-    };
-    $in_signing = 0;
-  }
-' android/app/build.gradle
-
