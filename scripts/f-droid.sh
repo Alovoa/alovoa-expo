@@ -12,5 +12,3 @@ yarn add expo-location@18.0.7
 # apply node_module patches (`rm -rf node_modules && yarn` to reverse)
 yarn patch-package --patch-dir scripts/patches
 
-# remove signing config block - does not work with `eas build`
-perl -ni -e 'print unless /signingConfig /' filename
