@@ -92,7 +92,8 @@ module.exports = {
       },
       "gradleProperties": {
         "org.gradle.jvmargs": "-Xmx6g -XX:MaxMetaspaceSize=3g -Dfile.encoding=UTF-8",
-        "org.gradle.daemon": "true"
+        "org.gradle.daemon": "true",
+        "android.dependencyMetadataInApk": "false"
       },
       "versionCode": 44
     },
