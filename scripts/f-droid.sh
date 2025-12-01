@@ -17,14 +17,16 @@ yarn patch-package --patch-dir scripts/patches
 
 # only use v1SigningEnabled
 perl -i -pe '
-  if (/release\s*{/) {
-    $in_release = 1;
-  }
-  if ($in_release && /signingConfig/) {
-    $_ .= "            v1SigningEnabled true\n";
-    $_ .= "            v2SigningEnabled false\n";
-    $_ .= "            v3SigningEnabled false\n";
-    $_ .= "            v4SigningEnabled false\n";
+  # Patch the release buildType to use signingConfigs.debug and add flags
+  if (/buildTypes\s*{/) { $in_buildtypes = 1 }
+  if ($in_buildtypes && /release {/) { $in_release = 1 }
+  if ($in_release && /signingConfig signingConfigs.debug/) {
+    # keep debug keystore for release
+    $_ .= "        v1SigningEnabled true\n";
+    $_ .= "        v2SigningEnabled false\n";
+    $_ .= "        v3SigningEnabled false\n";
+    $_ .= "        v4SigningEnabled false\n";
     $in_release = 0;
   }
 ' android/app/build.gradle
+
