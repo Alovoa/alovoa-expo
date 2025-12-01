@@ -14,3 +14,6 @@ yarn remove expo-dev-client
 
 # apply node_module patches (`rm -rf node_modules && yarn` to reverse)
 yarn patch-package --patch-dir scripts/patches
+
+# remove signing
+perl -i -pe 's/^\s*signingConfig\s+.*\n//g' android/app/build.gradle
