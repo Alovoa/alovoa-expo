@@ -4,7 +4,7 @@ import {
   useWindowDimensions
 } from "react-native";
 import { ActivityIndicator, Checkbox, Divider, Text, useTheme } from "react-native-paper";
-import { YourProfileResource, GenderEnum, UserIntention, Gender, IntentionE, SearchParams, IntentionNameMap, GenderNameMap, RootStackParamList } from "../../types";
+import { YourProfileResource, GenderEnum, UserIntention, Gender, IntentionE, SearchParams, IntentionNameMap, GenderNameMap, RootStackParamList } from "../../myTypes";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";

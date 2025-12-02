@@ -5,7 +5,7 @@ import { KeyboardAvoidingView, Pressable, View, useWindowDimensions } from "reac
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
-import { RootStackParamList, UserDto, UserPrompt } from "../../types";
+import { RootStackParamList, UserDto, UserPrompt } from "../../myTypes";
 import Alert from "../../components/Alert";
 import { useHeaderHeight } from '@react-navigation/elements';
 import VerticalView from "../../components/VerticalView";

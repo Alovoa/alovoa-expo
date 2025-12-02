@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as URL from "./URL";
 import { createNavigationContainerRef, CommonActions } from '@react-navigation/native';
-import { ConversationDto, RootStackParamList, UserDto } from "./types";
+import { ConversationDto, RootStackParamList, UserDto } from "./myTypes";
 import Toast from 'react-native-toast-message';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';

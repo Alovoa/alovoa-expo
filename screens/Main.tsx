@@ -6,7 +6,7 @@ import * as I18N from "../i18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NAVIGATION_BAR_HEIGHT } from "../assets/styles";
 import { useWindowDimensions } from "react-native";
-import { RootStackParamList, YourProfileResource, UserDto } from "../types";
+import { RootStackParamList, YourProfileResource, UserDto } from "../myTypes";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IconButton, Text, TextInput, useTheme } from 'react-native-paper';
-import { ComplimentModalT } from '../types';
+import { ComplimentModalT } from '../myTypes';
 import { View, Image, useWindowDimensions, KeyboardAvoidingView } from 'react-native';
 import { WIDESCREEN_HORIZONTAL_MAX } from '../assets/styles';
 import * as I18N from "../i18n";

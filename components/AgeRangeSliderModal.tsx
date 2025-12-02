@@ -1,6 +1,6 @@
 import React from "react";
 import { GRAY, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
-import { RangeSliderModalT } from "../types";
+import { RangeSliderModalT } from "../myTypes";
 import { Modal, Portal, Text, Button, useTheme, IconButton } from 'react-native-paper';
 import { View, useWindowDimensions } from "react-native";
 import Slider from "@react-native-community/slider";

@@ -20,7 +20,7 @@ import SvgNotification from "../assets/onboarding/notification.svg";
 import * as I18N from "../i18n";
 import * as URL from "../URL";
 import * as Global from "../Global";
-import { IntentionEnum, RootStackParamList, UserInterest, UserOnboarding, UserOnboardingResource } from "../types";
+import { IntentionEnum, RootStackParamList, UserInterest, UserOnboarding, UserOnboardingResource } from "../myTypes";
 import InterestView from "../components/InterestView";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 

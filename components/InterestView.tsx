@@ -1,5 +1,5 @@
 import React from "react";
-import { InterestModalT, UserInterest, UserInterestAutocomplete, UserInterestDto } from "../types";
+import { InterestModalT, UserInterest, UserInterestAutocomplete, UserInterestDto } from "../myTypes";
 import { Text, Button, Searchbar } from 'react-native-paper';
 import { Keyboard, View, useWindowDimensions } from "react-native";
 import * as Global from "../Global";

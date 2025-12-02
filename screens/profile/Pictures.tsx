@@ -11,7 +11,7 @@ import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../../assets/styles";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";
-import { RootStackParamList, UserDto, UserImage, YourProfileResource } from "../../types";
+import { RootStackParamList, UserDto, UserImage, YourProfileResource } from "../../myTypes";
 import { Badge, Button } from 'react-native-paper';
 import Alert from "../../components/Alert";
 import VerticalView from "../../components/VerticalView";

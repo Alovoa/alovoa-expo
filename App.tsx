@@ -22,7 +22,7 @@ import {
 } from '@expo-google-fonts/montserrat';
 import { enGB, en, de, registerTranslation } from 'react-native-paper-dates'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { RootStackParamList } from "./types";
+import { RootStackParamList } from "./myTypes";
 
 LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();

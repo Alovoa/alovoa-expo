@@ -1,5 +1,5 @@
 import React from "react";
-import { InterestModalT, UserInterest, } from "../types";
+import { InterestModalT, UserInterest, } from "../myTypes";
 import { Text, Button, useTheme, IconButton, Badge } from 'react-native-paper';
 import { KeyboardAvoidingView, View, useWindowDimensions } from "react-native";
 import * as Global from "../Global";

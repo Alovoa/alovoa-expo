@@ -15,7 +15,7 @@ import styles, { NAVIGATION_BAR_HEIGHT, STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { AlertsResource, UserDto, UnitsEnum, UserUsersResource, LikeResultT, RootStackParamList } from "../types";
+import { AlertsResource, UserDto, UnitsEnum, UserUsersResource, LikeResultT, RootStackParamList } from "../myTypes";
 import LikesEmpty from "../assets/images/likes-empty.svg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import VerticalView from "../components/VerticalView";

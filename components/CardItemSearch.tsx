@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, TouchableOpacity, StyleProp, TextStyle, StyleSheet, useWindowDimensions, Platform, Pressable } from "react-native";
 import { useTheme, Text, Chip, Button, Tooltip } from "react-native-paper";
 import Icon from "./Icon";
-import { CardItemT } from "../types";
+import { CardItemT } from "../myTypes";
 import * as Global from "../Global";
 import styles, {
   DISLIKE_ACTIONS,

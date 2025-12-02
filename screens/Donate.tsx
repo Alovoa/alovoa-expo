@@ -13,7 +13,7 @@ import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
-import { DonationDtoListModel, DonationDto, RootStackParamList } from "../types";
+import { DonationDtoListModel, DonationDto, RootStackParamList } from "../myTypes";
 import * as Linking from 'expo-linking';
 import VerticalView from "../components/VerticalView";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";

@@ -9,7 +9,7 @@ import {
   Platform,
 } from "react-native";
 import { useTheme, Text, Chip, Card, Menu, Surface, Portal, Modal, IconButton, RadioButton, Button, Tooltip } from "react-native-paper";
-import { UserInterest, UnitsEnum, ProfileResource, UserDto, UserPrompt, GenderNameMap, Gender, IntentionNameMap, UserMiscInfo, MiscInfoRelationshipNameMap, MiscInfoKidsNameMap, MiscInfoDrugsOtherNameMap, MiscInfoDrugsAlcoholNameMap, MiscInfoDrugsTobaccoNameMap, MiscInfoDrugsCannabisNameMap, MiscInfoRelationshipTypeNameMap, MiscInfoFamilyNameMap, MiscInfoPoliticsNameMap, MiscInfoReligionNameMap, MiscInfoGenderIdentityNameMap, RootStackParamList } from "../types";
+import { UserInterest, UnitsEnum, ProfileResource, UserDto, UserPrompt, GenderNameMap, Gender, IntentionNameMap, UserMiscInfo, MiscInfoRelationshipNameMap, MiscInfoKidsNameMap, MiscInfoDrugsOtherNameMap, MiscInfoDrugsAlcoholNameMap, MiscInfoDrugsTobaccoNameMap, MiscInfoDrugsCannabisNameMap, MiscInfoRelationshipTypeNameMap, MiscInfoFamilyNameMap, MiscInfoPoliticsNameMap, MiscInfoReligionNameMap, MiscInfoGenderIdentityNameMap, RootStackParamList } from "../myTypes";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";

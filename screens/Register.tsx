@@ -6,7 +6,7 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
 import * as Localization from 'expo-localization';
-import { RegisterBody, RootStackParamList } from "../types";
+import { RegisterBody, RootStackParamList } from "../myTypes";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DatePickerInput } from "react-native-paper-dates";
 import { ValidRangeType } from "react-native-paper-dates/lib/typescript/Date/Calendar";
