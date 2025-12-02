@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import Icon from "./Icon";
 import styles from "../assets/styles";
-import { TabBarIconT } from "../types";
+import { TabBarIconT } from "../myTypes";
 import { useTheme } from "react-native-paper";
 
 const TabBarIcon = ({ focused, iconName, text }: TabBarIconT) => {

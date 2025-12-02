@@ -5,7 +5,7 @@ import {
 } from "react-native";
 import { Text, TextInput, Button, HelperText, ActivityIndicator, Badge } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT } from "../../assets/styles";
-import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE, MiscInfoNameMap, IntentionNameMap, RootStackParamList, UserPrompt } from "../../types";
+import { YourProfileResource, UserMiscInfoEnum, UserInterest, UserDto, UserMiscInfo, UserIntention, IntentionE, MiscInfoNameMap, IntentionNameMap, RootStackParamList, UserPrompt } from "../../myTypes";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";

@@ -6,7 +6,7 @@ import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
 import SvgPasswordReset from "../assets/images/password-reset.svg";
-import { Captcha, PasswordResetDto, RootStackParamList } from "../types";
+import { Captcha, PasswordResetDto, RootStackParamList } from "../myTypes";
 import VerticalView from "../components/VerticalView";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 

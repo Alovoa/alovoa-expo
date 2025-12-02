@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Dialog, Portal, Text } from 'react-native-paper';
-import { AlertModel } from '../types';
+import { AlertModel } from '../myTypes';
 import { useWindowDimensions } from 'react-native';
 import { WIDESCREEN_HORIZONTAL_MAX } from '../assets/styles';
 

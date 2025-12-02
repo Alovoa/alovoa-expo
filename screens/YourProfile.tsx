@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Text, Button, Card, ActivityIndicator, IconButton, Badge } from "react-native-paper";
 import styles, { STATUS_BAR_HEIGHT } from "../assets/styles";
-import { YourProfileResource, UserDto, RootStackParamList } from "../types";
+import { YourProfileResource, UserDto, RootStackParamList } from "../myTypes";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
