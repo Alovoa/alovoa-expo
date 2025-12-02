@@ -612,3 +612,5 @@ export const SettingsEmailNameMap = new Map<number, string>([
   [SettingsEmailEnum.LIKE, 'profile.settings.email.like'],
   [SettingsEmailEnum.CHAT, 'profile.settings.email.chat'],
 ]);
+
+export {}
