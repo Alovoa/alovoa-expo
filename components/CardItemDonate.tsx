@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Image, TouchableOpacity, StyleProp, TextStyle, useWindowDimensions } from "react-native";
 import { useTheme, Text } from "react-native-paper";
-import { CardItemT } from "../types";
+import { CardItemT } from "../myTypes";
 import * as Global from "../Global";
 import styles, {
   WIDESCREEN_HORIZONTAL_MAX

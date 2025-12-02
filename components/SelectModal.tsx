@@ -1,5 +1,5 @@
 import React from "react";
-import { SelectModalT } from "../types";
+import { SelectModalT } from "../myTypes";
 import { Modal, Portal, Text, Button, Checkbox, useTheme, IconButton } from 'react-native-paper';
 import { View, useWindowDimensions } from "react-native";
 import * as I18N from "../i18n";

@@ -2,7 +2,7 @@ import React from "react";
 import { View, useWindowDimensions } from "react-native";
 import { Text } from "react-native-paper";
 import { Message } from "../components";
-import { ChatsResource, ConversationDto, RootStackParamList } from "../types";
+import { ChatsResource, ConversationDto, RootStackParamList } from "../myTypes";
 import { STATUS_BAR_HEIGHT } from "../assets/styles";
 import ConvoEmpty from "../assets/images/convo-empty.svg";
 import * as Global from "../Global";

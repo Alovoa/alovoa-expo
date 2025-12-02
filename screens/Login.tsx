@@ -7,7 +7,7 @@ import * as Linking from 'expo-linking';
 import * as Global from "../Global";
 import * as URL from "../URL";
 import * as I18N from "../i18n";
-import { Captcha, RootStackParamList } from "../types";
+import { Captcha, RootStackParamList } from "../myTypes";
 import VerticalView from "../components/VerticalView";
 import { STATUS_BAR_HEIGHT } from "../assets/styles";
 import splash from '../assets/splash.png';

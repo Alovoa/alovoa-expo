@@ -15,7 +15,7 @@ import {
 import { useTheme, Text } from "react-native-paper";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Autolink, { CustomMatcher } from 'react-native-autolink';
-import { MessageDtoListModel, MessageDto, RootStackParamList } from "../types";
+import { MessageDtoListModel, MessageDto, RootStackParamList } from "../myTypes";
 import styles from "../assets/styles";
 import * as Global from "../Global";
 import * as URL from "../URL";

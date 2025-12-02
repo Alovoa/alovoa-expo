@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Image, TouchableOpacity, useWindowDimensions } from "react-native";
 import { Text } from "react-native-paper";
-import { MessageT } from "../types";
+import { MessageT } from "../myTypes";
 import styles, { WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import * as I18N from "../i18n";
 import * as Global from "../Global";

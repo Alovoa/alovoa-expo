@@ -1,4 +1,4 @@
-import { DataT } from "../../types";
+import { DataT } from "../../myTypes";
 import icon from '../icon.png';
 
 const IMAGE_01 = icon,

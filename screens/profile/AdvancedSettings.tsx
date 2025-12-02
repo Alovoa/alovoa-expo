@@ -4,7 +4,7 @@ import {
   useWindowDimensions
 } from "react-native";
 import styles from "../../assets/styles";
-import { RootStackParamList, UserDto } from "../../types";
+import { RootStackParamList, UserDto } from "../../myTypes";
 import * as I18N from "../../i18n";
 import * as Global from "../../Global";
 import * as URL from "../../URL";

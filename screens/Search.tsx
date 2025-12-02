@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, RefreshControl, ScrollView, useWindowDimensions } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
-import { UserDto, SearchResource, SearchDto, UnitsEnum, SearchParams, SearchParamsSortE, RootStackParamList } from "../types";
+import { UserDto, SearchResource, SearchDto, UnitsEnum, SearchParams, SearchParamsSortE, RootStackParamList } from "../myTypes";
 import * as I18N from "../i18n";
 import * as Global from "../Global";
 import * as URL from "../URL";
