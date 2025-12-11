@@ -22,7 +22,8 @@ module.exports = {
       ],
       "./plugins/setClearTextTrafficFalse",
       "./plugins/withGradleProperties",
-      "expo-localization"
+      "expo-localization",
+      "expo-build-properties"
     ],
     "splash": {
       "image": "./assets/splash.png",
