@@ -117,13 +117,19 @@ const Profile = ({ route, navigation }: Props) => {
   });
 
   async function load(fetch = false) {
-
     if (fetch || !user) {
       let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, user == null ? uuid : user.uuid));
       let data: ProfileResource = response.data;
       setUser(data.user);
       setYou(data.currUserDto);
       setIsLegal(data.isLegal);
+    }
+  }
+
+  React.useEffect(() => {
+
+    if(!user) {
+      return;
     }
 
     setLikesMe(user.likesCurrentUser);
@@ -175,8 +181,7 @@ const Profile = ({ route, navigation }: Props) => {
     }
 
     setMiscInfo(user.miscInfos);
-
-  }
+  }, [user]);
 
   React.useEffect(() => {
     const loadData = async () => {
