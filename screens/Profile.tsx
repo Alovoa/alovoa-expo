@@ -50,13 +50,13 @@ const Profile = ({ route, navigation }: Props) => {
   const MIN_AGE = 16
   const MAX_AGE = 100
 
-  const routeUser: UserDto = route.params.user;
-  const uuid = route.params.uuid;
+  const routeUser: UserDto | undefined = route.params.user;
+  const uuid: string | undefined = route.params.uuid;
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
   const insets = useSafeAreaInsets()
 
-  const [user, setUser] = React.useState(routeUser);
+  const [user, setUser] = React.useState<UserDto | undefined>(routeUser);
   const [compatible, setCompatible] = React.useState(false);
   const [isSelf, setIsSelf] = React.useState(false);
   const [liked, setLiked] = React.useState(false);
@@ -118,7 +118,7 @@ const Profile = ({ route, navigation }: Props) => {
 
   async function load(fetch = false) {
     if (fetch || !user) {
-      let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, user == null ? uuid : user.uuid));
+      let response = await Global.Fetch(Global.format(URL.API_RESOURCE_PROFILE, user == null || uuid ? uuid : user.uuid));
       let data: ProfileResource = response.data;
       setUser(data.user);
       setYou(data.currUserDto);
@@ -128,7 +128,7 @@ const Profile = ({ route, navigation }: Props) => {
 
   React.useEffect(() => {
 
-    if(!user) {
+    if (!user) {
       return;
     }
 
@@ -224,14 +224,14 @@ const Profile = ({ route, navigation }: Props) => {
   }
 
   async function blockUser() {
-    await Global.Fetch(Global.format(URL.USER_BLOCK, user.uuid), 'post');
+    await Global.Fetch(Global.format(URL.USER_BLOCK, user?.uuid), 'post');
     hideMenu();
     setBlocked(true);
     setRemoveUser(true);
   }
 
   async function unblockUser() {
-    await Global.Fetch(Global.format(URL.USER_UNBLOCK, user.uuid), 'post');
+    await Global.Fetch(Global.format(URL.USER_UNBLOCK, user?.uuid), 'post');
     hideMenu();
     setBlocked(false);
   }
@@ -243,7 +243,7 @@ const Profile = ({ route, navigation }: Props) => {
 
   async function reportUserSend() {
     if (reportOption) {
-      await Global.Fetch(Global.format(URL.USER_REPORT, user.uuid), 'post', reportOption, 'text/plain');
+      await Global.Fetch(Global.format(URL.USER_REPORT, user?.uuid), 'post', reportOption, 'text/plain');
       setReported(true);
       setReportedUser(true);
       setReportModalVisible(false);
@@ -252,9 +252,9 @@ const Profile = ({ route, navigation }: Props) => {
 
   async function likeUser(message?: string) {
     if (!message) {
-      await Global.Fetch(Global.format(URL.USER_LIKE, user.uuid), 'post');
+      await Global.Fetch(Global.format(URL.USER_LIKE, user?.uuid), 'post');
     } else {
-      await Global.Fetch(Global.format(URL.USER_LIKE_MESSAGE, user.uuid, message), 'post');
+      await Global.Fetch(Global.format(URL.USER_LIKE_MESSAGE, user?.uuid, message), 'post');
     }
     setLiked(true);
     setRemoveUser(true);
@@ -262,7 +262,7 @@ const Profile = ({ route, navigation }: Props) => {
   }
 
   async function hideUser() {
-    await Global.Fetch(Global.format(URL.USER_HIDE, user.uuid), 'post');
+    await Global.Fetch(Global.format(URL.USER_HIDE, user?.uuid), 'post');
     setHidden(true);
     setRemoveUser(true);
   }
@@ -500,7 +500,7 @@ const Profile = ({ route, navigation }: Props) => {
             </View>
             <View style={{ marginTop: 80 }}></View>
             <View style={{ marginBottom: 80 }}>
-              <Text style={{ display: "flex", opacity: 0.5, justifyContent: "center" }}>{user.uuid}</Text>
+              <Text style={{ display: "flex", opacity: 0.5, justifyContent: "center" }}>{user?.uuid}</Text>
             </View>
           </View>
         </View>
