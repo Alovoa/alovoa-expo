@@ -59,7 +59,6 @@
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
     "react-native-autolink": "4.2.0",
-    "react-native-card-stack-swiper": "1.2.5",
     "react-native-gesture-handler": "~2.28.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-modal": "^14.0.0-rc.1",
