@@ -5,7 +5,7 @@ module.exports = {
   "expo": {
     "name": "Alovoa",
     "slug": "alovoa-expo",
-    "version": "2.3.4",
+    "version": "2.4.0",
     "scheme": "alovoa",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -92,7 +92,7 @@ module.exports = {
         "checkReleaseBuilds": false,
         "abortOnError": false
       },
-      "versionCode": 48
+      "versionCode": 49
     },
     "web": {
       "favicon": "./assets/favicon.png"
