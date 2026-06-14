@@ -1,12 +1,13 @@
 import React, { ReactNode } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 import Animated, {
   SharedValue,
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   withTiming,
-  interpolate
+  interpolate,
+  Extrapolation
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { scheduleOnRN } from "react-native-worklets";
@@ -39,6 +40,15 @@ export default function SwipeCard({
   const translateY = useSharedValue(0);
   const rotate = useSharedValue(0);
   const isTapEnabled = useSharedValue(true);
+
+  const { height } = useWindowDimensions();
+
+  const scaleFont = (factor: number, min = 42, max = 80) => {
+    const size = height * factor;
+    return Math.min(Math.max(size, min), max);
+  };
+
+  const CARD_FONT_SIZE = scaleFont(0.1);
 
   const gesture = Gesture.Pan()
     .onUpdate((event) => {
@@ -101,6 +111,41 @@ export default function SwipeCard({
       }
     });
 
+  const styles = StyleSheet.create({
+    card: {
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+
+      justifyContent: "center",
+      alignItems: "center",
+    },
+
+    labelContainer: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 20,
+    },
+
+    likeText: {
+      fontSize: CARD_FONT_SIZE,
+      fontWeight: "bold",
+      color: "#22c55e",
+    },
+
+    nopeText: {
+      fontSize: CARD_FONT_SIZE,
+      fontWeight: "bold",
+      color: "#ef4444",
+    },
+
+    labelBackground: {
+      ...StyleSheet.absoluteFillObject,
+      borderRadius: 8,
+    },
+  });
+
   const animatedStyle = useAnimatedStyle(() => {
     const distance = Math.sqrt(
       translateX.value * translateX.value +
@@ -123,20 +168,68 @@ export default function SwipeCard({
     };
   });
 
+  const likeTextStyle = useAnimatedStyle(() => {
+    const x = translateX.value;
+
+    const opacity =
+      x > 4
+        ? interpolate(x, [20, 120], [0, 1], Extrapolation.CLAMP)
+        : 0;
+
+    return { opacity };
+  });
+
+  const nopeTextStyle = useAnimatedStyle(() => {
+    const x = translateX.value;
+
+    const opacity =
+      x < -4
+        ? interpolate(x, [-120, -20], [1, 0], Extrapolation.CLAMP)
+        : 0;
+
+    return { opacity };
+  });
+
+  const likeBgStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(
+      translateX.value,
+      [0, 120],
+      [0, 1],
+      Extrapolation.CLAMP
+    ),
+  }));
+
+  const nopeBgStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(
+      translateX.value,
+      [-120, 0],
+      [1, 0],
+      Extrapolation.CLAMP
+    ),
+  }));
+
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={[styles.card, animatedStyle]}>
-        {children}
+        <Animated.View style={animatedStyle}>
+          {children}
+        </Animated.View>
+
+        <View style={styles.labelContainer} pointerEvents="none">
+          <Animated.View style={[styles.labelBackground, likeBgStyle]} />
+          <Animated.Text style={[styles.likeText, likeTextStyle]}>
+            LIKE
+          </Animated.Text>
+        </View>
+
+        <View style={styles.labelContainer} pointerEvents="none">
+          <Animated.View style={[styles.labelBackground, nopeBgStyle]} />
+          <Animated.Text style={[styles.nopeText, nopeTextStyle]}>
+            NOPE
+          </Animated.Text>
+        </View>
+
       </Animated.View>
     </GestureDetector>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    zIndex: 1,
-  },
-});
