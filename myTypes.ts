@@ -57,6 +57,8 @@ export type CardItemT = {
   index?: number;
   onLikePressed?: () => void;
   onMessagePressed?: (result: LikeResultT) => void;
+  tapEnabled: boolean;
+  setTapEnabled?: (enabled: boolean) => void;
 };
 
 export type IconT = {

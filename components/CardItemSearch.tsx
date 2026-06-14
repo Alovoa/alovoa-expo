@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, TouchableOpacity, StyleProp, TextStyle, StyleSheet, useWindowDimensions, Platform, Pressable } from "react-native";
+import { View, Image, TouchableOpacity, StyleProp, TextStyle, StyleSheet, useWindowDimensions, Pressable } from "react-native";
 import { useTheme, Text, Chip, Button, Tooltip } from "react-native-paper";
 import Icon from "./Icon";
 import { CardItemT } from "../myTypes";
@@ -14,14 +14,19 @@ import styles, {
 } from "../assets/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as I18N from "../i18n";
+import { useSharedValue } from "react-native-reanimated";
 
 const CardItem = ({
   user,
   unitsImperial,
   swiper,
   onLikePressed,
-  index
+  index,
+  tapEnabled
 }: CardItemT) => {
+
+  const isTapEnabled = useSharedValue(true);
+
 
   const { colors } = useTheme();
   const i18n = I18N.getI18n();
@@ -31,6 +36,7 @@ const CardItem = ({
 
   const [showLikeTooltip, setShowLikeTooltip] = React.useState(false);
   const [tooManyReports, setTooManyReports] = React.useState(false);
+  const [openProfileEnabled, setOpenProfileEnabled] = React.useState(true);
 
   const style = StyleSheet.create({
     image: {
@@ -52,8 +58,16 @@ const CardItem = ({
   }
 
   React.useEffect(() => {
-      load();
+    load();
   }, []);
+
+   React.useEffect(() => {
+    if(tapEnabled) {
+      setTimeout(() => setOpenProfileEnabled(tapEnabled));
+    } else {
+      setOpenProfileEnabled(tapEnabled);
+    }
+  }, [tapEnabled]);
 
   async function load() {
     let hideThresholdString = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_HIDE_THRESHOLD);
@@ -96,22 +110,22 @@ const CardItem = ({
 
   return (
     <View style={[styles.containerCardItem, { paddingHorizontal: 20, backgroundColor: colors.surface, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - STATUS_BAR_HEIGHT - cardPadding, width: width - cardPadding }]}>
-      { tooManyReports &&
-        <View style={{flexGrow: 1, height: '100%', alignItems: 'center', justifyContent: 'center'}}>
-          <View style={{gap: 24}}>
+      {tooManyReports &&
+        <View style={{ flexGrow: 1, height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ gap: 24 }}>
             <Text>{Global.format(i18n.t('profile.search.report-card'), user.firstName)}</Text>
-            <View style={{flexDirection: 'row'}}>
-              <Button style={{flex: 1}} onPress={() => setTooManyReports(false)}>{i18n.t('profile.search.report-card-show')}</Button>
-              <Button mode="contained" labelStyle={{fontWeight: 'bold'}} style={{flex: 1}} onPress={() => onHideUser()}>{i18n.t('profile.search.report-card-dismiss')}</Button>
+            <View style={{ flexDirection: 'row' }}>
+              <Button style={{ flex: 1 }} onPress={() => setTooManyReports(false)}>{i18n.t('profile.search.report-card-show')}</Button>
+              <Button mode="contained" labelStyle={{ fontWeight: 'bold' }} style={{ flex: 1 }} onPress={() => onHideUser()}>{i18n.t('profile.search.report-card-dismiss')}</Button>
             </View>
           </View>
         </View>
       }
 
-      { !tooManyReports &&
-        <Pressable style={{flexGrow: 1}} onPress={() => Global.nagivateProfile(user)}>
+      {!tooManyReports &&
+        <Pressable style={{ flexGrow: 1 }} disabled={!openProfileEnabled} onPress={() => Global.nagivateProfile(user)}>
           {/* IMAGE */}
-          <TouchableOpacity onPress={() => Global.nagivateProfile(user)}>
+          <TouchableOpacity disabled={!openProfileEnabled} onPress={() => Global.nagivateProfile(user)}>
             <Image source={{ uri: user.profilePicture ? user.profilePicture : undefined }} style={style.image} />
           </TouchableOpacity>
 
@@ -145,7 +159,7 @@ const CardItem = ({
 
           {/* DESCRIPTION */}
           {
-            <View style={{ }}>
+            <View style={{}}>
               <Text style={styles.descriptionCardItem}>{user.description}</Text>
             </View>
           }
@@ -153,17 +167,17 @@ const CardItem = ({
       }
 
       {/* ACTIONS */}
-      { !tooManyReports &&
-      <View style={styles.actionsCardItem}>
-        <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onHideUser()}>
-          <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
-        </TouchableOpacity>
-        <Tooltip title={i18n.t('compliment.tooltip')}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={() => onLikeUser()}>
-            <Icon name="heart" color={LIKE_ACTIONS} size={25} />
+      {!tooManyReports &&
+        <View style={styles.actionsCardItem}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onHideUser()}>
+            <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
-        </Tooltip>
-      </View>
+          <Tooltip title={i18n.t('compliment.tooltip')}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={() => onLikeUser()}>
+              <Icon name="heart" color={LIKE_ACTIONS} size={25} />
+            </TouchableOpacity>
+          </Tooltip>
+        </View>
       }
     </View>
   );
