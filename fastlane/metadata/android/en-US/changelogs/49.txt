@@ -1,0 +1,1 @@
+Smoother swiping by removing outdated swiping library and using a custom technology.
