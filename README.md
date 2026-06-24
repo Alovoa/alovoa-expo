@@ -19,6 +19,9 @@ React Native mobile application for Alovoa.
 - Improve the project by posting in [Issues](https://github.com/Alovoa/alovoa-expo/issues) and make a PR upon Issue discussion.
 - Translate this project into your preferred language on [Weblate](https://hosted.weblate.org/projects/alovoa-expo/alovoa-expo/)
 
+## Helping with the Alovoa server
+- This is the Alovoa mobile app, you can also [help with the server](https://github.com/Alovoa/alovoa)
+
 ## Installation and usage
 
 Be sure, you have installed all dependencies and applications to run Expo project on your computer : [Getting Started with Expo](https://docs.expo.io/get-started/installation/).
