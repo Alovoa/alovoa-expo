@@ -21,12 +21,10 @@ const CardItem = ({
   unitsImperial,
   swiper,
   onLikePressed,
+  onHidePressed,
   index,
   tapEnabled
 }: CardItemT) => {
-
-  const isTapEnabled = useSharedValue(true);
-
 
   const { colors } = useTheme();
   const i18n = I18N.getI18n();
@@ -73,6 +71,7 @@ const CardItem = ({
     let hideThresholdString = await Global.GetStorage(Global.STORAGE_ADV_SEARCH_HIDE_THRESHOLD);
     let hideThreshold = hideThresholdString ? Number(hideThresholdString) : Global.DEFAULT_HIDE_THRESHOLD;
     setTooManyReports(user.numReports >= hideThreshold);
+    setOpenProfileEnabled(true);
   }
 
   const nameStyle: StyleProp<TextStyle> = [
@@ -104,10 +103,6 @@ const CardItem = ({
     setShowLikeTooltip(false);
   }
 
-  function onHideUser() {
-    swiper.current?.swipeLeft();
-  }
-
   return (
     <View style={[styles.containerCardItem, { paddingHorizontal: 20, backgroundColor: colors.surface, maxWidth: WIDESCREEN_HORIZONTAL_MAX, height: height - NAVIGATION_BAR_HEIGHT - STATUS_BAR_HEIGHT - cardPadding, width: width - cardPadding }]}>
       {tooManyReports &&
@@ -116,7 +111,7 @@ const CardItem = ({
             <Text>{Global.format(i18n.t('profile.search.report-card'), user.firstName)}</Text>
             <View style={{ flexDirection: 'row' }}>
               <Button style={{ flex: 1 }} onPress={() => setTooManyReports(false)}>{i18n.t('profile.search.report-card-show')}</Button>
-              <Button mode="contained" labelStyle={{ fontWeight: 'bold' }} style={{ flex: 1 }} onPress={() => onHideUser()}>{i18n.t('profile.search.report-card-dismiss')}</Button>
+              <Button mode="contained" labelStyle={{ fontWeight: 'bold' }} style={{ flex: 1 }} onPress={onHidePressed}>{i18n.t('profile.search.report-card-dismiss')}</Button>
             </View>
           </View>
         </View>
@@ -169,7 +164,7 @@ const CardItem = ({
       {/* ACTIONS */}
       {!tooManyReports &&
         <View style={styles.actionsCardItem}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={() => onHideUser()}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: GRAY, marginRight: 24 }]} onPress={onHidePressed}>
             <Icon name="close" color={DISLIKE_ACTIONS} size={25} />
           </TouchableOpacity>
           <Tooltip title={i18n.t('compliment.tooltip')}>

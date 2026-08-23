@@ -9,7 +9,7 @@ import * as URL from "../URL";
 import * as I18N from "../i18n";
 import { Captcha, RootStackParamList } from "../myTypes";
 import VerticalView from "../components/VerticalView";
-import { STATUS_BAR_HEIGHT } from "../assets/styles";
+import { STATUS_BAR_HEIGHT, WIDESCREEN_HORIZONTAL_MAX } from "../assets/styles";
 import splash from '../assets/splash.png';
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import Modal from "react-native-modal";
@@ -24,6 +24,7 @@ type Props = BottomTabScreenProps<RootStackParamList, 'Login'>
 const Login = ({ route: _r, navigation: _n }: Props) => {
 
   const { colors } = useTheme();
+  const { width } = useWindowDimensions();
 
   const [email, setEmail] = React.useState("");
   const [emailValid, setEmailValid] = React.useState(false);
@@ -38,10 +39,14 @@ const Login = ({ route: _r, navigation: _n }: Props) => {
   const showDialog = () => { setVisible(true); Keyboard.dismiss() };
   const hideDialog = () => setVisible(false);
   const { height } = useWindowDimensions();
+  function calcMarginModal() {
+    return width < WIDESCREEN_HORIZONTAL_MAX + 12 ? 12 : width / 5 + 12;
+  }
+  const containerStyle = { backgroundColor: colors.background, padding: 24, marginHorizontal: calcMarginModal(), borderRadius: 8 }; +
 
-  React.useEffect(() => {
-    load();
-  }, []);
+    React.useEffect(() => {
+      load();
+    }, []);
 
   const _handleRedirect = async (event: { url: string; }) => {
 
@@ -251,11 +256,7 @@ const Login = ({ route: _r, navigation: _n }: Props) => {
         avoidKeyboard={false}
         style={{ justifyContent: 'center', margin: 0 }}>
         <KeyboardAvoidingView behavior="padding">
-          <View style={{
-            backgroundColor: colors.elevation.level2,
-            padding: 24,
-            borderRadius: 8
-          }}>
+          <View style={containerStyle}>
             <View>
               <IconButton
                 style={{ alignSelf: 'flex-end' }}
