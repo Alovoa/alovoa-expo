@@ -230,6 +230,7 @@ const Search = ({ route, navigation }: Props) => {
                 user={card}
                 unitsImperial={user?.units === UnitsEnum.IMPERIAL}
                 onLikePressed={onLikePressed}
+                onHidePressed={hideUser}
                 tapEnabled={tapEnabled}
                 setTapEnabled={setTapEnabled}
               />
