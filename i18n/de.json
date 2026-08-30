@@ -1,5 +1,5 @@
 {
-    "imprint": "Impressum",
+    "imprint": "Kontakt",
     "tos": "Nutzungsbedingungen",
     "privacy-policy": "Datenschutzerklärung",
     "auth": {
@@ -284,7 +284,7 @@
     "restart-apply-changes": "Starte die App neu um die Änderungen zu übernehmen",
     "compliment": {
         "title": "Kompliment senden",
-        "tooltip": "Hier tippen, um ein Kompliment zu senden!" 
+        "tooltip": "Hier tippen, um ein Kompliment zu senden!"
     },
     "referral": {
         "title": "Einem Freund weiterempfehlen",
